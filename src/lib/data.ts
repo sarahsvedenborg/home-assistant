@@ -1,7 +1,12 @@
 import "server-only";
 
 import { FALLBACK_FAMILY_MEMBERS, FALLBACK_MOVIES, FALLBACK_WISHLIST_ITEMS } from "@/lib/demo-data";
-import type { FamilyMember, MovieRecommendation, WishListGroup, WishListItem } from "@/lib/types";
+import type {
+  FamilyMember,
+  MovieRecommendation,
+  WishListGroup,
+  WishListItem,
+} from "@/lib/types";
 import { isSanityConfigured } from "@/sanity/env";
 import { getReadClient } from "@/sanity/lib/client";
 import {

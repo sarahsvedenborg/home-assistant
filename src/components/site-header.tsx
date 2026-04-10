@@ -11,7 +11,7 @@ export function SiteHeader({ current }: SiteHeaderProps) {
         <span className="brandEmoji">🏡</span>
         <span>
           <strong>Family Hub</strong>
-          <small>delte ideer paa ett hyggelig sted</small>
+          <small>Felles info for familien Svedenborg</small>
         </span>
       </Link>
 
@@ -23,7 +23,7 @@ export function SiteHeader({ current }: SiteHeaderProps) {
           href="/wishlist"
           className={current === "wishlist" ? "navLink navLinkActive" : "navLink"}
         >
-          Oenskeliste
+          Ønskeliste
         </Link>
         <Link
           href="/movies"

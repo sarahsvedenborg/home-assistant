@@ -14,7 +14,7 @@ const bodyFont = Nunito({
 
 export const metadata: Metadata = {
   title: "Family Hub",
-  description: "Et lekent felles sted for familiens onskelister, filmvalg og planer.",
+  description: "Et lekent felles sted for familiens ønskelister, filmvalg og planer.",
 };
 
 export default function RootLayout({

@@ -148,7 +148,7 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
         </label>
 
         <label className="srOnly" aria-hidden="true">
-          La dette feltet staa tomt
+          La dette feltet stå tomt
           <input
             type="text"
             tabIndex={-1}

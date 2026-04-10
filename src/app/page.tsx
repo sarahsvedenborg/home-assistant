@@ -19,15 +19,16 @@ export default async function Home() {
       <section className="heroPanel">
         <div className="heroCopy">
           <span className="kicker">Velkommen hjem</span>
-          <h1>Et lyst og koselig familieknutepunkt for oensker, filmkvelder og nye ideer.</h1>
+{/*           <h1>Et lyst og koselig familieknutepunkt for ønsker, filmkvelder og nye ideer.</h1> */}
+          <h1>Et knutepunkt for felles info for familien.</h1>
           <p>
-            Laget for aa vaere enkelt for barna, nyttig for de voksne og fint aa bruke paa mobil,
-            nettbrett og laptop.
+           {/*  Laget for å være enkelt for barna, nyttig for de voksne og fint å bruke på mobil,
+            nettbrett og laptop. */}
           </p>
 
           <div className="heroActions">
             <Link className="buttonPrimary" href="/wishlist#add-wish">
-              Legg til et oenske
+              Legg til et ønske
             </Link>
             <Link className="buttonSecondary" href="/movies#add-movie">
               Legg til en film
@@ -38,19 +39,19 @@ export default async function Home() {
         <div className="heroStats" aria-label="Hovedpunkter i Family Hub">
           <div className="statBubble statBubbleWarm">
             <strong>{familyMembers.length}</strong>
-            <span>familiemedlemmer klare til aa bli med</span>
+            <span>familiemedlemmer</span>
           </div>
           <div className="statBubble statBubbleCool">
             <strong>{wishListItems.length}</strong>
-            <span>oensker lagret</span>
+            <span>ønsker</span>
           </div>
           <div className="statBubble statBubbleSun">
             <strong>{movies.length}</strong>
-            <span>filmforslag samlet</span>
+            <span>filmforslag</span>
           </div>
           <div className="statusPill">
             <span className="statusDot" aria-hidden="true" />
-            {siteMode === "live" ? "Koblet til Sanity" : "Demodata til miljoevariabler er satt"}
+            {siteMode === "live" ? "Koblet til Sanity" : "Demodata til miljøvariabler er satt"}
           </div>
         </div>
       </section>
@@ -59,18 +60,18 @@ export default async function Home() {
         <HubCard
           href="/wishlist"
           icon="🎁"
-          title="Oenskeliste"
-          description="Samle gaveoensker per person med korte notater og valgfrie lenker."
+          title="Ønskeliste"
+          description="Samle gaveønsker per person med korte notater og valgfrie lenker."
           stat={`${wishListItems.length} ideer`}
           accentClass="accentWarm"
-          ctaLabel="Aapne oenskelisten"
+          ctaLabel="Åpne ønskelisten"
         />
         <HubCard
           href="/movies"
           icon="🎬"
           title="Filmer"
           description="Lagre familiens filmvalg, hold oversikt over hva som er sett, og planlegg neste kosekveld."
-          stat={`${movies.filter((movie) => !movie.watched).length} igjen aa se`}
+          stat={`${movies.filter((movie) => !movie.watched).length} igjen å se`}
           accentClass="accentCool"
           ctaLabel="Se filmer"
         />
@@ -81,7 +82,7 @@ export default async function Home() {
             </span>
             <span className="hubStat">kommer snart</span>
           </div>
-          <h2>Flere familieomraader</h2>
+          <h2>Flere familieområder</h2>
           <p>Her kan turer, middagstips, kalendere og andre enkle kategorier komme senere.</p>
           <span className="buttonSecondary buttonMuted">Klar for fase to</span>
         </article>

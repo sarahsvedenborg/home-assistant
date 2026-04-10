@@ -410,6 +410,67 @@ button {
   border-radius: 1.4rem;
 }
 
+.groupCardOpen {
+  margin-top: 1rem;
+}
+
+.familyCardGrid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.familyCard {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid rgba(75, 98, 124, 0.18);
+  border-radius: 1.2rem;
+  background: rgba(255, 255, 255, 0.72);
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.familyCard:hover,
+.familyCard:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(94, 166, 255, 0.45);
+}
+
+.familyCardActive {
+  border-color: rgba(255, 159, 110, 0.5);
+  background: rgba(255, 244, 231, 0.95);
+}
+
+.familyCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.familyCardEmoji {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  font-size: 1.35rem;
+}
+
+.familyCardCount,
+.lockedMember {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(75, 98, 124, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.88);
+  font-weight: 800;
+}
+
 .itemList {
   margin-top: 1rem;
   list-style: none;
@@ -582,6 +643,10 @@ button {
   }
 
   .formGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .familyCardGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

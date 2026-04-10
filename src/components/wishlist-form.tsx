@@ -1,10 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 type WishlistFormProps = {
   familyMembers: string[];
+  selectedMemberName?: string;
 };
 
 type FormState = {
@@ -21,21 +22,29 @@ const messageClassNames = {
   success: "feedback feedbackSuccess",
 };
 
-export function WishlistForm({ familyMembers }: WishlistFormProps) {
+export function WishlistForm({ familyMembers, selectedMemberName }: WishlistFormProps) {
   const router = useRouter();
+  const defaultMember = selectedMemberName || familyMembers[0] || "";
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
     kind: "error" | "success";
     text: string;
   } | null>(null);
   const [form, setForm] = useState<FormState>({
-    submittedByName: familyMembers[0] || "",
+    submittedByName: defaultMember,
     title: "",
     link: "",
     description: "",
     password: "",
     website: "",
   });
+
+  useEffect(() => {
+    setForm((current) => ({
+      ...current,
+      submittedByName: defaultMember,
+    }));
+  }, [defaultMember]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -58,9 +67,9 @@ export function WishlistForm({ familyMembers }: WishlistFormProps) {
         return;
       }
 
-      setMessage({ kind: "success", text: result.message || "Oensket er lagt til!" });
+      setMessage({ kind: "success", text: result.message || "Ønsket er lagt til!" });
       setForm({
-        submittedByName: familyMembers[0] || "",
+        submittedByName: defaultMember,
         title: "",
         link: "",
         description: "",
@@ -78,31 +87,46 @@ export function WishlistForm({ familyMembers }: WishlistFormProps) {
   return (
     <form className="formPanel" onSubmit={handleSubmit}>
       <div className="formIntro">
-        <span className="kicker">Legg til et oenske</span>
-        <h2>Del en ide med bare noen faa trykk</h2>
-        <p>Perfekt for gaver, opplevelser eller smaa hint til senere.</p>
+        <span className="kicker">Legg til et ønske</span>
+        <h2>
+          {selectedMemberName
+            ? `Legg til et ønske for ${selectedMemberName}`
+            : "Del en ide med bare noen få trykk"}
+        </h2>
+        <p>
+          {selectedMemberName
+            ? "Skjemaet lagrer ønsket direkte på riktig person."
+            : "Perfekt for gaver, opplevelser eller små hint til senere."}
+        </p>
       </div>
 
       <div className="formGrid">
-        <label className="field">
-          <span>Navnet ditt</span>
-          <select
-            value={form.submittedByName}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, submittedByName: event.target.value }))
-            }
-            required
-          >
-            {familyMembers.map((member) => (
-              <option key={member} value={member}>
-                {member}
-              </option>
-            ))}
-          </select>
-        </label>
+        {selectedMemberName ? (
+          <div className="field fieldWide">
+            <span>Legges til for</span>
+            <div className="lockedMember">{selectedMemberName}</div>
+          </div>
+        ) : (
+          <label className="field">
+            <span>Navnet ditt</span>
+            <select
+              value={form.submittedByName}
+              onChange={(event) =>
+                setForm((current) => ({ ...current, submittedByName: event.target.value }))
+              }
+              required
+            >
+              {familyMembers.map((member) => (
+                <option key={member} value={member}>
+                  {member}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
 
         <label className="field fieldWide">
-          <span>Navn paa oensket</span>
+          <span>Navn på ønsket</span>
           <input
             type="text"
             value={form.title}
@@ -149,7 +173,7 @@ export function WishlistForm({ familyMembers }: WishlistFormProps) {
         </label>
 
         <label className="srOnly" aria-hidden="true">
-          La dette feltet staa tomt
+          La dette feltet stå tomt
           <input
             type="text"
             tabIndex={-1}
