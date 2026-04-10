@@ -28,6 +28,8 @@ cp .env.example .env.local
 
 Required for live content:
 
+- `SANITY_STUDIO_PROJECT_ID`
+- `SANITY_STUDIO_DATASET`
 - `NEXT_PUBLIC_SANITY_PROJECT_ID`
 - `NEXT_PUBLIC_SANITY_DATASET`
 - `SANITY_API_WRITE_TOKEN`
@@ -44,7 +46,24 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000` for the app and `http://localhost:3000/studio` for the Sanity Studio.
+Open `http://localhost:3000` for the app. Run `npm run studio` to launch Sanity Studio locally.
+
+Use `.env.local` in the project root and prefer unquoted values. Sanity Studio reads
+`SANITY_STUDIO_*` variables, while the Next app reads `NEXT_PUBLIC_*` variables. Keep them in sync, for example:
+
+```bash
+SANITY_STUDIO_PROJECT_ID=p51d587r
+SANITY_STUDIO_DATASET=production
+SANITY_STUDIO_API_VERSION=2026-04-10
+NEXT_PUBLIC_SANITY_PROJECT_ID=p51d587r
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_SANITY_API_VERSION=2026-04-10
+SANITY_API_WRITE_TOKEN=your_write_token
+FAMILY_HUB_SUBMISSION_PASSWORD=chargingHorse
+SANITY_REQUIRE_APPROVAL=false
+```
+
+If you change env values, restart both `npm run dev` and `npm run studio`.
 
 ## Useful scripts
 
