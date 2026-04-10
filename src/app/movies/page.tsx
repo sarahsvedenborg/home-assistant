@@ -17,24 +17,24 @@ export default async function MoviesPage() {
 
       <section className="sectionHero accentCoolPanel">
         <div>
-          <span className="kicker">Movie night</span>
-          <h1>Keep a happy stack of family picks ready for the next popcorn night.</h1>
-          <p>Browse suggestions, spot what is already watched, and save the next favorite.</p>
+          <span className="kicker">Filmkveld</span>
+          <h1>Ha en koselig samling familiefilmer klar til neste popcornkveld.</h1>
+          <p>Se forslag, hold styr paa hva som er sett, og lagre neste favoritt.</p>
         </div>
-        <div className="sectionBadge">{movies.filter((movie) => !movie.watched).length} still to watch</div>
+        <div className="sectionBadge">{movies.filter((movie) => !movie.watched).length} igjen aa se</div>
       </section>
 
       <section className="contentGrid">
         <div className="listPanel">
           <div className="panelHeading">
-            <h2>Movie picks</h2>
-            <p>Posters are optional, so a title alone is enough to save a great idea.</p>
+            <h2>Filmforslag</h2>
+            <p>Plakater er valgfrie, saa bare en tittel er nok til aa lagre en god ide.</p>
           </div>
 
           {movies.length === 0 ? (
             <EmptyState
-              title="No movies yet"
-              description="Add the first recommendation and start planning movie night."
+              title="Ingen filmer enda"
+              description="Legg til det foerste forslaget og begynn aa planlegge filmkveld."
             />
           ) : (
             <div className="movieGrid">
@@ -55,15 +55,15 @@ export default async function MoviesPage() {
                       </div>
                     )}
                     <span className={movie.watched ? "watchBadge watched" : "watchBadge"}>
-                      {movie.watched ? "Watched" : "Watch next"}
+                      {movie.watched ? "Sett" : "Se neste"}
                     </span>
                   </div>
                   <div className="movieBody">
                     <h3>{movie.title}</h3>
-                    <p>Suggested by {movie.suggestedBy}</p>
+                    <p>Foreslatt av {movie.suggestedBy}</p>
                     {movie.link ? (
                       <a href={movie.link} target="_blank" rel="noreferrer" className="inlineLink">
-                        Open movie link
+                        Aapne filmlenke
                       </a>
                     ) : null}
                   </div>

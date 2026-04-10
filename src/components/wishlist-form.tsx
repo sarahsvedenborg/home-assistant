@@ -54,11 +54,11 @@ export function WishlistForm({ familyMembers }: WishlistFormProps) {
       const result = (await response.json()) as { error?: string; message?: string };
 
       if (!response.ok) {
-        setMessage({ kind: "error", text: result.error || "That did not work." });
+        setMessage({ kind: "error", text: result.error || "Det fungerte ikke." });
         return;
       }
 
-      setMessage({ kind: "success", text: result.message || "Wish added!" });
+      setMessage({ kind: "success", text: result.message || "Oensket er lagt til!" });
       setForm({
         submittedByName: familyMembers[0] || "",
         title: "",
@@ -69,7 +69,7 @@ export function WishlistForm({ familyMembers }: WishlistFormProps) {
       });
       router.refresh();
     } catch {
-      setMessage({ kind: "error", text: "Something went wrong. Please try again." });
+      setMessage({ kind: "error", text: "Noe gikk galt. Proev igjen." });
     } finally {
       setIsSubmitting(false);
     }
@@ -78,14 +78,14 @@ export function WishlistForm({ familyMembers }: WishlistFormProps) {
   return (
     <form className="formPanel" onSubmit={handleSubmit}>
       <div className="formIntro">
-        <span className="kicker">Add a wish</span>
-        <h2>Share an idea in a few taps</h2>
-        <p>Perfect for presents, experiences, or tiny hints for later.</p>
+        <span className="kicker">Legg til et oenske</span>
+        <h2>Del en ide med bare noen faa trykk</h2>
+        <p>Perfekt for gaver, opplevelser eller smaa hint til senere.</p>
       </div>
 
       <div className="formGrid">
         <label className="field">
-          <span>Your name</span>
+          <span>Navnet ditt</span>
           <select
             value={form.submittedByName}
             onChange={(event) =>
@@ -102,19 +102,19 @@ export function WishlistForm({ familyMembers }: WishlistFormProps) {
         </label>
 
         <label className="field fieldWide">
-          <span>Item name</span>
+          <span>Navn paa oensket</span>
           <input
             type="text"
             value={form.title}
             onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
-            placeholder="Lego set, scooter, craft kit..."
+            placeholder="Lego, sparkesykkel, hobbysett..."
             maxLength={100}
             required
           />
         </label>
 
         <label className="field fieldWide">
-          <span>Link (optional)</span>
+          <span>Lenke (valgfritt)</span>
           <input
             type="url"
             value={form.link}
@@ -124,32 +124,32 @@ export function WishlistForm({ familyMembers }: WishlistFormProps) {
         </label>
 
         <label className="field fieldWide">
-          <span>Notes (optional)</span>
+          <span>Notater (valgfritt)</span>
           <textarea
             value={form.description}
             onChange={(event) =>
               setForm((current) => ({ ...current, description: event.target.value }))
             }
-            placeholder="Favorite color, size, or why it feels fun"
+            placeholder="Favorittfarge, stoerrelse eller hvorfor det virker fint"
             maxLength={280}
             rows={4}
           />
         </label>
 
         <label className="field fieldWide">
-          <span>Family password (optional)</span>
+          <span>Familiepassord (valgfritt)</span>
           <input
             type="password"
             value={form.password}
             onChange={(event) =>
               setForm((current) => ({ ...current, password: event.target.value }))
             }
-            placeholder="Only if a grown-up gave you one"
+            placeholder="Bare hvis en voksen har gitt deg det"
           />
         </label>
 
         <label className="srOnly" aria-hidden="true">
-          Leave this field empty
+          La dette feltet staa tomt
           <input
             type="text"
             tabIndex={-1}
@@ -162,9 +162,9 @@ export function WishlistForm({ familyMembers }: WishlistFormProps) {
 
       <div className="formActions">
         <button className="buttonPrimary" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Sending..." : "Add suggestion"}
+          {isSubmitting ? "Sender..." : "Legg til forslag"}
         </button>
-        <p className="smallNote">A grown-up can clean up or approve entries in Sanity Studio.</p>
+        <p className="smallNote">En voksen kan rydde opp eller godkjenne forslag i Sanity Studio.</p>
       </div>
 
       {message ? (

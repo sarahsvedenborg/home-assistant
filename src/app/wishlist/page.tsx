@@ -16,26 +16,26 @@ export default async function WishListPage() {
 
       <section className="sectionHero accentWarmPanel">
         <div>
-          <span className="kicker">Wish list</span>
-          <h1>Everyone can drop hints, dream big, and save favorite gift ideas.</h1>
+          <span className="kicker">Oenskeliste</span>
+          <h1>Alle kan legge igjen hint, oenske stort og lagre fine gaveideer.</h1>
           <p>
-            Items stay organized by person so birthdays, holidays, and surprise treats feel easier.
+            Alt holdes sortert per person, saa bursdager, hoeytider og overraskelser blir enklere.
           </p>
         </div>
-        <div className="sectionBadge">{wishListItems.length} saved wishes</div>
+        <div className="sectionBadge">{wishListItems.length} lagrede oensker</div>
       </section>
 
       <section className="contentGrid">
         <div className="listPanel">
           <div className="panelHeading">
-            <h2>Saved by person</h2>
-            <p>Each card shows titles, notes, and links when they are available.</p>
+            <h2>Lagret per person</h2>
+            <p>Hvert kort viser navn, notater og lenker naar de finnes.</p>
           </div>
 
           {groupedItems.length === 0 ? (
             <EmptyState
-              title="No wishes yet"
-              description="Add the first one below and it will show up here."
+              title="Ingen oensker enda"
+              description="Legg til det foerste oensket under, saa vises det her."
             />
           ) : (
             <div className="groupStack">
@@ -43,7 +43,7 @@ export default async function WishListPage() {
                 <section className="groupCard" key={group.person}>
                   <div className="groupHeader">
                     <h3>{group.person}</h3>
-                    <span>{group.items.length} idea{group.items.length === 1 ? "" : "s"}</span>
+                    <span>{group.items.length} ide{group.items.length === 1 ? "" : "er"}</span>
                   </div>
 
                   <ul className="itemList">
@@ -51,12 +51,12 @@ export default async function WishListPage() {
                       <li key={item.id} className="itemCard">
                         <div className="itemTitleRow">
                           <strong>{item.title}</strong>
-                          <span className="itemMeta">submitted by {item.submittedBy}</span>
+                          <span className="itemMeta">lagt til av {item.submittedBy}</span>
                         </div>
                         {item.description ? <p>{item.description}</p> : null}
                         {item.link ? (
                           <a href={item.link} target="_blank" rel="noreferrer" className="inlineLink">
-                            Open link
+                            Aapne lenke
                           </a>
                         ) : null}
                       </li>

@@ -12,28 +12,28 @@ export const FALLBACK_FAMILY_MEMBERS: FamilyMember[] = [
 export const FALLBACK_WISHLIST_ITEMS: WishListItem[] = [
   {
     id: "wish-1",
-    title: "Sketchbook with bright markers",
-    description: "A jumbo pad with thick pages for doodles and sticker ideas.",
-    submittedBy: "Avery",
+    title: "Tegneblokk med sterke tusjer",
+    description: "En stor blokk med tykke sider til tegninger og klistremerkeideer.",
+    submittedBy: "Amelie",
     link: "https://example.com/sketchbook",
   },
   {
     id: "wish-2",
-    title: "Build-your-own rocket kit",
-    description: "Something hands-on that can be painted after it is built.",
-    submittedBy: "Finn",
+    title: "Byggesett til rakett",
+    description: "Noe praktisk som kan males etter at det er bygget.",
+    submittedBy: "Colette",
   },
   {
     id: "wish-3",
-    title: "Glow-in-the-dark dinosaur blanket",
-    description: "Soft blanket for movie nights and reading time.",
-    submittedBy: "Milo",
+    title: "Selvlysende dinosaurteppe",
+    description: "Et mykt teppe til filmkvelder og lesestund.",
+    submittedBy: "Linnea",
   },
   {
     id: "wish-4",
-    title: "Family waffle breakfast gift card",
-    description: "A fun morning out together.",
-    submittedBy: "Dad",
+    title: "Gavekort til familie-vaffelfrokost",
+    description: "En hyggelig morgen ute sammen.",
+    submittedBy: "Pappa",
   },
 ];
 
@@ -41,20 +41,20 @@ export const FALLBACK_MOVIES: MovieRecommendation[] = [
   {
     id: "movie-1",
     title: "The Mitchells vs. the Machines",
-    suggestedBy: "Mom",
+    suggestedBy: "Mamma",
     watched: true,
     link: "https://example.com/mitchells",
   },
   {
     id: "movie-2",
     title: "Paddington 2",
-    suggestedBy: "Scout",
+    suggestedBy: "Felix",
     watched: false,
   },
   {
     id: "movie-3",
     title: "Spider-Man: Into the Spider-Verse",
-    suggestedBy: "Finn",
+    suggestedBy: "Colette",
     watched: false,
   },
 ];

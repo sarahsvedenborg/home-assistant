@@ -14,7 +14,7 @@ const bodyFont = Nunito({
 
 export const metadata: Metadata = {
   title: "Family Hub",
-  description: "A playful shared space for family wish lists, movie picks, and future plans.",
+  description: "Et lekent felles sted for familiens onskelister, filmvalg og planer.",
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable}`}>
+    <html lang="no" className={`${displayFont.variable} ${bodyFont.variable}`}>
       <body>{children}</body>
     </html>
   );

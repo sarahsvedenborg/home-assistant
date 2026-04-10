@@ -11,28 +11,28 @@ export function SiteHeader({ current }: SiteHeaderProps) {
         <span className="brandEmoji">🏡</span>
         <span>
           <strong>Family Hub</strong>
-          <small>shared ideas, one happy place</small>
+          <small>delte ideer paa ett hyggelig sted</small>
         </span>
       </Link>
 
-      <nav className="siteNav" aria-label="Main navigation">
+      <nav className="siteNav" aria-label="Hovednavigasjon">
         <Link href="/" className={current === "home" ? "navLink navLinkActive" : "navLink"}>
-          Hub
+          Hjem
         </Link>
         <Link
           href="/wishlist"
           className={current === "wishlist" ? "navLink navLinkActive" : "navLink"}
         >
-          Wish List
+          Oenskeliste
         </Link>
         <Link
           href="/movies"
           className={current === "movies" ? "navLink navLinkActive" : "navLink"}
         >
-          Movies
+          Filmer
         </Link>
         <Link href="/studio" className="navLink navLinkStudio">
-          Grown-up Studio
+          Studio for voksne
         </Link>
       </nav>
     </header>

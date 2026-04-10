@@ -54,11 +54,11 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
       const result = (await response.json()) as { error?: string; message?: string };
 
       if (!response.ok) {
-        setMessage({ kind: "error", text: result.error || "That did not work." });
+        setMessage({ kind: "error", text: result.error || "Det fungerte ikke." });
         return;
       }
 
-      setMessage({ kind: "success", text: result.message || "Movie added!" });
+      setMessage({ kind: "success", text: result.message || "Filmen er lagt til!" });
       setForm({
         suggestedByName: familyMembers[0] || "",
         title: "",
@@ -69,7 +69,7 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
       });
       router.refresh();
     } catch {
-      setMessage({ kind: "error", text: "Something went wrong. Please try again." });
+      setMessage({ kind: "error", text: "Noe gikk galt. Proev igjen." });
     } finally {
       setIsSubmitting(false);
     }
@@ -78,14 +78,14 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
   return (
     <form className="formPanel" onSubmit={handleSubmit}>
       <div className="formIntro">
-        <span className="kicker">Add a movie</span>
-        <h2>Save the next family movie night pick</h2>
-        <p>Share favorites, new finds, or the one everyone keeps talking about.</p>
+        <span className="kicker">Legg til en film</span>
+        <h2>Lagre neste filmvalg til familiekvelden</h2>
+        <p>Del favoritter, nye funn eller filmen alle snakker om.</p>
       </div>
 
       <div className="formGrid">
         <label className="field">
-          <span>Suggested by</span>
+          <span>Foreslatt av</span>
           <select
             value={form.suggestedByName}
             onChange={(event) =>
@@ -102,19 +102,19 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
         </label>
 
         <label className="field fieldWide">
-          <span>Movie title</span>
+          <span>Filmtittel</span>
           <input
             type="text"
             value={form.title}
             onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
-            placeholder="A fun comedy, adventure, or favorite classic"
+            placeholder="En morsom komedie, et eventyr eller en klassiker"
             maxLength={120}
             required
           />
         </label>
 
         <label className="field fieldWide">
-          <span>Movie link (optional)</span>
+          <span>Filmlenke (valgfritt)</span>
           <input
             type="url"
             value={form.link}
@@ -124,31 +124,31 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
         </label>
 
         <label className="field fieldWide">
-          <span>Poster image URL (optional)</span>
+          <span>Lenke til filmplakat (valgfritt)</span>
           <input
             type="url"
             value={form.posterUrl}
             onChange={(event) =>
               setForm((current) => ({ ...current, posterUrl: event.target.value }))
             }
-            placeholder="https://image.example/poster.jpg"
+            placeholder="https://image.example/plakat.jpg"
           />
         </label>
 
         <label className="field fieldWide">
-          <span>Family password (optional)</span>
+          <span>Familiepassord (valgfritt)</span>
           <input
             type="password"
             value={form.password}
             onChange={(event) =>
               setForm((current) => ({ ...current, password: event.target.value }))
             }
-            placeholder="Only if a grown-up gave you one"
+            placeholder="Bare hvis en voksen har gitt deg det"
           />
         </label>
 
         <label className="srOnly" aria-hidden="true">
-          Leave this field empty
+          La dette feltet staa tomt
           <input
             type="text"
             tabIndex={-1}
@@ -161,9 +161,9 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
 
       <div className="formActions">
         <button className="buttonPrimary" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Sending..." : "Add movie"}
+          {isSubmitting ? "Sender..." : "Legg til film"}
         </button>
-        <p className="smallNote">New picks start as unwatched and can be managed in the studio.</p>
+        <p className="smallNote">Nye forslag starter som usett og kan administreres i studio.</p>
       </div>
 
       {message ? (
