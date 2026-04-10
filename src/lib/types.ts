@@ -29,3 +29,8 @@ export type WishListGroup = {
   person: string;
   items: WishListItem[];
 };
+
+export type FamilyMemberWishListGroup = {
+  member: FamilyMember;
+  items: WishListItem[];
+};

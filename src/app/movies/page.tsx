@@ -19,22 +19,22 @@ export default async function MoviesPage() {
         <div>
           <span className="kicker">Filmkveld</span>
           <h1>Ha en koselig samling familiefilmer klar til neste popcornkveld.</h1>
-          <p>Se forslag, hold styr paa hva som er sett, og lagre neste favoritt.</p>
+          <p>Se forslag, hold styr på hva som er sett, og lagre neste favoritt.</p>
         </div>
-        <div className="sectionBadge">{movies.filter((movie) => !movie.watched).length} igjen aa se</div>
+        <div className="sectionBadge">{movies.filter((movie) => !movie.watched).length} igjen å se</div>
       </section>
 
       <section className="contentGrid">
         <div className="listPanel">
           <div className="panelHeading">
             <h2>Filmforslag</h2>
-            <p>Plakater er valgfrie, saa bare en tittel er nok til aa lagre en god ide.</p>
+            <p>Plakater er valgfrie, så bare en tittel er nok til å lagre en god idé.</p>
           </div>
 
           {movies.length === 0 ? (
             <EmptyState
               title="Ingen filmer enda"
-              description="Legg til det foerste forslaget og begynn aa planlegge filmkveld."
+              description="Legg til det første forslaget og begynn å planlegge filmkveld."
             />
           ) : (
             <div className="movieGrid">
@@ -63,7 +63,7 @@ export default async function MoviesPage() {
                     <p>Foreslatt av {movie.suggestedBy}</p>
                     {movie.link ? (
                       <a href={movie.link} target="_blank" rel="noreferrer" className="inlineLink">
-                        Aapne filmlenke
+                        Åpne filmlenke
                       </a>
                     ) : null}
                   </div>
