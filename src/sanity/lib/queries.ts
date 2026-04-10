@@ -22,3 +22,16 @@ export const MOVIE_RECOMMENDATIONS_QUERY = `*[_type == "movieRecommendation" && 
   "posterUrl": coalesce(poster.asset->url, posterUrl),
   "suggestedBy": coalesce(familyMember->name, suggestedByName)
 }`;
+
+export const SHOPPING_LIST_QUERY = `*[_type == "shoppingList"][0] {
+  _id,
+  title,
+  items[]{
+    _key,
+    title,
+    quantity,
+    note,
+    addedBy,
+    checked
+  }
+}`;

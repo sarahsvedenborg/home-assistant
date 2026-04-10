@@ -591,6 +591,11 @@ button {
   align-items: flex-start;
 }
 
+.shoppingItemChecked {
+  opacity: 0.72;
+  background: rgba(130, 209, 174, 0.16);
+}
+
 .emptyState {
   display: grid;
   gap: 0.75rem;

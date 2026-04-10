@@ -1,5 +1,7 @@
 import "server-only";
 
+import { randomUUID } from "crypto";
+
 import { requireApproval } from "@/sanity/env";
 import { getReadClient, getWriteClient } from "@/sanity/lib/client";
 import { FAMILY_MEMBERS_QUERY } from "@/sanity/lib/queries";
@@ -120,4 +122,46 @@ export async function submitMovieRecommendation(input: {
   return requireApproval
     ? "Movie suggestion sent! A grown-up can approve it in the studio."
     : "Movie night idea added!";
+}
+
+export async function addShoppingListItem(input: {
+  title: string;
+  quantity?: string;
+  note?: string;
+  addedBy?: string;
+}) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const existingList = await client.fetch<{ _id: string } | null>(
+    `*[_type == "shoppingList"][0]{_id}`,
+  );
+
+  const item = {
+    _key: randomUUID(),
+    title: input.title,
+    quantity: input.quantity,
+    note: input.note,
+    addedBy: input.addedBy,
+    checked: false,
+  };
+
+  if (!existingList?._id) {
+    await client.create({
+      _type: "shoppingList",
+      title: "Handleliste",
+      items: [item],
+    });
+  } else {
+    await client
+      .patch(existingList._id)
+      .setIfMissing({ items: [] })
+      .append("items", [item])
+      .commit();
+  }
+
+  return "Varen er lagt til i handlelisten!";
 }

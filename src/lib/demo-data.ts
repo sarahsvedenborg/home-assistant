@@ -1,4 +1,4 @@
-import type { FamilyMember, MovieRecommendation, WishListItem } from "@/lib/types";
+import type { FamilyMember, MovieRecommendation, ShoppingList, WishListItem } from "@/lib/types";
 
 export const FALLBACK_FAMILY_MEMBERS: FamilyMember[] = [
   { id: "mom", name: "Mamma", role: "adult", emoji: "🌻", accentColor: "#ff9f6e" },
@@ -58,3 +58,32 @@ export const FALLBACK_MOVIES: MovieRecommendation[] = [
     watched: false,
   },
 ];
+
+export const FALLBACK_SHOPPING_LIST: ShoppingList = {
+  id: "shopping-list-1",
+  title: "Handleliste",
+  items: [
+    {
+      id: "shopping-1",
+      title: "Melk",
+      quantity: "2 kartonger",
+      addedBy: "Mamma",
+      checked: false,
+    },
+    {
+      id: "shopping-2",
+      title: "Tacolefser",
+      quantity: "1 pakke",
+      note: "Gjerne store",
+      addedBy: "Pappa",
+      checked: false,
+    },
+    {
+      id: "shopping-3",
+      title: "Bananer",
+      quantity: "6 stk",
+      addedBy: "Linnea",
+      checked: true,
+    },
+  ],
+};

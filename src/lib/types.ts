@@ -34,3 +34,18 @@ export type FamilyMemberWishListGroup = {
   member: FamilyMember;
   items: WishListItem[];
 };
+
+export type ShoppingListEntry = {
+  id: string;
+  title: string;
+  quantity?: string;
+  note?: string;
+  addedBy?: string;
+  checked: boolean;
+};
+
+export type ShoppingList = {
+  id: string;
+  title: string;
+  items: ShoppingListEntry[];
+};
