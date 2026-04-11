@@ -12,7 +12,7 @@ import type {
   WishListItem,
 } from "@/lib/types";
 import { isSanityConfigured } from "@/sanity/env";
-import { getReadClient } from "@/sanity/lib/client";
+import { getFreshReadClient, getReadClient } from "@/sanity/lib/client";
 import {
   FAMILY_MEMBERS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
@@ -63,6 +63,20 @@ type SanityShoppingList = {
 
 async function fetchFromSanity<T>(query: string) {
   const client = getReadClient();
+
+  if (!client) {
+    return null;
+  }
+
+  try {
+    return await client.fetch<T>(query);
+  } catch {
+    return null;
+  }
+}
+
+async function fetchFreshFromSanity<T>(query: string) {
+  const client = getFreshReadClient();
 
   if (!client) {
     return null;
@@ -147,7 +161,7 @@ export async function getShoppingList(): Promise<ShoppingList> {
     return FALLBACK_SHOPPING_LIST;
   }
 
-  const list = await fetchFromSanity<SanityShoppingList>(SHOPPING_LIST_QUERY);
+  const list = await fetchFreshFromSanity<SanityShoppingList>(SHOPPING_LIST_QUERY);
 
   if (!list) {
     return FALLBACK_SHOPPING_LIST;
