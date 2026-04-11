@@ -29,6 +29,10 @@ export function getReadClient() {
   return buildClient({ useCdn: true });
 }
 
+export function getFreshReadClient() {
+  return buildClient({ useCdn: false });
+}
+
 export function getWriteClient() {
   if (!canWriteToSanity) {
     return null;
