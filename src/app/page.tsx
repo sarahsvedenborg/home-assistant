@@ -38,26 +38,28 @@ export default async function Home() {
         </div>
 
         <div className="heroStats" aria-label="Hovedpunkter i Family Hub">
-          <div className="statBubble statBubbleWarm">
-            <strong>{familyMembers.length}</strong>
-            <span>familiemedlemmer</span>
+           <div className="statBubble statBubbleCool">
+            <strong>{shoppingList.items.filter((item) => !item.checked).length}</strong>
+            <span>varer på handlelisten</span>
           </div>
+            <div className="statBubble statBubbleSun">
+            <strong>{movies.length}</strong>
+            <span>filmforslag</span>
+          </div>
+        
           <div className="statBubble statBubbleCool">
             <strong>{wishListItems.length}</strong>
             <span>ønsker</span>
           </div>
-          <div className="statBubble statBubbleSun">
-            <strong>{movies.length}</strong>
-            <span>filmforslag</span>
+            <div className="statBubble statBubbleWarm">
+            <strong>{familyMembers.length}</strong>
+            <span>familiemedlemmer</span>
           </div>
-          <div className="statBubble statBubbleCool">
-            <strong>{shoppingList.items.filter((item) => !item.checked).length}</strong>
-            <span>varer igjen paa handlelisten</span>
-          </div>
-          <div className="statusPill">
+        
+        {/*   <div className="statusPill">
             <span className="statusDot" aria-hidden="true" />
             {siteMode === "live" ? "Koblet til Sanity" : "Demodata til miljøvariabler er satt"}
-          </div>
+          </div> */}
         </div>
       </section>
 
