@@ -6,6 +6,7 @@ import { useEffect, useState, type FormEvent } from "react";
 type WishlistFormProps = {
   familyMembers: string[];
   selectedMemberName?: string;
+  submitPath?: string;
 };
 
 type FormState = {
@@ -22,7 +23,11 @@ const messageClassNames = {
   success: "feedback feedbackSuccess",
 };
 
-export function WishlistForm({ familyMembers, selectedMemberName }: WishlistFormProps) {
+export function WishlistForm({
+  familyMembers,
+  selectedMemberName,
+  submitPath = "/api/submissions/wishlist",
+}: WishlistFormProps) {
   const router = useRouter();
   const defaultMember = selectedMemberName || familyMembers[0] || "";
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,10 +54,10 @@ export function WishlistForm({ familyMembers, selectedMemberName }: WishlistForm
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
-    setMessage(null);
+      setMessage(null);
 
-    try {
-      const response = await fetch("/api/submissions/wishlist", {
+      try {
+      const response = await fetch(submitPath, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,25 +92,26 @@ export function WishlistForm({ familyMembers, selectedMemberName }: WishlistForm
   return (
     <form className="formPanel" onSubmit={handleSubmit}>
       <div className="formIntro">
-        <span className="kicker">Legg til et ønske</span>
+      {/*   <span className="kicker">Legg til et ønske</span> */}
         <h2>
           {selectedMemberName
             ? `Legg til et ønske for ${selectedMemberName}`
             : "Del en ide med bare noen få trykk"}
         </h2>
-        <p>
+      {/*   <p>
           {selectedMemberName
             ? "Skjemaet lagrer ønsket direkte på riktig person."
             : "Perfekt for gaver, opplevelser eller små hint til senere."}
-        </p>
+        </p> */}
       </div>
 
       <div className="formGrid">
         {selectedMemberName ? (
-          <div className="field fieldWide">
+        /*   <div className="field fieldWide">
             <span>Legges til for</span>
             <div className="lockedMember">{selectedMemberName}</div>
-          </div>
+          </div> */
+          null
         ) : (
           <label className="field">
             <span>Navnet ditt</span>
@@ -126,7 +132,7 @@ export function WishlistForm({ familyMembers, selectedMemberName }: WishlistForm
         )}
 
         <label className="field fieldWide">
-          <span>Navn på ønsket</span>
+          <span>Hva ønsker du deg?</span>
           <input
             type="text"
             value={form.title}
@@ -188,7 +194,7 @@ export function WishlistForm({ familyMembers, selectedMemberName }: WishlistForm
         <button className="buttonPrimary" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Sender..." : "Legg til forslag"}
         </button>
-        <p className="smallNote">En voksen kan rydde opp eller godkjenne forslag i Sanity Studio.</p>
+{/*         <p className="smallNote">En voksen kan rydde opp eller godkjenne forslag i Sanity Studio.</p> */}
       </div>
 
       {message ? (

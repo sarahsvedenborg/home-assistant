@@ -411,6 +411,92 @@ button {
   border-radius: 1.4rem;
 }
 
+.tabsPanel {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.tabList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tabButton {
+  min-height: 3rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(75, 98, 124, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.tabButtonActive {
+  border-color: rgba(255, 159, 110, 0.5);
+  background: rgba(255, 244, 231, 0.95);
+  color: var(--ink);
+}
+
+.tabPanel {
+  margin-top: 1rem;
+}
+
+.wishTabsContent {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.wishTableHeader,
+.wishTableRow {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.2fr) minmax(180px, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.wishTableHeader {
+  padding: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.wishTableBody {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.wishTableRow {
+  padding: 1rem;
+  border: 1px solid rgba(75, 98, 124, 0.12);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.wishTableRowCompact {
+  grid-template-columns: minmax(220px, 1.2fr) minmax(180px, 1fr);
+}
+
+.wishTitleCell {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.wishInlineLink {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.wishTableEmpty {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--muted);
+}
+
 .groupCardOpen {
   margin-top: 1rem;
 }
@@ -655,6 +741,11 @@ button {
   .familyCardGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .wishTabsContent {
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    align-items: start;
+  }
 }
 
 @media (max-width: 699px) {
@@ -665,5 +756,17 @@ button {
 
   .siteNav {
     justify-content: flex-start;
+  }
+
+  .wishTableHeader {
+    display: none;
+  }
+
+  .wishTableRow {
+    grid-template-columns: 1fr;
+  }
+
+  .wishTableRowCompact {
+    grid-template-columns: 1fr;
   }
 }

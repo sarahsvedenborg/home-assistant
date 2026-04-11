@@ -78,13 +78,13 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
   return (
     <form className="formPanel" onSubmit={handleSubmit}>
       <div className="formIntro">
-        <span className="kicker">Legg til en film</span>
-        <h2>Lagre neste filmvalg til familiekvelden</h2>
-        <p>Del favoritter, nye funn eller filmen alle snakker om.</p>
+      {/*   <span className="kicker">Legg til en film</span> */}
+        <h2>Legg til filmforslag</h2>
+{/*         <p>Del favoritter, nye funn eller filmen alle snakker om.</p> */}
       </div>
 
       <div className="formGrid">
-        <label className="field">
+      {/*   <label className="field">
           <span>Foreslatt av</span>
           <select
             value={form.suggestedByName}
@@ -99,7 +99,7 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
               </option>
             ))}
           </select>
-        </label>
+        </label> */}
 
         <label className="field fieldWide">
           <span>Filmtittel</span>

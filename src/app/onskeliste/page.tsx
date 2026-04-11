@@ -1,8 +1,8 @@
+import { OnskelisteTabs } from "@/components/onskeliste-tabs";
 import { SiteHeader } from "@/components/site-header";
-import { WishlistBrowser } from "@/components/wishlist-browser";
 import { getFamilyMembers, getWishListItems } from "@/lib/data";
 
-export default async function WishListPage() {
+export default async function OnskelistePage() {
   const [familyMembers, wishListItems] = await Promise.all([
     getFamilyMembers(),
     getWishListItems(),
@@ -10,18 +10,17 @@ export default async function WishListPage() {
 
   return (
     <main className="shell">
-      <SiteHeader current="wishlist" />
+      <SiteHeader current="onskeliste" />
 
       <section className="sectionHero accentWarmPanel">
         <div>
           <span className="kicker">Ønskeliste</span>
-          <h1 style={{padding: '0.5em 0'}}>Ønskelister</h1>
-        {/*  */}
+          <h1 style={{ padding: "0.5em 0" }}>Familiens ønskelister</h1>
         </div>
         <div className="sectionBadge">{wishListItems.length} lagrede ønsker</div>
       </section>
 
-      <WishlistBrowser familyMembers={familyMembers} wishListItems={wishListItems} />
+      <OnskelisteTabs familyMembers={familyMembers} wishListItems={wishListItems} />
     </main>
   );
 }
