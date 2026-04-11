@@ -683,6 +683,67 @@ button {
   background: rgba(130, 209, 174, 0.16);
 }
 
+.shoppingToggle {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.shoppingToggle:disabled {
+  cursor: wait;
+}
+
+.shoppingToggle .itemCard {
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.shoppingToggle:hover .itemCard,
+.shoppingToggle:focus-visible .itemCard {
+  transform: translateY(-1px);
+  outline: 2px solid rgba(94, 166, 255, 0.28);
+}
+
+.shoppingToggleChecked .itemCard {
+  background: rgba(130, 209, 174, 0.16);
+}
+
+.shoppingItemTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.shoppingCheckbox {
+  display: inline-grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid rgba(75, 98, 124, 0.35);
+  border-radius: 0.35rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: #20593d;
+  font-size: 0.9rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.shoppingCheckboxChecked {
+  border-color: rgba(32, 89, 61, 0.45);
+  background: rgba(130, 209, 174, 0.38);
+}
+
+.shoppingItemTitle {
+  transition: color 0.18s ease, text-decoration-color 0.18s ease;
+}
+
+.shoppingItemTitleChecked {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgba(32, 89, 61, 0.7);
+}
+
 .loginShell {
   max-width: 560px;
   padding-top: 4rem;

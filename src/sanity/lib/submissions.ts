@@ -165,3 +165,33 @@ export async function addShoppingListItem(input: {
 
   return "Varen er lagt til i handlelisten!";
 }
+
+export async function toggleShoppingListItem(itemId: string) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const existingList = await client.fetch<{
+    _id: string;
+    items?: Array<{ _key: string; checked?: boolean }>;
+  } | null>(`*[_type == "shoppingList"][0]{_id, items[]{_key, checked}}`);
+
+  if (!existingList?._id) {
+    throw new Error("Handlelisten finnes ikke ennå.");
+  }
+
+  const currentItem = existingList.items?.find((item) => item._key === itemId);
+
+  if (!currentItem) {
+    throw new Error("Fant ikke varen du ville oppdatere.");
+  }
+
+  await client
+    .patch(existingList._id)
+    .set({ [`items[_key==\"${itemId}\"].checked`]: !Boolean(currentItem.checked) })
+    .commit();
+
+  return !Boolean(currentItem.checked);
+}

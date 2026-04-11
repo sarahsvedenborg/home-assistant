@@ -1,3 +1,4 @@
+import { ShoppingListBrowser } from "@/components/shopping-list-browser";
 import { ShoppingListForm } from "@/components/shopping-list-form";
 import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getShoppingList } from "@/lib/data";
@@ -38,24 +39,15 @@ export default async function HandlelistePage() {
               <p>Legg til den foerste varen i skjemaet ved siden av.</p>
             </div>
           ) : (
-            <div className="groupStack">
-              {shoppingList.items.map((item) => (
-                <article key={item.id} className={item.checked ? "itemCard shoppingItemChecked" : "itemCard"}>
-                  <div className="itemTitleRow">
-                    <strong>{item.title}</strong>
-                    <span className="itemMeta">{item.checked ? "Kjoept" : "Mangler"}</span>
-                  </div>
-                  {item.quantity ? <p>Mengde: {item.quantity}</p> : null}
-                  {item.note ? <p>{item.note}</p> : null}
-{/*                   {item.addedBy ? <p>Lagt til av {item.addedBy}</p> : null} */}
-                </article>
-              ))}
-            </div>
+            <ShoppingListBrowser items={shoppingList.items} />
           )}
         </div>
 
         <div>
-          <ShoppingListForm familyMembers={familyMembers.map((member) => member.name)} />
+          <ShoppingListForm
+            familyMembers={familyMembers.map((member) => member.name)}
+            previousItems={shoppingList.items}
+          />
         </div>
       </section>
     </main>

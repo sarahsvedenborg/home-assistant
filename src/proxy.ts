@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { AUTH_COOKIE_NAME, getSafeRedirectPath, isAuthEnabled, isValidAuthCookie } from "@/lib/auth";
+import { AUTH_COOKIE_NAME, getSafeRedirectPath, isAuthEnabled, isValidAuthCookie } from "./lib/auth";
 
 function isPublicPath(pathname: string) {
   return (
