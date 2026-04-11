@@ -2,12 +2,13 @@ import Link from "next/link";
 
 import { HubCard } from "@/components/hub-card";
 import { SiteHeader } from "@/components/site-header";
-import { getFamilyMembers, getMovieRecommendations, getSiteMode, getWishListItems } from "@/lib/data";
+import { getFamilyMembers, getMovieRecommendations, getShoppingList, getSiteMode, getWishListItems } from "@/lib/data";
 
 export default async function Home() {
-  const [familyMembers, movies, wishListItems] = await Promise.all([
+  const [familyMembers, movies, shoppingList, wishListItems] = await Promise.all([
     getFamilyMembers(),
     getMovieRecommendations(),
+    getShoppingList(),
     getWishListItems(),
   ]);
   const siteMode = getSiteMode();
@@ -49,6 +50,10 @@ export default async function Home() {
             <strong>{movies.length}</strong>
             <span>filmforslag</span>
           </div>
+          <div className="statBubble statBubbleCool">
+            <strong>{shoppingList.items.filter((item) => !item.checked).length}</strong>
+            <span>varer igjen paa handlelisten</span>
+          </div>
           <div className="statusPill">
             <span className="statusDot" aria-hidden="true" />
             {siteMode === "live" ? "Koblet til Sanity" : "Demodata til miljøvariabler er satt"}
@@ -65,6 +70,15 @@ export default async function Home() {
           stat={`${wishListItems.length} ideer`}
           accentClass="accentWarm"
           ctaLabel="Åpne ønskelisten"
+        />
+        <HubCard
+          href="/handleliste"
+          icon="🛒"
+          title="Handleliste"
+          description="Samle alt som maa kjoepes i en delt liste som hele familien kan oppdatere."
+          stat={`${shoppingList.items.filter((item) => !item.checked).length} mangler`}
+          accentClass="accentFuture"
+          ctaLabel="Aapne handlelisten"
         />
         <HubCard
           href="/movies"

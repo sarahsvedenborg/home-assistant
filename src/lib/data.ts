@@ -1,9 +1,13 @@
 import "server-only";
 
-import { FALLBACK_FAMILY_MEMBERS, FALLBACK_MOVIES, FALLBACK_WISHLIST_ITEMS } from "@/lib/demo-data";
+import { FALLBACK_FAMILY_MEMBERS, FALLBACK_MOVIES, FALLBACK_SHOPPING_LIST, FALLBACK_WISHLIST_ITEMS } from "@/lib/demo-data";
+
+
 import type {
   FamilyMember,
   MovieRecommendation,
+  ShoppingList,
+  ShoppingListEntry,
   WishListGroup,
   WishListItem,
 } from "@/lib/types";
@@ -12,7 +16,9 @@ import { getReadClient } from "@/sanity/lib/client";
 import {
   FAMILY_MEMBERS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
+  SHOPPING_LIST_QUERY,
   WISHLIST_ITEMS_QUERY,
+  
 } from "@/sanity/lib/queries";
 
 type SanityFamilyMember = {
@@ -38,6 +44,21 @@ type SanityMovieRecommendation = {
   link?: string;
   suggestedBy?: string;
   watched?: boolean;
+};
+
+type SanityShoppingListItem = {
+  _key: string;
+  title: string;
+  quantity?: string;
+  note?: string;
+  addedBy?: string;
+  checked?: boolean;
+};
+
+type SanityShoppingList = {
+  _id: string;
+  title?: string;
+  items?: SanityShoppingListItem[];
 };
 
 async function fetchFromSanity<T>(query: string) {
@@ -119,6 +140,33 @@ export async function getMovieRecommendations(): Promise<MovieRecommendation[]> 
     suggestedBy: movie.suggestedBy || "Someone",
     watched: Boolean(movie.watched),
   }));
+}
+
+export async function getShoppingList(): Promise<ShoppingList> {
+  if (!isSanityConfigured) {
+    return FALLBACK_SHOPPING_LIST;
+  }
+
+  const list = await fetchFromSanity<SanityShoppingList>(SHOPPING_LIST_QUERY);
+
+  if (!list) {
+    return FALLBACK_SHOPPING_LIST;
+  }
+
+  const items: ShoppingListEntry[] = (list.items || []).map((item) => ({
+    id: item._key,
+    title: item.title,
+    quantity: item.quantity,
+    note: item.note,
+    addedBy: item.addedBy,
+    checked: Boolean(item.checked),
+  }));
+
+  return {
+    id: list._id,
+    title: list.title || "Handleliste",
+    items,
+  };
 }
 
 export function groupWishListByPerson(items: WishListItem[]): WishListGroup[] {

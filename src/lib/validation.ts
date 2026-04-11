@@ -146,3 +146,51 @@ export function validateMovieSubmission(
     },
   };
 }
+
+export function validateShoppingListSubmission(
+  payload: unknown,
+): ValidationResult<{
+  title: string;
+  quantity?: string;
+  note?: string;
+  addedBy?: string;
+  password: string;
+}> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const title = normalizeText(common.record.title);
+  const quantity = normalizeText(common.record.quantity);
+  const note = normalizeText(common.record.note);
+  const addedBy = normalizeText(common.record.addedBy);
+
+  if (!title) {
+    return { success: false, error: "Legg til en vare du vil kjope." };
+  }
+
+  if (title.length > 100) {
+    return { success: false, error: "Varenavnet maa vaere under 100 tegn." };
+  }
+
+  if (quantity.length > 60) {
+    return { success: false, error: "Mengden maa vaere under 60 tegn." };
+  }
+
+  if (note.length > 200) {
+    return { success: false, error: "Notatet maa vaere under 200 tegn." };
+  }
+
+  return {
+    success: true,
+    data: {
+      title,
+      quantity: quantity || undefined,
+      note: note || undefined,
+      addedBy: addedBy || undefined,
+      password: common.password,
+    },
+  };
+}
