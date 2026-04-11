@@ -1,22 +1,30 @@
 import { NextResponse } from "next/server";
 
-import { submissionPassword } from "@/sanity/env";
+import { AUTH_COOKIE_NAME, isAuthEnabled, isValidAuthCookie } from "@/lib/auth";
 import { submitWishListItem } from "@/sanity/lib/submissions";
 import { validateWishListSubmission } from "@/lib/validation";
 
 export async function POST(request: Request) {
+  if (isAuthEnabled()) {
+    const cookieStore = request.headers.get("cookie") || "";
+    const authCookie = cookieStore
+      .split(";")
+      .map((part) => part.trim())
+      .find((part) => part.startsWith(`${AUTH_COOKIE_NAME}=`))
+      ?.split("=")
+      .slice(1)
+      .join("=");
+
+    if (!(await isValidAuthCookie(authCookie))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
+
   const payload = await request.json();
   const result = validateWishListSubmission(payload);
 
   if (!result.success) {
     return NextResponse.json({ error: result.error }, { status: 400 });
-  }
-
-  if (submissionPassword && result.data.password !== submissionPassword) {
-    return NextResponse.json(
-      { error: "That family password did not match." },
-      { status: 401 },
-    );
   }
 
   try {

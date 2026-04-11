@@ -12,7 +12,6 @@ type FormState = {
   quantity: string;
   note: string;
   addedBy: string;
-  password: string;
   website: string;
 };
 
@@ -28,7 +27,6 @@ export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
     quantity: "",
     note: "",
     addedBy: familyMembers[0] || "",
-    password: "",
     website: "",
   });
 
@@ -59,7 +57,6 @@ export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
         quantity: "",
         note: "",
         addedBy: familyMembers[0] || "",
-        password: "",
         website: "",
       });
       router.refresh();
@@ -124,16 +121,6 @@ export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
             placeholder="For eksempel type, merke eller noe annet viktig"
             rows={4}
             maxLength={200}
-          />
-        </label>
-
-        <label className="field fieldWide">
-          <span>Familiepassord (valgfritt)</span>
-          <input
-            type="password"
-            value={form.password}
-            onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-            placeholder="Bare hvis en voksen har gitt deg det"
           />
         </label>
 

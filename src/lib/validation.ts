@@ -33,7 +33,6 @@ function validateCommonFields(payload: unknown) {
   }
 
   const record = payload as Record<string, unknown>;
-  const password = normalizeText(record.password);
   const honeypot = normalizeText(record.website);
 
   if (honeypot) {
@@ -42,7 +41,6 @@ function validateCommonFields(payload: unknown) {
 
   return {
     success: true,
-    password,
     record,
   } as const;
 }
@@ -54,7 +52,6 @@ export function validateWishListSubmission(
   description?: string;
   link?: string;
   submittedByName: string;
-  password: string;
 }> {
   const common = validateCommonFields(payload);
 
@@ -94,7 +91,6 @@ export function validateWishListSubmission(
       title,
       description: description || undefined,
       link: link || undefined,
-      password: common.password,
     },
   };
 }
@@ -106,7 +102,6 @@ export function validateMovieSubmission(
   link?: string;
   posterUrl?: string;
   suggestedByName: string;
-  password: string;
 }> {
   const common = validateCommonFields(payload);
 
@@ -142,7 +137,6 @@ export function validateMovieSubmission(
       link: link || undefined,
       posterUrl: posterUrl || undefined,
       suggestedByName,
-      password: common.password,
     },
   };
 }
@@ -154,7 +148,6 @@ export function validateShoppingListSubmission(
   quantity?: string;
   note?: string;
   addedBy?: string;
-  password: string;
 }> {
   const common = validateCommonFields(payload);
 
@@ -190,7 +183,6 @@ export function validateShoppingListSubmission(
       quantity: quantity || undefined,
       note: note || undefined,
       addedBy: addedBy || undefined,
-      password: common.password,
     },
   };
 }

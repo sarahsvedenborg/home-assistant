@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { HubCard } from "@/components/hub-card";
 import { SiteHeader } from "@/components/site-header";
-import { getFamilyMembers, getMovieRecommendations, getShoppingList, getSiteMode, getWishListItems } from "@/lib/data";
+import { getFamilyMembers, getMovieRecommendations, getShoppingList, getWishListItems } from "@/lib/data";
 
 export default async function Home() {
   const [familyMembers, movies, shoppingList, wishListItems] = await Promise.all([
@@ -11,8 +11,6 @@ export default async function Home() {
     getShoppingList(),
     getWishListItems(),
   ]);
-  const siteMode = getSiteMode();
-
   return (
     <main className="shell">
       <SiteHeader current="home" />

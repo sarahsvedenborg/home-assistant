@@ -12,7 +12,6 @@ type FormState = {
   title: string;
   link: string;
   posterUrl: string;
-  password: string;
   website: string;
 };
 
@@ -33,7 +32,6 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
     title: "",
     link: "",
     posterUrl: "",
-    password: "",
     website: "",
   });
 
@@ -64,7 +62,6 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
         title: "",
         link: "",
         posterUrl: "",
-        password: "",
         website: "",
       });
       router.refresh();
@@ -132,18 +129,6 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
               setForm((current) => ({ ...current, posterUrl: event.target.value }))
             }
             placeholder="https://image.example/plakat.jpg"
-          />
-        </label>
-
-        <label className="field fieldWide">
-          <span>Familiepassord (valgfritt)</span>
-          <input
-            type="password"
-            value={form.password}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, password: event.target.value }))
-            }
-            placeholder="Bare hvis en voksen har gitt deg det"
           />
         </label>
 

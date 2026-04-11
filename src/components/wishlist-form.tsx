@@ -14,7 +14,6 @@ type FormState = {
   title: string;
   link: string;
   description: string;
-  password: string;
   website: string;
 };
 
@@ -40,7 +39,6 @@ export function WishlistForm({
     title: "",
     link: "",
     description: "",
-    password: "",
     website: "",
   });
 
@@ -78,7 +76,6 @@ export function WishlistForm({
         title: "",
         link: "",
         description: "",
-        password: "",
         website: "",
       });
       router.refresh();
@@ -163,18 +160,6 @@ export function WishlistForm({
             placeholder="Favorittfarge, stoerrelse eller hvorfor det virker fint"
             maxLength={280}
             rows={4}
-          />
-        </label>
-
-        <label className="field fieldWide">
-          <span>Familiepassord (valgfritt)</span>
-          <input
-            type="password"
-            value={form.password}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, password: event.target.value }))
-            }
-            placeholder="Bare hvis en voksen har gitt deg det"
           />
         </label>
 
