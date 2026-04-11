@@ -92,25 +92,26 @@ export function WishlistForm({
   return (
     <form className="formPanel" onSubmit={handleSubmit}>
       <div className="formIntro">
-        <span className="kicker">Legg til et ønske</span>
+      {/*   <span className="kicker">Legg til et ønske</span> */}
         <h2>
           {selectedMemberName
             ? `Legg til et ønske for ${selectedMemberName}`
             : "Del en ide med bare noen få trykk"}
         </h2>
-        <p>
+      {/*   <p>
           {selectedMemberName
             ? "Skjemaet lagrer ønsket direkte på riktig person."
             : "Perfekt for gaver, opplevelser eller små hint til senere."}
-        </p>
+        </p> */}
       </div>
 
       <div className="formGrid">
         {selectedMemberName ? (
-          <div className="field fieldWide">
+        /*   <div className="field fieldWide">
             <span>Legges til for</span>
             <div className="lockedMember">{selectedMemberName}</div>
-          </div>
+          </div> */
+          null
         ) : (
           <label className="field">
             <span>Navnet ditt</span>
@@ -131,7 +132,7 @@ export function WishlistForm({
         )}
 
         <label className="field fieldWide">
-          <span>Navn på ønsket</span>
+          <span>Hva ønsker du deg?</span>
           <input
             type="text"
             value={form.title}
@@ -193,7 +194,7 @@ export function WishlistForm({
         <button className="buttonPrimary" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Sender..." : "Legg til forslag"}
         </button>
-        <p className="smallNote">En voksen kan rydde opp eller godkjenne forslag i Sanity Studio.</p>
+{/*         <p className="smallNote">En voksen kan rydde opp eller godkjenne forslag i Sanity Studio.</p> */}
       </div>
 
       {message ? (

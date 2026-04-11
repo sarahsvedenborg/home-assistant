@@ -28,7 +28,7 @@ export default async function Home() {
           </p>
 
           <div className="heroActions">
-            <Link className="buttonPrimary" href="/wishlist#add-wish">
+            <Link className="buttonPrimary" href="/onskeliste#add-wish">
               Legg til et ønske
             </Link>
             <Link className="buttonSecondary" href="/movies#add-movie">

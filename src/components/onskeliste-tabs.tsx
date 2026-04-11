@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { WishlistForm } from "@/components/wishlist-form";
 import { buildWishListGroupsForFamily } from "@/lib/wishlist";
 import type { FamilyMember, WishListItem } from "@/lib/types";
 
@@ -45,33 +46,42 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
       </div>
 
       <div className="tabPanel" role="tabpanel" aria-label={activeGroup.member.name}>
-        <div className="wishTableHeader">
-          <span>Ønske</span>
-          <span>Lenke</span>
-          <span>Kommentar</span>
-        </div>
+        <div className="wishTabsContent">
+          <div>
+            <div className="wishTableHeader">
+              <span>Ønske</span>
+              <span>Kommentar</span>
+            </div>
 
-        {activeGroup.items.length === 0 ? (
-          <div className="wishTableEmpty">Ingen oensker registrert for {activeGroup.member.name} ennå.</div>
-        ) : (
-          <div className="wishTableBody">
-            {activeGroup.items.map((item) => (
-              <div key={item.id} className="wishTableRow">
-                <strong>{item.title}</strong>
-                <span>
-                  {item.link ? (
-                    <a href={item.link} target="_blank" rel="noreferrer" className="inlineLink">
-                      Aapne lenke
-                    </a>
-                  ) : (
-                    "-"
-                  )}
-                </span>
-                <span>{item.description || "-"}</span>
+            {activeGroup.items.length === 0 ? (
+              <div className="wishTableEmpty">
+                Ingen ønsker registrert for {activeGroup.member.name} ennå.
               </div>
-            ))}
+            ) : (
+              <div className="wishTableBody">
+                {activeGroup.items.map((item) => (
+                  <div key={item.id} className="wishTableRow wishTableRowCompact">
+                    <div className="wishTitleCell">
+                      <strong>{item.title}</strong>
+                      {item.link ? (
+                        <a href={item.link} target="_blank" rel="noreferrer" className="wishInlineLink">
+                          {item.link}
+                        </a>
+                      ) : null}
+                    </div>
+                    <span>{item.description || "-"}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        )}
+
+          <WishlistForm
+            familyMembers={familyMembers.map((member) => member.name)}
+            selectedMemberName={activeGroup.member.name}
+            submitPath="/api/submissions/onskeliste"
+          />
+        </div>
       </div>
     </section>
   );

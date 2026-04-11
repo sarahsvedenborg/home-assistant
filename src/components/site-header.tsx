@@ -19,17 +19,17 @@ export function SiteHeader({ current }: SiteHeaderProps) {
         <Link href="/" className={current === "home" ? "navLink navLinkActive" : "navLink"}>
           Hjem
         </Link>
-        <Link
+       {/*  <Link
           href="/wishlist"
           className={current === "wishlist" ? "navLink navLinkActive" : "navLink"}
         >
           Ønskeliste
-        </Link>
+        </Link> */}
         <Link
           href="/onskeliste"
           className={current === "onskeliste" ? "navLink navLinkActive" : "navLink"}
         >
-          Onskeliste
+          Ønskeliste
         </Link>
         <Link
           href="/movies"
