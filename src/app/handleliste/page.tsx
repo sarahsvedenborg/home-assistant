@@ -55,7 +55,10 @@ export default async function HandlelistePage() {
         </div>
 
         <div>
-          <ShoppingListForm familyMembers={familyMembers.map((member) => member.name)} />
+          <ShoppingListForm
+            familyMembers={familyMembers.map((member) => member.name)}
+            previousItems={shoppingList.items}
+          />
         </div>
       </section>
     </main>

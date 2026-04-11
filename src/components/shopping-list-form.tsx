@@ -1,10 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
+
+import type { ShoppingListEntry } from "@/lib/types";
 
 type ShoppingListFormProps = {
   familyMembers: string[];
+  previousItems: ShoppingListEntry[];
 };
 
 type FormState = {
@@ -15,7 +18,7 @@ type FormState = {
   website: string;
 };
 
-export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
+export function ShoppingListForm({ familyMembers, previousItems }: ShoppingListFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
@@ -29,6 +32,17 @@ export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
     addedBy: familyMembers[0] || "",
     website: "",
   });
+
+  const suggestedItems = useMemo(() => {
+    return Array.from(
+      new Map(
+        previousItems
+          .slice()
+          .reverse()
+          .map((item) => [item.title.trim().toLowerCase(), item]),
+      ).values(),
+    );
+  }, [previousItems]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -80,12 +94,21 @@ export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
           <span>Vare</span>
           <input
             type="text"
+            list="shopping-item-suggestions"
             value={form.title}
             onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
             placeholder="Brod, melk, pasta..."
             maxLength={100}
             required
           />
+          <datalist id="shopping-item-suggestions">
+            {suggestedItems.map((item) => (
+              <option key={item.id} value={item.title} />
+            ))}
+          </datalist>
+          {suggestedItems.length > 0 ? (
+            <p className="smallNote">Begynn aa skrive for aa velge blant varer dere har lagt til tidligere.</p>
+          ) : null}
         </label>
 
         <label className="field">
