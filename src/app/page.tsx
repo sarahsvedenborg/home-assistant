@@ -38,36 +38,38 @@ export default async function Home() {
         </div>
 
         <div className="heroStats" aria-label="Hovedpunkter i Family Hub">
-          <div className="statBubble statBubbleWarm">
-            <strong>{familyMembers.length}</strong>
-            <span>familiemedlemmer</span>
+           <div className="statBubble statBubbleCool">
+            <strong>{shoppingList.items.filter((item) => !item.checked).length}</strong>
+            <span>varer på handlelisten</span>
           </div>
+            <div className="statBubble statBubbleSun">
+            <strong>{movies.length}</strong>
+            <span>filmforslag</span>
+          </div>
+        
           <div className="statBubble statBubbleCool">
             <strong>{wishListItems.length}</strong>
             <span>ønsker</span>
           </div>
-          <div className="statBubble statBubbleSun">
-            <strong>{movies.length}</strong>
-            <span>filmforslag</span>
+            <div className="statBubble statBubbleWarm">
+            <strong>{familyMembers.length}</strong>
+            <span>familiemedlemmer</span>
           </div>
-          <div className="statBubble statBubbleCool">
-            <strong>{shoppingList.items.filter((item) => !item.checked).length}</strong>
-            <span>varer igjen paa handlelisten</span>
-          </div>
-          <div className="statusPill">
+        
+        {/*   <div className="statusPill">
             <span className="statusDot" aria-hidden="true" />
             {siteMode === "live" ? "Koblet til Sanity" : "Demodata til miljøvariabler er satt"}
-          </div>
+          </div> */}
         </div>
       </section>
 
       <section className="hubGrid" aria-label="Hovedseksjoner">
         <HubCard
-          href="/wishlist"
+          href="/onskeliste"
           icon="🎁"
           title="Ønskeliste"
-          description="Samle gaveønsker per person med korte notater og valgfrie lenker."
-          stat={`${wishListItems.length} ideer`}
+          description="Samling av gaveønsker per familiemedlem."
+          stat={`${wishListItems.length} idéer`}
           accentClass="accentWarm"
           ctaLabel="Åpne ønskelisten"
         />
@@ -75,17 +77,17 @@ export default async function Home() {
           href="/handleliste"
           icon="🛒"
           title="Handleliste"
-          description="Samle alt som maa kjoepes i en delt liste som hele familien kan oppdatere."
-          stat={`${shoppingList.items.filter((item) => !item.checked).length} mangler`}
+          description="Varer vi trenger å kjøpe."
+          stat={`${shoppingList.items.filter((item) => !item.checked).length} varer`}
           accentClass="accentFuture"
-          ctaLabel="Aapne handlelisten"
+          ctaLabel="Åpne handlelisten"
         />
         <HubCard
           href="/movies"
           icon="🎬"
           title="Filmer"
-          description="Lagre familiens filmvalg, hold oversikt over hva som er sett, og planlegg neste kosekveld."
-          stat={`${movies.filter((movie) => !movie.watched).length} igjen å se`}
+          description="Oversikt over filmforlag og hva som er sett og ikke."
+          stat={`${movies.filter((movie) => !movie.watched).length} usett`}
           accentClass="accentCool"
           ctaLabel="Se filmer"
         />
@@ -102,7 +104,7 @@ export default async function Home() {
         </article>
       </section>
 
-      <section className="infoStrip">
+  {/*     <section className="infoStrip">
         <div>
           <span className="kicker">Trygt fra start</span>
           <h2>Ingen komplisert innlogging for barna</h2>
@@ -111,7 +113,7 @@ export default async function Home() {
           Barn sender inn forslag gjennom enkle skjemaer. Voksne beholder redigeringsrettigheter i
           Sanity Studio.
         </p>
-      </section>
+      </section> */}
     </main>
   );
 }
