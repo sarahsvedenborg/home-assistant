@@ -18,8 +18,8 @@ export default async function MoviesPage() {
       <section className="sectionHero accentCoolPanel">
         <div>
           <span className="kicker">Filmkveld</span>
-          <h1>Ha en koselig samling familiefilmer klar til neste popcornkveld.</h1>
-          <p>Se forslag, hold styr på hva som er sett, og lagre neste favoritt.</p>
+          <h1 style={{margin: '0.2em 0'}}>Filmliste</h1>
+
         </div>
         <div className="sectionBadge">{movies.filter((movie) => !movie.watched).length} igjen å se</div>
       </section>
@@ -28,7 +28,7 @@ export default async function MoviesPage() {
         <div className="listPanel">
           <div className="panelHeading">
             <h2>Filmforslag</h2>
-            <p>Plakater er valgfrie, så bare en tittel er nok til å lagre en god idé.</p>
+{/*             <p>Plakater er valgfrie, så bare en tittel er nok til å lagre en god idé.</p> */}
           </div>
 
           {movies.length === 0 ? (
