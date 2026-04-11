@@ -43,7 +43,7 @@ export const shoppingListType = defineType({
             }),
             defineField({
               name: "checked",
-              title: "Kjoept",
+              title: "Kjøpt",
               type: "boolean",
               initialValue: false,
             }),
@@ -57,7 +57,7 @@ export const shoppingListType = defineType({
             prepare({ title, subtitle, checked }) {
               return {
                 title,
-                subtitle: `${subtitle || "Ingen mengde"} - ${checked ? "kjoept" : "mangler"}`,
+                subtitle: `${subtitle || "Ingen mengde"} - ${checked ? "kjøpt" : "mangler"}`,
               };
             },
           },

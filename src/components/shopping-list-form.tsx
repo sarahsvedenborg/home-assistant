@@ -97,7 +97,7 @@ export function ShoppingListForm({ familyMembers, previousItems }: ShoppingListF
             list="shopping-item-suggestions"
             value={form.title}
             onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
-            placeholder="Brod, melk, pasta..."
+            placeholder="Brød, melk, pasta..."
             maxLength={100}
             required
           />

@@ -57,9 +57,16 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
             >
               <article className={item.checked ? "itemCard shoppingItemChecked" : "itemCard"}>
                 <div className="itemTitleRow">
-                  <strong>{item.title}</strong>
+                  <div className="shoppingItemTitleWrap">
+                    <span className={item.checked ? "shoppingCheckbox shoppingCheckboxChecked" : "shoppingCheckbox"} aria-hidden="true">
+                      {item.checked ? "✓" : ""}
+                    </span>
+                    <strong className={item.checked ? "shoppingItemTitle shoppingItemTitleChecked" : "shoppingItemTitle"}>
+                      {item.title}
+                    </strong>
+                  </div>
                   <span className="itemMeta">
-                    {isPending ? "Oppdaterer..." : item.checked ? "Kjoept" : "Mangler"}
+                    {isPending ? "Oppdaterer..." : item.checked ? "Kjøpt" : "Mangler"}
                   </span>
                 </div>
                 {item.quantity ? <p>Mengde: {item.quantity}</p> : null}
