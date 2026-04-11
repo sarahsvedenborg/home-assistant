@@ -73,9 +73,9 @@ export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
   return (
     <form className="formPanel" onSubmit={handleSubmit}>
       <div className="formIntro">
-        <span className="kicker">Legg til vare</span>
-        <h2>Oppdater handlelisten raskt</h2>
-        <p>Legg inn hva som mangler, hvor mye dere trenger og et kort notat hvis det hjelper.</p>
+     {/*    <span className="kicker">Legg til vare</span> */}
+        <h2>Legg til vare</h2>
+{/*         <p>Legg inn hva som mangler, hvor mye dere trenger og et kort notat hvis det hjelper.</p> */}
       </div>
 
       <div className="formGrid">
@@ -92,7 +92,7 @@ export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
         </label>
 
         <label className="field">
-          <span>Mengde</span>
+          <span>Mengde (valgfritt)</span>
           <input
             type="text"
             value={form.quantity}
@@ -102,7 +102,7 @@ export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
           />
         </label>
 
-        <label className="field">
+      {/*   <label className="field">
           <span>Lagt til av</span>
           <select
             value={form.addedBy}
@@ -114,10 +114,10 @@ export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
               </option>
             ))}
           </select>
-        </label>
+        </label> */}
 
         <label className="field fieldWide">
-          <span>Notat (valgfritt)</span>
+          <span>Kommentar (valgfritt)</span>
           <textarea
             value={form.note}
             onChange={(event) => setForm((current) => ({ ...current, note: event.target.value }))}
@@ -153,7 +153,7 @@ export function ShoppingListForm({ familyMembers }: ShoppingListFormProps) {
         <button className="buttonPrimary" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Sender..." : "Legg til i handlelisten"}
         </button>
-        <p className="smallNote">Listen samles i ett Sanity-dokument som voksne kan rydde i.</p>
+{/*         <p className="smallNote">Listen samles i ett Sanity-dokument som voksne kan rydde i.</p> */}
       </div>
 
       {message ? (

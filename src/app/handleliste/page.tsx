@@ -17,17 +17,16 @@ export default async function HandlelistePage() {
       <section className="sectionHero accentFuture">
         <div>
           <span className="kicker">Handleliste</span>
-          <h1>En delt liste for alt familien trenger aa kjope.</h1>
-          <p>Alle kan legge til varer raskt, mens voksne kan holde orden i Sanity Studio.</p>
+          <h1>Handleliste</h1>
+{/*           <p>Alle kan legge til varer raskt, mens voksne kan holde orden i Sanity Studio.</p> */}
         </div>
-        <div className="sectionBadge">{remainingItems.length} varer gjenstaar</div>
+        <div className="sectionBadge">{remainingItems.length} varer gjenstår</div>
       </section>
 
       <section className="contentGrid">
         <div className="listPanel">
           <div className="panelHeading">
             <h2>{shoppingList.title}</h2>
-            <p>Listen er lagret i ett Sanity-dokument, saa hele familien ser samme oversikt.</p>
           </div>
 
           {shoppingList.items.length === 0 ? (
@@ -48,7 +47,7 @@ export default async function HandlelistePage() {
                   </div>
                   {item.quantity ? <p>Mengde: {item.quantity}</p> : null}
                   {item.note ? <p>{item.note}</p> : null}
-                  {item.addedBy ? <p>Lagt til av {item.addedBy}</p> : null}
+{/*                   {item.addedBy ? <p>Lagt til av {item.addedBy}</p> : null} */}
                 </article>
               ))}
             </div>

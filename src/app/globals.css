@@ -222,6 +222,7 @@ button {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.85rem;
+  margin-top: 1em;
 }
 
 .buttonPrimary,
