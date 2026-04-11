@@ -39,6 +39,9 @@ Optional:
 - `FAMILY_HUB_SUBMISSION_PASSWORD` to require a shared family password for submissions
 - `SANITY_REQUIRE_APPROVAL=true` to make new submissions start as pending
 
+When `FAMILY_HUB_SUBMISSION_PASSWORD` is set, the app uses it both for page access and form submissions.
+Users enter it once, then stay logged in through a cookie for six months.
+
 ## Run locally
 
 ```bash
@@ -47,6 +50,14 @@ npm run dev
 ```
 
 Open `http://localhost:3000` for the app. Run `npm run studio` to launch Sanity Studio locally.
+
+Public route:
+
+- `http://localhost:3000/test-route`
+
+Protected routes:
+
+- all other app pages require the family password when it is configured
 
 Use `.env.local` in the project root and prefer unquoted values. Sanity Studio reads
 `SANITY_STUDIO_*` variables, while the Next app reads `NEXT_PUBLIC_*` variables. Keep them in sync, for example:

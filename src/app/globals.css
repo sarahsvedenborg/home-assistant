@@ -683,6 +683,15 @@ button {
   background: rgba(130, 209, 174, 0.16);
 }
 
+.loginShell {
+  max-width: 560px;
+  padding-top: 4rem;
+}
+
+.loginPanel {
+  margin-top: 2rem;
+}
+
 .emptyState {
   display: grid;
   gap: 0.75rem;
