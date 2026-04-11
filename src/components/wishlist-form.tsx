@@ -6,6 +6,7 @@ import { useEffect, useState, type FormEvent } from "react";
 type WishlistFormProps = {
   familyMembers: string[];
   selectedMemberName?: string;
+  submitPath?: string;
 };
 
 type FormState = {
@@ -22,7 +23,11 @@ const messageClassNames = {
   success: "feedback feedbackSuccess",
 };
 
-export function WishlistForm({ familyMembers, selectedMemberName }: WishlistFormProps) {
+export function WishlistForm({
+  familyMembers,
+  selectedMemberName,
+  submitPath = "/api/submissions/wishlist",
+}: WishlistFormProps) {
   const router = useRouter();
   const defaultMember = selectedMemberName || familyMembers[0] || "";
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,10 +54,10 @@ export function WishlistForm({ familyMembers, selectedMemberName }: WishlistForm
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
-    setMessage(null);
+      setMessage(null);
 
-    try {
-      const response = await fetch("/api/submissions/wishlist", {
+      try {
+      const response = await fetch(submitPath, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

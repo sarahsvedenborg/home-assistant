@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 type SiteHeaderProps = {
-  current: "home" | "wishlist" | "movies" | "handleliste";
+  current: "home" | "wishlist" | "onskeliste" | "movies" | "handleliste";
 };
 
 export function SiteHeader({ current }: SiteHeaderProps) {
@@ -24,6 +24,12 @@ export function SiteHeader({ current }: SiteHeaderProps) {
           className={current === "wishlist" ? "navLink navLinkActive" : "navLink"}
         >
           Ønskeliste
+        </Link>
+        <Link
+          href="/onskeliste"
+          className={current === "onskeliste" ? "navLink navLinkActive" : "navLink"}
+        >
+          Onskeliste
         </Link>
         <Link
           href="/movies"

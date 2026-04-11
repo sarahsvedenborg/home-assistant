@@ -15,7 +15,7 @@ export default async function WishListPage() {
       <section className="sectionHero accentWarmPanel">
         <div>
           <span className="kicker">Ønskeliste</span>
-          <h1 style={{padding: '0.5em 0'}}>Velg en person for å se og legge til ønsker.</h1>
+          <h1 style={{padding: '0.5em 0'}}>Ønskelister</h1>
         {/*  */}
         </div>
         <div className="sectionBadge">{wishListItems.length} lagrede ønsker</div>
