@@ -81,7 +81,7 @@ type SanityBlock = {
 type SanityRecipe = {
   _id: string;
   title: string;
-  url: string;
+  url?: string;
   ingredients?: SanityBlock[];
   steps?: SanityBlock[];
   comments?: SanityBlock[];
@@ -235,6 +235,11 @@ export async function getRecipes(): Promise<Recipe[]> {
     steps: blocksToParagraphs(recipe.steps),
     comments: blocksToParagraphs(recipe.comments),
   }));
+}
+
+export async function getRecipeById(id: string): Promise<Recipe | null> {
+  const recipes = await getRecipes();
+  return recipes.find((recipe) => recipe.id === id) || null;
 }
 
 export function groupWishListByPerson(items: WishListItem[]): WishListGroup[] {

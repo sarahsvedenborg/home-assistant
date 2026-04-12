@@ -713,6 +713,32 @@ button {
   gap: 0.7rem;
 }
 
+.recipeCardLink {
+  display: block;
+}
+
+.recipeCardInteractive {
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.recipeCardLink:hover .recipeCardInteractive,
+.recipeCardLink:focus-visible .recipeCardInteractive {
+  transform: translateY(-1px);
+  border-color: rgba(94, 166, 255, 0.3);
+}
+
+.recipeMetaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.recipeDetailGrid {
+  grid-template-columns: 1fr;
+}
+
 .shoppingItemTitleWrap {
   display: flex;
   align-items: center;

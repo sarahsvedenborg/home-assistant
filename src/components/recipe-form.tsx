@@ -92,7 +92,6 @@ export function RecipeForm() {
             value={form.url}
             onChange={(event) => setForm((current) => ({ ...current, url: event.target.value }))}
             placeholder="https://"
-            required
           />
         </label>
 
@@ -103,7 +102,6 @@ export function RecipeForm() {
             onChange={(event) => setForm((current) => ({ ...current, ingredients: event.target.value }))}
             placeholder="En ingrediens per linje, gjerne med mengde."
             rows={6}
-            required
           />
         </label>
 
@@ -114,7 +112,6 @@ export function RecipeForm() {
             onChange={(event) => setForm((current) => ({ ...current, steps: event.target.value }))}
             placeholder="Et steg per linje."
             rows={8}
-            required
           />
         </label>
 

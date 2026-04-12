@@ -1,9 +1,13 @@
+import Link from "next/link";
+
 import { RecipeForm } from "@/components/recipe-form";
 import { SiteHeader } from "@/components/site-header";
 import { getRecipes } from "@/lib/data";
 
 export default async function OppskrifterPage() {
   const recipes = await getRecipes();
+
+
 
   return (
     <main className="shell">
@@ -34,36 +38,34 @@ export default async function OppskrifterPage() {
           ) : (
             <div className="groupStack">
               {recipes.map((recipe) => (
-                <article key={recipe.id} className="itemCard">
-                  <div className="itemTitleRow">
-                    <strong>{recipe.title}</strong>
-                  </div>
-                  <a href={recipe.url} target="_blank" rel="noreferrer" className="inlineLink">
-                    Gå til oppskrift
-                  </a>
-                  <div className="recipeContentStack">
-                    <div>
-                      <strong>Ingredienser</strong>
-                      {recipe.ingredients.map((paragraph, index) => (
-                        <p key={`${recipe.id}-ingredient-${index}`}>{paragraph}</p>
-                      ))}
-                    </div>
-                    <div>
-                      <strong>Steg</strong>
-                      {recipe.steps.map((paragraph, index) => (
-                        <p key={`${recipe.id}-step-${index}`}>{paragraph}</p>
-                      ))}
-                    </div>
-                    {recipe.comments.length > 0 ? (
-                      <div>
-                        <strong>Kommentarer</strong>
-                        {recipe.comments.map((paragraph, index) => (
-                          <p key={`${recipe.id}-comment-${index}`}>{paragraph}</p>
-                        ))}
+                recipe.ingredients.length > 0 || recipe.steps.length > 0 ? (
+                  <Link key={recipe.id} href={`/oppskrifter/${recipe.id}`} className="recipeCardLink">
+                    <article className="itemCard recipeCard recipeCardInteractive">
+                      <div className="itemTitleRow">
+                        <strong>{recipe.title}</strong>
                       </div>
-                    ) : null}
-                  </div>
-                </article>
+                    {/*   <div className="recipeMetaRow">
+                        <span>{recipe.ingredients.length} ingredienslinjer</span>
+                        <span>{recipe.steps.length} steg</span>
+                      </div> */}
+                    </article>
+                  </Link>
+                ) : (
+                  <a
+                    key={recipe.id}
+                    href={recipe.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="recipeCardLink"
+                  >
+                    <article className="itemCard recipeCard recipeCardInteractive">
+                      <div className="itemTitleRow">
+                        <strong>{recipe.title}</strong>
+                      </div>
+                      <span className="inlineLink">Åpne ekstern oppskrift</span>
+                    </article>
+                  </a>
+                )
               ))}
             </div>
           )}

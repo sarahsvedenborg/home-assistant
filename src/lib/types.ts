@@ -53,7 +53,7 @@ export type ShoppingList = {
 export type Recipe = {
   id: string;
   title: string;
-  url: string;
+  url?: string;
   ingredients: string[];
   steps: string[];
   comments: string[];

@@ -191,9 +191,9 @@ export function validateRecipeSubmission(
   payload: unknown,
 ): ValidationResult<{
   title: string;
-  url: string;
-  ingredients: string;
-  steps: string;
+  url?: string;
+  ingredients?: string;
+  steps?: string;
   comments?: string;
 }> {
   const common = validateCommonFields(payload);
@@ -212,25 +212,29 @@ export function validateRecipeSubmission(
     return { success: false, error: "Legg til en tittel paa oppskriften." };
   }
 
-  if (!url || !isValidOptionalUrl(url)) {
-    return { success: false, error: "Legg til en gyldig URL som starter med http:// eller https://." };
+  if (url && !isValidOptionalUrl(url)) {
+    return { success: false, error: "URL maa starte med http:// eller https://." };
   }
 
-  if (!ingredients) {
-    return { success: false, error: "Legg til ingredienser for oppskriften." };
+  const hasIngredients = Boolean(ingredients);
+  const hasSteps = Boolean(steps);
+  const hasLocalRecipeContent = hasIngredients || hasSteps;
+
+  if (!url && !hasLocalRecipeContent) {
+    return { success: false, error: "Legg til en URL eller skriv ingredienser og steg." };
   }
 
-  if (!steps) {
-    return { success: false, error: "Legg til steg for oppskriften." };
+  if (hasIngredients !== hasSteps) {
+    return { success: false, error: "Fyll ut baade ingredienser og steg for lokale oppskrifter." };
   }
 
   return {
     success: true,
     data: {
       title,
-      url,
-      ingredients,
-      steps,
+      url: url || undefined,
+      ingredients: ingredients || undefined,
+      steps: steps || undefined,
       comments: comments || undefined,
     },
   };

@@ -40,6 +40,12 @@ export const RECIPES_QUERY = `*[_type == "recipe"] | order(_createdAt desc) {
   _id,
   title,
   url,
+  ingredients[]{
+    ...
+  },
+  steps[]{
+    ...
+  },
   content[]{
     ...,
     children[]{
