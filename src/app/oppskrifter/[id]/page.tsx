@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { SiteHeader } from "@/components/site-header";
@@ -27,10 +28,15 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
     <main className="shell">
       <SiteHeader current="oppskrifter" />
 
-   {/*    <section className="sectionHeroCompact accentCoolPanel"> */}
-      <section className="sectionHeroCompact ">
+      <section className="sectionHeroCompact">
         <div>
+          <Link href="/oppskrifter" className="recipeBackLink">
+            <span aria-hidden="true">←</span>
+            Tilbake til oppskrifter
+          </Link>
+          <div>
           <span className="kicker">Oppskrift</span>
+          </div>
           <h1 className="recipeDetailTitle">{recipe.title}</h1>
         </div>
       </section>
@@ -38,8 +44,14 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
       <section className="contentGrid recipeDetailGrid">
         <article className="listPanel">
           {recipe.url ? (
-            <a href={recipe.url} target="_blank" rel="noreferrer" className="inlineLink" style={{float: "right"}}>
-              Åpne ekstern oppskrift
+            <a
+              href={recipe.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inlineLink"
+              style={{ float: "right" }}
+            >
+              Aapne ekstern oppskrift
             </a>
           ) : null}
 

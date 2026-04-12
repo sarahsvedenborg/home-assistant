@@ -766,6 +766,16 @@ button {
   max-width: 100%;
 }
 
+.recipeBackLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
 .shoppingItemTitleWrap {
   display: flex;
   align-items: center;
