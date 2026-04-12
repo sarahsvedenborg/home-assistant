@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 type SiteHeaderProps = {
-  current: "home" | "wishlist" | "onskeliste" | "movies" | "handleliste";
+  current: "home" | "wishlist" | "onskeliste" | "movies" | "handleliste" | "oppskrifter";
 };
 
 export function SiteHeader({ current }: SiteHeaderProps) {
@@ -42,6 +42,12 @@ export function SiteHeader({ current }: SiteHeaderProps) {
           className={current === "handleliste" ? "navLink navLinkActive" : "navLink"}
         >
           Handleliste
+        </Link>
+        <Link
+          href="/oppskrifter"
+          className={current === "oppskrifter" ? "navLink navLinkActive" : "navLink"}
+        >
+          Oppskrifter
         </Link>
         <Link href="/studio" className="navLink navLinkStudio">
           Studio for voksne

@@ -186,3 +186,42 @@ export function validateShoppingListSubmission(
     },
   };
 }
+
+export function validateRecipeSubmission(
+  payload: unknown,
+): ValidationResult<{
+  title: string;
+  url: string;
+  content: string;
+}> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const title = normalizeText(common.record.title);
+  const url = normalizeText(common.record.url);
+  const content = normalizeText(common.record.content);
+
+  if (!title) {
+    return { success: false, error: "Legg til en tittel paa oppskriften." };
+  }
+
+  if (!url || !isValidOptionalUrl(url)) {
+    return { success: false, error: "Legg til en gyldig URL som starter med http:// eller https://." };
+  }
+
+  if (!content) {
+    return { success: false, error: "Legg til innhold for oppskriften." };
+  }
+
+  return {
+    success: true,
+    data: {
+      title,
+      url,
+      content,
+    },
+  };
+}

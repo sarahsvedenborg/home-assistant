@@ -35,3 +35,15 @@ export const SHOPPING_LIST_QUERY = `*[_type == "shoppingList"][0] {
     checked
   }
 }`;
+
+export const RECIPES_QUERY = `*[_type == "recipe"] | order(_createdAt desc) {
+  _id,
+  title,
+  url,
+  content[]{
+    ...,
+    children[]{
+      ...
+    }
+  }
+}`;

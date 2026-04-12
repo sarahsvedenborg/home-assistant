@@ -1,4 +1,4 @@
-import type { FamilyMember, MovieRecommendation, ShoppingList, WishListItem } from "@/lib/types";
+import type { FamilyMember, MovieRecommendation, Recipe, ShoppingList, WishListItem } from "@/lib/types";
 
 export const FALLBACK_FAMILY_MEMBERS: FamilyMember[] = [
   { id: "mom", name: "Mamma", role: "adult", emoji: "🌻", accentColor: "#ff9f6e" },
@@ -87,3 +87,26 @@ export const FALLBACK_SHOPPING_LIST: ShoppingList = {
     },
   ],
 };
+
+export const FALLBACK_RECIPES: Recipe[] = [
+  {
+    id: "recipe-1",
+    title: "Kremet tomatpasta",
+    url: "https://example.com/tomatpasta",
+    content: [
+      "Kok pasta etter anvisning.",
+      "Stek hvitløk og tomatpuré i litt olje.",
+      "Rør inn fløte og parmesan før pastaen vendes inn.",
+    ],
+  },
+  {
+    id: "recipe-2",
+    title: "Enkel gulrotsuppe",
+    url: "https://example.com/gulrotsuppe",
+    content: [
+      "Surr løk og gulrotbiter myke i en gryte.",
+      "Hell over kraft og kok til grønnsakene er møre.",
+      "Kjør glatt og smak til med sitron og pepper.",
+    ],
+  },
+];

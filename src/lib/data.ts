@@ -1,11 +1,18 @@
 import "server-only";
 
-import { FALLBACK_FAMILY_MEMBERS, FALLBACK_MOVIES, FALLBACK_SHOPPING_LIST, FALLBACK_WISHLIST_ITEMS } from "@/lib/demo-data";
+import {
+  FALLBACK_FAMILY_MEMBERS,
+  FALLBACK_MOVIES,
+  FALLBACK_RECIPES,
+  FALLBACK_SHOPPING_LIST,
+  FALLBACK_WISHLIST_ITEMS,
+} from "@/lib/demo-data";
 
 
 import type {
   FamilyMember,
   MovieRecommendation,
+  Recipe,
   ShoppingList,
   ShoppingListEntry,
   WishListGroup,
@@ -16,6 +23,7 @@ import { getFreshReadClient, getReadClient } from "@/sanity/lib/client";
 import {
   FAMILY_MEMBERS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
+  RECIPES_QUERY,
   SHOPPING_LIST_QUERY,
   WISHLIST_ITEMS_QUERY,
   
@@ -59,6 +67,22 @@ type SanityShoppingList = {
   _id: string;
   title?: string;
   items?: SanityShoppingListItem[];
+};
+
+type SanityBlockChild = {
+  text?: string;
+};
+
+type SanityBlock = {
+  _type?: string;
+  children?: SanityBlockChild[];
+};
+
+type SanityRecipe = {
+  _id: string;
+  title: string;
+  url: string;
+  content?: SanityBlock[];
 };
 
 async function fetchFromSanity<T>(query: string) {
@@ -181,6 +205,28 @@ export async function getShoppingList(): Promise<ShoppingList> {
     title: list.title || "Handleliste",
     items,
   };
+}
+
+export async function getRecipes(): Promise<Recipe[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_RECIPES;
+  }
+
+  const recipes = await fetchFreshFromSanity<SanityRecipe[]>(RECIPES_QUERY);
+
+  if (!recipes) {
+    return FALLBACK_RECIPES;
+  }
+
+  return recipes.map((recipe) => ({
+    id: recipe._id,
+    title: recipe.title,
+    url: recipe.url,
+    content: (recipe.content || [])
+      .filter((block) => block._type === "block")
+      .map((block) => (block.children || []).map((child) => child.text || "").join(""))
+      .filter(Boolean),
+  }));
 }
 
 export function groupWishListByPerson(items: WishListItem[]): WishListGroup[] {

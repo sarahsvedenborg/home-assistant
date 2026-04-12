@@ -708,6 +708,11 @@ button {
   background: rgba(130, 209, 174, 0.16);
 }
 
+.recipeContentStack {
+  display: grid;
+  gap: 0.7rem;
+}
+
 .shoppingItemTitleWrap {
   display: flex;
   align-items: center;

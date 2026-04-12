@@ -49,3 +49,10 @@ export type ShoppingList = {
   title: string;
   items: ShoppingListEntry[];
 };
+
+export type Recipe = {
+  id: string;
+  title: string;
+  url: string;
+  content: string[];
+};

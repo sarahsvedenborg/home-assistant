@@ -195,3 +195,35 @@ export async function toggleShoppingListItem(itemId: string) {
 
   return !Boolean(currentItem.checked);
 }
+
+export async function submitRecipe(input: {
+  title: string;
+  url: string;
+  content: string;
+}) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  await client.create({
+    _type: "recipe",
+    title: input.title,
+    url: input.url,
+    content: input.content.split(/\n+/).filter(Boolean).map((text) => ({
+      _type: "block",
+      children: [
+        {
+          _type: "span",
+          marks: [],
+          text,
+        },
+      ],
+      markDefs: [],
+      style: "normal",
+    })),
+  });
+
+  return "Oppskriften er lagt til!";
+}
