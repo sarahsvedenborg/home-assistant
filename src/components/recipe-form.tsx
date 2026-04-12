@@ -6,7 +6,9 @@ import { useState, type FormEvent } from "react";
 type RecipeFormState = {
   title: string;
   url: string;
-  content: string;
+  ingredients: string;
+  steps: string;
+  comments: string;
   website: string;
 };
 
@@ -20,7 +22,9 @@ export function RecipeForm() {
   const [form, setForm] = useState<RecipeFormState>({
     title: "",
     url: "",
-    content: "",
+    ingredients: "",
+    steps: "",
+    comments: "",
     website: "",
   });
 
@@ -49,7 +53,9 @@ export function RecipeForm() {
       setForm({
         title: "",
         url: "",
-        content: "",
+        ingredients: "",
+        steps: "",
+        comments: "",
         website: "",
       });
       router.refresh();
@@ -91,13 +97,34 @@ export function RecipeForm() {
         </label>
 
         <label className="field fieldWide">
-          <span>Innhold</span>
+          <span>Ingredienser</span>
           <textarea
-            value={form.content}
-            onChange={(event) => setForm((current) => ({ ...current, content: event.target.value }))}
-            placeholder="Skriv ingredienser og fremgangsmaate her. Ett nytt avsnitt per linje."
+            value={form.ingredients}
+            onChange={(event) => setForm((current) => ({ ...current, ingredients: event.target.value }))}
+            placeholder="En ingrediens per linje, gjerne med mengde."
+            rows={6}
+            required
+          />
+        </label>
+
+        <label className="field fieldWide">
+          <span>Steg</span>
+          <textarea
+            value={form.steps}
+            onChange={(event) => setForm((current) => ({ ...current, steps: event.target.value }))}
+            placeholder="Et steg per linje."
             rows={8}
             required
+          />
+        </label>
+
+        <label className="field fieldWide">
+          <span>Kommentarer</span>
+          <textarea
+            value={form.comments}
+            onChange={(event) => setForm((current) => ({ ...current, comments: event.target.value }))}
+            placeholder="Tips, serveringsforslag eller egne notater."
+            rows={8}
           />
         </label>
 

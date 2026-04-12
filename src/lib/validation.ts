@@ -192,7 +192,9 @@ export function validateRecipeSubmission(
 ): ValidationResult<{
   title: string;
   url: string;
-  content: string;
+  ingredients: string;
+  steps: string;
+  comments?: string;
 }> {
   const common = validateCommonFields(payload);
 
@@ -202,7 +204,9 @@ export function validateRecipeSubmission(
 
   const title = normalizeText(common.record.title);
   const url = normalizeText(common.record.url);
-  const content = normalizeText(common.record.content);
+  const ingredients = normalizeText(common.record.ingredients);
+  const steps = normalizeText(common.record.steps);
+  const comments = normalizeText(common.record.comments);
 
   if (!title) {
     return { success: false, error: "Legg til en tittel paa oppskriften." };
@@ -212,8 +216,12 @@ export function validateRecipeSubmission(
     return { success: false, error: "Legg til en gyldig URL som starter med http:// eller https://." };
   }
 
-  if (!content) {
-    return { success: false, error: "Legg til innhold for oppskriften." };
+  if (!ingredients) {
+    return { success: false, error: "Legg til ingredienser for oppskriften." };
+  }
+
+  if (!steps) {
+    return { success: false, error: "Legg til steg for oppskriften." };
   }
 
   return {
@@ -221,7 +229,9 @@ export function validateRecipeSubmission(
     data: {
       title,
       url,
-      content,
+      ingredients,
+      steps,
+      comments: comments || undefined,
     },
   };
 }

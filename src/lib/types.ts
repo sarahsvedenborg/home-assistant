@@ -54,5 +54,7 @@ export type Recipe = {
   id: string;
   title: string;
   url: string;
-  content: string[];
+  ingredients: string[];
+  steps: string[];
+  comments: string[];
 };

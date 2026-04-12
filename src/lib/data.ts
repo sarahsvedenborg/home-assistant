@@ -82,8 +82,17 @@ type SanityRecipe = {
   _id: string;
   title: string;
   url: string;
-  content?: SanityBlock[];
+  ingredients?: SanityBlock[];
+  steps?: SanityBlock[];
+  comments?: SanityBlock[];
 };
+
+function blocksToParagraphs(blocks?: SanityBlock[]) {
+  return (blocks || [])
+    .filter((block) => block._type === "block")
+    .map((block) => (block.children || []).map((child) => child.text || "").join(""))
+    .filter(Boolean);
+}
 
 async function fetchFromSanity<T>(query: string) {
   const client = getReadClient();
@@ -222,10 +231,9 @@ export async function getRecipes(): Promise<Recipe[]> {
     id: recipe._id,
     title: recipe.title,
     url: recipe.url,
-    content: (recipe.content || [])
-      .filter((block) => block._type === "block")
-      .map((block) => (block.children || []).map((child) => child.text || "").join(""))
-      .filter(Boolean),
+    ingredients: blocksToParagraphs(recipe.ingredients),
+    steps: blocksToParagraphs(recipe.steps),
+    comments: blocksToParagraphs(recipe.comments),
   }));
 }
 

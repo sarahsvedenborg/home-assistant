@@ -18,11 +18,24 @@ export const recipeType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "content",
-      title: "Innhold",
+      name: "ingredients",
+      title: "Ingredienser",
       type: "array",
       of: [defineArrayMember({ type: "block" })],
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "steps",
+      title: "Steg",
+      type: "array",
+      of: [defineArrayMember({ type: "block" })],
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "comments",
+      title: "Kommentarer",
+      type: "array",
+      of: [defineArrayMember({ type: "block" })],
     }),
   ],
   preview: {

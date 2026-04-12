@@ -49,8 +49,11 @@ export function SiteHeader({ current }: SiteHeaderProps) {
         >
           Oppskrifter
         </Link>
-        <Link href="/studio" className="navLink navLinkStudio">
+       {/*  <Link href="/studio" className="navLink navLinkStudio">
           Studio for voksne
+        </Link> */}
+          <Link href="https://svedenborg.sanity.studio" className="navLink navLinkStudio">
+          Sanity studio
         </Link>
       </nav>
     </header>

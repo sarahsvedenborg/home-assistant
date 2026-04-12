@@ -199,7 +199,9 @@ export async function toggleShoppingListItem(itemId: string) {
 export async function submitRecipe(input: {
   title: string;
   url: string;
-  content: string;
+  ingredients: string;
+  steps: string;
+  comments?: string;
 }) {
   const client = getWriteClient();
 
@@ -211,15 +213,21 @@ export async function submitRecipe(input: {
     _type: "recipe",
     title: input.title,
     url: input.url,
-    content: input.content.split(/\n+/).filter(Boolean).map((text) => ({
+    ingredients: input.ingredients.split(/\n+/).filter(Boolean).map((text) => ({
       _type: "block",
-      children: [
-        {
-          _type: "span",
-          marks: [],
-          text,
-        },
-      ],
+      children: [{ _type: "span", marks: [], text }],
+      markDefs: [],
+      style: "normal",
+    })),
+    steps: input.steps.split(/\n+/).filter(Boolean).map((text) => ({
+      _type: "block",
+      children: [{ _type: "span", marks: [], text }],
+      markDefs: [],
+      style: "normal",
+    })),
+    comments: (input.comments || "").split(/\n+/).filter(Boolean).map((text) => ({
+      _type: "block",
+      children: [{ _type: "span", marks: [], text }],
       markDefs: [],
       style: "normal",
     })),

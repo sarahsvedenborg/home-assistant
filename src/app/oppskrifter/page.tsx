@@ -12,7 +12,7 @@ export default async function OppskrifterPage() {
       <section className="sectionHero accentCoolPanel">
         <div>
           <span className="kicker">Oppskrifter</span>
-          <h1>Oppskrifter</h1>
+          <h1 style={{margin: "0.25em 0"}}>Oppskrifter</h1>
         </div>
         <div className="sectionBadge">{recipes.length} oppskrifter</div>
       </section>
@@ -42,9 +42,26 @@ export default async function OppskrifterPage() {
                     Gå til oppskrift
                   </a>
                   <div className="recipeContentStack">
-                    {recipe.content.map((paragraph, index) => (
-                      <p key={`${recipe.id}-${index}`}>{paragraph}</p>
-                    ))}
+                    <div>
+                      <strong>Ingredienser</strong>
+                      {recipe.ingredients.map((paragraph, index) => (
+                        <p key={`${recipe.id}-ingredient-${index}`}>{paragraph}</p>
+                      ))}
+                    </div>
+                    <div>
+                      <strong>Steg</strong>
+                      {recipe.steps.map((paragraph, index) => (
+                        <p key={`${recipe.id}-step-${index}`}>{paragraph}</p>
+                      ))}
+                    </div>
+                    {recipe.comments.length > 0 ? (
+                      <div>
+                        <strong>Kommentarer</strong>
+                        {recipe.comments.map((paragraph, index) => (
+                          <p key={`${recipe.id}-comment-${index}`}>{paragraph}</p>
+                        ))}
+                      </div>
+                    ) : null}
                   </div>
                 </article>
               ))}
