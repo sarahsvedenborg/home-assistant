@@ -9,6 +9,7 @@ type MovieFormProps = {
 
 type FormState = {
   suggestedByName: string;
+  suitableFor: string[];
   title: string;
   link: string;
   posterUrl: string;
@@ -29,6 +30,7 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
   } | null>(null);
   const [form, setForm] = useState<FormState>({
     suggestedByName: familyMembers[0] || "",
+    suitableFor: [],
     title: "",
     link: "",
     posterUrl: "",
@@ -59,6 +61,7 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
       setMessage({ kind: "success", text: result.message || "Filmen er lagt til!" });
       setForm({
         suggestedByName: familyMembers[0] || "",
+        suitableFor: [],
         title: "",
         link: "",
         posterUrl: "",
@@ -119,6 +122,36 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
             placeholder="https://"
           />
         </label>
+
+        <fieldset className="field fieldWide checkboxFieldset">
+          <legend>Passer for</legend>
+          <div className="checkboxGrid">
+            {familyMembers.map((member) => {
+              const checked = form.suitableFor.includes(member);
+
+              return (
+                <label key={member} className="checkboxOption">
+                  <input
+                    className="checkboxInput"
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(event) => {
+                      setForm((current) => ({
+                        ...current,
+                        suitableFor: event.target.checked
+                          ? [...current.suitableFor, member]
+                          : current.suitableFor.filter((value) => value !== member),
+                        }));
+                    }}
+                  />
+                  <span className={checked ? "checkboxLabel checkboxLabelChecked" : "checkboxLabel"}>
+                    {member}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
 
         <label className="field fieldWide">
           <span>Lenke til filmplakat (valgfritt)</span>

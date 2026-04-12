@@ -43,6 +43,7 @@ type SanityMovieRecommendation = {
   posterUrl?: string;
   link?: string;
   suggestedBy?: string;
+  suitableFor?: string[];
   watched?: boolean;
 };
 
@@ -152,6 +153,7 @@ export async function getMovieRecommendations(): Promise<MovieRecommendation[]> 
     posterUrl: movie.posterUrl,
     link: movie.link,
     suggestedBy: movie.suggestedBy || "Someone",
+    suitableFor: movie.suitableFor || [],
     watched: Boolean(movie.watched),
   }));
 }

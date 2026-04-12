@@ -19,6 +19,7 @@ export const MOVIE_RECOMMENDATIONS_QUERY = `*[_type == "movieRecommendation" && 
   title,
   link,
   watched,
+  suitableFor,
   "posterUrl": coalesce(poster.asset->url, posterUrl),
   "suggestedBy": coalesce(familyMember->name, suggestedByName)
 }`;

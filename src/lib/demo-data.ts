@@ -42,6 +42,7 @@ export const FALLBACK_MOVIES: MovieRecommendation[] = [
     id: "movie-1",
     title: "The Mitchells vs. the Machines",
     suggestedBy: "Mamma",
+    suitableFor: ["Amélie", "Colette", "Linnea", "Felix"],
     watched: true,
     link: "https://example.com/mitchells",
   },
@@ -49,12 +50,14 @@ export const FALLBACK_MOVIES: MovieRecommendation[] = [
     id: "movie-2",
     title: "Paddington 2",
     suggestedBy: "Felix",
+    suitableFor: ["Linnea", "Felix"],
     watched: false,
   },
   {
     id: "movie-3",
     title: "Spider-Man: Into the Spider-Verse",
     suggestedBy: "Colette",
+    suitableFor: ["Amélie", "Colette"],
     watched: false,
   },
 ];
