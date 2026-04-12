@@ -27,12 +27,12 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
     <main className="shell">
       <SiteHeader current="oppskrifter" />
 
-      <section className="sectionHero accentCoolPanel">
+   {/*    <section className="sectionHeroCompact accentCoolPanel"> */}
+      <section className="sectionHeroCompact ">
         <div>
           <span className="kicker">Oppskrift</span>
-          <h1 style={{ margin: "0.25em 0" }}>{recipe.title}</h1>
+          <h1 className="recipeDetailTitle">{recipe.title}</h1>
         </div>
-        <div className="sectionBadge">Detaljer</div> 
       </section>
 
       <section className="contentGrid recipeDetailGrid">

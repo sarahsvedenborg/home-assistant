@@ -367,6 +367,26 @@ button {
   border-radius: 1.8rem;
 }
 
+.sectionHeroCompact {
+    display: grid;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+  padding: 1.35rem;
+  border-radius: 1.8rem;
+  grid-template-columns: 1fr;
+  padding: 1rem 1.35rem;
+}
+
+.sectionHeroCompact h1 {
+   font-size: clamp(1.5rem, 5vw, 3.2rem);
+  line-height: 0.95;
+  margin: 0.35em 0;
+}
+
+.sectionHeroCompact > * {
+  width: 100%;
+}
+
 .accentWarmPanel {
   background: linear-gradient(135deg, rgba(255, 230, 205, 0.95), rgba(255, 248, 240, 0.92));
 }
@@ -737,6 +757,13 @@ button {
 
 .recipeDetailGrid {
   grid-template-columns: 1fr;
+}
+
+.recipeDetailTitle {
+  margin: 0.2em 0 0;
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  line-height: 1;
+  max-width: 100%;
 }
 
 .shoppingItemTitleWrap {
