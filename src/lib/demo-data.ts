@@ -1,4 +1,4 @@
-import type { FamilyMember, MovieRecommendation, ShoppingList, WishListItem } from "@/lib/types";
+import type { FamilyMember, MovieRecommendation, Recipe, ShoppingList, WishListItem } from "@/lib/types";
 
 export const FALLBACK_FAMILY_MEMBERS: FamilyMember[] = [
   { id: "mom", name: "Mamma", role: "adult", emoji: "🌻", accentColor: "#ff9f6e" },
@@ -87,3 +87,41 @@ export const FALLBACK_SHOPPING_LIST: ShoppingList = {
     },
   ],
 };
+
+export const FALLBACK_RECIPES: Recipe[] = [
+  {
+    id: "recipe-1",
+    title: "Kremet tomatpasta",
+    url: "https://example.com/tomatpasta",
+    ingredients: [
+      "400 g pasta",
+      "2 fedd hvitløk",
+      "2 ss tomatpure",
+      "2 dl floete",
+      "Parmesan",
+    ],
+    steps: [
+      "Kok pasta etter anvisning.",
+      "Stek hvitløk og tomatpuré i litt olje.",
+      "Rør inn fløte og parmesan før pastaen vendes inn.",
+    ],
+    comments: ["God med litt chili og frisk basilikum."],
+  },
+  {
+    id: "recipe-2",
+    title: "Enkel gulrotsuppe",
+    url: "https://example.com/gulrotsuppe",
+    ingredients: [
+      "1 løk",
+      "6 gulrøtter",
+      "7 dl kraft",
+      "1 ss sitronsaft",
+    ],
+    steps: [
+      "Surr løk og gulrotbiter myke i en gryte.",
+      "Hell over kraft og kok til grønnsakene er møre.",
+      "Kjør glatt og smak til med sitron og pepper.",
+    ],
+    comments: ["Server gjerne med grovt broed ved siden av."],
+  },
+];

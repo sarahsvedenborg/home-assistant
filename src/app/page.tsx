@@ -2,12 +2,13 @@ import Link from "next/link";
 
 import { HubCard } from "@/components/hub-card";
 import { SiteHeader } from "@/components/site-header";
-import { getFamilyMembers, getMovieRecommendations, getShoppingList, getWishListItems } from "@/lib/data";
+import { getFamilyMembers, getMovieRecommendations, getRecipes, getShoppingList, getWishListItems } from "@/lib/data";
 
 export default async function Home() {
-  const [familyMembers, movies, shoppingList, wishListItems] = await Promise.all([
+  const [familyMembers, movies, recipes, shoppingList, wishListItems] = await Promise.all([
     getFamilyMembers(),
     getMovieRecommendations(),
+    getRecipes(),
     getShoppingList(),
     getWishListItems(),
   ]);
@@ -38,7 +39,7 @@ export default async function Home() {
         <div className="heroStats" aria-label="Hovedpunkter i Family Hub">
            <div className="statBubble statBubbleCool">
             <strong>{shoppingList.items.filter((item) => !item.checked).length}</strong>
-            <span>varer på handlelisten</span>
+            <span>varer må kjøpes</span>
           </div>
             <div className="statBubble statBubbleSun">
             <strong>{movies.length}</strong>
@@ -79,6 +80,15 @@ export default async function Home() {
           stat={`${shoppingList.items.filter((item) => !item.checked).length} varer`}
           accentClass="accentFuture"
           ctaLabel="Åpne handlelisten"
+        />
+        <HubCard
+          href="/oppskrifter"
+          icon="🍲"
+          title="Oppskrifter"
+          description="Samling av oppskrifter med lenker og notater."
+          stat={`${recipes.length} oppskrifter`}
+          accentClass="accentCool"
+          ctaLabel="Se oppskrifter"
         />
         <HubCard
           href="/movies"

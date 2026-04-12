@@ -186,3 +186,56 @@ export function validateShoppingListSubmission(
     },
   };
 }
+
+export function validateRecipeSubmission(
+  payload: unknown,
+): ValidationResult<{
+  title: string;
+  url?: string;
+  ingredients?: string;
+  steps?: string;
+  comments?: string;
+}> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const title = normalizeText(common.record.title);
+  const url = normalizeText(common.record.url);
+  const ingredients = normalizeText(common.record.ingredients);
+  const steps = normalizeText(common.record.steps);
+  const comments = normalizeText(common.record.comments);
+
+  if (!title) {
+    return { success: false, error: "Legg til en tittel paa oppskriften." };
+  }
+
+  if (url && !isValidOptionalUrl(url)) {
+    return { success: false, error: "URL maa starte med http:// eller https://." };
+  }
+
+  const hasIngredients = Boolean(ingredients);
+  const hasSteps = Boolean(steps);
+  const hasLocalRecipeContent = hasIngredients || hasSteps;
+
+  if (!url && !hasLocalRecipeContent) {
+    return { success: false, error: "Legg til en URL eller skriv ingredienser og steg." };
+  }
+
+  if (hasIngredients !== hasSteps) {
+    return { success: false, error: "Fyll ut baade ingredienser og steg for lokale oppskrifter." };
+  }
+
+  return {
+    success: true,
+    data: {
+      title,
+      url: url || undefined,
+      ingredients: ingredients || undefined,
+      steps: steps || undefined,
+      comments: comments || undefined,
+    },
+  };
+}

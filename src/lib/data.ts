@@ -1,11 +1,18 @@
 import "server-only";
 
-import { FALLBACK_FAMILY_MEMBERS, FALLBACK_MOVIES, FALLBACK_SHOPPING_LIST, FALLBACK_WISHLIST_ITEMS } from "@/lib/demo-data";
+import {
+  FALLBACK_FAMILY_MEMBERS,
+  FALLBACK_MOVIES,
+  FALLBACK_RECIPES,
+  FALLBACK_SHOPPING_LIST,
+  FALLBACK_WISHLIST_ITEMS,
+} from "@/lib/demo-data";
 
 
 import type {
   FamilyMember,
   MovieRecommendation,
+  Recipe,
   ShoppingList,
   ShoppingListEntry,
   WishListGroup,
@@ -16,6 +23,7 @@ import { getFreshReadClient, getReadClient } from "@/sanity/lib/client";
 import {
   FAMILY_MEMBERS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
+  RECIPES_QUERY,
   SHOPPING_LIST_QUERY,
   WISHLIST_ITEMS_QUERY,
   
@@ -60,6 +68,31 @@ type SanityShoppingList = {
   title?: string;
   items?: SanityShoppingListItem[];
 };
+
+type SanityBlockChild = {
+  text?: string;
+};
+
+type SanityBlock = {
+  _type?: string;
+  children?: SanityBlockChild[];
+};
+
+type SanityRecipe = {
+  _id: string;
+  title: string;
+  url?: string;
+  ingredients?: SanityBlock[];
+  steps?: SanityBlock[];
+  comments?: SanityBlock[];
+};
+
+function blocksToParagraphs(blocks?: SanityBlock[]) {
+  return (blocks || [])
+    .filter((block) => block._type === "block")
+    .map((block) => (block.children || []).map((child) => child.text || "").join(""))
+    .filter(Boolean);
+}
 
 async function fetchFromSanity<T>(query: string) {
   const client = getReadClient();
@@ -181,6 +214,32 @@ export async function getShoppingList(): Promise<ShoppingList> {
     title: list.title || "Handleliste",
     items,
   };
+}
+
+export async function getRecipes(): Promise<Recipe[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_RECIPES;
+  }
+
+  const recipes = await fetchFreshFromSanity<SanityRecipe[]>(RECIPES_QUERY);
+
+  if (!recipes) {
+    return FALLBACK_RECIPES;
+  }
+
+  return recipes.map((recipe) => ({
+    id: recipe._id,
+    title: recipe.title,
+    url: recipe.url,
+    ingredients: blocksToParagraphs(recipe.ingredients),
+    steps: blocksToParagraphs(recipe.steps),
+    comments: blocksToParagraphs(recipe.comments),
+  }));
+}
+
+export async function getRecipeById(id: string): Promise<Recipe | null> {
+  const recipes = await getRecipes();
+  return recipes.find((recipe) => recipe.id === id) || null;
 }
 
 export function groupWishListByPerson(items: WishListItem[]): WishListGroup[] {
