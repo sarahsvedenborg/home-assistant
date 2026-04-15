@@ -21,7 +21,7 @@ export default async function HandlelistePage() {
           <h1>Handleliste</h1>
 {/*           <p>Alle kan legge til varer raskt, mens voksne kan holde orden i Sanity Studio.</p> */}
         </div>
-        <div className="sectionBadge">{remainingItems.length} varer gjenstår</div>
+        <div className="sectionBadge">{remainingItems.length} må kjøpes</div>
       </section>
 
       <section className="contentGrid">

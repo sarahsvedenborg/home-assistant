@@ -219,3 +219,43 @@ export async function toggleShoppingListItem(itemId: string) {
 
   return !Boolean(currentItem.checked);
 }
+
+export async function submitRecipe(input: {
+  title: string;
+  url?: string;
+  ingredients?: string;
+  steps?: string;
+  comments?: string;
+}) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  await client.create({
+    _type: "recipe",
+    title: input.title,
+    url: input.url,
+    ingredients: (input.ingredients || "").split(/\n+/).filter(Boolean).map((text) => ({
+      _type: "block",
+      children: [{ _type: "span", marks: [], text }],
+      markDefs: [],
+      style: "normal",
+    })),
+    steps: (input.steps || "").split(/\n+/).filter(Boolean).map((text) => ({
+      _type: "block",
+      children: [{ _type: "span", marks: [], text }],
+      markDefs: [],
+      style: "normal",
+    })),
+    comments: (input.comments || "").split(/\n+/).filter(Boolean).map((text) => ({
+      _type: "block",
+      children: [{ _type: "span", marks: [], text }],
+      markDefs: [],
+      style: "normal",
+    })),
+  });
+
+  return "Oppskriften er lagt til!";
+}

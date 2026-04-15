@@ -1,0 +1,562 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 60
+              }
+            ]
+          }
+        ],
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Adult",
+              "value": "adult"
+            },
+            {
+              "title": "Child",
+              "value": "child"
+            }
+          ]
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "adult",
+                  "child"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "role",
+        "type": "string"
+      },
+      {
+        "description": "A fun icon to make the hub feel personal.",
+        "name": "emoji",
+        "type": "string"
+      },
+      {
+        "description": "Optional hex color like #ff9f6e",
+        "name": "accentColor",
+        "type": "string",
+        "title": "Accent color"
+      },
+      {
+        "initialValue": 0,
+        "name": "sortOrder",
+        "type": "number",
+        "title": "Sort order"
+      }
+    ],
+    "name": "familyMember",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 100
+              }
+            ]
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "rows": 4,
+        "name": "description",
+        "type": "text",
+        "title": "Notes"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "name": "link",
+        "type": "url"
+      },
+      {
+        "to": [
+          {
+            "type": "familyMember"
+          }
+        ],
+        "name": "familyMember",
+        "type": "reference",
+        "title": "Family member"
+      },
+      {
+        "description": "Used when no family member document is linked yet.",
+        "name": "submittedByName",
+        "type": "string",
+        "title": "Submitted by (fallback)"
+      },
+      {
+        "initialValue": "approved",
+        "options": {
+          "list": [
+            {
+              "title": "Approved",
+              "value": "approved"
+            },
+            {
+              "title": "Pending",
+              "value": "pending"
+            }
+          ]
+        },
+        "name": "status",
+        "type": "string",
+        "title": "Approval status"
+      }
+    ],
+    "name": "wishListItem",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 120
+              }
+            ]
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "to": [
+          {
+            "type": "familyMember"
+          }
+        ],
+        "name": "familyMember",
+        "type": "reference",
+        "title": "Suggested by"
+      },
+      {
+        "name": "suggestedByName",
+        "type": "string",
+        "title": "Suggested by (fallback)"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "name": "link",
+        "type": "url"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "poster",
+        "type": "image",
+        "title": "Poster image"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "description": "Useful for kid-friendly form submissions.",
+        "name": "posterUrl",
+        "type": "url",
+        "title": "Poster image URL"
+      },
+      {
+        "initialValue": false,
+        "name": "watched",
+        "type": "boolean"
+      },
+      {
+        "initialValue": "approved",
+        "options": {
+          "list": [
+            {
+              "title": "Approved",
+              "value": "approved"
+            },
+            {
+              "title": "Pending",
+              "value": "pending"
+            }
+          ]
+        },
+        "name": "status",
+        "type": "string",
+        "title": "Approval status"
+      }
+    ],
+    "name": "movieRecommendation",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Handleliste",
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 80
+              }
+            ]
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Tittel"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 100
+                      }
+                    ]
+                  }
+                ],
+                "name": "title",
+                "type": "string",
+                "title": "Vare"
+              },
+              {
+                "name": "quantity",
+                "type": "string",
+                "title": "Mengde"
+              },
+              {
+                "name": "note",
+                "type": "string",
+                "title": "Notat"
+              },
+              {
+                "name": "addedBy",
+                "type": "string",
+                "title": "Lagt til av"
+              },
+              {
+                "initialValue": false,
+                "name": "checked",
+                "type": "boolean",
+                "title": "Kjøpt"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "items",
+        "type": "array",
+        "title": "Varer"
+      }
+    ],
+    "name": "shoppingList",
+    "type": "document",
+    "title": "Handleliste"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 120
+              }
+            ]
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Tittel"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "url",
+        "type": "url",
+        "title": "URL"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "of": [
+          {
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "level": "error",
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "of": [],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "type": "block"
+          }
+        ],
+        "name": "content",
+        "type": "array",
+        "title": "Innhold"
+      }
+    ],
+    "name": "recipe",
+    "type": "document",
+    "title": "Oppskrift"
+  }
+]
