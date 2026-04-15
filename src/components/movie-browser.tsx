@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { EmptyState } from "@/components/empty-state";
 import type { MovieRecommendation } from "@/lib/types";
@@ -12,14 +12,69 @@ type MovieBrowserProps = {
 
 export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
   const [selectedMember, setSelectedMember] = useState<string>("alle");
+  const [localMovies, setLocalMovies] = useState(movies);
+  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLocalMovies(movies);
+  }, [movies]);
 
   const filteredMovies = useMemo(() => {
-    if (selectedMember === "alle") {
-      return movies;
+    const relevantMovies =
+      selectedMember === "alle"
+        ? localMovies
+        : localMovies.filter((movie) => movie.suitableFor.includes(selectedMember));
+
+    return [...relevantMovies].sort((left, right) => Number(left.watched) - Number(right.watched));
+  }, [localMovies, selectedMember]);
+
+  async function toggleMovie(id: string) {
+    const currentMovie = localMovies.find((movie) => movie.id === id);
+
+    if (!currentMovie) {
+      return;
     }
 
-    return movies.filter((movie) => movie.suitableFor.includes(selectedMember));
-  }, [movies, selectedMember]);
+    const nextWatched = !currentMovie.watched;
+
+    setPendingId(id);
+    setError(null);
+    setLocalMovies((current) =>
+      current.map((movie) => (movie.id === id ? { ...movie, watched: nextWatched } : movie)),
+    );
+
+    try {
+      const response = await fetch("/api/submissions/movies", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      if (!response.ok) {
+        const result = (await response.json()) as { error?: string };
+        setLocalMovies((current) =>
+          current.map((movie) => (movie.id === id ? { ...movie, watched: currentMovie.watched } : movie)),
+        );
+        setError(result.error || "Kunne ikke oppdatere filmen.");
+        return;
+      }
+
+      const result = (await response.json()) as { watched: boolean };
+      setLocalMovies((current) =>
+        current.map((movie) => (movie.id === id ? { ...movie, watched: result.watched } : movie)),
+      );
+    } catch {
+      setLocalMovies((current) =>
+        current.map((movie) => (movie.id === id ? { ...movie, watched: currentMovie.watched } : movie)),
+      );
+      setError("Noe gikk galt. Proev igjen.");
+    } finally {
+      setPendingId(null);
+    }
+  }
 
   return (
     <div className="listPanel">
@@ -55,31 +110,64 @@ export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
         <div className="movieTable">
           <div className="movieTableHeader">
             <span>Tittel</span>
-         {/*    <span>Passer for</span> */}
             <span>Status</span>
             <span>Trailer</span>
           </div>
 
           <div className="movieTableBody">
-            {filteredMovies.map((movie) => (
-              <article className="movieTableRow" key={movie.id}>
-                <strong>{movie.title}</strong>
-{/*                 <span>{movie.suitableFor.length > 0 ? movie.suitableFor.join(", ") : "Alle"}</span> */}
-                <span>{movie.watched ? "Sett" : "Ikke sett"}</span>
-                <span>
-                  {movie.link ? (
-                    <a href={movie.link} target="_blank" rel="noreferrer" className="inlineLink">
-                      Se trailer
-                    </a>
-                  ) : (
-                    "-"
-                  )}
-                </span>
-              </article>
-            ))}
+            {filteredMovies.map((movie) => {
+              const isPending = pendingId === movie.id;
+
+              return (
+                <button
+                  key={movie.id}
+                  type="button"
+                  className={movie.watched ? "movieTableButton movieTableButtonWatched" : "movieTableButton"}
+                  onClick={() => toggleMovie(movie.id)}
+                  disabled={isPending}
+                >
+                  <article className="movieTableRow">
+                    <div className="movieTitleCell">
+                      <strong>{movie.title}</strong>
+                     {/*  {movie.link ? (
+                        <a
+                          href={movie.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inlineLink movieInlineLink"
+                          onClick={(event) => event.stopPropagation()}
+                        >
+                          Se trailer
+                        </a>
+                      ) : null} */}
+                    </div>
+                    <span className="movieStatusCell">
+                      {isPending ? "Oppdaterer..." : movie.watched ? "Sett" : "Ikke sett"}
+                    </span>
+                    <span className="movieTrailerCell">
+                      {movie.link ? (
+                        <a
+                          href={movie.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inlineLink"
+                          onClick={(event) => event.stopPropagation()}
+                        >
+                          Se trailer
+                        </a>
+                      ) : (
+                      null
+                      )}
+                    </span>
+                  </article>
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
+
+      {error ? <p className="feedback feedbackError">{error}</p> : null}
     </div>
   );
 }

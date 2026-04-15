@@ -773,14 +773,44 @@ button {
   display: grid;
 }
 
+.movieTableButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.movieTableButton:disabled {
+  cursor: wait;
+}
+
+.movieTableButton:hover .movieTableRow,
+.movieTableButton:focus-visible .movieTableRow {
+  background: rgba(255, 244, 231, 0.45);
+}
+
+.movieTableButtonWatched .movieTableRow {
+  opacity: 0.7;
+}
+
 .movieTableRow {
   padding: 0.95rem 0;
   border-top: 1px solid rgba(75, 98, 124, 0.12);
+  transition: background-color 0.18s ease;
 }
 
 .movieTableRow strong {
   font-family: var(--font-body), sans-serif;
   font-size: 1rem;
+}
+
+.movieTitleCell {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.movieInlineLink {
+  font-size: 0.9rem;
 }
 
 .moviePosterWrap {
@@ -1024,7 +1054,25 @@ button {
   }
 
   .movieTableRow {
-    grid-template-columns: 1fr;
-    gap: 0.35rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title status"
+      "trailer trailer";
+    gap: 0.35rem 0.75rem;
+    align-items: start;
+  }
+
+  .movieTitleCell {
+    grid-area: title;
+  }
+
+  .movieStatusCell {
+    grid-area: status;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .movieTrailerCell {
+    grid-area: trailer;
   }
 }
