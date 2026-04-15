@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { MobileCollapsibleForm } from "@/components/mobile-collapsible-form";
 import { RecipeForm } from "@/components/recipe-form";
 import { SiteHeader } from "@/components/site-header";
 import { getRecipes } from "@/lib/data";
@@ -22,7 +23,7 @@ export default async function OppskrifterPage() {
       </section>
 
       <section className="contentGrid">
-        <div className="listPanel">
+        <div className="listPanel mobileListSlot">
           <div className="panelHeading">
             <h2>Lagrede oppskrifter</h2>
           </div>
@@ -33,7 +34,7 @@ export default async function OppskrifterPage() {
                 🍲
               </span>
               <h3>Ingen oppskrifter enda</h3>
-              <p>Legg til den foerste oppskriften i skjemaet ved siden av.</p>
+              <p>Legg til den foerste oppskriften i skjemaet.</p>
             </div>
           ) : (
             <div className="groupStack">
@@ -71,8 +72,10 @@ export default async function OppskrifterPage() {
           )}
         </div>
 
-        <div>
-          <RecipeForm />
+        <div className="mobileFormSlot">
+          <MobileCollapsibleForm title="Legg til oppskrift">
+            <RecipeForm />
+          </MobileCollapsibleForm>
         </div>
       </section>
     </main>

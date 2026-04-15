@@ -643,6 +643,61 @@ button {
   margin-bottom: 1rem;
 }
 
+.mobileCollapsibleForm {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.mobileFormToggle {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--paper);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  text-align: left;
+}
+
+.mobileFormToggleLabel,
+.mobileFormToggleMeta {
+  font-weight: 800;
+  font-size: x-large;
+}
+
+.mobileFormToggleMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted);
+}
+
+.mobileFormToggleCaret {
+  transition: transform 0.18s ease;
+}
+
+.mobileFormToggleOpen .mobileFormToggleCaret {
+  transform: rotate(180deg);
+}
+
+.mobileFormContent {
+  display: block;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+.desktopOnly {
+  display: block;
+}
+
 .field {
   display: grid;
   gap: 0.45rem;
@@ -1137,6 +1192,54 @@ button {
 }
 
 @media (max-width: 699px) {
+  .mobileCollapsibleForm {
+    gap: 0;
+  }
+
+  .mobileFormSlot {
+    order: -1;
+  }
+
+  .mobileListSlot {
+    order: 1;
+  }
+
+  .mobileFormToggle {
+    display: flex;
+  }
+
+  .mobileFormContent {
+    display: none;
+  }
+
+  .mobileFormContentOpen {
+    display: block;
+  }
+
+  .mobileFormToggleOpen {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
+  }
+
+  .mobileFormContentOpen > .formPanel {
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .mobileFormContentOpen > .formPanel .formIntro {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: block;
+  }
+
+  .desktopOnly {
+    display: none;
+  }
+
   .siteHeader {
     flex-direction: column;
     align-items: stretch;
@@ -1160,6 +1263,36 @@ button {
 
   .siteNavOpen {
     display: flex;
+  }
+
+  .sectionHero,
+  .sectionHeroCompact {
+    display: block;
+    margin-top: 0.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .sectionHero .kicker,
+  .sectionHeroCompact .kicker,
+  .sectionHero p,
+  .sectionHeroCompact p,
+  .sectionHero .sectionBadge,
+  .sectionHeroCompact .sectionBadge {
+    display: none;
+  }
+
+  .sectionHero h1,
+  .sectionHeroCompact h1,
+  .recipeDetailTitle {
+    max-width: 100%;
+    margin: 0;
+    font-size: clamp(1.7rem, 7vw, 2.2rem);
+    line-height: 1.05;
   }
 
   .wishTableHeader {
