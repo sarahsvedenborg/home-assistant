@@ -52,22 +52,32 @@ export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
           description="Velg et annet familiemedlem eller legg til et nytt forslag."
         />
       ) : (
-        <div className="movieGrid">
-          {filteredMovies.map((movie) => (
-            <article className="movieCard" key={movie.id}>
-              <div className="movieBody">
-                <h3>{movie.title}</h3>
-                {movie.suitableFor.length > 0 ? (
-                  <p>Passer for {movie.suitableFor.join(", ")}</p>
-                ) : null}
-                {movie.link ? (
-                  <a href={movie.link} target="_blank" rel="noreferrer" className="inlineLink">
-                    Åpne filmlenke
-                  </a>
-                ) : null}
-              </div>
-            </article>
-          ))}
+        <div className="movieTable">
+          <div className="movieTableHeader">
+            <span>Tittel</span>
+            <span>Passer for</span>
+            <span>Status</span>
+            <span>Lenke</span>
+          </div>
+
+          <div className="movieTableBody">
+            {filteredMovies.map((movie) => (
+              <article className="movieTableRow" key={movie.id}>
+                <strong>{movie.title}</strong>
+                <span>{movie.suitableFor.length > 0 ? movie.suitableFor.join(", ") : "Alle"}</span>
+                <span>{movie.watched ? "Sett" : "Ikke sett"}</span>
+                <span>
+                  {movie.link ? (
+                    <a href={movie.link} target="_blank" rel="noreferrer" className="inlineLink">
+                      Aapne
+                    </a>
+                  ) : (
+                    "-"
+                  )}
+                </span>
+              </article>
+            ))}
+          </div>
         </div>
       )}
     </div>
