@@ -87,16 +87,16 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
                 </div>
               )}
             </div>
-
-            <div className="desktopOnly">
-              <WishlistForm
-                familyMembers={familyMembers.map((member) => member.name)}
-                selectedMemberName={activeGroup.member.name}
-                submitPath="/api/submissions/onskeliste"
-              />
-            </div>
           </div>
         </div>
+      </div>
+
+      <div className="desktopOnly">
+        <WishlistForm
+          familyMembers={familyMembers.map((member) => member.name)}
+          selectedMemberName={activeGroup.member.name}
+          submitPath="/api/submissions/onskeliste"
+        />
       </div>
     </section>
   );
