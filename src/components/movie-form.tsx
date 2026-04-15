@@ -124,7 +124,16 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
         </label>
 
         <fieldset className="field fieldWide checkboxFieldset">
-          <legend>Passer for</legend>
+          <div className="checkboxFieldsetHeader">
+            <legend>Passer for</legend>
+            <button
+              type="button"
+              className="checkboxAction"
+              onClick={() => setForm((current) => ({ ...current, suitableFor: [...familyMembers] }))}
+            >
+              Velg alle
+            </button>
+          </div>
           <div className="checkboxGrid">
             {familyMembers.map((member) => {
               const checked = form.suitableFor.includes(member);

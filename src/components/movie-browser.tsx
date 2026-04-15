@@ -55,21 +55,21 @@ export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
         <div className="movieTable">
           <div className="movieTableHeader">
             <span>Tittel</span>
-            <span>Passer for</span>
+         {/*    <span>Passer for</span> */}
             <span>Status</span>
-            <span>Lenke</span>
+            <span>Trailer</span>
           </div>
 
           <div className="movieTableBody">
             {filteredMovies.map((movie) => (
               <article className="movieTableRow" key={movie.id}>
                 <strong>{movie.title}</strong>
-                <span>{movie.suitableFor.length > 0 ? movie.suitableFor.join(", ") : "Alle"}</span>
+{/*                 <span>{movie.suitableFor.length > 0 ? movie.suitableFor.join(", ") : "Alle"}</span> */}
                 <span>{movie.watched ? "Sett" : "Ikke sett"}</span>
                 <span>
                   {movie.link ? (
                     <a href={movie.link} target="_blank" rel="noreferrer" className="inlineLink">
-                      Aapne
+                      Se trailer
                     </a>
                   ) : (
                     "-"

@@ -100,7 +100,6 @@ export async function submitMovieRecommendation(input: {
     title: string;
     link?: string;
     posterUrl?: string;
-    suggestedByName: string;
     suitableFor: string[];
     familyMember?: { _type: "reference"; _ref: string };
     watched: boolean;
@@ -110,7 +109,6 @@ export async function submitMovieRecommendation(input: {
     title: input.title,
     link: input.link,
     posterUrl: input.posterUrl,
-    suggestedByName: input.suggestedByName,
     suitableFor: input.suitableFor,
     watched: false,
     status: requireApproval ? "pending" : "approved",
