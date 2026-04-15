@@ -1,4 +1,5 @@
 import { MovieBrowser } from "@/components/movie-browser";
+import { MobileCollapsibleForm } from "@/components/mobile-collapsible-form";
 import { MovieForm } from "@/components/movie-form";
 import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getMovieRecommendations } from "@/lib/data";
@@ -23,10 +24,14 @@ export default async function MoviesPage() {
       </section>
 
       <section className="contentGrid">
-        <MovieBrowser familyMembers={familyMembers.map((member) => member.name)} movies={movies} />
+        <div className="mobileListSlot">
+          <MovieBrowser familyMembers={familyMembers.map((member) => member.name)} movies={movies} />
+        </div>
 
-        <div id="add-movie">
-          <MovieForm familyMembers={familyMembers.map((member) => member.name)} />
+        <div id="add-movie" className="mobileFormSlot">
+          <MobileCollapsibleForm title="Legg til filmforslag">
+            <MovieForm familyMembers={familyMembers.map((member) => member.name)} />
+          </MobileCollapsibleForm>
         </div>
       </section>
     </main>

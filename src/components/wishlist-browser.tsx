@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { EmptyState } from "@/components/empty-state";
+import { MobileCollapsibleForm } from "@/components/mobile-collapsible-form";
 import { WishlistForm } from "@/components/wishlist-form";
 import type { FamilyMember, WishListItem } from "@/lib/types";
 import { buildWishListGroupsForFamily } from "@/lib/wishlist";
@@ -28,7 +29,7 @@ export function WishlistBrowser({ familyMembers, wishListItems }: WishlistBrowse
 
   return (
     <section className="contentGrid">
-      <div className="listPanel">
+      <div className="listPanel mobileListSlot">
         <div className="panelHeading">
           <h2>Familiemedlemmer</h2>
 {/*           <p>Trykk på et kort for å se ønskelisten og legge til et nytt ønske direkte.</p> */}
@@ -74,7 +75,7 @@ export function WishlistBrowser({ familyMembers, wishListItems }: WishlistBrowse
           {activeGroup.items.length === 0 ? (
             <EmptyState
               title="Ingen ønsker enda"
-              description={`Legg til det foerste ønsket for ${activeGroup.member.name} i skjemaet ved siden av.`}
+              description={`Legg til det foerste ønsket for ${activeGroup.member.name} i skjemaet.`}
             />
           ) : (
             <ul className="itemList">
@@ -97,11 +98,13 @@ export function WishlistBrowser({ familyMembers, wishListItems }: WishlistBrowse
         </section>
       </div>
 
-      <div id="add-wish">
-        <WishlistForm
-          familyMembers={familyMembers.map((member) => member.name)}
-          selectedMemberName={activeGroup.member.name}
-        />
+      <div id="add-wish" className="mobileFormSlot">
+        <MobileCollapsibleForm title={`Legg til ønske for ${activeGroup.member.name}`}>
+          <WishlistForm
+            familyMembers={familyMembers.map((member) => member.name)}
+            selectedMemberName={activeGroup.member.name}
+          />
+        </MobileCollapsibleForm>
       </div>
     </section>
   );
