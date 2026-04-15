@@ -76,6 +76,13 @@ button {
   padding: 1rem 0 1.25rem;
 }
 
+.siteHeaderTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .brandMark {
   display: inline-flex;
   align-items: center;
@@ -121,6 +128,40 @@ button {
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 0.65rem;
+}
+
+.menuButton {
+  display: none;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 1px solid rgba(75, 98, 124, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.72);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.menuButton span {
+  width: 1.1rem;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--ink);
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.menuButtonOpen span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.menuButtonOpen span:nth-child(2) {
+  opacity: 0;
+}
+
+.menuButtonOpen span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 .navLink {
@@ -611,7 +652,119 @@ button {
   font-weight: 800;
 }
 
-.field input,
+.checkboxFieldset {
+  border: 0;
+  padding: 0;
+}
+
+.checkboxFieldset legend {
+  font-weight: 800;
+}
+
+.checkboxFieldsetHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.checkboxAction {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(75, 98, 124, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.checkboxGrid {
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: 1fr;
+}
+
+.checkboxOption {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.55rem;
+  border: 0;
+  border-radius: 0.7rem;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.checkboxOption:hover,
+.checkboxOption:focus-within {
+  background: rgba(255, 244, 231, 0.55);
+}
+
+.checkboxOption:active {
+  transform: translateY(1px);
+}
+
+.checkboxInput {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  width: 20px !important;
+  min-width: 20px;
+  max-width: 20px;
+  height: 20px !important;
+  min-height: 20px;
+  max-height: 20px;
+  padding: 0;
+  margin: 0;
+  border: 1.5px solid rgba(255, 159, 110, 0.9);
+  border-radius: 4px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  line-height: 20px;
+  aspect-ratio: 1 / 1;
+  transition: border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.checkboxInput::after {
+  content: "";
+  width: 0.24rem;
+  height: 0.44rem;
+  border-right: 1.6px solid #fff;
+  border-bottom: 1.6px solid #fff;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.14s ease;
+}
+
+.checkboxInput:checked {
+  border-color: rgba(255, 159, 110, 0.9);
+  background: linear-gradient(135deg, var(--warm), #ffbe5c);
+  box-shadow: 0 0 0 3px rgba(255, 159, 110, 0.14);
+}
+
+.checkboxInput:checked::after {
+  transform: rotate(45deg) scale(1);
+}
+
+.checkboxInput:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(94, 166, 255, 0.16);
+}
+
+.checkboxLabel {
+  flex: 1;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.checkboxLabelChecked {
+  color: var(--ink);
+}
+
+.field input:not(.checkboxInput),
 .field select,
 .field textarea {
   width: 100%;
@@ -658,6 +811,69 @@ button {
   gap: 0.85rem;
 }
 
+.movieTable {
+  margin-top: 1rem;
+}
+
+.movieTableHeader,
+.movieTableRow {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.5fr) minmax(160px, 1.2fr) minmax(100px, 0.8fr) minmax(80px, 0.6fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+.movieTableHeader {
+  padding: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.movieTableBody {
+  display: grid;
+}
+
+.movieTableButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.movieTableButton:disabled {
+  cursor: wait;
+}
+
+.movieTableButton:hover .movieTableRow,
+.movieTableButton:focus-visible .movieTableRow {
+  background: rgba(255, 244, 231, 0.45);
+}
+
+.movieTableButtonWatched .movieTableRow {
+  opacity: 0.7;
+}
+
+.movieTableRow {
+  padding: 0.95rem 0;
+  border-top: 1px solid rgba(75, 98, 124, 0.12);
+  transition: background-color 0.18s ease;
+}
+
+.movieTableRow strong {
+  font-family: var(--font-body), sans-serif;
+  font-size: 1rem;
+}
+
+.movieTitleCell {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.movieInlineLink {
+  font-size: 0.9rem;
+}
+
 .moviePosterWrap {
   position: relative;
   overflow: hidden;
@@ -696,6 +912,40 @@ button {
 .movieBody {
   flex-direction: column;
   align-items: flex-start;
+}
+
+.panelHeadingStacked {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.filterChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.filterChip {
+  padding: 0.65rem 0.95rem;
+  border: 1px solid rgba(75, 98, 124, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
+  font-weight: 800;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.filterChip:hover,
+.filterChip:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(94, 166, 255, 0.35);
+}
+
+.filterChipActive {
+  border-color: rgba(255, 159, 110, 0.5);
+  background: rgba(255, 244, 231, 0.95);
+  color: var(--ink);
 }
 
 .shoppingItemChecked {
@@ -892,8 +1142,24 @@ button {
     align-items: stretch;
   }
 
+  .siteHeaderTop {
+    width: 100%;
+  }
+
+  .menuButton {
+    display: inline-flex;
+  }
+
   .siteNav {
+    display: none;
+    flex-direction: column;
     justify-content: flex-start;
+    width: 100%;
+    padding-top: 0.5rem;
+  }
+
+  .siteNavOpen {
+    display: flex;
   }
 
   .wishTableHeader {
@@ -906,5 +1172,32 @@ button {
 
   .wishTableRowCompact {
     grid-template-columns: 1fr;
+  }
+
+  .movieTableHeader {
+    display: none;
+  }
+
+  .movieTableRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title status"
+      "trailer trailer";
+    gap: 0.35rem 0.75rem;
+    align-items: start;
+  }
+
+  .movieTitleCell {
+    grid-area: title;
+  }
+
+  .movieStatusCell {
+    grid-area: status;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .movieTrailerCell {
+    grid-area: trailer;
   }
 }

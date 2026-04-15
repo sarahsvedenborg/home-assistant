@@ -18,9 +18,10 @@ export const movieRecommendationType = defineType({
       to: [{ type: "familyMember" }],
     }),
     defineField({
-      name: "suggestedByName",
-      title: "Suggested by (fallback)",
-      type: "string",
+      name: "suitableFor",
+      title: "Passer for",
+      type: "array",
+      of: [{ type: "string" }],
     }),
     defineField({
       name: "link",
@@ -63,15 +64,15 @@ export const movieRecommendationType = defineType({
   preview: {
     select: {
       title: "title",
-      suggestedByName: "suggestedByName",
       familyMemberName: "familyMember.name",
+      suitableFor: "suitableFor",
       watched: "watched",
       media: "poster",
     },
-    prepare({ title, suggestedByName, familyMemberName, watched, media }) {
+    prepare({ title, familyMemberName, suitableFor, watched, media }) {
       return {
         title,
-        subtitle: `${familyMemberName || suggestedByName || "Unknown"} - ${watched ? "watched" : "not watched yet"}`,
+        subtitle: `${familyMemberName || "Unknown"} - ${watched ? "watched" : "not watched yet"}${Array.isArray(suitableFor) && suitableFor.length > 0 ? ` - passer for ${suitableFor.join(", ")}` : ""}`,
         media,
       };
     },

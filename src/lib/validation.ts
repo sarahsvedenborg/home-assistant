@@ -102,6 +102,7 @@ export function validateMovieSubmission(
   link?: string;
   posterUrl?: string;
   suggestedByName: string;
+  suitableFor: string[];
 }> {
   const common = validateCommonFields(payload);
 
@@ -113,6 +114,9 @@ export function validateMovieSubmission(
   const link = normalizeText(common.record.link);
   const posterUrl = normalizeText(common.record.posterUrl);
   const suggestedByName = normalizeText(common.record.suggestedByName);
+  const suitableFor = Array.isArray(common.record.suitableFor)
+    ? common.record.suitableFor.filter((value): value is string => typeof value === "string").map((value) => value.trim()).filter(Boolean)
+    : [];
 
   if (!suggestedByName) {
     return { success: false, error: "Please choose who suggested the movie." };
@@ -137,6 +141,7 @@ export function validateMovieSubmission(
       link: link || undefined,
       posterUrl: posterUrl || undefined,
       suggestedByName,
+      suitableFor,
     },
   };
 }

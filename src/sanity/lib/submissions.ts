@@ -86,6 +86,7 @@ export async function submitMovieRecommendation(input: {
   link?: string;
   posterUrl?: string;
   suggestedByName: string;
+  suitableFor: string[];
 }) {
   const client = getWriteClient();
 
@@ -99,7 +100,7 @@ export async function submitMovieRecommendation(input: {
     title: string;
     link?: string;
     posterUrl?: string;
-    suggestedByName: string;
+    suitableFor: string[];
     familyMember?: { _type: "reference"; _ref: string };
     watched: boolean;
     status: "pending" | "approved";
@@ -108,7 +109,7 @@ export async function submitMovieRecommendation(input: {
     title: input.title,
     link: input.link,
     posterUrl: input.posterUrl,
-    suggestedByName: input.suggestedByName,
+    suitableFor: input.suitableFor,
     watched: false,
     status: requireApproval ? "pending" : "approved",
   };
@@ -122,6 +123,29 @@ export async function submitMovieRecommendation(input: {
   return requireApproval
     ? "Movie suggestion sent! A grown-up can approve it in the studio."
     : "Movie night idea added!";
+}
+
+export async function toggleMovieWatched(movieId: string) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const movie = await client.fetch<{ _id: string; watched?: boolean } | null>(
+    `*[_type == "movieRecommendation" && _id == $movieId][0]{_id, watched}`,
+    { movieId },
+  );
+
+  if (!movie?._id) {
+    throw new Error("Fant ikke filmen du ville oppdatere.");
+  }
+
+  const nextWatched = !Boolean(movie.watched);
+
+  await client.patch(movie._id).set({ watched: nextWatched }).commit();
+
+  return nextWatched;
 }
 
 export async function addShoppingListItem(input: {
