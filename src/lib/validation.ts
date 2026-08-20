@@ -29,14 +29,14 @@ function isValidOptionalUrl(value: string) {
 
 function validateCommonFields(payload: unknown) {
   if (!payload || typeof payload !== "object") {
-    return { success: false, error: "Please try sending the form again." } as const;
+    return { success: false, error: "Prøv å sende skjemaet på nytt." } as const;
   }
 
   const record = payload as Record<string, unknown>;
   const honeypot = normalizeText(record.website);
 
   if (honeypot) {
-    return { success: false, error: "That submission did not look valid." } as const;
+    return { success: false, error: "Dette skjemaet så ikke gyldig ut." } as const;
   }
 
   return {
@@ -65,23 +65,23 @@ export function validateWishListSubmission(
   const link = normalizeText(common.record.link);
 
   if (!submittedByName) {
-    return { success: false, error: "Please choose your name." };
+    return { success: false, error: "Velg navnet ditt." };
   }
 
   if (!title) {
-    return { success: false, error: "Please add an item name." };
+    return { success: false, error: "Legg til et ønske." };
   }
 
   if (title.length > 100) {
-    return { success: false, error: "Item names should stay under 100 characters." };
+    return { success: false, error: "Ønsket må være under 100 tegn." };
   }
 
   if (description.length > 280) {
-    return { success: false, error: "Notes should stay under 280 characters." };
+    return { success: false, error: "Kommentaren må være under 280 tegn." };
   }
 
   if (!isValidOptionalUrl(link)) {
-    return { success: false, error: "Links must start with http:// or https://." };
+    return { success: false, error: "Lenker må starte med http:// eller https://." };
   }
 
   return {
@@ -119,19 +119,19 @@ export function validateMovieSubmission(
     : [];
 
   if (!suggestedByName) {
-    return { success: false, error: "Please choose who suggested the movie." };
+    return { success: false, error: "Velg hvem som foreslo filmen." };
   }
 
   if (!title) {
-    return { success: false, error: "Please add a movie title." };
+    return { success: false, error: "Legg til en filmtittel." };
   }
 
   if (title.length > 120) {
-    return { success: false, error: "Movie titles should stay under 120 characters." };
+    return { success: false, error: "Filmtittelen må være under 120 tegn." };
   }
 
   if (!isValidOptionalUrl(link) || !isValidOptionalUrl(posterUrl)) {
-    return { success: false, error: "Links and image URLs must start with http:// or https://." };
+    return { success: false, error: "Lenker må starte med http:// eller https://." };
   }
 
   return {

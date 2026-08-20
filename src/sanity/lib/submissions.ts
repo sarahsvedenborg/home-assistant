@@ -77,8 +77,8 @@ export async function submitWishListItem(input: {
   await client.create(document);
 
   return requireApproval
-    ? "Thanks! A grown-up can approve this in the studio."
-    : "Added to the family wish list!";
+    ? "Takk! En voksen kan godkjenne det i studioet."
+    : "Lagt til i familiens ønskeliste!";
 }
 
 export async function submitMovieRecommendation(input: {
@@ -121,8 +121,8 @@ export async function submitMovieRecommendation(input: {
   await client.create(document);
 
   return requireApproval
-    ? "Movie suggestion sent! A grown-up can approve it in the studio."
-    : "Movie night idea added!";
+    ? "Filmforslaget er sendt! En voksen kan godkjenne det i studioet."
+    : "Filmforslaget er lagt til!";
 }
 
 export async function toggleMovieWatched(movieId: string) {

@@ -1,5 +1,5 @@
+import { AddButton } from "@/components/add-button";
 import { MovieBrowser } from "@/components/movie-browser";
-import { MobileCollapsibleForm } from "@/components/mobile-collapsible-form";
 import { MovieForm } from "@/components/movie-form";
 import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getMovieRecommendations } from "@/lib/data";
@@ -23,17 +23,13 @@ export default async function MoviesPage() {
         <div className="sectionBadge">{movies.filter((movie) => !movie.watched).length} igjen å se</div>
       </section>
 
-      <section className="contentGrid">
-        <div className="mobileListSlot">
-          <MovieBrowser familyMembers={familyMembers.map((member) => member.name)} movies={movies} />
-        </div>
-
-        <div id="add-movie" className="mobileFormSlot">
-          <MobileCollapsibleForm title="Legg til filmforslag">
-            <MovieForm familyMembers={familyMembers.map((member) => member.name)} />
-          </MobileCollapsibleForm>
-        </div>
+      <section className="listStack">
+        <MovieBrowser familyMembers={familyMembers.map((member) => member.name)} movies={movies} />
       </section>
+
+      <AddButton title="Legg til filmforslag" label="Legg til film">
+        <MovieForm familyMembers={familyMembers.map((member) => member.name)} />
+      </AddButton>
     </main>
   );
 }

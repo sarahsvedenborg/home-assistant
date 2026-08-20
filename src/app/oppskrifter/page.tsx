@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { MobileCollapsibleForm } from "@/components/mobile-collapsible-form";
+import { AddButton } from "@/components/add-button";
 import { RecipeForm } from "@/components/recipe-form";
 import { SiteHeader } from "@/components/site-header";
 import { getRecipes } from "@/lib/data";
@@ -22,8 +22,8 @@ export default async function OppskrifterPage() {
         <div className="sectionBadge">{recipes.length} oppskrifter</div>
       </section>
 
-      <section className="contentGrid">
-        <div className="listPanel mobileListSlot">
+      <section className="listStack">
+        <div className="listPanel">
           <div className="panelHeading">
             <h2>Lagrede oppskrifter</h2>
           </div>
@@ -72,12 +72,11 @@ export default async function OppskrifterPage() {
           )}
         </div>
 
-        <div className="mobileFormSlot">
-          <MobileCollapsibleForm title="Legg til oppskrift">
-            <RecipeForm />
-          </MobileCollapsibleForm>
-        </div>
       </section>
+
+      <AddButton title="Legg til oppskrift" label="Legg til oppskrift">
+        <RecipeForm />
+      </AddButton>
     </main>
   );
 }

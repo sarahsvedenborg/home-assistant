@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ message });
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : "Could not save that movie right now.";
+      error instanceof Error ? error.message : "Kunne ikke lagre filmen akkurat nå.";
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
@@ -68,7 +68,7 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ watched });
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : "Could not update that movie right now.";
+      error instanceof Error ? error.message : "Kunne ikke oppdatere filmen akkurat nå.";
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }

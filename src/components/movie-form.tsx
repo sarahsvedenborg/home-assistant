@@ -5,6 +5,9 @@ import { useState, type FormEvent } from "react";
 
 type MovieFormProps = {
   familyMembers: string[];
+  // Called after a successful submit so a parent (e.g. the modal) can show
+  // its own confirmation and close. When omitted, an inline message is shown.
+  onSuccess?: (message: string) => void;
 };
 
 type FormState = {
@@ -12,7 +15,6 @@ type FormState = {
   suitableFor: string[];
   title: string;
   link: string;
-  posterUrl: string;
   website: string;
 };
 
@@ -21,7 +23,7 @@ const messageClassNames = {
   success: "feedback feedbackSuccess",
 };
 
-export function MovieForm({ familyMembers }: MovieFormProps) {
+export function MovieForm({ familyMembers, onSuccess }: MovieFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
@@ -33,7 +35,6 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
     suitableFor: [],
     title: "",
     link: "",
-    posterUrl: "",
     website: "",
   });
 
@@ -58,16 +59,21 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
         return;
       }
 
-      setMessage({ kind: "success", text: result.message || "Filmen er lagt til!" });
+      const successText = result.message || "Filmen er lagt til!";
       setForm({
         suggestedByName: familyMembers[0] || "",
         suitableFor: [],
         title: "",
         link: "",
-        posterUrl: "",
         website: "",
       });
       router.refresh();
+
+      if (onSuccess) {
+        onSuccess(successText);
+      } else {
+        setMessage({ kind: "success", text: successText });
+      }
     } catch {
       setMessage({ kind: "error", text: "Noe gikk galt. Proev igjen." });
     } finally {
@@ -162,18 +168,6 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
           </div>
         </fieldset>
 
-        <label className="field fieldWide">
-          <span>Lenke til filmplakat (valgfritt)</span>
-          <input
-            type="url"
-            value={form.posterUrl}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, posterUrl: event.target.value }))
-            }
-            placeholder="https://image.example/plakat.jpg"
-          />
-        </label>
-
         <label className="srOnly" aria-hidden="true">
           La dette feltet stå tomt
           <input
@@ -190,7 +184,6 @@ export function MovieForm({ familyMembers }: MovieFormProps) {
         <button className="buttonPrimary" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Sender..." : "Legg til film"}
         </button>
-        <p className="smallNote">Nye forslag starter som usett og kan administreres i studio.</p>
       </div>
 
       {message ? (

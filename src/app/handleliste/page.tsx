@@ -1,4 +1,4 @@
-import { MobileCollapsibleForm } from "@/components/mobile-collapsible-form";
+import { AddButton } from "@/components/add-button";
 import { ShoppingListBrowser } from "@/components/shopping-list-browser";
 import { ShoppingListForm } from "@/components/shopping-list-form";
 import { SiteHeader } from "@/components/site-header";
@@ -25,8 +25,8 @@ export default async function HandlelistePage() {
         <div className="sectionBadge">{remainingItems.length} må kjøpes</div>
       </section>
 
-      <section className="contentGrid">
-        <div className="listPanel mobileListSlot">
+      <section className="listStack">
+        <div className="listPanel">
           <div className="panelHeading">
             <h2>{shoppingList.title}</h2>
           </div>
@@ -43,16 +43,14 @@ export default async function HandlelistePage() {
             <ShoppingListBrowser items={shoppingList.items} />
           )}
         </div>
-
-        <div className="mobileFormSlot">
-          <MobileCollapsibleForm title="Legg til vare">
-            <ShoppingListForm
-              familyMembers={familyMembers.map((member) => member.name)}
-              previousItems={shoppingList.items}
-            />
-          </MobileCollapsibleForm>
-        </div>
       </section>
+
+      <AddButton title="Legg til vare" label="Legg til vare">
+        <ShoppingListForm
+          familyMembers={familyMembers.map((member) => member.name)}
+          previousItems={shoppingList.items}
+        />
+      </AddButton>
     </main>
   );
 }

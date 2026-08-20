@@ -7,6 +7,9 @@ type WishlistFormProps = {
   familyMembers: string[];
   selectedMemberName?: string;
   submitPath?: string;
+  // Called after a successful submit so a parent (e.g. the modal) can show
+  // its own confirmation and close. When omitted, an inline message is shown.
+  onSuccess?: (message: string) => void;
 };
 
 type FormState = {
@@ -26,6 +29,7 @@ export function WishlistForm({
   familyMembers,
   selectedMemberName,
   submitPath = "/api/submissions/wishlist",
+  onSuccess,
 }: WishlistFormProps) {
   const router = useRouter();
   const defaultMember = selectedMemberName || familyMembers[0] || "";
@@ -70,7 +74,7 @@ export function WishlistForm({
         return;
       }
 
-      setMessage({ kind: "success", text: result.message || "Ønsket er lagt til!" });
+      const successText = result.message || "Ønsket er lagt til!";
       setForm({
         submittedByName: defaultMember,
         title: "",
@@ -79,6 +83,12 @@ export function WishlistForm({
         website: "",
       });
       router.refresh();
+
+      if (onSuccess) {
+        onSuccess(successText);
+      } else {
+        setMessage({ kind: "success", text: successText });
+      }
     } catch {
       setMessage({ kind: "error", text: "Noe gikk galt. Proev igjen." });
     } finally {
