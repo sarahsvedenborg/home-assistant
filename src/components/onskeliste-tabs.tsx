@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import { MobileCollapsibleForm } from "@/components/mobile-collapsible-form";
+import { AddButton } from "@/components/add-button";
 import { WishlistForm } from "@/components/wishlist-form";
 import { buildWishListGroupsForFamily } from "@/lib/wishlist";
 import type { FamilyMember, WishListItem } from "@/lib/types";
@@ -26,18 +26,8 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
   }
 
   return (
-    <section className="contentGrid">
-      <div className="mobileFormSlot mobileOnly">
-        <MobileCollapsibleForm title={`Legg til ønske for ${activeGroup.member.name}`}>
-          <WishlistForm
-            familyMembers={familyMembers.map((member) => member.name)}
-            selectedMemberName={activeGroup.member.name}
-            submitPath="/api/submissions/onskeliste"
-          />
-        </MobileCollapsibleForm>
-      </div>
-
-      <div className="listPanel tabsPanel mobileListSlot">
+    <section className="listStack">
+      <div className="listPanel tabsPanel">
         <div className="tabList" role="tablist" aria-label="Familiemedlemmer">
           {groups.map((group) => {
             const isActive = group.member.name === activeGroup.member.name;
@@ -91,13 +81,13 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
         </div>
       </div>
 
-      <div className="desktopOnly">
+      <AddButton title={`Legg til ønske for ${activeGroup.member.name}`} label="Legg til ønske">
         <WishlistForm
           familyMembers={familyMembers.map((member) => member.name)}
           selectedMemberName={activeGroup.member.name}
           submitPath="/api/submissions/onskeliste"
         />
-      </div>
+      </AddButton>
     </section>
   );
 }

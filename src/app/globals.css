@@ -643,61 +643,6 @@ button {
   margin-bottom: 1rem;
 }
 
-.mobileCollapsibleForm {
-  display: grid;
-  gap: 0.85rem;
-}
-
-.mobileFormToggle {
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  width: 100%;
-  min-height: 3.5rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid var(--line);
-  border-radius: 1.25rem;
-  background: var(--paper);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--shadow);
-  color: var(--ink);
-  text-align: left;
-}
-
-.mobileFormToggleLabel,
-.mobileFormToggleMeta {
-  font-weight: 800;
-  font-size: x-large;
-}
-
-.mobileFormToggleMeta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  color: var(--muted);
-}
-
-.mobileFormToggleCaret {
-  transition: transform 0.18s ease;
-}
-
-.mobileFormToggleOpen .mobileFormToggleCaret {
-  transform: rotate(180deg);
-}
-
-.mobileFormContent {
-  display: block;
-}
-
-.mobileOnly {
-  display: none;
-}
-
-.desktopOnly {
-  display: block;
-}
-
 .field {
   display: grid;
   gap: 0.45rem;
@@ -1192,54 +1137,6 @@ button {
 }
 
 @media (max-width: 699px) {
-  .mobileCollapsibleForm {
-    gap: 0;
-  }
-
-  .mobileFormSlot {
-    order: -1;
-  }
-
-  .mobileListSlot {
-    order: 1;
-  }
-
-  .mobileFormToggle {
-    display: flex;
-  }
-
-  .mobileFormContent {
-    display: none;
-  }
-
-  .mobileFormContentOpen {
-    display: block;
-  }
-
-  .mobileFormToggleOpen {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    box-shadow: none;
-  }
-
-  .mobileFormContentOpen > .formPanel {
-    border-top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-
-  .mobileFormContentOpen > .formPanel .formIntro {
-    display: none;
-  }
-
-  .mobileOnly {
-    display: block;
-  }
-
-  .desktopOnly {
-    display: none;
-  }
-
   .siteHeader {
     flex-direction: column;
     align-items: stretch;
@@ -1332,5 +1229,171 @@ button {
 
   .movieTrailerCell {
     grid-area: trailer;
+  }
+}
+
+/* Full-width list layout (replaces the two-column list/form grid) */
+.listStack {
+  margin-top: 1.5rem;
+}
+
+/* Floating "+" action button that opens the add-form overlay */
+.addFab {
+  position: fixed;
+  right: max(1.1rem, env(safe-area-inset-right));
+  bottom: max(1.1rem, env(safe-area-inset-bottom));
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 3.75rem;
+  padding: 0 1.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--warm);
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 1.15rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.addFabIcon {
+  font-size: 1.9rem;
+  line-height: 1;
+  font-weight: 700;
+}
+
+/* Overlay backdrop */
+.formModalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background: rgba(36, 52, 71, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+/* Bottom sheet on phones (mobile-first default) */
+.formModal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 92vh;
+  border-radius: 1.5rem 1.5rem 0 0;
+  background: var(--paper-strong);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.formModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.formModalHeader h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.formModalClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Scrollable content so the on-screen keyboard can never trap the submit button */
+.formModalBody {
+  padding: 1.25rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* The form supplies its own heading via the modal header, so hide the inline one */
+.formModalBody .formIntro {
+  display: none;
+}
+
+/* Success confirmation shown over the whole dialog, so it is always visible */
+.formModalConfirmation {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--paper-strong);
+}
+
+.formModalConfirmation p {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.formModalConfirmationIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--ink);
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+/* Big & friendly touch targets for the shared kiosk/phone form */
+.formModalBody .field span,
+.formModalBody legend {
+  font-size: 1.05rem;
+}
+
+.formModalBody input:not([type="checkbox"]):not([type="radio"]),
+.formModalBody select,
+.formModalBody textarea {
+  min-height: 3rem;
+  font-size: 1.1rem;
+}
+
+.formModalBody .buttonPrimary {
+  min-height: 3.4rem;
+  font-size: 1.15rem;
+}
+
+@media (min-width: 700px) {
+  /* Centered dialog, anchored toward the top so the touchscreen keyboard
+     (which covers the lower half) does not hide the fields or submit button */
+  .formModalBackdrop {
+    align-items: flex-start;
+    padding: 4vh 1.5rem 1.5rem;
+  }
+
+  .formModal {
+    width: min(560px, 100%);
+    max-height: 88vh;
+    border-radius: 1.5rem;
   }
 }

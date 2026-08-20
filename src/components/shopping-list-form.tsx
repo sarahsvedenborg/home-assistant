@@ -8,6 +8,9 @@ import type { ShoppingListEntry } from "@/lib/types";
 type ShoppingListFormProps = {
   familyMembers: string[];
   previousItems: ShoppingListEntry[];
+  // Called after a successful submit so a parent (e.g. the modal) can show
+  // its own confirmation and close. When omitted, an inline message is shown.
+  onSuccess?: (message: string) => void;
 };
 
 type FormState = {
@@ -18,7 +21,7 @@ type FormState = {
   website: string;
 };
 
-export function ShoppingListForm({ familyMembers, previousItems }: ShoppingListFormProps) {
+export function ShoppingListForm({ familyMembers, previousItems, onSuccess }: ShoppingListFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
@@ -65,7 +68,7 @@ export function ShoppingListForm({ familyMembers, previousItems }: ShoppingListF
         return;
       }
 
-      setMessage({ kind: "success", text: result.message || "Varen er lagt til!" });
+      const successText = result.message || "Varen er lagt til!";
       setForm({
         title: "",
         quantity: "",
@@ -74,6 +77,12 @@ export function ShoppingListForm({ familyMembers, previousItems }: ShoppingListF
         website: "",
       });
       router.refresh();
+
+      if (onSuccess) {
+        onSuccess(successText);
+      } else {
+        setMessage({ kind: "success", text: successText });
+      }
     } catch {
       setMessage({ kind: "error", text: "Noe gikk galt. Proev igjen." });
     } finally {

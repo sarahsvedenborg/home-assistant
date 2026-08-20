@@ -12,7 +12,13 @@ type RecipeFormState = {
   website: string;
 };
 
-export function RecipeForm() {
+type RecipeFormProps = {
+  // Called after a successful submit so a parent (e.g. the modal) can show
+  // its own confirmation and close. When omitted, an inline message is shown.
+  onSuccess?: (message: string) => void;
+};
+
+export function RecipeForm({ onSuccess }: RecipeFormProps = {}) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
@@ -49,7 +55,7 @@ export function RecipeForm() {
         return;
       }
 
-      setMessage({ kind: "success", text: result.message || "Oppskriften er lagt til!" });
+      const successText = result.message || "Oppskriften er lagt til!";
       setForm({
         title: "",
         url: "",
@@ -59,6 +65,12 @@ export function RecipeForm() {
         website: "",
       });
       router.refresh();
+
+      if (onSuccess) {
+        onSuccess(successText);
+      } else {
+        setMessage({ kind: "success", text: successText });
+      }
     } catch {
       setMessage({ kind: "error", text: "Noe gikk galt. Proev igjen." });
     } finally {

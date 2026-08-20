@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ message });
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : "Could not save that wish right now.";
+      error instanceof Error ? error.message : "Kunne ikke lagre ønsket akkurat nå.";
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
