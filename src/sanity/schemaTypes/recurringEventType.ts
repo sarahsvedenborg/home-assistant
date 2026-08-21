@@ -55,6 +55,18 @@ export const recurringEventType = defineType({
       rows: 3,
     }),
     defineField({
+      name: "startDate",
+      title: "Start date",
+      type: "datetime",
+      description: "Optional, when the activity starts running.",
+    }),
+    defineField({
+      name: "endDate",
+      title: "End date",
+      type: "datetime",
+      description: "Optional, when the activity stops running.",
+    }),
+    defineField({
       name: "status",
       title: "Approval status",
       type: "string",

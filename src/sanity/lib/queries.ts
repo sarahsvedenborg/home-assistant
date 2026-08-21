@@ -36,6 +36,8 @@ export const RECURRING_EVENTS_QUERY = `*[_type == "recurringEvent" && (!defined(
   dayOfWeek,
   time,
   whatToBring,
+  startDate,
+  endDate,
   "familyMember": coalesce(familyMember->name, familyMemberName)
 }`;
 

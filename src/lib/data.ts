@@ -106,6 +106,8 @@ type SanityRecurringEvent = {
   dayOfWeek: string;
   time?: string;
   whatToBring?: string;
+  startDate?: string;
+  endDate?: string;
   familyMember?: string;
 };
 
@@ -296,6 +298,8 @@ export async function getRecurringEvents(): Promise<RecurringEvent[]> {
     dayOfWeek: event.dayOfWeek,
     time: event.time,
     whatToBring: event.whatToBring,
+    startDate: event.startDate,
+    endDate: event.endDate,
     familyMember: event.familyMember || "Ukjent",
   }));
 }

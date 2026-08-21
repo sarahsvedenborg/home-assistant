@@ -288,6 +288,8 @@ export async function submitRecurringEvent(input: {
   dayOfWeek: string;
   time?: string;
   whatToBring?: string;
+  startDate?: string;
+  endDate?: string;
 }) {
   const client = getWriteClient();
 
@@ -303,6 +305,8 @@ export async function submitRecurringEvent(input: {
     dayOfWeek: string;
     time?: string;
     whatToBring?: string;
+    startDate?: string;
+    endDate?: string;
     familyMember?: { _type: "reference"; _ref: string };
     status: "pending" | "approved";
   } = {
@@ -312,6 +316,8 @@ export async function submitRecurringEvent(input: {
     dayOfWeek: input.dayOfWeek,
     time: input.time,
     whatToBring: input.whatToBring,
+    startDate: input.startDate,
+    endDate: input.endDate,
     status: requireApproval ? "pending" : "approved",
   };
 

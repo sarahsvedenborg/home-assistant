@@ -72,5 +72,7 @@ export type RecurringEvent = {
   dayOfWeek: string;
   time?: string;
   whatToBring?: string;
+  startDate?: string;
+  endDate?: string;
   familyMember: string;
 };

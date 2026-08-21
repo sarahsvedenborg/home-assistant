@@ -29,6 +29,23 @@ function isValidOptionalUrl(value: string) {
   }
 }
 
+// Converts a date-picker value (e.g. "2026-08-21") or an ISO string into a full
+// ISO datetime for Sanity's datetime field. Returns undefined for empty input
+// and null for an unparseable value so callers can distinguish the two.
+function toIsoDateTime(value: string): string | undefined | null {
+  if (!value) {
+    return undefined;
+  }
+
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+
+  return parsed.toISOString();
+}
+
 function validateCommonFields(payload: unknown) {
   if (!payload || typeof payload !== "object") {
     return { success: false, error: "Prøv å sende skjemaet på nytt." } as const;
@@ -291,6 +308,8 @@ export function validateRecurringEventSubmission(
   dayOfWeek: string;
   time?: string;
   whatToBring?: string;
+  startDate?: string;
+  endDate?: string;
 }> {
   const common = validateCommonFields(payload);
 
@@ -303,6 +322,8 @@ export function validateRecurringEventSubmission(
   const dayOfWeek = normalizeText(common.record.dayOfWeek);
   const time = normalizeText(common.record.time);
   const whatToBring = normalizeText(common.record.whatToBring);
+  const startDateRaw = normalizeText(common.record.startDate);
+  const endDateRaw = normalizeText(common.record.endDate);
 
   if (!title) {
     return { success: false, error: "Legg til en tittel på aktiviteten." };
@@ -328,6 +349,20 @@ export function validateRecurringEventSubmission(
     return { success: false, error: "Listen over hva som skal tas med må være under 500 tegn." };
   }
 
+  const startDate = toIsoDateTime(startDateRaw);
+  if (startDateRaw && !startDate) {
+    return { success: false, error: "Startdatoen er ugyldig." };
+  }
+
+  const endDate = toIsoDateTime(endDateRaw);
+  if (endDateRaw && !endDate) {
+    return { success: false, error: "Sluttdatoen er ugyldig." };
+  }
+
+  if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+    return { success: false, error: "Sluttdatoen kan ikke være før startdatoen." };
+  }
+
   return {
     success: true,
     data: {
@@ -336,6 +371,8 @@ export function validateRecurringEventSubmission(
       dayOfWeek,
       time: time || undefined,
       whatToBring: whatToBring || undefined,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
     },
   };
 }

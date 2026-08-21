@@ -5,6 +5,39 @@ import { getFamilyMembers, getRecurringEvents } from "@/lib/data";
 import type { RecurringEvent } from "@/lib/types";
 import { WEEKDAYS } from "@/lib/weekdays";
 
+// ISO datetime -> "DD.MM.YYYY" (date portion only, no timezone shift).
+function formatDate(iso?: string): string | null {
+  if (!iso) {
+    return null;
+  }
+
+  const [year, month, day] = iso.slice(0, 10).split("-");
+  if (!year || !month || !day) {
+    return null;
+  }
+
+  return `${day}.${month}.${year}`;
+}
+
+function formatDateRange(startDate?: string, endDate?: string): string | null {
+  const start = formatDate(startDate);
+  const end = formatDate(endDate);
+
+  if (start && end) {
+    return `${start}–${end}`;
+  }
+
+  if (start) {
+    return `Fra ${start}`;
+  }
+
+  if (end) {
+    return `Til ${end}`;
+  }
+
+  return null;
+}
+
 export default async function AktiviteterPage() {
   const [familyMembers, events] = await Promise.all([
     getFamilyMembers(),
@@ -66,6 +99,11 @@ export default async function AktiviteterPage() {
                             {event.time ? ` · ${event.time}` : ""}
                           </span>
                         </div>
+                        {formatDateRange(event.startDate, event.endDate) ? (
+                          <span className="itemMeta">
+                            {formatDateRange(event.startDate, event.endDate)}
+                          </span>
+                        ) : null}
                         {event.whatToBring ? <p>Ta med: {event.whatToBring}</p> : null}
                       </li>
                     ))}

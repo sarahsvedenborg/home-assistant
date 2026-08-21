@@ -157,6 +157,8 @@ export const FALLBACK_RECURRING_EVENTS: RecurringEvent[] = [
     dayOfWeek: "monday",
     time: "15:00",
     whatToBring: "Noteperm og pianobok.",
+    startDate: "2026-08-17T00:00:00.000Z",
+    endDate: "2026-12-14T00:00:00.000Z",
     familyMember: "Amélie",
   },
   {

@@ -18,6 +18,8 @@ type FormState = {
   dayOfWeek: string;
   time: string;
   whatToBring: string;
+  startDate: string;
+  endDate: string;
   website: string;
 };
 
@@ -34,6 +36,8 @@ export function RecurringEventForm({ familyMembers, onSuccess }: RecurringEventF
     dayOfWeek: WEEKDAYS[0].value,
     time: "",
     whatToBring: "",
+    startDate: "",
+    endDate: "",
     website: "",
   });
 
@@ -65,6 +69,8 @@ export function RecurringEventForm({ familyMembers, onSuccess }: RecurringEventF
         dayOfWeek: WEEKDAYS[0].value,
         time: "",
         whatToBring: "",
+        startDate: "",
+        endDate: "",
         website: "",
       });
       router.refresh();
@@ -153,6 +159,24 @@ export function RecurringEventForm({ familyMembers, onSuccess }: RecurringEventF
             placeholder="Gymtøy, noteperm, vannflaske..."
             rows={4}
             maxLength={500}
+          />
+        </label>
+
+        <label className="field">
+          <span>Startdato (valgfritt)</span>
+          <input
+            type="date"
+            value={form.startDate}
+            onChange={(event) => setForm((current) => ({ ...current, startDate: event.target.value }))}
+          />
+        </label>
+
+        <label className="field">
+          <span>Sluttdato (valgfritt)</span>
+          <input
+            type="date"
+            value={form.endDate}
+            onChange={(event) => setForm((current) => ({ ...current, endDate: event.target.value }))}
           />
         </label>
 
