@@ -45,39 +45,47 @@ export default async function Home() {
       <section className="hubGrid" aria-label="Hovedseksjoner">
         <HubCard
           href="/onskeliste"
+          formHref="/onskeliste#add-wish"
           icon="🎁"
           title="Ønskeliste"
           description="Samling av gaveønsker per familiemedlem."
           stat={`${wishListItems.length} idéer`}
           accentClass="accentWarm"
-          ctaLabel="Åpne ønskelisten"
+          openLabel="Åpne ønskelisten"
+          addLabel="Legg til ønske"
         />
         <HubCard
           href="/handleliste"
+          formHref="/handleliste#add-item"
           icon="🛒"
           title="Handleliste"
           description="Varer vi trenger å kjøpe."
           stat={`${shoppingList.items.filter((item) => !item.checked).length} varer`}
           accentClass="accentFuture"
-          ctaLabel="Åpne handlelisten"
+          openLabel="Åpne handlelisten"
+          addLabel="Legg til vare"
         />
         <HubCard
           href="/oppskrifter"
+          formHref="/oppskrifter#add-recipe"
           icon="🍲"
           title="Oppskrifter"
           description="Samling av oppskrifter med lenker og notater."
           stat={`${recipes.length} oppskrifter`}
           accentClass="accentCool"
-          ctaLabel="Se oppskrifter"
+          openLabel="Se oppskrifter"
+          addLabel="Legg til oppskrift"
         />
         <HubCard
           href="/movies"
+          formHref="/movies#add-movie"
           icon="🎬"
           title="Filmer"
           description="Oversikt over filmforlag og hva som er sett og ikke."
           stat={`${movies.filter((movie) => !movie.watched).length} usett`}
           accentClass="accentCool"
-          ctaLabel="Se filmer"
+          openLabel="Se filmer"
+          addLabel="Legg til film"
         />
         <article className="hubCard accentFuture">
           <div className="hubCardTop">

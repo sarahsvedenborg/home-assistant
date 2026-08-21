@@ -45,7 +45,7 @@ export default async function HandlelistePage() {
         </div>
       </section>
 
-      <AddButton title="Legg til vare" label="Legg til vare">
+      <AddButton title="Legg til vare" label="Legg til vare" anchor="add-item">
         <ShoppingListForm
           familyMembers={familyMembers.map((member) => member.name)}
           previousItems={shoppingList.items}

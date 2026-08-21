@@ -465,10 +465,27 @@ button {
 }
 
 .hubCard {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 0.95rem;
   padding: 1.25rem;
   border-radius: 1.75rem;
+}
+
+/* Two CTAs per card (open the list + open the add form), pinned to the
+   bottom so cards of differing text length still line their buttons up. */
+.hubCardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: auto;
+}
+
+.hubCardActions .buttonPrimary,
+.hubCardActions .buttonSecondary {
+  flex: 1 1 auto;
+  justify-content: center;
+  text-align: center;
 }
 
 .hubCardTop,
