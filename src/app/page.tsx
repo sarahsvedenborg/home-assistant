@@ -1,10 +1,20 @@
-import Link from "next/link";
-
-import { FamilyFeed } from "@/components/family-feed";
+import { FamilyDashboard } from "@/components/family-dashboard";
 import { HubCard } from "@/components/hub-card";
 import { SiteHeader } from "@/components/site-header";
 import { getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate } from "@/lib/family-feed";
+
+// "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
+function formatOsloDateLabel(date: Date): string {
+  const label = new Intl.DateTimeFormat("nb-NO", {
+    timeZone: "Europe/Oslo",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(date);
+
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
 
 export default async function Home() {
   const [movies, recipes, recurringEvents, shoppingList, wishListItems] =
@@ -25,34 +35,12 @@ export default async function Home() {
     <main className="shell">
       <SiteHeader current="home" />
 
-      <section className="heroPanel">
-        <div className="heroCopy">
-          <span className="kicker">Velkommen hjem</span>
-{/*           <h1>Et lyst og koselig familieknutepunkt for ønsker, filmkvelder og nye ideer.</h1> */}
-          <h1>Et knutepunkt for felles info for familien.</h1>
-          <p>
-           {/*  Laget for å være enkelt for barna, nyttig for de voksne og fint å bruke på mobil,
-            nettbrett og laptop. */}
-          </p>
-
-          <div className="heroActions">
-            <Link className="buttonPrimary" href="/onskeliste#add-wish">
-              Legg til et ønske
-            </Link>
-            <Link className="buttonSecondary" href="/movies#add-movie">
-              Legg til en film
-            </Link>
-          </div>
-        </div>
-
-        <div className="heroStats">
-          <FamilyFeed
-            todayEvents={todayEvents}
-            tomorrowEvents={tomorrowEvents}
-            activity={activity}
-          />
-        </div>
-      </section>
+      <FamilyDashboard
+        dateLabel={formatOsloDateLabel(now)}
+        todayEvents={todayEvents}
+        tomorrowEvents={tomorrowEvents}
+        activity={activity}
+      />
 
       <section className="hubGrid" aria-label="Hovedseksjoner">
         <HubCard
