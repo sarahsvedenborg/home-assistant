@@ -59,3 +59,9 @@ export type Recipe = {
   steps: string[];
   comments: string[];
 };
+
+export type FeatureSuggestion = {
+  id: string;
+  title: string;
+  text?: string;
+};

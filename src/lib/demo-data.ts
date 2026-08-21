@@ -1,4 +1,11 @@
-import type { FamilyMember, MovieRecommendation, Recipe, ShoppingList, WishListItem } from "@/lib/types";
+import type {
+  FamilyMember,
+  FeatureSuggestion,
+  MovieRecommendation,
+  Recipe,
+  ShoppingList,
+  WishListItem,
+} from "@/lib/types";
 
 export const FALLBACK_FAMILY_MEMBERS: FamilyMember[] = [
   { id: "mom", name: "Mamma", role: "adult", emoji: "🌻", accentColor: "#ff9f6e" },
@@ -126,5 +133,18 @@ export const FALLBACK_RECIPES: Recipe[] = [
       "Kjør glatt og smak til med sitron og pepper.",
     ],
     comments: ["Server gjerne med grovt broed ved siden av."],
+  },
+];
+
+export const FALLBACK_FEATURE_SUGGESTIONS: FeatureSuggestion[] = [
+  {
+    id: "suggestion-1",
+    title: "Ukemeny",
+    text: "En egen side der vi kan planlegge middager for hele uken.",
+  },
+  {
+    id: "suggestion-2",
+    title: "Bursdagskalender",
+    text: "Vis kommende bursdager i familien så vi ikke glemmer noen.",
   },
 ];

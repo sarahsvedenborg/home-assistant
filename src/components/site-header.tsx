@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 type SiteHeaderProps = {
-  current: "home" | "wishlist" | "onskeliste" | "movies" | "handleliste" | "oppskrifter";
+  current: "home" | "wishlist" | "onskeliste" | "movies" | "handleliste" | "oppskrifter" | "forslag";
 };
 
 export function SiteHeader({ current }: SiteHeaderProps) {
@@ -71,8 +71,16 @@ export function SiteHeader({ current }: SiteHeaderProps) {
         <Link
           href="/oppskrifter"
           className={current === "oppskrifter" ? "navLink navLinkActive" : "navLink"}
+          onClick={closeMenu}
         >
           Oppskrifter
+        </Link>
+        <Link
+          href="/forslag"
+          className={current === "forslag" ? "navLink navLinkActive" : "navLink"}
+          onClick={closeMenu}
+        >
+          Forslag
         </Link>
        {/*  <Link href="/studio" className="navLink navLinkStudio">
           Studio for voksne

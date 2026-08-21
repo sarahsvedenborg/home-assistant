@@ -259,3 +259,25 @@ export async function submitRecipe(input: {
 
   return "Oppskriften er lagt til!";
 }
+
+export async function submitFeatureSuggestion(input: {
+  title: string;
+  text?: string;
+}) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  await client.create({
+    _type: "featureSuggestion",
+    title: input.title,
+    text: input.text,
+    status: requireApproval ? "pending" : "approved",
+  });
+
+  return requireApproval
+    ? "Takk for forslaget! En voksen kan godkjenne det i studioet."
+    : "Takk for forslaget!";
+}

@@ -1,4 +1,5 @@
 import { familyMemberType } from "./familyMemberType";
+import { featureSuggestionType } from "./featureSuggestionType";
 import { movieRecommendationType } from "./movieRecommendationType";
 import { recipeType } from "./recipeType";
 import { shoppingListType } from "./shoppingListType";
@@ -10,4 +11,5 @@ export const schemaTypes = [
   movieRecommendationType,
   shoppingListType,
   recipeType,
+  featureSuggestionType,
 ];
