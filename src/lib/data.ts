@@ -19,7 +19,7 @@ import type {
   WishListItem,
 } from "@/lib/types";
 import { isSanityConfigured } from "@/sanity/env";
-import { getFreshReadClient, getReadClient } from "@/sanity/lib/client";
+import { sanityFetch } from "@/sanity/lib/live";
 import {
   FAMILY_MEMBERS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
@@ -95,32 +95,26 @@ function blocksToParagraphs(blocks?: SanityBlock[]) {
     .filter(Boolean);
 }
 
-async function fetchFromSanity<T>(query: string) {
-  const client = getReadClient();
-
-  if (!client) {
+// All reads go through the Live Content API's sanityFetch so every connected
+// client (notably the always-on kiosk) updates in real time when content
+// changes. It manages caching/revalidation and the live event id for us.
+async function fetchFromSanity<T>(query: string): Promise<T | null> {
+  if (!isSanityConfigured) {
     return null;
   }
 
   try {
-    return await client.fetch<T>(query);
+    const { data } = await sanityFetch({ query });
+    return (data as T) ?? null;
   } catch {
     return null;
   }
 }
 
-async function fetchFreshFromSanity<T>(query: string) {
-  const client = getFreshReadClient();
-
-  if (!client) {
-    return null;
-  }
-
-  try {
-    return await client.fetch<T>(query);
-  } catch {
-    return null;
-  }
+// Kept as a separate name for call-site clarity; live updates make every fetch
+// current, so there is no longer a distinct "fresh" (CDN-bypassing) path.
+async function fetchFreshFromSanity<T>(query: string): Promise<T | null> {
+  return fetchFromSanity<T>(query);
 }
 
 export function getSiteMode() {

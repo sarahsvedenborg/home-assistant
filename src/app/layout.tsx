@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Baloo_2, Nunito } from "next/font/google";
 import "./globals.css";
 
+import { SanityLive } from "@/sanity/lib/live";
+
 const displayFont = Baloo_2({
   variable: "--font-display",
   subsets: ["latin"],
@@ -24,7 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="no" className={`${displayFont.variable} ${bodyFont.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SanityLive />
+      </body>
     </html>
   );
 }
