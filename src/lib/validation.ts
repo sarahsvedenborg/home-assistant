@@ -244,3 +244,43 @@ export function validateRecipeSubmission(
     },
   };
 }
+
+export function validateFeatureSuggestionSubmission(
+  payload: unknown,
+): ValidationResult<{
+  title: string;
+  text: string;
+}> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const title = normalizeText(common.record.title);
+  const text = normalizeText(common.record.text);
+
+  if (!title) {
+    return { success: false, error: "Legg til en tittel på forslaget." };
+  }
+
+  if (title.length > 120) {
+    return { success: false, error: "Tittelen må være under 120 tegn." };
+  }
+
+  if (!text) {
+    return { success: false, error: "Beskriv forslaget litt nærmere." };
+  }
+
+  if (text.length > 1000) {
+    return { success: false, error: "Beskrivelsen må være under 1000 tegn." };
+  }
+
+  return {
+    success: true,
+    data: {
+      title,
+      text,
+    },
+  };
+}

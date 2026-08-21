@@ -24,6 +24,12 @@ export const MOVIE_RECOMMENDATIONS_QUERY = `*[_type == "movieRecommendation" && 
   "suggestedBy": familyMember->name
 }`;
 
+export const FEATURE_SUGGESTIONS_QUERY = `*[_type == "featureSuggestion" && (!defined(status) || status == "approved")] | order(_createdAt desc) {
+  _id,
+  title,
+  text
+}`;
+
 export const SHOPPING_LIST_QUERY = `*[_type == "shoppingList"][0] {
   _id,
   title,

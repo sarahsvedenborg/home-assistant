@@ -2,6 +2,7 @@ import "server-only";
 
 import {
   FALLBACK_FAMILY_MEMBERS,
+  FALLBACK_FEATURE_SUGGESTIONS,
   FALLBACK_MOVIES,
   FALLBACK_RECIPES,
   FALLBACK_SHOPPING_LIST,
@@ -11,6 +12,7 @@ import {
 
 import type {
   FamilyMember,
+  FeatureSuggestion,
   MovieRecommendation,
   Recipe,
   ShoppingList,
@@ -22,11 +24,12 @@ import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
   FAMILY_MEMBERS_QUERY,
+  FEATURE_SUGGESTIONS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
   RECIPES_QUERY,
   SHOPPING_LIST_QUERY,
   WISHLIST_ITEMS_QUERY,
-  
+
 } from "@/sanity/lib/queries";
 
 type SanityFamilyMember = {
@@ -86,6 +89,12 @@ type SanityRecipe = {
   ingredients?: SanityBlock[];
   steps?: SanityBlock[];
   comments?: SanityBlock[];
+};
+
+type SanityFeatureSuggestion = {
+  _id: string;
+  title: string;
+  text: string;
 };
 
 function blocksToParagraphs(blocks?: SanityBlock[]) {
@@ -236,6 +245,26 @@ export async function getRecipes(): Promise<Recipe[]> {
 export async function getRecipeById(id: string): Promise<Recipe | null> {
   const recipes = await getRecipes();
   return recipes.find((recipe) => recipe.id === id) || null;
+}
+
+export async function getFeatureSuggestions(): Promise<FeatureSuggestion[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_FEATURE_SUGGESTIONS;
+  }
+
+  const suggestions = await fetchFromSanity<SanityFeatureSuggestion[]>(
+    FEATURE_SUGGESTIONS_QUERY,
+  );
+
+  if (!suggestions) {
+    return FALLBACK_FEATURE_SUGGESTIONS;
+  }
+
+  return suggestions.map((suggestion) => ({
+    id: suggestion._id,
+    title: suggestion.title,
+    text: suggestion.text,
+  }));
 }
 
 export function groupWishListByPerson(items: WishListItem[]): WishListGroup[] {
