@@ -19,10 +19,12 @@ import type {
   RecurringEvent,
   ShoppingList,
   ShoppingListEntry,
+  Weather,
   WishListGroup,
   WishListItem,
 } from "@/lib/types";
 import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
+import { osloDateKey } from "@/lib/family-feed";
 import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
@@ -307,6 +309,73 @@ export async function getRecurringEvents(): Promise<RecurringEvent[]> {
     endDate: event.endDate,
     familyMember: event.familyMember || "Ukjent",
   }));
+}
+
+// Kløfta, Ullensaker. Coordinates truncated to 4 decimals per MET guidance.
+const WEATHER_LOCATION = { lat: 60.0725, lon: 11.1467 };
+
+type MetForecast = {
+  properties?: {
+    timeseries?: Array<{
+      time: string;
+      data: {
+        instant: { details: { air_temperature: number } };
+        next_1_hours?: { summary: { symbol_code: string } };
+        next_6_hours?: { summary: { symbol_code: string } };
+      };
+    }>;
+  };
+};
+
+// Today's forecast from MET Norway (Yr). No API key needed, but their terms
+// require an identifying User-Agent. Cached for 30 minutes. Returns null on
+// any failure so the dashboard can fall back to a placeholder.
+export async function getWeather(): Promise<Weather | null> {
+  try {
+    const response = await fetch(
+      `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${WEATHER_LOCATION.lat}&lon=${WEATHER_LOCATION.lon}`,
+      {
+        headers: {
+          "User-Agent": "family-hub/1.0 (https://github.com/sarahsvedenborg/home-assistant)",
+        },
+        next: { revalidate: 1800 },
+      },
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = (await response.json()) as MetForecast;
+    const series = data.properties?.timeseries ?? [];
+
+    if (series.length === 0) {
+      return null;
+    }
+
+    const current = series[0];
+    const temperature = current.data.instant.details.air_temperature;
+    const symbolCode =
+      current.data.next_1_hours?.summary.symbol_code ??
+      current.data.next_6_hours?.summary.symbol_code ??
+      "";
+
+    // High/low across the forecast points that fall on today (Oslo local).
+    const todayKey = osloDateKey(new Date());
+    const todaysTemps = series
+      .filter((entry) => osloDateKey(new Date(entry.time)) === todayKey)
+      .map((entry) => entry.data.instant.details.air_temperature);
+    const temps = todaysTemps.length > 0 ? todaysTemps : [temperature];
+
+    return {
+      temperature: Math.round(temperature),
+      symbolCode,
+      high: Math.round(Math.max(...temps)),
+      low: Math.round(Math.min(...temps)),
+    };
+  } catch {
+    return null;
+  }
 }
 
 export function groupWishListByPerson(items: WishListItem[]): WishListGroup[] {
