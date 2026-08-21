@@ -63,5 +63,5 @@ export type Recipe = {
 export type FeatureSuggestion = {
   id: string;
   title: string;
-  text: string;
+  text?: string;
 };

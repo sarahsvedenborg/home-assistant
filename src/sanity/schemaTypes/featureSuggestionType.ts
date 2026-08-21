@@ -16,7 +16,7 @@ export const featureSuggestionType = defineType({
       title: "Text",
       type: "text",
       rows: 5,
-      validation: (rule) => rule.required().max(1000),
+      validation: (rule) => rule.max(1000),
     }),
     defineField({
       name: "status",

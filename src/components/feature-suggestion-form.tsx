@@ -85,14 +85,13 @@ export function FeatureSuggestionForm({ onSuccess }: FeatureSuggestionFormProps 
         </label>
 
         <label className="field fieldWide">
-          <span>Beskrivelse</span>
+          <span>Beskrivelse (valgfritt)</span>
           <textarea
             value={form.text}
             onChange={(event) => setForm((current) => ({ ...current, text: event.target.value }))}
             placeholder="Fortell kort hva funksjonen skal gjøre og hvorfor den er nyttig."
             rows={5}
             maxLength={1000}
-            required
           />
         </label>
 

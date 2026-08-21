@@ -94,7 +94,7 @@ type SanityRecipe = {
 type SanityFeatureSuggestion = {
   _id: string;
   title: string;
-  text: string;
+  text?: string;
 };
 
 function blocksToParagraphs(blocks?: SanityBlock[]) {

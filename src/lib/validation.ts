@@ -249,7 +249,7 @@ export function validateFeatureSuggestionSubmission(
   payload: unknown,
 ): ValidationResult<{
   title: string;
-  text: string;
+  text?: string;
 }> {
   const common = validateCommonFields(payload);
 
@@ -268,10 +268,6 @@ export function validateFeatureSuggestionSubmission(
     return { success: false, error: "Tittelen må være under 120 tegn." };
   }
 
-  if (!text) {
-    return { success: false, error: "Beskriv forslaget litt nærmere." };
-  }
-
   if (text.length > 1000) {
     return { success: false, error: "Beskrivelsen må være under 1000 tegn." };
   }
@@ -280,7 +276,7 @@ export function validateFeatureSuggestionSubmission(
     success: true,
     data: {
       title,
-      text,
+      text: text || undefined,
     },
   };
 }

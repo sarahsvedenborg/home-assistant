@@ -39,7 +39,7 @@ export default async function ForslagPage() {
                   <div className="itemTitleRow">
                     <strong>{suggestion.title}</strong>
                   </div>
-                  <p>{suggestion.text}</p>
+                  {suggestion.text ? <p>{suggestion.text}</p> : null}
                 </li>
               ))}
             </ul>

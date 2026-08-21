@@ -262,7 +262,7 @@ export async function submitRecipe(input: {
 
 export async function submitFeatureSuggestion(input: {
   title: string;
-  text: string;
+  text?: string;
 }) {
   const client = getWriteClient();
 
