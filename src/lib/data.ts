@@ -31,7 +31,7 @@ import {
   MOVIE_RECOMMENDATIONS_QUERY,
   RECIPES_QUERY,
   RECURRING_EVENTS_QUERY,
-  SHOPPING_LIST_QUERY,
+  SHOPPING_LIST_ITEMS_QUERY,
   WISHLIST_ITEMS_QUERY,
 
 } from "@/sanity/lib/queries";
@@ -50,6 +50,7 @@ type SanityWishListItem = {
   description?: string;
   link?: string;
   submittedBy?: string;
+  _createdAt?: string;
 };
 
 type SanityMovieRecommendation = {
@@ -63,18 +64,13 @@ type SanityMovieRecommendation = {
 };
 
 type SanityShoppingListItem = {
-  _key: string;
+  _id: string;
   title: string;
   quantity?: string;
   note?: string;
   addedBy?: string;
   checked?: boolean;
-};
-
-type SanityShoppingList = {
-  _id: string;
-  title?: string;
-  items?: SanityShoppingListItem[];
+  _createdAt?: string;
 };
 
 type SanityBlockChild = {
@@ -184,6 +180,7 @@ export async function getWishListItems(): Promise<WishListItem[]> {
     description: item.description,
     link: item.link,
     submittedBy: item.submittedBy || "Someone",
+    createdAt: item._createdAt,
   }));
 }
 
@@ -216,24 +213,27 @@ export async function getShoppingList(): Promise<ShoppingList> {
     return FALLBACK_SHOPPING_LIST;
   }
 
-  const list = await fetchFreshFromSanity<SanityShoppingList>(SHOPPING_LIST_QUERY);
+  const itemDocs = await fetchFreshFromSanity<SanityShoppingListItem[]>(
+    SHOPPING_LIST_ITEMS_QUERY,
+  );
 
-  if (!list) {
+  if (!itemDocs) {
     return FALLBACK_SHOPPING_LIST;
   }
 
-  const items: ShoppingListEntry[] = (list.items || []).map((item) => ({
-    id: item._key,
+  const items: ShoppingListEntry[] = itemDocs.map((item) => ({
+    id: item._id,
     title: item.title,
     quantity: item.quantity,
     note: item.note,
     addedBy: item.addedBy,
     checked: Boolean(item.checked),
+    createdAt: item._createdAt,
   }));
 
   return {
-    id: list._id,
-    title: list.title || "Handleliste",
+    id: "shopping-list",
+    title: "Handleliste",
     items,
   };
 }

@@ -11,6 +11,7 @@ export const WISHLIST_ITEMS_QUERY = `*[_type == "wishListItem" && (!defined(stat
   title,
   description,
   link,
+  _createdAt,
   "submittedBy": coalesce(familyMember->name, submittedByName)
 }`;
 
@@ -43,17 +44,16 @@ export const RECURRING_EVENTS_QUERY = `*[_type == "recurringEvent" && (!defined(
   "familyMember": coalesce(familyMember->name, familyMemberName)
 }`;
 
-export const SHOPPING_LIST_QUERY = `*[_type == "shoppingList"][0] {
+// Shopping items are now standalone documents (one per item) so each carries
+// its own _createdAt, which powers the "Nytt i familien" feed on the homepage.
+export const SHOPPING_LIST_ITEMS_QUERY = `*[_type == "shoppingListItem"] | order(_createdAt desc) {
   _id,
   title,
-  items[]{
-    _key,
-    title,
-    quantity,
-    note,
-    addedBy,
-    checked
-  }
+  quantity,
+  note,
+  addedBy,
+  checked,
+  _createdAt
 }`;
 
 export const RECIPES_QUERY = `*[_type == "recipe"] | order(_createdAt desc) {

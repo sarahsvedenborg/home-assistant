@@ -1,7 +1,5 @@
 import "server-only";
 
-import { randomUUID } from "crypto";
-
 import { requireApproval } from "@/sanity/env";
 import { getReadClient, getWriteClient } from "@/sanity/lib/client";
 import { FAMILY_MEMBERS_QUERY } from "@/sanity/lib/queries";
@@ -160,32 +158,14 @@ export async function addShoppingListItem(input: {
     throw new Error("Sanity writes are not configured yet.");
   }
 
-  const existingList = await client.fetch<{ _id: string } | null>(
-    `*[_type == "shoppingList"][0]{_id}`,
-  );
-
-  const item = {
-    _key: randomUUID(),
+  await client.create({
+    _type: "shoppingListItem",
     title: input.title,
     quantity: input.quantity,
     note: input.note,
     addedBy: input.addedBy,
     checked: false,
-  };
-
-  if (!existingList?._id) {
-    await client.create({
-      _type: "shoppingList",
-      title: "Handleliste",
-      items: [item],
-    });
-  } else {
-    await client
-      .patch(existingList._id)
-      .setIfMissing({ items: [] })
-      .append("items", [item])
-      .commit();
-  }
+  });
 
   return "Varen er lagt til i handlelisten!";
 }
@@ -197,27 +177,20 @@ export async function toggleShoppingListItem(itemId: string) {
     throw new Error("Sanity writes are not configured yet.");
   }
 
-  const existingList = await client.fetch<{
-    _id: string;
-    items?: Array<{ _key: string; checked?: boolean }>;
-  } | null>(`*[_type == "shoppingList"][0]{_id, items[]{_key, checked}}`);
+  const currentItem = await client.fetch<{ _id: string; checked?: boolean } | null>(
+    `*[_type == "shoppingListItem" && _id == $id][0]{_id, checked}`,
+    { id: itemId },
+  );
 
-  if (!existingList?._id) {
-    throw new Error("Handlelisten finnes ikke ennå.");
-  }
-
-  const currentItem = existingList.items?.find((item) => item._key === itemId);
-
-  if (!currentItem) {
+  if (!currentItem?._id) {
     throw new Error("Fant ikke varen du ville oppdatere.");
   }
 
-  await client
-    .patch(existingList._id)
-    .set({ [`items[_key==\"${itemId}\"].checked`]: !Boolean(currentItem.checked) })
-    .commit();
+  const nextChecked = !Boolean(currentItem.checked);
 
-  return !Boolean(currentItem.checked);
+  await client.patch(currentItem._id).set({ checked: nextChecked }).commit();
+
+  return nextChecked;
 }
 
 export async function submitRecipe(input: {

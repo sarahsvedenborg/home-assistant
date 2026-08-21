@@ -1,17 +1,26 @@
 import Link from "next/link";
 
+import { FamilyFeed } from "@/components/family-feed";
 import { HubCard } from "@/components/hub-card";
 import { SiteHeader } from "@/components/site-header";
-import { getFamilyMembers, getMovieRecommendations, getRecipes, getShoppingList, getWishListItems } from "@/lib/data";
+import { getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getWishListItems } from "@/lib/data";
+import { buildRecentActivity, eventsForDate } from "@/lib/family-feed";
 
 export default async function Home() {
-  const [familyMembers, movies, recipes, shoppingList, wishListItems] = await Promise.all([
-    getFamilyMembers(),
-    getMovieRecommendations(),
-    getRecipes(),
-    getShoppingList(),
-    getWishListItems(),
-  ]);
+  const [movies, recipes, recurringEvents, shoppingList, wishListItems] =
+    await Promise.all([
+      getMovieRecommendations(),
+      getRecipes(),
+      getRecurringEvents(),
+      getShoppingList(),
+      getWishListItems(),
+    ]);
+
+  const now = new Date();
+  const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  const todayEvents = eventsForDate(recurringEvents, now);
+  const tomorrowEvents = eventsForDate(recurringEvents, tomorrow);
+  const activity = buildRecentActivity(wishListItems, shoppingList.items, { now });
   return (
     <main className="shell">
       <SiteHeader current="home" />
@@ -36,29 +45,12 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="heroStats" aria-label="Hovedpunkter i Family Hub">
-           <div className="statBubble statBubbleCool">
-            <strong>{shoppingList.items.filter((item) => !item.checked).length}</strong>
-            <span>varer må kjøpes</span>
-          </div>
-            <div className="statBubble statBubbleSun">
-            <strong>{movies.length}</strong>
-            <span>filmforslag</span>
-          </div>
-        
-          <div className="statBubble statBubbleCool">
-            <strong>{wishListItems.length}</strong>
-            <span>ønsker</span>
-          </div>
-            <div className="statBubble statBubbleWarm">
-            <strong>{familyMembers.length}</strong>
-            <span>familiemedlemmer</span>
-          </div>
-        
-        {/*   <div className="statusPill">
-            <span className="statusDot" aria-hidden="true" />
-            {siteMode === "live" ? "Koblet til Sanity" : "Demodata til miljøvariabler er satt"}
-          </div> */}
+        <div className="heroStats">
+          <FamilyFeed
+            todayEvents={todayEvents}
+            tomorrowEvents={tomorrowEvents}
+            activity={activity}
+          />
         </div>
       </section>
 

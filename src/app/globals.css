@@ -328,6 +328,48 @@ button {
   background: rgba(255, 210, 95, 0.24);
 }
 
+.familyFeed {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+}
+
+.feedCard {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1rem 1.15rem;
+  border-radius: 1.35rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.feedTitle {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.feedList {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feedItem {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.feedItem strong {
+  font-size: 1rem;
+}
+
+.feedEmpty {
+  color: var(--muted);
+  margin: 0;
+}
+
 .statusPill,
 .sectionBadge,
 .hubStat,
