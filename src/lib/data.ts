@@ -22,6 +22,7 @@ import type {
   WishListGroup,
   WishListItem,
 } from "@/lib/types";
+import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
 import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
@@ -103,8 +104,10 @@ type SanityFeatureSuggestion = {
 type SanityRecurringEvent = {
   _id: string;
   title: string;
+  category?: string;
   dayOfWeek: string;
   time?: string;
+  endTime?: string;
   whatToBring?: string;
   startDate?: string;
   endDate?: string;
@@ -295,8 +298,10 @@ export async function getRecurringEvents(): Promise<RecurringEvent[]> {
   return events.map((event) => ({
     id: event._id,
     title: event.title,
+    category: event.category || DEFAULT_EVENT_CATEGORY,
     dayOfWeek: event.dayOfWeek,
     time: event.time,
+    endTime: event.endTime,
     whatToBring: event.whatToBring,
     startDate: event.startDate,
     endDate: event.endDate,

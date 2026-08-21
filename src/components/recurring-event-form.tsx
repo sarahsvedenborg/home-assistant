@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
+import { DEFAULT_EVENT_CATEGORY, EVENT_CATEGORIES } from "@/lib/event-categories";
 import { WEEKDAYS } from "@/lib/weekdays";
 
 type RecurringEventFormProps = {
@@ -15,8 +16,10 @@ type RecurringEventFormProps = {
 type FormState = {
   title: string;
   familyMemberName: string;
+  category: string;
   dayOfWeek: string;
   time: string;
+  endTime: string;
   whatToBring: string;
   startDate: string;
   endDate: string;
@@ -33,8 +36,10 @@ export function RecurringEventForm({ familyMembers, onSuccess }: RecurringEventF
   const [form, setForm] = useState<FormState>({
     title: "",
     familyMemberName: familyMembers[0] || "",
+    category: DEFAULT_EVENT_CATEGORY,
     dayOfWeek: WEEKDAYS[0].value,
     time: "",
+    endTime: "",
     whatToBring: "",
     startDate: "",
     endDate: "",
@@ -66,8 +71,10 @@ export function RecurringEventForm({ familyMembers, onSuccess }: RecurringEventF
       setForm({
         title: "",
         familyMemberName: familyMembers[0] || "",
+        category: DEFAULT_EVENT_CATEGORY,
         dayOfWeek: WEEKDAYS[0].value,
         time: "",
+        endTime: "",
         whatToBring: "",
         startDate: "",
         endDate: "",
@@ -138,13 +145,44 @@ export function RecurringEventForm({ familyMembers, onSuccess }: RecurringEventF
           </select>
         </label>
 
+        <fieldset className="field fieldWide">
+          <legend>Type</legend>
+          <div className="radioRow">
+            {EVENT_CATEGORIES.map((eventCategory) => (
+              <label key={eventCategory.value} className="radioOption">
+                <input
+                  type="radio"
+                  name="category"
+                  value={eventCategory.value}
+                  checked={form.category === eventCategory.value}
+                  onChange={(event) =>
+                    setForm((current) => ({ ...current, category: event.target.value }))
+                  }
+                />
+                <span>{eventCategory.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
         <label className="field">
-          <span>Tidspunkt (valgfritt)</span>
+          <span>Starttidspunkt (valgfritt)</span>
           <input
             type="text"
             value={form.time}
             onChange={(event) => setForm((current) => ({ ...current, time: event.target.value }))}
             placeholder="15:00"
+            maxLength={40}
+          />
+        </label>
+
+        <label className="field">
+          <span>Sluttidspunkt (valgfritt)</span>
+          <input
+            type="text"
+            value={form.endTime}
+            onChange={(event) => setForm((current) => ({ ...current, endTime: event.target.value }))}
+            placeholder="16:00"
             maxLength={40}
           />
         </label>

@@ -285,8 +285,10 @@ export async function submitFeatureSuggestion(input: {
 export async function submitRecurringEvent(input: {
   title: string;
   familyMemberName: string;
+  category: string;
   dayOfWeek: string;
   time?: string;
+  endTime?: string;
   whatToBring?: string;
   startDate?: string;
   endDate?: string;
@@ -302,8 +304,10 @@ export async function submitRecurringEvent(input: {
     _type: "recurringEvent";
     title: string;
     familyMemberName: string;
+    category: string;
     dayOfWeek: string;
     time?: string;
+    endTime?: string;
     whatToBring?: string;
     startDate?: string;
     endDate?: string;
@@ -313,8 +317,10 @@ export async function submitRecurringEvent(input: {
     _type: "recurringEvent",
     title: input.title,
     familyMemberName: input.familyMemberName,
+    category: input.category,
     dayOfWeek: input.dayOfWeek,
     time: input.time,
+    endTime: input.endTime,
     whatToBring: input.whatToBring,
     startDate: input.startDate,
     endDate: input.endDate,

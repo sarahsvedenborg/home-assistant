@@ -2,6 +2,7 @@ import { AddButton } from "@/components/add-button";
 import { RecurringEventForm } from "@/components/recurring-event-form";
 import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getRecurringEvents } from "@/lib/data";
+import { eventCategoryLabel } from "@/lib/event-categories";
 import type { RecurringEvent } from "@/lib/types";
 import { WEEKDAYS } from "@/lib/weekdays";
 
@@ -90,23 +91,27 @@ export default async function AktiviteterPage() {
                   </div>
 
                   <ul className="itemList">
-                    {group.events.map((event: RecurringEvent) => (
-                      <li key={event.id} className="itemCard">
-                        <div className="itemTitleRow">
-                          <strong>{event.title}</strong>
-                          <span className="itemMeta">
-                            {event.familyMember}
-                            {event.time ? ` · ${event.time}` : ""}
-                          </span>
-                        </div>
-                        {formatDateRange(event.startDate, event.endDate) ? (
-                          <span className="itemMeta">
-                            {formatDateRange(event.startDate, event.endDate)}
-                          </span>
-                        ) : null}
-                        {event.whatToBring ? <p>Ta med: {event.whatToBring}</p> : null}
-                      </li>
-                    ))}
+                    {group.events.map((event: RecurringEvent) => {
+                      const timeRange = [event.time, event.endTime].filter(Boolean).join("–");
+                      const meta = [event.familyMember, timeRange, eventCategoryLabel(event.category)]
+                        .filter(Boolean)
+                        .join(" · ");
+
+                      return (
+                        <li key={event.id} className="itemCard">
+                          <div className="itemTitleRow">
+                            <strong>{event.title}</strong>
+                            <span className="itemMeta">{meta}</span>
+                          </div>
+                          {formatDateRange(event.startDate, event.endDate) ? (
+                            <span className="itemMeta">
+                              {formatDateRange(event.startDate, event.endDate)}
+                            </span>
+                          ) : null}
+                          {event.whatToBring ? <p>Ta med: {event.whatToBring}</p> : null}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </section>
               ))}

@@ -33,8 +33,10 @@ export const FEATURE_SUGGESTIONS_QUERY = `*[_type == "featureSuggestion" && (!de
 export const RECURRING_EVENTS_QUERY = `*[_type == "recurringEvent" && (!defined(status) || status == "approved")] | order(dayOfWeek asc, time asc) {
   _id,
   title,
+  category,
   dayOfWeek,
   time,
+  endTime,
   whatToBring,
   startDate,
   endDate,

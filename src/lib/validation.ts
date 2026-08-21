@@ -1,3 +1,4 @@
+import { EVENT_CATEGORY_VALUES } from "@/lib/event-categories";
 import { WEEKDAY_VALUES } from "@/lib/weekdays";
 
 type ValidationSuccess<T> = {
@@ -305,8 +306,10 @@ export function validateRecurringEventSubmission(
 ): ValidationResult<{
   title: string;
   familyMemberName: string;
+  category: string;
   dayOfWeek: string;
   time?: string;
+  endTime?: string;
   whatToBring?: string;
   startDate?: string;
   endDate?: string;
@@ -319,8 +322,10 @@ export function validateRecurringEventSubmission(
 
   const title = normalizeText(common.record.title);
   const familyMemberName = normalizeText(common.record.familyMemberName);
+  const category = normalizeText(common.record.category);
   const dayOfWeek = normalizeText(common.record.dayOfWeek);
   const time = normalizeText(common.record.time);
+  const endTime = normalizeText(common.record.endTime);
   const whatToBring = normalizeText(common.record.whatToBring);
   const startDateRaw = normalizeText(common.record.startDate);
   const endDateRaw = normalizeText(common.record.endDate);
@@ -337,12 +342,20 @@ export function validateRecurringEventSubmission(
     return { success: false, error: "Velg hvem aktiviteten gjelder." };
   }
 
+  if (!EVENT_CATEGORY_VALUES.includes(category as (typeof EVENT_CATEGORY_VALUES)[number])) {
+    return { success: false, error: "Velg om aktiviteten er skole eller fritid." };
+  }
+
   if (!WEEKDAY_VALUES.includes(dayOfWeek as (typeof WEEKDAY_VALUES)[number])) {
     return { success: false, error: "Velg hvilken ukedag aktiviteten er på." };
   }
 
   if (time.length > 40) {
     return { success: false, error: "Tidspunktet må være under 40 tegn." };
+  }
+
+  if (endTime.length > 40) {
+    return { success: false, error: "Sluttidspunktet må være under 40 tegn." };
   }
 
   if (whatToBring.length > 500) {
@@ -368,8 +381,10 @@ export function validateRecurringEventSubmission(
     data: {
       title,
       familyMemberName,
+      category,
       dayOfWeek,
       time: time || undefined,
+      endTime: endTime || undefined,
       whatToBring: whatToBring || undefined,
       startDate: startDate || undefined,
       endDate: endDate || undefined,

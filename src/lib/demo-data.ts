@@ -154,8 +154,10 @@ export const FALLBACK_RECURRING_EVENTS: RecurringEvent[] = [
   {
     id: "event-1",
     title: "Pianotimer",
+    category: "fritid",
     dayOfWeek: "monday",
     time: "15:00",
+    endTime: "16:00",
     whatToBring: "Noteperm og pianobok.",
     startDate: "2026-08-17T00:00:00.000Z",
     endDate: "2026-12-14T00:00:00.000Z",
@@ -164,6 +166,7 @@ export const FALLBACK_RECURRING_EVENTS: RecurringEvent[] = [
   {
     id: "event-2",
     title: "Gym på skolen",
+    category: "skole",
     dayOfWeek: "thursday",
     whatToBring: "Gymtøy, innesko og vannflaske.",
     familyMember: "Colette",

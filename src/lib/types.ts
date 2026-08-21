@@ -69,8 +69,10 @@ export type FeatureSuggestion = {
 export type RecurringEvent = {
   id: string;
   title: string;
+  category: string;
   dayOfWeek: string;
   time?: string;
+  endTime?: string;
   whatToBring?: string;
   startDate?: string;
   endDate?: string;

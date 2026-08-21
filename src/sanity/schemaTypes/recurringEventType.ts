@@ -43,10 +43,30 @@ export const recurringEventType = defineType({
       },
     }),
     defineField({
+      name: "category",
+      title: "Category",
+      type: "string",
+      initialValue: "skole",
+      validation: (rule) => rule.required(),
+      options: {
+        layout: "radio",
+        list: [
+          { title: "Skole", value: "skole" },
+          { title: "Fritid", value: "fritid" },
+        ],
+      },
+    }),
+    defineField({
       name: "time",
-      title: "Time",
+      title: "Start time",
       type: "string",
       description: "Optional, e.g. 15:00",
+    }),
+    defineField({
+      name: "endTime",
+      title: "End time",
+      type: "string",
+      description: "Optional, e.g. 16:00",
     }),
     defineField({
       name: "whatToBring",
