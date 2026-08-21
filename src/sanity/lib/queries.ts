@@ -30,6 +30,15 @@ export const FEATURE_SUGGESTIONS_QUERY = `*[_type == "featureSuggestion" && (!de
   text
 }`;
 
+export const RECURRING_EVENTS_QUERY = `*[_type == "recurringEvent" && (!defined(status) || status == "approved")] | order(dayOfWeek asc, time asc) {
+  _id,
+  title,
+  dayOfWeek,
+  time,
+  whatToBring,
+  "familyMember": coalesce(familyMember->name, familyMemberName)
+}`;
+
 export const SHOPPING_LIST_QUERY = `*[_type == "shoppingList"][0] {
   _id,
   title,

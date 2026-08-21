@@ -1,3 +1,5 @@
+import { WEEKDAY_VALUES } from "@/lib/weekdays";
+
 type ValidationSuccess<T> = {
   success: true;
   data: T;
@@ -277,6 +279,63 @@ export function validateFeatureSuggestionSubmission(
     data: {
       title,
       text: text || undefined,
+    },
+  };
+}
+
+export function validateRecurringEventSubmission(
+  payload: unknown,
+): ValidationResult<{
+  title: string;
+  familyMemberName: string;
+  dayOfWeek: string;
+  time?: string;
+  whatToBring?: string;
+}> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const title = normalizeText(common.record.title);
+  const familyMemberName = normalizeText(common.record.familyMemberName);
+  const dayOfWeek = normalizeText(common.record.dayOfWeek);
+  const time = normalizeText(common.record.time);
+  const whatToBring = normalizeText(common.record.whatToBring);
+
+  if (!title) {
+    return { success: false, error: "Legg til en tittel på aktiviteten." };
+  }
+
+  if (title.length > 120) {
+    return { success: false, error: "Tittelen må være under 120 tegn." };
+  }
+
+  if (!familyMemberName) {
+    return { success: false, error: "Velg hvem aktiviteten gjelder." };
+  }
+
+  if (!WEEKDAY_VALUES.includes(dayOfWeek as (typeof WEEKDAY_VALUES)[number])) {
+    return { success: false, error: "Velg hvilken ukedag aktiviteten er på." };
+  }
+
+  if (time.length > 40) {
+    return { success: false, error: "Tidspunktet må være under 40 tegn." };
+  }
+
+  if (whatToBring.length > 500) {
+    return { success: false, error: "Listen over hva som skal tas med må være under 500 tegn." };
+  }
+
+  return {
+    success: true,
+    data: {
+      title,
+      familyMemberName,
+      dayOfWeek,
+      time: time || undefined,
+      whatToBring: whatToBring || undefined,
     },
   };
 }

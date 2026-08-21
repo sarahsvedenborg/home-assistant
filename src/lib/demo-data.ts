@@ -3,6 +3,7 @@ import type {
   FeatureSuggestion,
   MovieRecommendation,
   Recipe,
+  RecurringEvent,
   ShoppingList,
   WishListItem,
 } from "@/lib/types";
@@ -146,5 +147,23 @@ export const FALLBACK_FEATURE_SUGGESTIONS: FeatureSuggestion[] = [
     id: "suggestion-2",
     title: "Bursdagskalender",
     text: "Vis kommende bursdager i familien så vi ikke glemmer noen.",
+  },
+];
+
+export const FALLBACK_RECURRING_EVENTS: RecurringEvent[] = [
+  {
+    id: "event-1",
+    title: "Pianotimer",
+    dayOfWeek: "monday",
+    time: "15:00",
+    whatToBring: "Noteperm og pianobok.",
+    familyMember: "Amélie",
+  },
+  {
+    id: "event-2",
+    title: "Gym på skolen",
+    dayOfWeek: "thursday",
+    whatToBring: "Gymtøy, innesko og vannflaske.",
+    familyMember: "Colette",
   },
 ];

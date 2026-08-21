@@ -281,3 +281,47 @@ export async function submitFeatureSuggestion(input: {
     ? "Takk for forslaget! En voksen kan godkjenne det i studioet."
     : "Takk for forslaget!";
 }
+
+export async function submitRecurringEvent(input: {
+  title: string;
+  familyMemberName: string;
+  dayOfWeek: string;
+  time?: string;
+  whatToBring?: string;
+}) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const familyMember = await resolveFamilyMemberReference(input.familyMemberName);
+  const document: {
+    _type: "recurringEvent";
+    title: string;
+    familyMemberName: string;
+    dayOfWeek: string;
+    time?: string;
+    whatToBring?: string;
+    familyMember?: { _type: "reference"; _ref: string };
+    status: "pending" | "approved";
+  } = {
+    _type: "recurringEvent",
+    title: input.title,
+    familyMemberName: input.familyMemberName,
+    dayOfWeek: input.dayOfWeek,
+    time: input.time,
+    whatToBring: input.whatToBring,
+    status: requireApproval ? "pending" : "approved",
+  };
+
+  if (familyMember) {
+    document.familyMember = familyMember;
+  }
+
+  await client.create(document);
+
+  return requireApproval
+    ? "Aktiviteten er sendt! En voksen kan godkjenne den i studioet."
+    : "Aktiviteten er lagt til!";
+}

@@ -65,3 +65,12 @@ export type FeatureSuggestion = {
   title: string;
   text?: string;
 };
+
+export type RecurringEvent = {
+  id: string;
+  title: string;
+  dayOfWeek: string;
+  time?: string;
+  whatToBring?: string;
+  familyMember: string;
+};
