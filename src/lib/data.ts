@@ -5,6 +5,7 @@ import {
   FALLBACK_FEATURE_SUGGESTIONS,
   FALLBACK_MOVIES,
   FALLBACK_RECIPES,
+  FALLBACK_RECURRING_EVENTS,
   FALLBACK_SHOPPING_LIST,
   FALLBACK_WISHLIST_ITEMS,
 } from "@/lib/demo-data";
@@ -15,11 +16,13 @@ import type {
   FeatureSuggestion,
   MovieRecommendation,
   Recipe,
+  RecurringEvent,
   ShoppingList,
   ShoppingListEntry,
   WishListGroup,
   WishListItem,
 } from "@/lib/types";
+import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
 import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
@@ -27,6 +30,7 @@ import {
   FEATURE_SUGGESTIONS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
   RECIPES_QUERY,
+  RECURRING_EVENTS_QUERY,
   SHOPPING_LIST_QUERY,
   WISHLIST_ITEMS_QUERY,
 
@@ -95,6 +99,19 @@ type SanityFeatureSuggestion = {
   _id: string;
   title: string;
   text?: string;
+};
+
+type SanityRecurringEvent = {
+  _id: string;
+  title: string;
+  category?: string;
+  dayOfWeek: string;
+  time?: string;
+  endTime?: string;
+  whatToBring?: string;
+  startDate?: string;
+  endDate?: string;
+  familyMember?: string;
 };
 
 function blocksToParagraphs(blocks?: SanityBlock[]) {
@@ -264,6 +281,31 @@ export async function getFeatureSuggestions(): Promise<FeatureSuggestion[]> {
     id: suggestion._id,
     title: suggestion.title,
     text: suggestion.text,
+  }));
+}
+
+export async function getRecurringEvents(): Promise<RecurringEvent[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_RECURRING_EVENTS;
+  }
+
+  const events = await fetchFromSanity<SanityRecurringEvent[]>(RECURRING_EVENTS_QUERY);
+
+  if (!events) {
+    return FALLBACK_RECURRING_EVENTS;
+  }
+
+  return events.map((event) => ({
+    id: event._id,
+    title: event.title,
+    category: event.category || DEFAULT_EVENT_CATEGORY,
+    dayOfWeek: event.dayOfWeek,
+    time: event.time,
+    endTime: event.endTime,
+    whatToBring: event.whatToBring,
+    startDate: event.startDate,
+    endDate: event.endDate,
+    familyMember: event.familyMember || "Ukjent",
   }));
 }
 

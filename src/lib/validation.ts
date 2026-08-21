@@ -1,3 +1,6 @@
+import { EVENT_CATEGORY_VALUES } from "@/lib/event-categories";
+import { WEEKDAY_VALUES } from "@/lib/weekdays";
+
 type ValidationSuccess<T> = {
   success: true;
   data: T;
@@ -25,6 +28,23 @@ function isValidOptionalUrl(value: string) {
   } catch {
     return false;
   }
+}
+
+// Converts a date-picker value (e.g. "2026-08-21") or an ISO string into a full
+// ISO datetime for Sanity's datetime field. Returns undefined for empty input
+// and null for an unparseable value so callers can distinguish the two.
+function toIsoDateTime(value: string): string | undefined | null {
+  if (!value) {
+    return undefined;
+  }
+
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+
+  return parsed.toISOString();
 }
 
 function validateCommonFields(payload: unknown) {
@@ -277,6 +297,97 @@ export function validateFeatureSuggestionSubmission(
     data: {
       title,
       text: text || undefined,
+    },
+  };
+}
+
+export function validateRecurringEventSubmission(
+  payload: unknown,
+): ValidationResult<{
+  title: string;
+  familyMemberName: string;
+  category: string;
+  dayOfWeek: string;
+  time?: string;
+  endTime?: string;
+  whatToBring?: string;
+  startDate?: string;
+  endDate?: string;
+}> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const title = normalizeText(common.record.title);
+  const familyMemberName = normalizeText(common.record.familyMemberName);
+  const category = normalizeText(common.record.category);
+  const dayOfWeek = normalizeText(common.record.dayOfWeek);
+  const time = normalizeText(common.record.time);
+  const endTime = normalizeText(common.record.endTime);
+  const whatToBring = normalizeText(common.record.whatToBring);
+  const startDateRaw = normalizeText(common.record.startDate);
+  const endDateRaw = normalizeText(common.record.endDate);
+
+  if (!title) {
+    return { success: false, error: "Legg til en tittel på aktiviteten." };
+  }
+
+  if (title.length > 120) {
+    return { success: false, error: "Tittelen må være under 120 tegn." };
+  }
+
+  if (!familyMemberName) {
+    return { success: false, error: "Velg hvem aktiviteten gjelder." };
+  }
+
+  if (!EVENT_CATEGORY_VALUES.includes(category as (typeof EVENT_CATEGORY_VALUES)[number])) {
+    return { success: false, error: "Velg om aktiviteten er skole eller fritid." };
+  }
+
+  if (!WEEKDAY_VALUES.includes(dayOfWeek as (typeof WEEKDAY_VALUES)[number])) {
+    return { success: false, error: "Velg hvilken ukedag aktiviteten er på." };
+  }
+
+  if (time.length > 40) {
+    return { success: false, error: "Tidspunktet må være under 40 tegn." };
+  }
+
+  if (endTime.length > 40) {
+    return { success: false, error: "Sluttidspunktet må være under 40 tegn." };
+  }
+
+  if (whatToBring.length > 500) {
+    return { success: false, error: "Listen over hva som skal tas med må være under 500 tegn." };
+  }
+
+  const startDate = toIsoDateTime(startDateRaw);
+  if (startDateRaw && !startDate) {
+    return { success: false, error: "Startdatoen er ugyldig." };
+  }
+
+  const endDate = toIsoDateTime(endDateRaw);
+  if (endDateRaw && !endDate) {
+    return { success: false, error: "Sluttdatoen er ugyldig." };
+  }
+
+  if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+    return { success: false, error: "Sluttdatoen kan ikke være før startdatoen." };
+  }
+
+  return {
+    success: true,
+    data: {
+      title,
+      familyMemberName,
+      category,
+      dayOfWeek,
+      time: time || undefined,
+      endTime: endTime || undefined,
+      whatToBring: whatToBring || undefined,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
     },
   };
 }
