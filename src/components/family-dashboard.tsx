@@ -2,13 +2,15 @@ import Link from "next/link";
 
 import { eventCategoryLabel } from "@/lib/event-categories";
 import type { RecentActivity } from "@/lib/family-feed";
-import type { RecurringEvent } from "@/lib/types";
+import { describeWeather } from "@/lib/weather";
+import type { RecurringEvent, Weather } from "@/lib/types";
 
 type FamilyDashboardProps = {
   dateLabel: string;
   todayEvents: RecurringEvent[];
   tomorrowEvents: RecurringEvent[];
   activity: RecentActivity[];
+  weather: Weather | null;
 };
 
 const ACTIVITY_ICON: Record<RecentActivity["type"], string> = {
@@ -74,11 +76,37 @@ function ComingSoonWidget({
   );
 }
 
+function WeatherWidget({ weather }: { weather: Weather }) {
+  const { emoji, label } = describeWeather(weather.symbolCode);
+
+  return (
+    <article className="widget wWeather accentCool">
+      <div className="widgetHead">
+        <h2 className="widgetTitle">Været</h2>
+        <span className="itemMeta">Kløfta</span>
+      </div>
+      <div className="weatherNow">
+        <span className="weatherEmoji" aria-hidden="true">
+          {emoji}
+        </span>
+        <div className="weatherReadout">
+          <strong className="weatherTemp">{weather.temperature}°</strong>
+          <span className="itemMeta">{label}</span>
+        </div>
+      </div>
+      <span className="itemMeta">
+        Høy {weather.high}° · Lav {weather.low}°
+      </span>
+    </article>
+  );
+}
+
 export function FamilyDashboard({
   dateLabel,
   todayEvents,
   tomorrowEvents,
   activity,
+  weather,
 }: FamilyDashboardProps) {
   return (
     <section className="dashboard" aria-label="Familieoversikt">
@@ -134,13 +162,17 @@ export function FamilyDashboard({
         )}
       </article>
 
-      <ComingSoonWidget
-        areaClass="wWeather"
-        accentClass="accentCool"
-        icon="⛅"
-        title="Været"
-        description="Værmelding for dagen dukker opp her."
-      />
+      {weather ? (
+        <WeatherWidget weather={weather} />
+      ) : (
+        <ComingSoonWidget
+          areaClass="wWeather"
+          accentClass="accentCool"
+          icon="⛅"
+          title="Været"
+          description="Værmelding for dagen dukker opp her."
+        />
+      )}
 
       <ComingSoonWidget
         areaClass="wDinner"

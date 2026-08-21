@@ -68,6 +68,13 @@ export type FeatureSuggestion = {
   text?: string;
 };
 
+export type Weather = {
+  temperature: number; // current air temperature, °C
+  symbolCode: string; // MET Norway symbol code, e.g. "partlycloudy_day"
+  high: number; // today's highest forecast temperature, °C
+  low: number; // today's lowest forecast temperature, °C
+};
+
 export type RecurringEvent = {
   id: string;
   title: string;

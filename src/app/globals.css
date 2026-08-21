@@ -380,6 +380,28 @@ button {
   margin: 0;
 }
 
+.weatherNow {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.weatherEmoji {
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+.weatherReadout {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.weatherTemp {
+  font-family: var(--font-display), cursive;
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
 /* Area assignments live inside the breakpoints that define matching
    template-areas. On mobile (no areas) the widgets fall back to natural
    single-column source order instead of phantom named grid lines. */

@@ -1,7 +1,7 @@
 import { FamilyDashboard } from "@/components/family-dashboard";
 import { HubCard } from "@/components/hub-card";
 import { SiteHeader } from "@/components/site-header";
-import { getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getWishListItems } from "@/lib/data";
+import { getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getWeather, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
@@ -17,13 +17,14 @@ function formatOsloDateLabel(date: Date): string {
 }
 
 export default async function Home() {
-  const [movies, recipes, recurringEvents, shoppingList, wishListItems] =
+  const [movies, recipes, recurringEvents, shoppingList, wishListItems, weather] =
     await Promise.all([
       getMovieRecommendations(),
       getRecipes(),
       getRecurringEvents(),
       getShoppingList(),
       getWishListItems(),
+      getWeather(),
     ]);
 
   const now = new Date();
@@ -40,6 +41,7 @@ export default async function Home() {
         todayEvents={todayEvents}
         tomorrowEvents={tomorrowEvents}
         activity={activity}
+        weather={weather}
       />
 
       <section className="hubGrid" aria-label="Hovedseksjoner">
