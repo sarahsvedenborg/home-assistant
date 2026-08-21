@@ -1,103 +1,91 @@
-import Link from "next/link";
-
+import { FamilyDashboard } from "@/components/family-dashboard";
 import { HubCard } from "@/components/hub-card";
 import { SiteHeader } from "@/components/site-header";
-import { getFamilyMembers, getMovieRecommendations, getRecipes, getShoppingList, getWishListItems } from "@/lib/data";
+import { getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getWishListItems } from "@/lib/data";
+import { buildRecentActivity, eventsForDate } from "@/lib/family-feed";
+
+// "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
+function formatOsloDateLabel(date: Date): string {
+  const label = new Intl.DateTimeFormat("nb-NO", {
+    timeZone: "Europe/Oslo",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(date);
+
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
 
 export default async function Home() {
-  const [familyMembers, movies, recipes, shoppingList, wishListItems] = await Promise.all([
-    getFamilyMembers(),
-    getMovieRecommendations(),
-    getRecipes(),
-    getShoppingList(),
-    getWishListItems(),
-  ]);
+  const [movies, recipes, recurringEvents, shoppingList, wishListItems] =
+    await Promise.all([
+      getMovieRecommendations(),
+      getRecipes(),
+      getRecurringEvents(),
+      getShoppingList(),
+      getWishListItems(),
+    ]);
+
+  const now = new Date();
+  const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  const todayEvents = eventsForDate(recurringEvents, now);
+  const tomorrowEvents = eventsForDate(recurringEvents, tomorrow);
+  const activity = buildRecentActivity(wishListItems, shoppingList.items, { now });
   return (
     <main className="shell">
       <SiteHeader current="home" />
 
-      <section className="heroPanel">
-        <div className="heroCopy">
-          <span className="kicker">Velkommen hjem</span>
-{/*           <h1>Et lyst og koselig familieknutepunkt for ønsker, filmkvelder og nye ideer.</h1> */}
-          <h1>Et knutepunkt for felles info for familien.</h1>
-          <p>
-           {/*  Laget for å være enkelt for barna, nyttig for de voksne og fint å bruke på mobil,
-            nettbrett og laptop. */}
-          </p>
-
-          <div className="heroActions">
-            <Link className="buttonPrimary" href="/onskeliste#add-wish">
-              Legg til et ønske
-            </Link>
-            <Link className="buttonSecondary" href="/movies#add-movie">
-              Legg til en film
-            </Link>
-          </div>
-        </div>
-
-        <div className="heroStats" aria-label="Hovedpunkter i Family Hub">
-           <div className="statBubble statBubbleCool">
-            <strong>{shoppingList.items.filter((item) => !item.checked).length}</strong>
-            <span>varer må kjøpes</span>
-          </div>
-            <div className="statBubble statBubbleSun">
-            <strong>{movies.length}</strong>
-            <span>filmforslag</span>
-          </div>
-        
-          <div className="statBubble statBubbleCool">
-            <strong>{wishListItems.length}</strong>
-            <span>ønsker</span>
-          </div>
-            <div className="statBubble statBubbleWarm">
-            <strong>{familyMembers.length}</strong>
-            <span>familiemedlemmer</span>
-          </div>
-        
-        {/*   <div className="statusPill">
-            <span className="statusDot" aria-hidden="true" />
-            {siteMode === "live" ? "Koblet til Sanity" : "Demodata til miljøvariabler er satt"}
-          </div> */}
-        </div>
-      </section>
+      <FamilyDashboard
+        dateLabel={formatOsloDateLabel(now)}
+        todayEvents={todayEvents}
+        tomorrowEvents={tomorrowEvents}
+        activity={activity}
+      />
 
       <section className="hubGrid" aria-label="Hovedseksjoner">
         <HubCard
           href="/onskeliste"
+          formHref="/onskeliste#add-wish"
           icon="🎁"
           title="Ønskeliste"
           description="Samling av gaveønsker per familiemedlem."
           stat={`${wishListItems.length} idéer`}
           accentClass="accentWarm"
-          ctaLabel="Åpne ønskelisten"
+          openLabel="Åpne ønskelisten"
+          addLabel="Legg til ønske"
         />
         <HubCard
           href="/handleliste"
+          formHref="/handleliste#add-item"
           icon="🛒"
           title="Handleliste"
           description="Varer vi trenger å kjøpe."
           stat={`${shoppingList.items.filter((item) => !item.checked).length} varer`}
           accentClass="accentFuture"
-          ctaLabel="Åpne handlelisten"
+          openLabel="Åpne handlelisten"
+          addLabel="Legg til vare"
         />
         <HubCard
           href="/oppskrifter"
+          formHref="/oppskrifter#add-recipe"
           icon="🍲"
           title="Oppskrifter"
           description="Samling av oppskrifter med lenker og notater."
           stat={`${recipes.length} oppskrifter`}
           accentClass="accentCool"
-          ctaLabel="Se oppskrifter"
+          openLabel="Se oppskrifter"
+          addLabel="Legg til oppskrift"
         />
         <HubCard
           href="/movies"
+          formHref="/movies#add-movie"
           icon="🎬"
           title="Filmer"
           description="Oversikt over filmforlag og hva som er sett og ikke."
           stat={`${movies.filter((movie) => !movie.watched).length} usett`}
           accentClass="accentCool"
-          ctaLabel="Se filmer"
+          openLabel="Se filmer"
+          addLabel="Legg til film"
         />
         <article className="hubCard accentFuture">
           <div className="hubCardTop">

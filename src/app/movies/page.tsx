@@ -27,7 +27,7 @@ export default async function MoviesPage() {
         <MovieBrowser familyMembers={familyMembers.map((member) => member.name)} movies={movies} />
       </section>
 
-      <AddButton title="Legg til filmforslag" label="Legg til film">
+      <AddButton title="Legg til filmforslag" label="Legg til film" anchor="add-movie">
         <MovieForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>
     </main>

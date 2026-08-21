@@ -13,13 +13,39 @@ type AddButtonProps = {
   title: string;
   // Text on the floating action button.
   label: string;
+  // Optional URL hash (without the "#") that auto-opens the modal, so links
+  // like /handleliste#add-item can open the form straight from the dashboard.
+  anchor?: string;
   // The form to render inside the modal; receives an injected onSuccess.
   children: ReactElement<FormChildProps>;
 };
 
-export function AddButton({ title, label, children }: AddButtonProps) {
+export function AddButton({ title, label, anchor, children }: AddButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
+
+  // Open the modal when the URL hash matches our anchor, then strip the hash
+  // so the same link can trigger it again on a later visit.
+  useEffect(() => {
+    if (!anchor) {
+      return;
+    }
+
+    function openFromHash() {
+      if (window.location.hash === `#${anchor}`) {
+        setIsOpen(true);
+        window.history.replaceState(
+          null,
+          "",
+          window.location.pathname + window.location.search,
+        );
+      }
+    }
+
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
+  }, [anchor]);
 
   // Once a confirmation shows, auto-close the modal after a beat.
   useEffect(() => {

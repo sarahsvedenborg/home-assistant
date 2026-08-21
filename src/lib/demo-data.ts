@@ -24,24 +24,28 @@ export const FALLBACK_WISHLIST_ITEMS: WishListItem[] = [
     description: "En stor blokk med tykke sider til tegninger og klistremerkeideer.",
     submittedBy: "Amelie",
     link: "https://example.com/sketchbook",
+    createdAt: "2026-08-20T18:30:00.000Z",
   },
   {
     id: "wish-2",
     title: "Byggesett til rakett",
     description: "Noe praktisk som kan males etter at det er bygget.",
     submittedBy: "Colette",
+    createdAt: "2026-08-19T09:15:00.000Z",
   },
   {
     id: "wish-3",
     title: "Selvlysende dinosaurteppe",
     description: "Et mykt teppe til filmkvelder og lesestund.",
     submittedBy: "Linnea",
+    createdAt: "2026-08-05T12:00:00.000Z",
   },
   {
     id: "wish-4",
     title: "Gavekort til familie-vaffelfrokost",
     description: "En hyggelig morgen ute sammen.",
     submittedBy: "Pappa",
+    createdAt: "2026-08-21T07:45:00.000Z",
   },
 ];
 
@@ -80,6 +84,7 @@ export const FALLBACK_SHOPPING_LIST: ShoppingList = {
       quantity: "2 kartonger",
       addedBy: "Mamma",
       checked: false,
+      createdAt: "2026-08-21T06:20:00.000Z",
     },
     {
       id: "shopping-2",
@@ -88,6 +93,7 @@ export const FALLBACK_SHOPPING_LIST: ShoppingList = {
       note: "Gjerne store",
       addedBy: "Pappa",
       checked: false,
+      createdAt: "2026-08-18T16:10:00.000Z",
     },
     {
       id: "shopping-3",
@@ -95,6 +101,7 @@ export const FALLBACK_SHOPPING_LIST: ShoppingList = {
       quantity: "6 stk",
       addedBy: "Linnea",
       checked: true,
+      createdAt: "2026-08-10T14:00:00.000Z",
     },
   ],
 };

@@ -14,6 +14,7 @@ export type WishListItem = {
   description?: string;
   link?: string;
   submittedBy: string;
+  createdAt?: string;
 };
 
 export type MovieRecommendation = {
@@ -43,6 +44,7 @@ export type ShoppingListEntry = {
   note?: string;
   addedBy?: string;
   checked: boolean;
+  createdAt?: string;
 };
 
 export type ShoppingList = {

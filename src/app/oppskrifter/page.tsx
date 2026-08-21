@@ -74,7 +74,7 @@ export default async function OppskrifterPage() {
 
       </section>
 
-      <AddButton title="Legg til oppskrift" label="Legg til oppskrift">
+      <AddButton title="Legg til oppskrift" label="Legg til oppskrift" anchor="add-recipe">
         <RecipeForm />
       </AddButton>
     </main>
