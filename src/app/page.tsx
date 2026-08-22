@@ -3,8 +3,9 @@ import { FamilyCalendar } from "@/components/family-calendar";
 import { FamilyDashboard } from "@/components/family-dashboard";
 import { HomeViewTabs } from "@/components/home-view-tabs";
 import { HubCard } from "@/components/hub-card";
+import { IssueBoard } from "@/components/issue-board";
 import { SingleEventForm } from "@/components/single-event-form";
-import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
+import { getBoardIssues, getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
@@ -21,6 +22,7 @@ function formatOsloDateLabel(date: Date): string {
 
 export default async function Home() {
   const [
+    boardIssues,
     familyMembers,
     messages,
     movies,
@@ -31,6 +33,7 @@ export default async function Home() {
     wishListItems,
     weather,
   ] = await Promise.all([
+    getBoardIssues(),
     getFamilyMembers(),
     getShortMessages(),
     getMovieRecommendations(),
@@ -112,6 +115,12 @@ export default async function Home() {
             recurringEvents={recurringEvents}
             singleEvents={singleEvents}
             todayDateKey={osloDateKey(now)}
+          />
+        }
+        board={
+          <IssueBoard
+            initialIssues={boardIssues}
+            familyMembers={familyMembers.map((member) => member.name)}
           />
         }
       />

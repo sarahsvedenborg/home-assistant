@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
 
-type HomeView = "dashboard" | "calendar";
+type HomeView = "dashboard" | "calendar" | "board";
 
 type HomeViewTabsProps = {
   dashboard: ReactNode;
   calendar: ReactNode;
+  board: ReactNode;
 };
 
-export function HomeViewTabs({ dashboard, calendar }: HomeViewTabsProps) {
+export function HomeViewTabs({ dashboard, calendar, board }: HomeViewTabsProps) {
   const [view, setView] = useState<HomeView>("dashboard");
 
   return (
@@ -38,6 +39,17 @@ export function HomeViewTabs({ dashboard, calendar }: HomeViewTabsProps) {
             onClick={() => setView("calendar")}
           >
             Kalender
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="board-tab"
+            aria-controls="board-panel"
+            aria-selected={view === "board"}
+            className={view === "board" ? "homeViewTab homeViewTabActive" : "homeViewTab"}
+            onClick={() => setView("board")}
+          >
+            Oppgaver
           </button>
         </div>
 
@@ -71,6 +83,16 @@ export function HomeViewTabs({ dashboard, calendar }: HomeViewTabsProps) {
         hidden={view !== "calendar"}
       >
         {calendar}
+      </div>
+
+      <div
+        id="board-panel"
+        className="homeBoardPanel"
+        role="tabpanel"
+        aria-labelledby="board-tab"
+        hidden={view !== "board"}
+      >
+        {board}
       </div>
     </section>
   );

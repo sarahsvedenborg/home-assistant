@@ -393,6 +393,135 @@ button {
   transform: translateX(-50%);
 }
 
+.homeBoardPanel {
+  width: min(1400px, calc(100vw - 2rem));
+  margin-top: 0.75rem;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+.issueBoard {
+  display: grid;
+  gap: 1rem;
+}
+
+.issueBoardToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem;
+}
+
+.issueBoardToolbar h2 {
+  font-family: var(--font-display), cursive;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+.issueBoardColumns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.issueBoardColumn {
+  min-width: 0;
+  min-height: 28rem;
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.issueBoardColumn-todo {
+  border-top: 4px solid var(--warm);
+}
+
+.issueBoardColumn-inProgress {
+  border-top: 4px solid var(--cool);
+}
+
+.issueBoardColumn-done {
+  border-top: 4px solid var(--mint);
+}
+
+.issueBoardColumnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.1rem 0.2rem 0.8rem;
+}
+
+.issueBoardColumnHeader h3 {
+  font-size: 1.05rem;
+}
+
+.issueBoardColumnHeader span {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--paper-strong);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.issueBoardCards {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.issueBoardCard {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1rem;
+  border: 1px solid rgba(111, 127, 143, 0.18);
+  border-radius: 0.95rem;
+  background: var(--paper-strong);
+  box-shadow: 0 5px 18px rgba(58, 76, 98, 0.08);
+}
+
+.issueBoardCard strong {
+  overflow-wrap: anywhere;
+}
+
+.issueBoardCard p {
+  color: var(--muted);
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.issueBoardAssigned {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.issueBoardStatus select {
+  width: 100%;
+  min-height: 2.35rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: rgba(250, 248, 243, 0.9);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.issueBoardEmpty {
+  padding: 1.25rem 0.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 .widget {
   display: grid;
   gap: 0.75rem;
@@ -1960,16 +2089,35 @@ button {
   }
 
   .homeViewTab {
-    flex: 1 1 50%;
+    flex: 1 1 33.333%;
     min-width: 0;
+    padding-inline: 0.45rem;
   }
 
   .homeQuickLinks {
     justify-content: flex-end;
   }
 
-  .homeCalendarPanel {
+  .homeCalendarPanel,
+  .homeBoardPanel {
     width: calc(100vw - 1rem);
+  }
+
+  .issueBoardToolbar {
+    align-items: flex-start;
+  }
+
+  .issueBoardColumns {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.5rem;
+  }
+
+  .issueBoardColumn {
+    flex: 0 0 min(84vw, 22rem);
+    min-height: 22rem;
+    scroll-snap-align: start;
   }
 
   .calendarShell {

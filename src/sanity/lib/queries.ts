@@ -43,6 +43,17 @@ export const SHORT_MESSAGES_QUERY = defineQuery(/* groq */ `
   }
 `);
 
+export const BOARD_ISSUES_QUERY = defineQuery(/* groq */ `
+  *[_type == "boardIssue"] | order(_createdAt asc) {
+    _id,
+    title,
+    text,
+    assigned,
+    status,
+    _createdAt
+  }
+`);
+
 export const RECURRING_EVENTS_QUERY = `*[_type == "recurringEvent" && (!defined(status) || status == "approved")] | order(dayOfWeek asc, time asc) {
   _id,
   title,

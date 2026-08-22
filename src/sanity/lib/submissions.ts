@@ -1,5 +1,6 @@
 import "server-only";
 
+import type { BoardIssueStatus } from "@/lib/types";
 import { requireApproval } from "@/sanity/env";
 import { getReadClient, getWriteClient } from "@/sanity/lib/client";
 import { FAMILY_MEMBERS_QUERY } from "@/sanity/lib/queries";
@@ -275,6 +276,51 @@ export async function submitShortMessage(input: {
   return requireApproval
     ? "Meldingen er sendt! En voksen kan godkjenne den i studioet."
     : "Meldingen er lagt til!";
+}
+
+export async function submitBoardIssue(input: {
+  title?: string;
+  text?: string;
+  assigned?: string;
+  status: BoardIssueStatus;
+}) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  await client.create({
+    _type: "boardIssue",
+    title: input.title,
+    text: input.text,
+    assigned: input.assigned,
+    status: input.status,
+  });
+
+  return "Oppgaven er lagt til!";
+}
+
+export async function updateBoardIssueStatus(
+  issueId: string,
+  status: BoardIssueStatus,
+) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const issue = await client.fetch<{ _id: string } | null>(
+    `*[_type == "boardIssue" && _id == $issueId][0]{_id}`,
+    { issueId },
+  );
+
+  if (!issue?._id) {
+    throw new Error("Fant ikke oppgaven du ville oppdatere.");
+  }
+
+  await client.patch(issue._id).set({ status }).commit();
 }
 
 export async function submitSingleEvent(input: {
