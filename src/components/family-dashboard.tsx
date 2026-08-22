@@ -118,17 +118,18 @@ export function FamilyDashboard({
   return (
     <section className="dashboard" aria-label="Familieoversikt">
       <article className="widget wGreet accentWarm">
-        <span className="kicker">Velkommen hjem</span>
+      {/*   <span className="itemMeta">{dateLabel}</span> */}
+     {/*    <span className="kicker">{dateLabel}</span> */}
         <h1 className="dashboardTitle">Dagens oversikt</h1>
-        <span className="itemMeta">{dateLabel}</span>
-        <div className="heroActions">
+         <span className="itemMeta">{dateLabel}</span> 
+      {/*   <div className="heroActions">
           <Link className="buttonPrimary" href="/onskeliste#add-wish">
             Legg til et ønske
           </Link>
           <Link className="buttonSecondary" href="/movies#add-movie">
             Legg til en film
           </Link>
-        </div>
+        </div> */}
       </article>
 
       <article className="widget wToday accentFuture">
