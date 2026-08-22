@@ -1,10 +1,12 @@
 import { AddButton } from "@/components/add-button";
+import { FamilyCalendar } from "@/components/family-calendar";
 import { FamilyDashboard } from "@/components/family-dashboard";
+import { HomeViewTabs } from "@/components/home-view-tabs";
 import { HubCard } from "@/components/hub-card";
 import { SingleEventForm } from "@/components/single-event-form";
 import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
-import { buildRecentActivity, eventsForDate } from "@/lib/family-feed";
+import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
 function formatOsloDateLabel(date: Date): string {
@@ -48,71 +50,79 @@ export default async function Home() {
     <main className="shell">
       <SiteHeader current="home" />
 
-      <FamilyDashboard
-        dateLabel={formatOsloDateLabel(now)}
-        todayEvents={todayEvents}
-        tomorrowEvents={tomorrowEvents}
-        activity={activity}
-        weather={weather}
-      />
+      <HomeViewTabs
+        dashboard={
+          <>
+            <FamilyDashboard
+              dateLabel={formatOsloDateLabel(now)}
+              todayEvents={todayEvents}
+              tomorrowEvents={tomorrowEvents}
+              activity={activity}
+              weather={weather}
+            />
 
-      <section className="hubGrid" aria-label="Hovedseksjoner">
-        <HubCard
-          href="/onskeliste"
-          formHref="/onskeliste#add-wish"
-          icon="🎁"
-          title="Ønskeliste"
-          description="Samling av gaveønsker per familiemedlem."
-          stat={`${wishListItems.length} idéer`}
-          accentClass="accentWarm"
-          openLabel="Åpne ønskelisten"
-          addLabel="Legg til ønske"
-        />
-        <HubCard
-          href="/handleliste"
-          formHref="/handleliste#add-item"
-          icon="🛒"
-          title="Handleliste"
-          description="Varer vi trenger å kjøpe."
-          stat={`${shoppingList.items.filter((item) => !item.checked).length} varer`}
-          accentClass="accentFuture"
-          openLabel="Åpne handlelisten"
-          addLabel="Legg til vare"
-        />
-        <HubCard
-          href="/oppskrifter"
-          formHref="/oppskrifter#add-recipe"
-          icon="🍲"
-          title="Oppskrifter"
-          description="Samling av oppskrifter med lenker og notater."
-          stat={`${recipes.length} oppskrifter`}
-          accentClass="accentCool"
-          openLabel="Se oppskrifter"
-          addLabel="Legg til oppskrift"
-        />
-        <HubCard
-          href="/movies"
-          formHref="/movies#add-movie"
-          icon="🎬"
-          title="Filmer"
-          description="Oversikt over filmforlag og hva som er sett og ikke."
-          stat={`${movies.filter((movie) => !movie.watched).length} usett`}
-          accentClass="accentCool"
-          openLabel="Se filmer"
-          addLabel="Legg til film"
-        />
-        <HubCard
-          href="/kalender"
-          formHref="/#add-event"
-          icon="📅"
-          title="Kalender"
-          description="Se avtaler og faste aktiviteter i uke- eller månedsvisning."
-          stat={`${singleEvents.length + recurringEvents.length} hendelser`}
-          accentClass="accentFuture"
-          openLabel="Åpne kalenderen"
-          addLabel="Legg til hendelse"
-        />
-      </section>
+            <section className="hubGrid" aria-label="Hovedseksjoner">
+              <HubCard
+                href="/onskeliste"
+                formHref="/onskeliste#add-wish"
+                icon="🎁"
+                title="Ønskeliste"
+                stat={`${wishListItems.length} idéer`}
+                accentClass="accentWarm"
+                openLabel="Åpne ønskelisten"
+                addLabel="Legg til ønske"
+              />
+              <HubCard
+                href="/handleliste"
+                formHref="/handleliste#add-item"
+                icon="🛒"
+                title="Handleliste"
+                stat={`${shoppingList.items.filter((item) => !item.checked).length} varer`}
+                accentClass="accentFuture"
+                openLabel="Åpne handlelisten"
+                addLabel="Legg til vare"
+              />
+              <HubCard
+                href="/oppskrifter"
+                formHref="/oppskrifter#add-recipe"
+                icon="🍲"
+                title="Oppskrifter"
+                stat={`${recipes.length} oppskrifter`}
+                accentClass="accentCool"
+                openLabel="Se oppskrifter"
+                addLabel="Legg til oppskrift"
+              />
+              <HubCard
+                href="/movies"
+                formHref="/movies#add-movie"
+                icon="🎬"
+                title="Filmer"
+                stat={`${movies.filter((movie) => !movie.watched).length} usett`}
+                accentClass="accentCool"
+                openLabel="Se filmer"
+                addLabel="Legg til film"
+              />
+              <HubCard
+                href="/kalender"
+                formHref="/#add-event"
+                icon="📅"
+                title="Kalender"
+                stat={`${singleEvents.length + recurringEvents.length} hendelser`}
+                accentClass="accentFuture"
+                openLabel="Åpne kalenderen"
+                addLabel="Legg til hendelse"
+              />
+            </section>
+          </>
+        }
+        calendar={
+          <FamilyCalendar
+            recurringEvents={recurringEvents}
+            singleEvents={singleEvents}
+            todayDateKey={osloDateKey(now)}
+          />
+        }
+      />
 
       <AddButton title="Legg til hendelse" label="Ny hendelse" anchor="add-event">
         <SingleEventForm familyMembers={familyMembers.map((member) => member.name)} />

@@ -7,7 +7,6 @@ type HubCardProps = {
   formHref: string;
   icon: string;
   title: string;
-  description: string;
   stat: string;
   accentClass: string;
   // Label for the button that opens the list page.
@@ -21,7 +20,6 @@ export function HubCard({
   formHref,
   icon,
   title,
-  description,
   stat,
   accentClass,
   openLabel,
@@ -36,7 +34,6 @@ export function HubCard({
         <span className="hubStat">{stat}</span>
       </div>
       <h2>{title}</h2>
-      <p>{description}</p>
       <div className="hubCardActions">
         <Link href={href} className="buttonSecondary">
           {openLabel}
