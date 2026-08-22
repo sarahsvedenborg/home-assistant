@@ -308,6 +308,52 @@ button {
   grid-template-columns: 1fr;
 }
 
+.homeViews {
+  margin-top: 0.5rem;
+}
+
+.homeViewTabs {
+  display: inline-flex;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.homeViewTab {
+  min-width: 8rem;
+  min-height: 3rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: 0.75rem;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 900;
+  transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+.homeViewTab:hover,
+.homeViewTab:focus-visible {
+  transform: translateY(-1px);
+}
+
+.homeViewTabActive {
+  background: var(--paper-strong);
+  color: var(--ink);
+  box-shadow: 0 5px 18px rgba(58, 76, 98, 0.1);
+}
+
+.homeViews .dashboard,
+.homeViews .calendarPanel {
+  margin-top: 0.75rem;
+}
+
+.homeCalendarPanel {
+  width: min(1600px, calc(100vw - 2rem));
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
 .widget {
   display: grid;
   gap: 0.75rem;
@@ -1770,6 +1816,20 @@ button {
 }
 
 @media (max-width: 699px) {
+  .homeViewTabs {
+    display: flex;
+    width: 100%;
+  }
+
+  .homeViewTab {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+
+  .homeCalendarPanel {
+    width: calc(100vw - 1rem);
+  }
+
   .calendarShell {
     width: min(100% - 1rem, 1600px);
   }
