@@ -1,35 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { FormModal } from "@/components/form-modal";
 import { ShortMessageForm } from "@/components/short-message-form";
+import { formatMessageDate, messageRecipientLabel } from "@/lib/messages";
 import type { ShortMessage } from "@/lib/types";
-
-function formatMessageDate(createdAt: string): string {
-  return new Intl.DateTimeFormat("nb-NO", {
-    timeZone: "Europe/Oslo",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(new Date(createdAt));
-}
-
-function recipientLabel(recipients: string[]): string {
-  return recipients
-    .map((recipient) => {
-      if (recipient === "all") {
-        return "Alle";
-      }
-
-      if (recipient === "parents") {
-        return "Foreldre";
-      }
-
-      return recipient;
-    })
-    .join(", ");
-}
 
 export function MessageWidget({
   messages,
@@ -66,9 +43,14 @@ export function MessageWidget({
           <h2 className="widgetTitle">
             <span aria-hidden="true">💬</span> Meldinger
           </h2>
-          <button type="button" className="widgetAddButton" onClick={() => setIsOpen(true)}>
-            Ny melding
-          </button>
+          <div className="widgetMessageActions">
+            <Link href="/meldinger" className="widgetTextLink">
+              Se alle
+            </Link>
+            <button type="button" className="widgetAddButton" onClick={() => setIsOpen(true)}>
+              Ny melding
+            </button>
+          </div>
         </div>
 
         {messages.length === 0 ? (
@@ -84,7 +66,9 @@ export function MessageWidget({
                 ) : null}
                 <strong>{message.text}</strong>
                 {message.recipients.length > 0 ? (
-                  <span className="itemMeta">Til: {recipientLabel(message.recipients)}</span>
+                  <span className="itemMeta">
+                    Til: {messageRecipientLabel(message.recipients)}
+                  </span>
                 ) : null}
               </li>
             ))}

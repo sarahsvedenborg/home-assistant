@@ -34,8 +34,8 @@ export const FEATURE_SUGGESTIONS_QUERY = `*[_type == "featureSuggestion" && (!de
 }`;
 
 export const SHORT_MESSAGES_QUERY = defineQuery(/* groq */ `
-  *[_type == "shortMessage" && (!defined(status) || status == "approved")]
-  | order(_createdAt desc)[0...8] {
+  *[_type == "shortMessage"]
+  | order(_createdAt desc) {
     _id,
     recipients,
     text,

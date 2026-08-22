@@ -1,0 +1,63 @@
+import { AddButton } from "@/components/add-button";
+import { ShortMessageForm } from "@/components/short-message-form";
+import { SiteHeader } from "@/components/site-header";
+import { getFamilyMembers, getShortMessages } from "@/lib/data";
+import { formatMessageDate, messageRecipientLabel } from "@/lib/messages";
+
+export default async function MeldingerPage() {
+  const [familyMembers, messages] = await Promise.all([
+    getFamilyMembers(),
+    getShortMessages(),
+  ]);
+
+  return (
+    <main className="shell">
+      <SiteHeader current="meldinger" />
+
+      <section className="sectionHero accentCoolPanel">
+        <div>
+          <span className="kicker">Beskjeder</span>
+          <h1 style={{ margin: "0.25em 0" }}>Alle meldinger</h1>
+          <p>Meldinger vises her til de slettes manuelt i Sanity Studio.</p>
+        </div>
+        <div className="sectionBadge">{messages.length} meldinger</div>
+      </section>
+
+      <section className="listStack">
+        <div className="listPanel">
+          {messages.length === 0 ? (
+            <div className="emptyState">
+              <span className="emptyIcon" aria-hidden="true">
+                💬
+              </span>
+              <h2>Ingen meldinger enda</h2>
+              <p>Legg til den første korte beskjeden til familien.</p>
+            </div>
+          ) : (
+            <div className="messageArchive">
+              {messages.map((message) => (
+                <article className="itemCard messageArchiveItem" key={message.id}>
+                  {message.createdAt ? (
+                    <time className="messageDate" dateTime={message.createdAt}>
+                      {formatMessageDate(message.createdAt)}
+                    </time>
+                  ) : null}
+                  <strong>{message.text}</strong>
+                  {message.recipients.length > 0 ? (
+                    <span className="itemMeta">
+                      Til: {messageRecipientLabel(message.recipients)}
+                    </span>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <AddButton title="Ny melding" label="Ny melding" anchor="add-message">
+        <ShortMessageForm familyMembers={familyMembers.map((member) => member.name)} />
+      </AddButton>
+    </main>
+  );
+}

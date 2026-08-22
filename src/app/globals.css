@@ -436,6 +436,24 @@ button {
   font-weight: 900;
 }
 
+.widgetMessageActions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.widgetTextLink {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.widgetTextLink:hover,
+.widgetTextLink:focus-visible {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
 .widgetAddButton:hover,
 .widgetAddButton:focus-visible {
   transform: translateY(-1px);
@@ -451,6 +469,16 @@ button {
   font-size: 0.72rem;
   font-weight: 800;
   text-transform: capitalize;
+}
+
+.messageArchive {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.messageArchiveItem strong {
+  font-size: 1.05rem;
+  line-height: 1.45;
 }
 
 .weatherNow {
