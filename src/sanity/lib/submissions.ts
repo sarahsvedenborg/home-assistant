@@ -269,12 +269,10 @@ export async function submitShortMessage(input: {
     _type: "shortMessage",
     recipients: input.recipients,
     text: input.text,
-    status: requireApproval ? "pending" : "approved",
+    status: "approved",
   });
 
-  return requireApproval
-    ? "Meldingen er sendt! En voksen kan godkjenne den i studioet."
-    : "Meldingen er lagt til!";
+  return "Meldingen er lagt til!";
 }
 
 export async function submitSingleEvent(input: {
