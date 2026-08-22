@@ -1845,6 +1845,8 @@ button {
 }
 
 .calendarDay {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   min-height: 150px;
   padding: 0.7rem;
@@ -1884,9 +1886,20 @@ button {
 }
 
 .calendarEvents {
-  display: grid;
-  align-content: start;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   gap: 0.5rem;
+}
+
+.calendarEventsTop,
+.calendarEventsBottom {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.calendarEventsBottom {
+  margin-top: auto;
 }
 
 .calendarEvent {
@@ -1897,6 +1910,21 @@ button {
   border-left: 4px solid var(--cool);
   border-radius: 0.7rem;
   background: rgba(223, 240, 255, 0.9);
+}
+
+.calendarEventSchool {
+  border-left-color: var(--cool);
+  background: rgba(223, 240, 255, 0.9);
+}
+
+.calendarEventLeisure {
+  border-left-color: var(--mint);
+  background: rgba(225, 247, 237, 0.92);
+}
+
+.calendarEventSingle {
+  border-left-color: #9b72cf;
+  background: rgba(239, 229, 251, 0.92);
 }
 
 .calendarEvent strong {
