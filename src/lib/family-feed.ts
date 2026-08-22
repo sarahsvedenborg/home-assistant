@@ -1,4 +1,11 @@
-import type { RecurringEvent, ShoppingListEntry, WishListItem } from "@/lib/types";
+import { eventCategoryLabel } from "@/lib/event-categories";
+import { singleEventCategoryLabel } from "@/lib/single-event-categories";
+import type {
+  RecurringEvent,
+  ShoppingListEntry,
+  SingleEvent,
+  WishListItem,
+} from "@/lib/types";
 import type { WeekdayValue } from "@/lib/weekdays";
 
 const OSLO_TZ = "Europe/Oslo";
@@ -43,15 +50,63 @@ function isActiveOn(event: RecurringEvent, dateKey: string): boolean {
   return true;
 }
 
-// Events that occur on the given date: matching weekday, inside the active
-// window, sorted by start time (undated events sort first).
-export function eventsForDate(events: RecurringEvent[], date: Date): RecurringEvent[] {
+// A unified event shape the dashboard renders, whatever the source. Recurring
+// occurrences and single-day events both normalize to this.
+export type DashboardEvent = {
+  id: string;
+  title: string;
+  familyMember: string;
+  time?: string;
+  endTime?: string;
+  categoryLabel?: string;
+  allDay?: boolean;
+};
+
+function toDashboardEvent(event: RecurringEvent): DashboardEvent {
+  return {
+    id: event.id,
+    title: event.title,
+    familyMember: event.familyMember,
+    time: event.time,
+    endTime: event.endTime,
+    categoryLabel: eventCategoryLabel(event.category),
+  };
+}
+
+function singleToDashboardEvent(event: SingleEvent): DashboardEvent {
+  return {
+    id: event.id,
+    title: event.title,
+    familyMember: event.familyMember,
+    time: event.allDay ? undefined : event.time,
+    endTime: event.allDay ? undefined : event.endTime,
+    categoryLabel: singleEventCategoryLabel(event.category),
+    allDay: event.allDay,
+  };
+}
+
+// Everything happening on the given date: recurring occurrences (matching
+// weekday, inside their active window) merged with single-day events on that
+// date. Sorted by start time, with all-day / untimed entries first.
+export function eventsForDate(
+  recurring: RecurringEvent[],
+  single: SingleEvent[],
+  date: Date,
+): DashboardEvent[] {
   const weekday = osloWeekday(date);
   const dateKey = osloDateKey(date);
 
-  return events
+  const recurringToday = recurring
     .filter((event) => event.dayOfWeek === weekday && isActiveOn(event, dateKey))
-    .sort((left, right) => (left.time || "").localeCompare(right.time || ""));
+    .map(toDashboardEvent);
+
+  const singleToday = single
+    .filter((event) => osloDateKey(new Date(event.date)) === dateKey)
+    .map(singleToDashboardEvent);
+
+  return [...recurringToday, ...singleToday].sort((left, right) =>
+    (left.time || "").localeCompare(right.time || ""),
+  );
 }
 
 export type RecentActivityType = "wish" | "shopping";

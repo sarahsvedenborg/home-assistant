@@ -68,6 +68,18 @@ export type FeatureSuggestion = {
   text?: string;
 };
 
+export type SingleEvent = {
+  id: string;
+  title: string;
+  category: string;
+  date: string; // ISO datetime; only the date portion is significant
+  time?: string;
+  endTime?: string;
+  allDay?: boolean;
+  note?: string;
+  familyMember: string;
+};
+
 export type Weather = {
   temperature: number; // current air temperature, °C
   symbolCode: string; // MET Norway symbol code, e.g. "partlycloudy_day"

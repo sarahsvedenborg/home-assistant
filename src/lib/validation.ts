@@ -1,4 +1,5 @@
 import { EVENT_CATEGORY_VALUES } from "@/lib/event-categories";
+import { SINGLE_EVENT_CATEGORY_VALUES } from "@/lib/single-event-categories";
 import { WEEKDAY_VALUES } from "@/lib/weekdays";
 
 type ValidationSuccess<T> = {
@@ -297,6 +298,81 @@ export function validateFeatureSuggestionSubmission(
     data: {
       title,
       text: text || undefined,
+    },
+  };
+}
+
+export function validateSingleEventSubmission(
+  payload: unknown,
+): ValidationResult<{
+  title: string;
+  familyMemberName: string;
+  category: string;
+  date: string;
+  allDay: boolean;
+  time?: string;
+  endTime?: string;
+  note?: string;
+}> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const title = normalizeText(common.record.title);
+  const familyMemberName = normalizeText(common.record.familyMemberName);
+  const category = normalizeText(common.record.category);
+  const dateRaw = normalizeText(common.record.date);
+  const allDay = common.record.allDay === true;
+  const time = normalizeText(common.record.time);
+  const endTime = normalizeText(common.record.endTime);
+  const note = normalizeText(common.record.note);
+
+  if (!title) {
+    return { success: false, error: "Legg til en tittel på hendelsen." };
+  }
+
+  if (title.length > 120) {
+    return { success: false, error: "Tittelen må være under 120 tegn." };
+  }
+
+  if (!familyMemberName) {
+    return { success: false, error: "Velg hvem hendelsen gjelder." };
+  }
+
+  if (!SINGLE_EVENT_CATEGORY_VALUES.includes(category as (typeof SINGLE_EVENT_CATEGORY_VALUES)[number])) {
+    return { success: false, error: "Velg en kategori for hendelsen." };
+  }
+
+  const date = toIsoDateTime(dateRaw);
+  if (!dateRaw || !date) {
+    return { success: false, error: "Velg en gyldig dato for hendelsen." };
+  }
+
+  if (time.length > 40) {
+    return { success: false, error: "Tidspunktet må være under 40 tegn." };
+  }
+
+  if (endTime.length > 40) {
+    return { success: false, error: "Sluttidspunktet må være under 40 tegn." };
+  }
+
+  if (note.length > 500) {
+    return { success: false, error: "Notatet må være under 500 tegn." };
+  }
+
+  return {
+    success: true,
+    data: {
+      title,
+      familyMemberName,
+      category,
+      date,
+      allDay,
+      time: allDay ? undefined : time || undefined,
+      endTime: allDay ? undefined : endTime || undefined,
+      note: note || undefined,
     },
   };
 }

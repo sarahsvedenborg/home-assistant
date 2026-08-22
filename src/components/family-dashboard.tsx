@@ -1,14 +1,13 @@
 import Link from "next/link";
 
-import { eventCategoryLabel } from "@/lib/event-categories";
-import type { RecentActivity } from "@/lib/family-feed";
+import type { DashboardEvent, RecentActivity } from "@/lib/family-feed";
 import { describeWeather } from "@/lib/weather";
-import type { RecurringEvent, Weather } from "@/lib/types";
+import type { Weather } from "@/lib/types";
 
 type FamilyDashboardProps = {
   dateLabel: string;
-  todayEvents: RecurringEvent[];
-  tomorrowEvents: RecurringEvent[];
+  todayEvents: DashboardEvent[];
+  tomorrowEvents: DashboardEvent[];
   activity: RecentActivity[];
   weather: Weather | null;
 };
@@ -23,7 +22,7 @@ const ACTIVITY_VERB: Record<RecentActivity["type"], string> = {
   shopping: "la til",
 };
 
-function EventList({ events }: { events: RecurringEvent[] }) {
+function EventList({ events }: { events: DashboardEvent[] }) {
   if (events.length === 0) {
     return <p className="widgetEmpty">Ingen aktiviteter 🎉</p>;
   }
@@ -31,8 +30,10 @@ function EventList({ events }: { events: RecurringEvent[] }) {
   return (
     <ul className="widgetList">
       {events.map((event) => {
-        const timeRange = [event.time, event.endTime].filter(Boolean).join("–");
-        const meta = [event.familyMember, timeRange, eventCategoryLabel(event.category)]
+        const timeRange = event.allDay
+          ? "Hele dagen"
+          : [event.time, event.endTime].filter(Boolean).join("–");
+        const meta = [event.familyMember, timeRange, event.categoryLabel]
           .filter(Boolean)
           .join(" · ");
 

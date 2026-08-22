@@ -7,6 +7,7 @@ import {
   FALLBACK_RECIPES,
   FALLBACK_RECURRING_EVENTS,
   FALLBACK_SHOPPING_LIST,
+  FALLBACK_SINGLE_EVENTS,
   FALLBACK_WISHLIST_ITEMS,
 } from "@/lib/demo-data";
 
@@ -19,11 +20,13 @@ import type {
   RecurringEvent,
   ShoppingList,
   ShoppingListEntry,
+  SingleEvent,
   Weather,
   WishListGroup,
   WishListItem,
 } from "@/lib/types";
 import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
+import { DEFAULT_SINGLE_EVENT_CATEGORY } from "@/lib/single-event-categories";
 import { osloDateKey } from "@/lib/family-feed";
 import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -34,6 +37,7 @@ import {
   RECIPES_QUERY,
   RECURRING_EVENTS_QUERY,
   SHOPPING_LIST_ITEMS_QUERY,
+  SINGLE_EVENTS_QUERY,
   WISHLIST_ITEMS_QUERY,
 
 } from "@/sanity/lib/queries";
@@ -109,6 +113,18 @@ type SanityRecurringEvent = {
   whatToBring?: string;
   startDate?: string;
   endDate?: string;
+  familyMember?: string;
+};
+
+type SanitySingleEvent = {
+  _id: string;
+  title: string;
+  category?: string;
+  date: string;
+  time?: string;
+  endTime?: string;
+  allDay?: boolean;
+  note?: string;
   familyMember?: string;
 };
 
@@ -307,6 +323,30 @@ export async function getRecurringEvents(): Promise<RecurringEvent[]> {
     whatToBring: event.whatToBring,
     startDate: event.startDate,
     endDate: event.endDate,
+    familyMember: event.familyMember || "Ukjent",
+  }));
+}
+
+export async function getSingleEvents(): Promise<SingleEvent[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_SINGLE_EVENTS;
+  }
+
+  const events = await fetchFromSanity<SanitySingleEvent[]>(SINGLE_EVENTS_QUERY);
+
+  if (!events) {
+    return FALLBACK_SINGLE_EVENTS;
+  }
+
+  return events.map((event) => ({
+    id: event._id,
+    title: event.title,
+    category: event.category || DEFAULT_SINGLE_EVENT_CATEGORY,
+    date: event.date,
+    time: event.time,
+    endTime: event.endTime,
+    allDay: Boolean(event.allDay),
+    note: event.note,
     familyMember: event.familyMember || "Ukjent",
   }));
 }

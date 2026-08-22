@@ -1,7 +1,9 @@
+import { AddButton } from "@/components/add-button";
 import { FamilyDashboard } from "@/components/family-dashboard";
 import { HubCard } from "@/components/hub-card";
+import { SingleEventForm } from "@/components/single-event-form";
 import { SiteHeader } from "@/components/site-header";
-import { getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getWeather, getWishListItems } from "@/lib/data";
+import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
@@ -17,20 +19,30 @@ function formatOsloDateLabel(date: Date): string {
 }
 
 export default async function Home() {
-  const [movies, recipes, recurringEvents, shoppingList, wishListItems, weather] =
-    await Promise.all([
-      getMovieRecommendations(),
-      getRecipes(),
-      getRecurringEvents(),
-      getShoppingList(),
-      getWishListItems(),
-      getWeather(),
-    ]);
+  const [
+    familyMembers,
+    movies,
+    recipes,
+    recurringEvents,
+    singleEvents,
+    shoppingList,
+    wishListItems,
+    weather,
+  ] = await Promise.all([
+    getFamilyMembers(),
+    getMovieRecommendations(),
+    getRecipes(),
+    getRecurringEvents(),
+    getSingleEvents(),
+    getShoppingList(),
+    getWishListItems(),
+    getWeather(),
+  ]);
 
   const now = new Date();
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  const todayEvents = eventsForDate(recurringEvents, now);
-  const tomorrowEvents = eventsForDate(recurringEvents, tomorrow);
+  const todayEvents = eventsForDate(recurringEvents, singleEvents, now);
+  const tomorrowEvents = eventsForDate(recurringEvents, singleEvents, tomorrow);
   const activity = buildRecentActivity(wishListItems, shoppingList.items, { now });
   return (
     <main className="shell">
@@ -101,6 +113,10 @@ export default async function Home() {
           <span className="buttonSecondary buttonMuted">Klar for fase to</span>
         </article>
       </section>
+
+      <AddButton title="Legg til hendelse" label="Ny hendelse" anchor="add-event">
+        <SingleEventForm familyMembers={familyMembers.map((member) => member.name)} />
+      </AddButton>
 
   {/*     <section className="infoStrip">
         <div>

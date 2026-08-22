@@ -46,6 +46,21 @@ export const RECURRING_EVENTS_QUERY = `*[_type == "recurringEvent" && (!defined(
 
 // Shopping items are now standalone documents (one per item) so each carries
 // its own _createdAt, which powers the "Nytt i familien" feed on the homepage.
+// Single-day events. Kept separate from recurringEvent so each schema stays
+// clean; the dashboard feed merges the two. Fetched in full and filtered to
+// today/tomorrow in app code (see family-feed.ts).
+export const SINGLE_EVENTS_QUERY = `*[_type == "singleEvent" && (!defined(status) || status == "approved")] | order(date asc) {
+  _id,
+  title,
+  category,
+  date,
+  time,
+  endTime,
+  allDay,
+  note,
+  "familyMember": coalesce(familyMember->name, familyMemberName)
+}`;
+
 export const SHOPPING_LIST_ITEMS_QUERY = `*[_type == "shoppingListItem"] | order(_createdAt desc) {
   _id,
   title,

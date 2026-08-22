@@ -5,6 +5,7 @@ import type {
   Recipe,
   RecurringEvent,
   ShoppingList,
+  SingleEvent,
   WishListItem,
 } from "@/lib/types";
 
@@ -141,6 +142,35 @@ export const FALLBACK_RECIPES: Recipe[] = [
       "Kjør glatt og smak til med sitron og pepper.",
     ],
     comments: ["Server gjerne med grovt broed ved siden av."],
+  },
+];
+
+export const FALLBACK_SINGLE_EVENTS: SingleEvent[] = [
+  {
+    id: "single-1",
+    title: "Bursdagsfeiring hos Emma",
+    category: "bursdag",
+    date: "2026-08-22T00:00:00.000Z",
+    time: "13:00",
+    endTime: "16:00",
+    note: "Gave er kjøpt, ligger i gangen.",
+    familyMember: "Linnea",
+  },
+  {
+    id: "single-2",
+    title: "Tannlege",
+    category: "avtale",
+    date: "2026-08-23T00:00:00.000Z",
+    time: "09:30",
+    familyMember: "Colette",
+  },
+  {
+    id: "single-3",
+    title: "Tur til Tusenfryd",
+    category: "tur",
+    date: "2026-08-29T00:00:00.000Z",
+    allDay: true,
+    familyMember: "Pappa",
   },
 ];
 
