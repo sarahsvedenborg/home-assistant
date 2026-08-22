@@ -595,8 +595,8 @@ button {
     grid-template-columns: repeat(4, 1fr);
     grid-template-areas:
       "greet    greet    greet   weather"
-      "dinner   news     today   tomorrow"
-      "messages messages today   tomorrow";
+      "today    tomorrow dinner  news"
+      "today    tomorrow messages messages";
   }
 }
 
