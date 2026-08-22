@@ -1,5 +1,7 @@
+import { BOARD_STATUS_VALUES } from "@/lib/board";
 import { EVENT_CATEGORY_VALUES } from "@/lib/event-categories";
 import { SINGLE_EVENT_CATEGORY_VALUES } from "@/lib/single-event-categories";
+import type { BoardIssueStatus } from "@/lib/types";
 import { WEEKDAY_VALUES } from "@/lib/weekdays";
 
 type ValidationSuccess<T> = {
@@ -356,6 +358,78 @@ export function validateShortMessageSubmission(
       recipients: uniqueRecipients,
       text,
     },
+  };
+}
+
+export function validateBoardIssueSubmission(
+  payload: unknown,
+  familyMemberNames: string[],
+): ValidationResult<{
+  title?: string;
+  text?: string;
+  assigned?: string;
+  status: BoardIssueStatus;
+}> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const title = normalizeText(common.record.title);
+  const text = normalizeText(common.record.text);
+  const submittedAssigned = normalizeText(common.record.assigned);
+  const submittedStatus = normalizeText(common.record.status) || "todo";
+
+  if (title.length > 120) {
+    return { success: false, error: "Tittelen må være under 120 tegn." };
+  }
+
+  if (text.length > 500) {
+    return { success: false, error: "Teksten må være under 500 tegn." };
+  }
+
+  if (!BOARD_STATUS_VALUES.includes(submittedStatus as BoardIssueStatus)) {
+    return { success: false, error: "Velg en gyldig status." };
+  }
+
+  const assigned = submittedAssigned
+    ? familyMemberNames.find(
+        (name) => name.toLowerCase() === submittedAssigned.toLowerCase(),
+      )
+    : undefined;
+
+  if (submittedAssigned && !assigned) {
+    return { success: false, error: "Velg et gyldig familiemedlem." };
+  }
+
+  return {
+    success: true,
+    data: {
+      title: title || undefined,
+      text: text || undefined,
+      assigned,
+      status: submittedStatus as BoardIssueStatus,
+    },
+  };
+}
+
+export function validateBoardIssueStatus(
+  payload: unknown,
+): ValidationResult<{ status: BoardIssueStatus }> {
+  if (!payload || typeof payload !== "object") {
+    return { success: false, error: "Prøv å oppdatere statusen på nytt." };
+  }
+
+  const status = normalizeText((payload as Record<string, unknown>).status);
+
+  if (!BOARD_STATUS_VALUES.includes(status as BoardIssueStatus)) {
+    return { success: false, error: "Velg en gyldig status." };
+  }
+
+  return {
+    success: true,
+    data: { status: status as BoardIssueStatus },
   };
 }
 

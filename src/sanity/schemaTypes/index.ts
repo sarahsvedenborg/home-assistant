@@ -1,3 +1,4 @@
+import { boardIssueType } from "./boardIssueType";
 import { familyMemberType } from "./familyMemberType";
 import { featureSuggestionType } from "./featureSuggestionType";
 import { movieRecommendationType } from "./movieRecommendationType";
@@ -10,6 +11,7 @@ import { singleEventType } from "./singleEventType";
 import { wishListItemType } from "./wishListItemType";
 
 export const schemaTypes = [
+  boardIssueType,
   familyMemberType,
   wishListItemType,
   movieRecommendationType,

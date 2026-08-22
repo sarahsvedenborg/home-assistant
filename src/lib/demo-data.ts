@@ -1,4 +1,5 @@
 import type {
+  BoardIssue,
   FamilyMember,
   FeatureSuggestion,
   MovieRecommendation,
@@ -9,6 +10,27 @@ import type {
   SingleEvent,
   WishListItem,
 } from "@/lib/types";
+
+export const FALLBACK_BOARD_ISSUES: BoardIssue[] = [
+  {
+    id: "issue-1",
+    title: "Rydde boden",
+    text: "Sortere det som skal beholdes og gis bort.",
+    assigned: "Pappa",
+    status: "todo",
+  },
+  {
+    id: "issue-2",
+    title: "Bestille bursdagsgave",
+    assigned: "Mamma",
+    status: "inProgress",
+  },
+  {
+    id: "issue-3",
+    title: "Henge opp kalenderen",
+    status: "done",
+  },
+];
 
 export const FALLBACK_FAMILY_MEMBERS: FamilyMember[] = [
   { id: "mom", name: "Mamma", role: "adult", emoji: "🌻", accentColor: "#ff9f6e" },

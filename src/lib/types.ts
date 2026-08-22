@@ -75,6 +75,17 @@ export type ShortMessage = {
   createdAt?: string;
 };
 
+export type BoardIssueStatus = "todo" | "inProgress" | "done";
+
+export type BoardIssue = {
+  id: string;
+  title?: string;
+  text?: string;
+  assigned?: string;
+  status: BoardIssueStatus;
+  createdAt?: string;
+};
+
 export type SingleEvent = {
   id: string;
   title: string;

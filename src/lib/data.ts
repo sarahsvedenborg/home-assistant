@@ -1,6 +1,7 @@
 import "server-only";
 
 import {
+  FALLBACK_BOARD_ISSUES,
   FALLBACK_FAMILY_MEMBERS,
   FALLBACK_FEATURE_SUGGESTIONS,
   FALLBACK_MOVIES,
@@ -14,6 +15,8 @@ import {
 
 
 import type {
+  BoardIssue,
+  BoardIssueStatus,
   FamilyMember,
   FeatureSuggestion,
   MovieRecommendation,
@@ -33,6 +36,7 @@ import { osloDateKey } from "@/lib/family-feed";
 import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
+  BOARD_ISSUES_QUERY,
   FAMILY_MEMBERS_QUERY,
   FEATURE_SUGGESTIONS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
@@ -110,6 +114,15 @@ type SanityShortMessage = {
   _id: string;
   recipients?: string[];
   text: string;
+  _createdAt?: string;
+};
+
+type SanityBoardIssue = {
+  _id: string;
+  title?: string;
+  text?: string;
+  assigned?: string;
+  status?: string;
   _createdAt?: string;
 };
 
@@ -328,6 +341,31 @@ export async function getShortMessages(): Promise<ShortMessage[]> {
     recipients: message.recipients || [],
     text: message.text,
     createdAt: message._createdAt,
+  }));
+}
+
+export async function getBoardIssues(): Promise<BoardIssue[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_BOARD_ISSUES;
+  }
+
+  const issues = await fetchFromSanity<SanityBoardIssue[]>(BOARD_ISSUES_QUERY);
+
+  if (!issues) {
+    return FALLBACK_BOARD_ISSUES;
+  }
+
+  const validStatuses: BoardIssueStatus[] = ["todo", "inProgress", "done"];
+
+  return issues.map((issue) => ({
+    id: issue._id,
+    title: issue.title,
+    text: issue.text,
+    assigned: issue.assigned,
+    status: validStatuses.includes(issue.status as BoardIssueStatus)
+      ? (issue.status as BoardIssueStatus)
+      : "todo",
+    createdAt: issue._createdAt,
   }));
 }
 
