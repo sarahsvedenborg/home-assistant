@@ -62,6 +62,11 @@ export type DashboardEvent = {
   allDay?: boolean;
 };
 
+export type CalendarDay = {
+  dateKey: string;
+  events: DashboardEvent[];
+};
+
 function toDashboardEvent(event: RecurringEvent): DashboardEvent {
   return {
     id: event.id,
@@ -85,16 +90,23 @@ function singleToDashboardEvent(event: SingleEvent): DashboardEvent {
   };
 }
 
-// Everything happening on the given date: recurring occurrences (matching
-// weekday, inside their active window) merged with single-day events on that
-// date. Sorted by start time, with all-day / untimed entries first.
-export function eventsForDate(
+function dateFromKey(dateKey: string): Date {
+  // Noon UTC remains on the same calendar date in Oslo throughout the year.
+  return new Date(`${dateKey}T12:00:00Z`);
+}
+
+function nextDateKey(dateKey: string): string {
+  const date = dateFromKey(dateKey);
+  date.setUTCDate(date.getUTCDate() + 1);
+  return date.toISOString().slice(0, 10);
+}
+
+export function eventsForDateKey(
   recurring: RecurringEvent[],
   single: SingleEvent[],
-  date: Date,
+  dateKey: string,
 ): DashboardEvent[] {
-  const weekday = osloWeekday(date);
-  const dateKey = osloDateKey(date);
+  const weekday = osloWeekday(dateFromKey(dateKey));
 
   const recurringToday = recurring
     .filter((event) => event.dayOfWeek === weekday && isActiveOn(event, dateKey))
@@ -107,6 +119,43 @@ export function eventsForDate(
   return [...recurringToday, ...singleToday].sort((left, right) =>
     (left.time || "").localeCompare(right.time || ""),
   );
+}
+
+export function eventsForDateRange(
+  recurring: RecurringEvent[],
+  single: SingleEvent[],
+  startDateKey: string,
+  endDateKey: string,
+): CalendarDay[] {
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(startDateKey) ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(endDateKey) ||
+    startDateKey > endDateKey
+  ) {
+    return [];
+  }
+
+  const days: CalendarDay[] = [];
+
+  for (let dateKey = startDateKey; dateKey <= endDateKey; dateKey = nextDateKey(dateKey)) {
+    days.push({
+      dateKey,
+      events: eventsForDateKey(recurring, single, dateKey),
+    });
+  }
+
+  return days;
+}
+
+// Everything happening on the given date: recurring occurrences (matching
+// weekday, inside their active window) merged with single-day events on that
+// date. Sorted by start time, with all-day / untimed entries first.
+export function eventsForDate(
+  recurring: RecurringEvent[],
+  single: SingleEvent[],
+  date: Date,
+): DashboardEvent[] {
+  return eventsForDateKey(recurring, single, osloDateKey(date));
 }
 
 export type RecentActivityType = "wish" | "shopping";

@@ -101,17 +101,17 @@ export default async function Home() {
           openLabel="Se filmer"
           addLabel="Legg til film"
         />
-        <article className="hubCard accentFuture">
-          <div className="hubCardTop">
-            <span className="hubIcon" aria-hidden="true">
-              🌟
-            </span>
-            <span className="hubStat">kommer snart</span>
-          </div>
-          <h2>Flere familieområder</h2>
-          <p>Her kan turer, middagstips, kalendere og andre enkle kategorier komme senere.</p>
-          <span className="buttonSecondary buttonMuted">Klar for fase to</span>
-        </article>
+        <HubCard
+          href="/kalender"
+          formHref="/#add-event"
+          icon="📅"
+          title="Kalender"
+          description="Se avtaler og faste aktiviteter i uke- eller månedsvisning."
+          stat={`${singleEvents.length + recurringEvents.length} hendelser`}
+          accentClass="accentFuture"
+          openLabel="Åpne kalenderen"
+          addLabel="Legg til hendelse"
+        />
       </section>
 
       <AddButton title="Legg til hendelse" label="Ny hendelse" anchor="add-event">
