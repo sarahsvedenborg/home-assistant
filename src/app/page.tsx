@@ -4,7 +4,6 @@ import { FamilyDashboard } from "@/components/family-dashboard";
 import { HomeViewTabs } from "@/components/home-view-tabs";
 import { HubCard } from "@/components/hub-card";
 import { SingleEventForm } from "@/components/single-event-form";
-import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
 
@@ -49,9 +48,7 @@ export default async function Home() {
   const tomorrowEvents = eventsForDate(recurringEvents, singleEvents, tomorrow);
   const activity = buildRecentActivity(wishListItems, shoppingList.items, { now });
   return (
-    <main className="shell">
-      <SiteHeader current="home" />
-
+    <main className="shell homeShell">
       <HomeViewTabs
         dashboard={
           <>

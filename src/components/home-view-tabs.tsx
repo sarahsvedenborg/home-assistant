@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type ReactNode } from "react";
 
 type HomeView = "dashboard" | "calendar";
@@ -14,29 +15,40 @@ export function HomeViewTabs({ dashboard, calendar }: HomeViewTabsProps) {
 
   return (
     <section className="homeViews" aria-label="Velg startsidevisning">
-      <div className="homeViewTabs" role="tablist" aria-label="Startsidevisning">
-        <button
-          type="button"
-          role="tab"
-          id="dashboard-tab"
-          aria-controls="dashboard-panel"
-          aria-selected={view === "dashboard"}
-          className={view === "dashboard" ? "homeViewTab homeViewTabActive" : "homeViewTab"}
-          onClick={() => setView("dashboard")}
-        >
-          Dashboard
-        </button>
-        <button
-          type="button"
-          role="tab"
-          id="calendar-tab"
-          aria-controls="calendar-panel"
-          aria-selected={view === "calendar"}
-          className={view === "calendar" ? "homeViewTab homeViewTabActive" : "homeViewTab"}
-          onClick={() => setView("calendar")}
-        >
-          Kalender
-        </button>
+      <div className="homeViewBar">
+        <div className="homeViewTabs" role="tablist" aria-label="Startsidevisning">
+          <button
+            type="button"
+            role="tab"
+            id="dashboard-tab"
+            aria-controls="dashboard-panel"
+            aria-selected={view === "dashboard"}
+            className={view === "dashboard" ? "homeViewTab homeViewTabActive" : "homeViewTab"}
+            onClick={() => setView("dashboard")}
+          >
+            Dashboard
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="calendar-tab"
+            aria-controls="calendar-panel"
+            aria-selected={view === "calendar"}
+            className={view === "calendar" ? "homeViewTab homeViewTabActive" : "homeViewTab"}
+            onClick={() => setView("calendar")}
+          >
+            Kalender
+          </button>
+        </div>
+
+        <div className="homeQuickLinks" aria-label="Hurtiglenker">
+          <Link href="/forslag" className="homeGhostButton">
+            Forslag
+          </Link>
+          <a href="https://svedenborg.sanity.studio" className="homeGhostButton">
+            Admin
+          </a>
+        </div>
       </div>
 
       <div
