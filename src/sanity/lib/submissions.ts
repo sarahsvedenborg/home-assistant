@@ -255,6 +255,59 @@ export async function submitFeatureSuggestion(input: {
     : "Takk for forslaget!";
 }
 
+export async function submitSingleEvent(input: {
+  title: string;
+  familyMemberName: string;
+  category: string;
+  date: string;
+  allDay: boolean;
+  time?: string;
+  endTime?: string;
+  note?: string;
+}) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const familyMember = await resolveFamilyMemberReference(input.familyMemberName);
+  const document: {
+    _type: "singleEvent";
+    title: string;
+    familyMemberName: string;
+    category: string;
+    date: string;
+    allDay: boolean;
+    time?: string;
+    endTime?: string;
+    note?: string;
+    familyMember?: { _type: "reference"; _ref: string };
+    status: "pending" | "approved";
+  } = {
+    _type: "singleEvent",
+    title: input.title,
+    familyMemberName: input.familyMemberName,
+    category: input.category,
+    date: input.date,
+    allDay: input.allDay,
+    time: input.time,
+    endTime: input.endTime,
+    note: input.note,
+    status: requireApproval ? "pending" : "approved",
+  };
+
+  if (familyMember) {
+    document.familyMember = familyMember;
+  }
+
+  await client.create(document);
+
+  return requireApproval
+    ? "Hendelsen er sendt! En voksen kan godkjenne den i studioet."
+    : "Hendelsen er lagt til!";
+}
+
 export async function submitRecurringEvent(input: {
   title: string;
   familyMemberName: string;

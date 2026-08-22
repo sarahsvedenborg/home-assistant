@@ -5,6 +5,7 @@ import { recipeType } from "./recipeType";
 import { recurringEventType } from "./recurringEventType";
 import { shoppingListItemType } from "./shoppingListItemType";
 import { shoppingListType } from "./shoppingListType";
+import { singleEventType } from "./singleEventType";
 import { wishListItemType } from "./wishListItemType";
 
 export const schemaTypes = [
@@ -16,4 +17,5 @@ export const schemaTypes = [
   recipeType,
   featureSuggestionType,
   recurringEventType,
+  singleEventType,
 ];
