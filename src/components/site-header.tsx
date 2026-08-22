@@ -13,7 +13,8 @@ type SiteHeaderProps = {
     | "oppskrifter"
     | "forslag"
     | "aktiviteter"
-    | "kalender";
+    | "kalender"
+    | "meldinger";
 };
 
 export function SiteHeader({ current }: SiteHeaderProps) {
@@ -29,7 +30,7 @@ export function SiteHeader({ current }: SiteHeaderProps) {
         <Link href="/" className="brandMark" onClick={closeMenu}>
           <span className="brandEmoji">🏡</span>
           <span>
-            <strong>Family Hub</strong>
+            <strong>Infoskjermen</strong>
             <small>Felles info for familien Svedenborg</small>
           </span>
         </Link>
@@ -104,6 +105,13 @@ export function SiteHeader({ current }: SiteHeaderProps) {
           onClick={closeMenu}
         >
           Kalender
+        </Link>
+        <Link
+          href="/meldinger"
+          className={current === "meldinger" ? "navLink navLinkActive" : "navLink"}
+          onClick={closeMenu}
+        >
+          Meldinger
         </Link>
        {/*  <Link href="/studio" className="navLink navLinkStudio">
           Studio for voksne

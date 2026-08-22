@@ -1,14 +1,17 @@
 import Link from "next/link";
 
+import { MessageWidget } from "@/components/message-widget";
 import type { DashboardEvent, RecentActivity } from "@/lib/family-feed";
 import { describeWeather } from "@/lib/weather";
-import type { Weather } from "@/lib/types";
+import type { ShortMessage, Weather } from "@/lib/types";
 
 type FamilyDashboardProps = {
   dateLabel: string;
   todayEvents: DashboardEvent[];
   tomorrowEvents: DashboardEvent[];
   activity: RecentActivity[];
+  messages: ShortMessage[];
+  familyMembers: string[];
   weather: Weather | null;
 };
 
@@ -107,6 +110,8 @@ export function FamilyDashboard({
   todayEvents,
   tomorrowEvents,
   activity,
+  messages,
+  familyMembers,
   weather,
 }: FamilyDashboardProps) {
   return (
@@ -183,13 +188,7 @@ export function FamilyDashboard({
         description="Her kan vi planlegge hva vi spiser i uka."
       />
 
-      <ComingSoonWidget
-        areaClass="wMessages"
-        accentClass="accentCool"
-        icon="💬"
-        title="Meldinger"
-        description="Små beskjeder til familien samles her."
-      />
+      <MessageWidget messages={messages} familyMembers={familyMembers} />
     </section>
   );
 }

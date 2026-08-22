@@ -6,6 +6,7 @@ import {
   FALLBACK_MOVIES,
   FALLBACK_RECIPES,
   FALLBACK_RECURRING_EVENTS,
+  FALLBACK_SHORT_MESSAGES,
   FALLBACK_SHOPPING_LIST,
   FALLBACK_SINGLE_EVENTS,
   FALLBACK_WISHLIST_ITEMS,
@@ -18,6 +19,7 @@ import type {
   MovieRecommendation,
   Recipe,
   RecurringEvent,
+  ShortMessage,
   ShoppingList,
   ShoppingListEntry,
   SingleEvent,
@@ -36,6 +38,7 @@ import {
   MOVIE_RECOMMENDATIONS_QUERY,
   RECIPES_QUERY,
   RECURRING_EVENTS_QUERY,
+  SHORT_MESSAGES_QUERY,
   SHOPPING_LIST_ITEMS_QUERY,
   SINGLE_EVENTS_QUERY,
   WISHLIST_ITEMS_QUERY,
@@ -101,6 +104,13 @@ type SanityFeatureSuggestion = {
   _id: string;
   title: string;
   text?: string;
+};
+
+type SanityShortMessage = {
+  _id: string;
+  recipients?: string[];
+  text: string;
+  _createdAt?: string;
 };
 
 type SanityRecurringEvent = {
@@ -299,6 +309,25 @@ export async function getFeatureSuggestions(): Promise<FeatureSuggestion[]> {
     id: suggestion._id,
     title: suggestion.title,
     text: suggestion.text,
+  }));
+}
+
+export async function getShortMessages(): Promise<ShortMessage[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_SHORT_MESSAGES;
+  }
+
+  const messages = await fetchFromSanity<SanityShortMessage[]>(SHORT_MESSAGES_QUERY);
+
+  if (!messages) {
+    return FALLBACK_SHORT_MESSAGES;
+  }
+
+  return messages.map((message) => ({
+    id: message._id,
+    recipients: message.recipients || [],
+    text: message.text,
+    createdAt: message._createdAt,
   }));
 }
 

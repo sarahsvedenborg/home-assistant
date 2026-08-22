@@ -255,6 +255,28 @@ export async function submitFeatureSuggestion(input: {
     : "Takk for forslaget!";
 }
 
+export async function submitShortMessage(input: {
+  recipients: string[];
+  text: string;
+}) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  await client.create({
+    _type: "shortMessage",
+    recipients: input.recipients,
+    text: input.text,
+    status: requireApproval ? "pending" : "approved",
+  });
+
+  return requireApproval
+    ? "Meldingen er sendt! En voksen kan godkjenne den i studioet."
+    : "Meldingen er lagt til!";
+}
+
 export async function submitSingleEvent(input: {
   title: string;
   familyMemberName: string;
