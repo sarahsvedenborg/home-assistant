@@ -67,7 +67,6 @@ export default async function Home() {
                 formHref="/onskeliste#add-wish"
                 icon="🎁"
                 title="Ønskeliste"
-                description="Samling av gaveønsker per familiemedlem."
                 stat={`${wishListItems.length} idéer`}
                 accentClass="accentWarm"
                 openLabel="Åpne ønskelisten"
@@ -78,7 +77,6 @@ export default async function Home() {
                 formHref="/handleliste#add-item"
                 icon="🛒"
                 title="Handleliste"
-                description="Varer vi trenger å kjøpe."
                 stat={`${shoppingList.items.filter((item) => !item.checked).length} varer`}
                 accentClass="accentFuture"
                 openLabel="Åpne handlelisten"
@@ -89,7 +87,6 @@ export default async function Home() {
                 formHref="/oppskrifter#add-recipe"
                 icon="🍲"
                 title="Oppskrifter"
-                description="Samling av oppskrifter med lenker og notater."
                 stat={`${recipes.length} oppskrifter`}
                 accentClass="accentCool"
                 openLabel="Se oppskrifter"
@@ -100,7 +97,6 @@ export default async function Home() {
                 formHref="/movies#add-movie"
                 icon="🎬"
                 title="Filmer"
-                description="Oversikt over filmforlag og hva som er sett og ikke."
                 stat={`${movies.filter((movie) => !movie.watched).length} usett`}
                 accentClass="accentCool"
                 openLabel="Se filmer"
@@ -111,7 +107,6 @@ export default async function Home() {
                 formHref="/#add-event"
                 icon="📅"
                 title="Kalender"
-                description="Se avtaler og faste aktiviteter i uke- eller månedsvisning."
                 stat={`${singleEvents.length + recurringEvents.length} hendelser`}
                 accentClass="accentFuture"
                 openLabel="Åpne kalenderen"
