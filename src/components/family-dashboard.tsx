@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { MessageWidget } from "@/components/message-widget";
 import { ShoppingWidget } from "@/components/shopping-widget";
 import type { DashboardEvent, RecentActivity } from "@/lib/family-feed";

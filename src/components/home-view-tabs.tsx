@@ -42,8 +42,11 @@ export function HomeViewTabs({ dashboard, calendar }: HomeViewTabsProps) {
         </div>
 
         <div className="homeQuickLinks" aria-label="Hurtiglenker">
+          <Link href="/aktiviteter" className="homeGhostButton">
+            Faste aktiviteter
+          </Link>
           <Link href="/forslag" className="homeGhostButton">
-            Forslag
+            Forslag til inforkjermen
           </Link>
           <a href="https://svedenborg.sanity.studio" className="homeGhostButton">
             Admin

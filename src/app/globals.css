@@ -913,6 +913,12 @@ button {
   list-style: none;
 }
 
+.activityCategoryDivider {
+  height: 1px;
+  margin: 0.15rem 0;
+  background: var(--line);
+}
+
 .itemCard {
   display: grid;
   gap: 0.55rem;

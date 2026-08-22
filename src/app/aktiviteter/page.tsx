@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import { AddButton } from "@/components/add-button";
 import { RecurringEventForm } from "@/components/recurring-event-form";
 import { SiteHeader } from "@/components/site-header";
@@ -39,6 +41,10 @@ function formatDateRange(startDate?: string, endDate?: string): string | null {
   return null;
 }
 
+function activityCategoryOrder(category: string): number {
+  return category === "skole" ? 0 : 1;
+}
+
 export default async function AktiviteterPage() {
   const [familyMembers, events] = await Promise.all([
     getFamilyMembers(),
@@ -50,7 +56,11 @@ export default async function AktiviteterPage() {
     day,
     events: events
       .filter((event) => event.dayOfWeek === day.value)
-      .sort((left, right) => (left.time || "").localeCompare(right.time || "")),
+      .sort(
+        (left, right) =>
+          activityCategoryOrder(left.category) - activityCategoryOrder(right.category) ||
+          (left.time || "").localeCompare(right.time || ""),
+      ),
   })).filter((group) => group.events.length > 0);
 
   return (
@@ -91,25 +101,34 @@ export default async function AktiviteterPage() {
                   </div>
 
                   <ul className="itemList">
-                    {group.events.map((event: RecurringEvent) => {
+                    {group.events.map((event: RecurringEvent, index) => {
                       const timeRange = [event.time, event.endTime].filter(Boolean).join("–");
                       const meta = [event.familyMember, timeRange, eventCategoryLabel(event.category)]
                         .filter(Boolean)
                         .join(" · ");
+                      const startsFritidSection =
+                        event.category === "fritid" &&
+                        index > 0 &&
+                        group.events[index - 1]?.category === "skole";
 
                       return (
-                        <li key={event.id} className="itemCard">
-                          <div className="itemTitleRow">
-                            <strong>{event.title}</strong>
-                            <span className="itemMeta">{meta}</span>
-                          </div>
-                          {formatDateRange(event.startDate, event.endDate) ? (
-                            <span className="itemMeta">
-                              {formatDateRange(event.startDate, event.endDate)}
-                            </span>
+                        <Fragment key={event.id}>
+                          {startsFritidSection ? (
+                            <li className="activityCategoryDivider" aria-hidden="true" />
                           ) : null}
-                          {event.whatToBring ? <p>Ta med: {event.whatToBring}</p> : null}
-                        </li>
+                          <li className="itemCard">
+                            <div className="itemTitleRow">
+                              <strong>{event.title}</strong>
+                              <span className="itemMeta">{meta}</span>
+                            </div>
+                            {formatDateRange(event.startDate, event.endDate) ? (
+                              <span className="itemMeta">
+                                {formatDateRange(event.startDate, event.endDate)}
+                              </span>
+                            ) : null}
+                            {event.whatToBring ? <p>Ta med: {event.whatToBring}</p> : null}
+                          </li>
+                        </Fragment>
                       );
                     })}
                   </ul>
