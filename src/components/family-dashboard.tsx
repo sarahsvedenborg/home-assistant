@@ -1,9 +1,10 @@
 import Link from "next/link";
 
 import { MessageWidget } from "@/components/message-widget";
+import { ShoppingWidget } from "@/components/shopping-widget";
 import type { DashboardEvent, RecentActivity } from "@/lib/family-feed";
 import { describeWeather } from "@/lib/weather";
-import type { ShortMessage, Weather } from "@/lib/types";
+import type { ShoppingListEntry, ShortMessage, Weather } from "@/lib/types";
 
 type FamilyDashboardProps = {
   dateLabel: string;
@@ -11,6 +12,7 @@ type FamilyDashboardProps = {
   tomorrowEvents: DashboardEvent[];
   activity: RecentActivity[];
   messages: ShortMessage[];
+  shoppingItems: ShoppingListEntry[];
   familyMembers: string[];
   weather: Weather | null;
 };
@@ -51,9 +53,7 @@ function EventList({ events }: { events: DashboardEvent[] }) {
   );
 }
 
-// Placeholder card for a feature that is planned but not built yet (weather,
-// dinner plan, messages). Keeps the dashboard layout complete and signals
-// what is coming.
+// Placeholder card used when live weather data is unavailable.
 function ComingSoonWidget({
   areaClass,
   accentClass,
@@ -111,23 +111,25 @@ export function FamilyDashboard({
   tomorrowEvents,
   activity,
   messages,
+  shoppingItems,
   familyMembers,
   weather,
 }: FamilyDashboardProps) {
   return (
     <section className="dashboard" aria-label="Familieoversikt">
       <article className="widget wGreet accentWarm">
-        <span className="kicker">Velkommen hjem</span>
+      {/*   <span className="itemMeta">{dateLabel}</span> */}
+     {/*    <span className="kicker">{dateLabel}</span> */}
         <h1 className="dashboardTitle">Dagens oversikt</h1>
-        <span className="itemMeta">{dateLabel}</span>
-        <div className="heroActions">
+         <span className="itemMeta">{dateLabel}</span> 
+      {/*   <div className="heroActions">
           <Link className="buttonPrimary" href="/onskeliste#add-wish">
             Legg til et ønske
           </Link>
           <Link className="buttonSecondary" href="/movies#add-movie">
             Legg til en film
           </Link>
-        </div>
+        </div> */}
       </article>
 
       <article className="widget wToday accentFuture">
@@ -180,13 +182,7 @@ export function FamilyDashboard({
         />
       )}
 
-      <ComingSoonWidget
-        areaClass="wDinner"
-        accentClass="accentWarm"
-        icon="🍽️"
-        title="Dagens middag"
-        description="Her kan vi planlegge hva vi spiser i uka."
-      />
+      <ShoppingWidget items={shoppingItems} familyMembers={familyMembers} />
 
       <MessageWidget messages={messages} familyMembers={familyMembers} />
     </section>

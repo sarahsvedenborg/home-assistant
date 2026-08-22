@@ -4,7 +4,6 @@ import { FamilyDashboard } from "@/components/family-dashboard";
 import { HomeViewTabs } from "@/components/home-view-tabs";
 import { HubCard } from "@/components/hub-card";
 import { SingleEventForm } from "@/components/single-event-form";
-import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
 
@@ -49,9 +48,7 @@ export default async function Home() {
   const tomorrowEvents = eventsForDate(recurringEvents, singleEvents, tomorrow);
   const activity = buildRecentActivity(wishListItems, shoppingList.items, { now });
   return (
-    <main className="shell">
-      <SiteHeader current="home" />
-
+    <main className="shell homeShell">
       <HomeViewTabs
         dashboard={
           <>
@@ -61,6 +58,7 @@ export default async function Home() {
               tomorrowEvents={tomorrowEvents}
               activity={activity}
               messages={messages}
+              shoppingItems={shoppingList.items}
               familyMembers={familyMembers.map((member) => member.name)}
               weather={weather}
             />
@@ -75,16 +73,6 @@ export default async function Home() {
                 accentClass="accentWarm"
                 openLabel="Åpne ønskelisten"
                 addLabel="Legg til ønske"
-              />
-              <HubCard
-                href="/handleliste"
-                formHref="/handleliste#add-item"
-                icon="🛒"
-                title="Handleliste"
-                stat={`${shoppingList.items.filter((item) => !item.checked).length} varer`}
-                accentClass="accentFuture"
-                openLabel="Åpne handlelisten"
-                addLabel="Legg til vare"
               />
               <HubCard
                 href="/oppskrifter"
@@ -106,7 +94,7 @@ export default async function Home() {
                 openLabel="Se filmer"
                 addLabel="Legg til film"
               />
-              <HubCard
+            {/*   <HubCard
                 href="/kalender"
                 formHref="/#add-event"
                 icon="📅"
@@ -115,7 +103,7 @@ export default async function Home() {
                 accentClass="accentFuture"
                 openLabel="Åpne kalenderen"
                 addLabel="Legg til hendelse"
-              />
+              /> */}
             </section>
           </>
         }

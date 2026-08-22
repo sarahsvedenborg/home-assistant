@@ -308,8 +308,19 @@ button {
   grid-template-columns: 1fr;
 }
 
+.homeShell {
+  padding-top: 0.5rem;
+}
+
 .homeViews {
-  margin-top: 0.5rem;
+  margin-top: 0;
+}
+
+.homeViewBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
 .homeViewTabs {
@@ -319,6 +330,34 @@ button {
   border: 1px solid var(--line);
   border-radius: 1rem;
   background: rgba(255, 255, 255, 0.68);
+}
+
+.homeQuickLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.homeGhostButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.28);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+  transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+.homeGhostButton:hover,
+.homeGhostButton:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
 }
 
 .homeViewTab {
@@ -464,6 +503,11 @@ button {
   border-top: 1px solid var(--line);
 }
 
+.shoppingWidgetItem + .shoppingWidgetItem {
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--line);
+}
+
 .messageDate {
   color: var(--muted);
   font-size: 0.72rem;
@@ -552,7 +596,7 @@ button {
     grid-template-areas:
       "greet    greet    greet   weather"
       "today    tomorrow dinner  news"
-      "messages messages dinner  news";
+      "today    tomorrow messages messages";
   }
 }
 
@@ -1871,6 +1915,11 @@ button {
 }
 
 @media (max-width: 699px) {
+  .homeViewBar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .homeViewTabs {
     display: flex;
     width: 100%;
@@ -1879,6 +1928,10 @@ button {
   .homeViewTab {
     flex: 1 1 50%;
     min-width: 0;
+  }
+
+  .homeQuickLinks {
+    justify-content: flex-end;
   }
 
   .homeCalendarPanel {
