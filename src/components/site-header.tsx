@@ -1,26 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-type SiteHeaderProps = {
-  current:
-    | "home"
-    | "wishlist"
-    | "onskeliste"
-    | "movies"
-    | "handleliste"
-    | "oppskrifter"
-    | "forslag"
-    | "aktiviteter"
-    | "kalender";
-};
-
-export function SiteHeader({ current }: SiteHeaderProps) {
+export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   function closeMenu() {
     setIsOpen(false);
+  }
+
+  function navClass(href: string) {
+    const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href);
+    return isActive ? "navLink navLinkActive" : "navLink";
   }
 
   return (
@@ -53,54 +47,54 @@ export function SiteHeader({ current }: SiteHeaderProps) {
         className={isOpen ? "siteNav siteNavOpen" : "siteNav"}
         aria-label="Hovednavigasjon"
       >
-        <Link href="/" className={current === "home" ? "navLink navLinkActive" : "navLink"} onClick={closeMenu}>
+        <Link href="/" className={navClass("/")} onClick={closeMenu}>
           Hjem
         </Link>
         <Link
           href="/onskeliste"
-          className={current === "onskeliste" ? "navLink navLinkActive" : "navLink"}
+          className={navClass("/onskeliste")}
           onClick={closeMenu}
         >
           Ønskeliste
         </Link>
         <Link
           href="/movies"
-          className={current === "movies" ? "navLink navLinkActive" : "navLink"}
+          className={navClass("/movies")}
           onClick={closeMenu}
         >
           Filmer
         </Link>
         <Link
           href="/handleliste"
-          className={current === "handleliste" ? "navLink navLinkActive" : "navLink"}
+          className={navClass("/handleliste")}
           onClick={closeMenu}
         >
           Handleliste
         </Link>
         <Link
           href="/oppskrifter"
-          className={current === "oppskrifter" ? "navLink navLinkActive" : "navLink"}
+          className={navClass("/oppskrifter")}
           onClick={closeMenu}
         >
           Oppskrifter
         </Link>
         <Link
           href="/forslag"
-          className={current === "forslag" ? "navLink navLinkActive" : "navLink"}
+          className={navClass("/forslag")}
           onClick={closeMenu}
         >
           Forslag
         </Link>
         <Link
           href="/aktiviteter"
-          className={current === "aktiviteter" ? "navLink navLinkActive" : "navLink"}
+          className={navClass("/aktiviteter")}
           onClick={closeMenu}
         >
           Aktiviteter
         </Link>
         <Link
           href="/kalender"
-          className={current === "kalender" ? "navLink navLinkActive" : "navLink"}
+          className={navClass("/kalender")}
           onClick={closeMenu}
         >
           Kalender

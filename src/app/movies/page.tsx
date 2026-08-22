@@ -1,7 +1,6 @@
 import { AddButton } from "@/components/add-button";
 import { MovieBrowser } from "@/components/movie-browser";
 import { MovieForm } from "@/components/movie-form";
-import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getMovieRecommendations } from "@/lib/data";
 
 export default async function MoviesPage() {
@@ -12,8 +11,6 @@ export default async function MoviesPage() {
 
   return (
     <main className="shell">
-      <SiteHeader current="movies" />
-
       <section className="sectionHero accentCoolPanel">
         <div>
           <span className="kicker">Filmkveld</span>

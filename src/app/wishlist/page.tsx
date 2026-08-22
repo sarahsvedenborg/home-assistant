@@ -1,4 +1,3 @@
-import { SiteHeader } from "@/components/site-header";
 import { WishlistBrowser } from "@/components/wishlist-browser";
 import { getFamilyMembers, getWishListItems } from "@/lib/data";
 
@@ -10,8 +9,6 @@ export default async function WishListPage() {
 
   return (
     <main className="shell">
-      <SiteHeader current="wishlist" />
-
       <section className="sectionHero accentWarmPanel">
         <div>
           <span className="kicker">Ønskeliste</span>

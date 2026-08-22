@@ -68,6 +68,16 @@ button {
   padding: 1rem 0 3rem;
 }
 
+.appHeaderShell {
+  width: min(1600px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding-top: 1rem;
+}
+
+.appHeaderShell + .shell {
+  padding-top: 0;
+}
+
 .siteHeader {
   display: flex;
   align-items: center;
@@ -308,6 +318,73 @@ button {
   grid-template-columns: 1fr;
 }
 
+.homeShell {
+  width: min(1600px, calc(100% - 2rem));
+}
+
+.homeWelcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+  box-shadow: var(--shadow);
+}
+
+.homeWelcome h1 {
+  margin: 0.2em 0 0.1em;
+  font-family: var(--font-display), cursive;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1;
+}
+
+.homeWelcome .heroActions {
+  flex-shrink: 0;
+  margin-top: 0;
+}
+
+.homeViews {
+  margin-top: 1.25rem;
+}
+
+.homeViewTabs {
+  display: inline-flex;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.homeViewTab {
+  min-width: 8rem;
+  min-height: 3rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: 0.75rem;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 900;
+  transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+.homeViewTab:hover,
+.homeViewTab:focus-visible {
+  transform: translateY(-1px);
+}
+
+.homeViewTabActive {
+  background: var(--paper-strong);
+  color: var(--ink);
+  box-shadow: 0 5px 18px rgba(58, 76, 98, 0.1);
+}
+
+.homeViews .dashboard,
+.homeViews .calendarPanel {
+  margin-top: 1rem;
+}
+
 .widget {
   display: grid;
   gap: 0.75rem;
@@ -335,12 +412,6 @@ button {
 .widgetTitle {
   font-size: 1.15rem;
   margin: 0;
-}
-
-.dashboardTitle {
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  line-height: 1;
-  margin: 0.1em 0 0;
 }
 
 .widgetBadge {
@@ -409,15 +480,10 @@ button {
   .dashboard {
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
-      "greet    greet"
       "today    tomorrow"
       "news     news"
       "weather  dinner"
       "messages messages";
-  }
-
-  .wGreet {
-    grid-area: greet;
   }
 
   .wWeather {
@@ -449,9 +515,8 @@ button {
   .dashboard {
     grid-template-columns: repeat(4, 1fr);
     grid-template-areas:
-      "greet    greet    greet   weather"
-      "today    tomorrow dinner  news"
-      "messages messages dinner  news";
+      "today    tomorrow weather  dinner"
+      "news     news     messages dinner";
   }
 }
 
@@ -1770,6 +1835,35 @@ button {
 }
 
 @media (max-width: 699px) {
+  .appHeaderShell,
+  .homeShell {
+    width: min(100% - 1rem, 1600px);
+  }
+
+  .homeWelcome {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 1.1rem;
+  }
+
+  .homeWelcome .heroActions {
+    width: 100%;
+  }
+
+  .homeWelcome .heroActions > * {
+    flex: 1 1 auto;
+  }
+
+  .homeViewTabs {
+    display: flex;
+    width: 100%;
+  }
+
+  .homeViewTab {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+
   .calendarShell {
     width: min(100% - 1rem, 1600px);
   }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Baloo_2, Nunito } from "next/font/google";
 import "./globals.css";
 
+import { AppChrome } from "@/components/app-chrome";
 import { SanityLive } from "@/sanity/lib/live";
 
 const displayFont = Baloo_2({
@@ -27,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="no" className={`${displayFont.variable} ${bodyFont.variable}`}>
       <body>
-        {children}
+        <AppChrome>{children}</AppChrome>
         <SanityLive />
       </body>
     </html>

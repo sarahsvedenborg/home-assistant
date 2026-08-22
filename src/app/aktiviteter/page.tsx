@@ -1,6 +1,5 @@
 import { AddButton } from "@/components/add-button";
 import { RecurringEventForm } from "@/components/recurring-event-form";
-import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getRecurringEvents } from "@/lib/data";
 import { eventCategoryLabel } from "@/lib/event-categories";
 import type { RecurringEvent } from "@/lib/types";
@@ -55,8 +54,6 @@ export default async function AktiviteterPage() {
 
   return (
     <main className="shell">
-      <SiteHeader current="aktiviteter" />
-
       <section className="sectionHero accentFuture">
         <div>
           <span className="kicker">Ukeplan</span>

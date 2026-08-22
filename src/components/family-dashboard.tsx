@@ -1,11 +1,8 @@
-import Link from "next/link";
-
 import type { DashboardEvent, RecentActivity } from "@/lib/family-feed";
 import { describeWeather } from "@/lib/weather";
 import type { Weather } from "@/lib/types";
 
 type FamilyDashboardProps = {
-  dateLabel: string;
   todayEvents: DashboardEvent[];
   tomorrowEvents: DashboardEvent[];
   activity: RecentActivity[];
@@ -103,7 +100,6 @@ function WeatherWidget({ weather }: { weather: Weather }) {
 }
 
 export function FamilyDashboard({
-  dateLabel,
   todayEvents,
   tomorrowEvents,
   activity,
@@ -111,20 +107,6 @@ export function FamilyDashboard({
 }: FamilyDashboardProps) {
   return (
     <section className="dashboard" aria-label="Familieoversikt">
-      <article className="widget wGreet accentWarm">
-        <span className="kicker">Velkommen hjem</span>
-        <h1 className="dashboardTitle">Dagens oversikt</h1>
-        <span className="itemMeta">{dateLabel}</span>
-        <div className="heroActions">
-          <Link className="buttonPrimary" href="/onskeliste#add-wish">
-            Legg til et ønske
-          </Link>
-          <Link className="buttonSecondary" href="/movies#add-movie">
-            Legg til en film
-          </Link>
-        </div>
-      </article>
-
       <article className="widget wToday accentFuture">
         <div className="widgetHead">
           <h2 className="widgetTitle">I dag</h2>
