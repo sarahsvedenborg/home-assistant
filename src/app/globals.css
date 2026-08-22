@@ -503,6 +503,11 @@ button {
   border-top: 1px solid var(--line);
 }
 
+.shoppingWidgetItem + .shoppingWidgetItem {
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--line);
+}
+
 .messageDate {
   color: var(--muted);
   font-size: 0.72rem;

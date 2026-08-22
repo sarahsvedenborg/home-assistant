@@ -58,6 +58,7 @@ export default async function Home() {
               tomorrowEvents={tomorrowEvents}
               activity={activity}
               messages={messages}
+              shoppingItems={shoppingList.items}
               familyMembers={familyMembers.map((member) => member.name)}
               weather={weather}
             />
@@ -72,16 +73,6 @@ export default async function Home() {
                 accentClass="accentWarm"
                 openLabel="Åpne ønskelisten"
                 addLabel="Legg til ønske"
-              />
-              <HubCard
-                href="/handleliste"
-                formHref="/handleliste#add-item"
-                icon="🛒"
-                title="Handleliste"
-                stat={`${shoppingList.items.filter((item) => !item.checked).length} varer`}
-                accentClass="accentFuture"
-                openLabel="Åpne handlelisten"
-                addLabel="Legg til vare"
               />
               <HubCard
                 href="/oppskrifter"
@@ -103,7 +94,7 @@ export default async function Home() {
                 openLabel="Se filmer"
                 addLabel="Legg til film"
               />
-              <HubCard
+            {/*   <HubCard
                 href="/kalender"
                 formHref="/#add-event"
                 icon="📅"
@@ -112,7 +103,7 @@ export default async function Home() {
                 accentClass="accentFuture"
                 openLabel="Åpne kalenderen"
                 addLabel="Legg til hendelse"
-              />
+              /> */}
             </section>
           </>
         }
