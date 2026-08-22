@@ -1,3 +1,5 @@
+import { defineQuery } from "next-sanity";
+
 export const FAMILY_MEMBERS_QUERY = `*[_type == "familyMember"] | order(sortOrder asc, name asc) {
   _id,
   name,
@@ -30,6 +32,16 @@ export const FEATURE_SUGGESTIONS_QUERY = `*[_type == "featureSuggestion" && (!de
   title,
   text
 }`;
+
+export const SHORT_MESSAGES_QUERY = defineQuery(/* groq */ `
+  *[_type == "shortMessage" && (!defined(status) || status == "approved")]
+  | order(_createdAt desc)[0...8] {
+    _id,
+    recipients,
+    text,
+    _createdAt
+  }
+`);
 
 export const RECURRING_EVENTS_QUERY = `*[_type == "recurringEvent" && (!defined(status) || status == "approved")] | order(dayOfWeek asc, time asc) {
   _id,

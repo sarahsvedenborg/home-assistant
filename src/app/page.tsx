@@ -5,7 +5,7 @@ import { HomeViewTabs } from "@/components/home-view-tabs";
 import { HubCard } from "@/components/hub-card";
 import { SingleEventForm } from "@/components/single-event-form";
 import { SiteHeader } from "@/components/site-header";
-import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
+import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
@@ -23,6 +23,7 @@ function formatOsloDateLabel(date: Date): string {
 export default async function Home() {
   const [
     familyMembers,
+    messages,
     movies,
     recipes,
     recurringEvents,
@@ -32,6 +33,7 @@ export default async function Home() {
     weather,
   ] = await Promise.all([
     getFamilyMembers(),
+    getShortMessages(),
     getMovieRecommendations(),
     getRecipes(),
     getRecurringEvents(),
@@ -58,6 +60,8 @@ export default async function Home() {
               todayEvents={todayEvents}
               tomorrowEvents={tomorrowEvents}
               activity={activity}
+              messages={messages}
+              familyMembers={familyMembers.map((member) => member.name)}
               weather={weather}
             />
 

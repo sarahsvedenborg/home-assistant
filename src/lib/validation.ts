@@ -302,6 +302,63 @@ export function validateFeatureSuggestionSubmission(
   };
 }
 
+export function validateShortMessageSubmission(
+  payload: unknown,
+  familyMemberNames: string[],
+): ValidationResult<{
+  recipients: string[];
+  text: string;
+}> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const text = normalizeText(common.record.text);
+  const submittedRecipients = Array.isArray(common.record.recipients)
+    ? common.record.recipients
+        .filter((value): value is string => typeof value === "string")
+        .map((value) => value.trim())
+        .filter(Boolean)
+    : [];
+
+  if (!text) {
+    return { success: false, error: "Skriv en kort melding." };
+  }
+
+  if (text.length > 240) {
+    return { success: false, error: "Meldingen må være under 240 tegn." };
+  }
+
+  const memberNamesByLowerCase = new Map(
+    familyMemberNames.map((name) => [name.toLowerCase(), name]),
+  );
+  const recipients = submittedRecipients.map((recipient) => {
+    const lowerRecipient = recipient.toLowerCase();
+
+    if (lowerRecipient === "all" || lowerRecipient === "parents") {
+      return lowerRecipient;
+    }
+
+    return memberNamesByLowerCase.get(lowerRecipient);
+  });
+
+  if (recipients.some((recipient) => !recipient)) {
+    return { success: false, error: "En av mottakerne er ikke gyldig." };
+  }
+
+  const uniqueRecipients = [...new Set(recipients as string[])];
+
+  return {
+    success: true,
+    data: {
+      recipients: uniqueRecipients,
+      text,
+    },
+  };
+}
+
 export function validateSingleEventSubmission(
   payload: unknown,
 ): ValidationResult<{

@@ -68,6 +68,13 @@ export type FeatureSuggestion = {
   text?: string;
 };
 
+export type ShortMessage = {
+  id: string;
+  recipients: string[];
+  text: string;
+  createdAt?: string;
+};
+
 export type SingleEvent = {
   id: string;
   title: string;

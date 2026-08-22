@@ -4,6 +4,7 @@ import type {
   MovieRecommendation,
   Recipe,
   RecurringEvent,
+  ShortMessage,
   ShoppingList,
   SingleEvent,
   WishListItem,
@@ -184,6 +185,21 @@ export const FALLBACK_FEATURE_SUGGESTIONS: FeatureSuggestion[] = [
     id: "suggestion-2",
     title: "Bursdagskalender",
     text: "Vis kommende bursdager i familien så vi ikke glemmer noen.",
+  },
+];
+
+export const FALLBACK_SHORT_MESSAGES: ShortMessage[] = [
+  {
+    id: "message-1",
+    recipients: ["all"],
+    text: "Husk å sette skoene på plass i gangen.",
+    createdAt: "2026-08-22T08:00:00.000Z",
+  },
+  {
+    id: "message-2",
+    recipients: ["parents"],
+    text: "Foreldremøte på tirsdag kl. 18.",
+    createdAt: "2026-08-21T16:30:00.000Z",
   },
 ];
 

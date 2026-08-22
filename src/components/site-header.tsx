@@ -29,7 +29,7 @@ export function SiteHeader({ current }: SiteHeaderProps) {
         <Link href="/" className="brandMark" onClick={closeMenu}>
           <span className="brandEmoji">🏡</span>
           <span>
-            <strong>Family Hub</strong>
+            <strong>Infoskjermen</strong>
             <small>Felles info for familien Svedenborg</small>
           </span>
         </Link>
