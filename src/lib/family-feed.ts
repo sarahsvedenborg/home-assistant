@@ -58,6 +58,7 @@ export type DashboardEvent = {
   familyMember: string;
   time?: string;
   endTime?: string;
+  category?: string;
   categoryLabel?: string;
   allDay?: boolean;
 };
@@ -74,6 +75,7 @@ function toDashboardEvent(event: RecurringEvent): DashboardEvent {
     familyMember: event.familyMember,
     time: event.time,
     endTime: event.endTime,
+    category: event.category,
     categoryLabel: eventCategoryLabel(event.category),
   };
 }
@@ -85,6 +87,7 @@ function singleToDashboardEvent(event: SingleEvent): DashboardEvent {
     familyMember: event.familyMember,
     time: event.allDay ? undefined : event.time,
     endTime: event.allDay ? undefined : event.endTime,
+    category: event.category,
     categoryLabel: singleEventCategoryLabel(event.category),
     allDay: event.allDay,
   };

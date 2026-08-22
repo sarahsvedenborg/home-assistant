@@ -74,11 +74,17 @@ function periodTitle(view: CalendarView, anchor: Date, days: CalendarDay[]): str
 function EventCard({ event }: { event: DashboardEvent }) {
   const time = event.allDay
     ? "Hele dagen"
-    : [event.time, event.endTime].filter(Boolean).join("–") || "Uten tidspunkt";
+    : [event.time, event.endTime].filter(Boolean).join("–") || null;
+  const categoryClass =
+    event.category === "skole"
+      ? "calendarEventSchool"
+      : event.category === "fritid"
+        ? "calendarEventLeisure"
+        : "calendarEventSingle";
 
   return (
-    <article className="calendarEvent">
-      <span className="calendarEventTime">{time}</span>
+    <article className={`calendarEvent ${categoryClass}`}>
+      {time ? <span className="calendarEventTime">{time}</span> : null}
       <strong>{event.title}</strong>
       <span className="calendarEventMeta">
         {[event.familyMember, event.categoryLabel].filter(Boolean).join(" · ")}
@@ -215,6 +221,11 @@ export function FamilyCalendar({
             ]
               .filter(Boolean)
               .join(" ");
+            const schoolEvents = day.events.filter((event) => event.category === "skole");
+            const leisureEvents = day.events.filter((event) => event.category === "fritid");
+            const otherEvents = day.events.filter(
+              (event) => event.category !== "skole" && event.category !== "fritid",
+            );
 
             return (
               <section className={className} key={day.dateKey}>
@@ -229,9 +240,21 @@ export function FamilyCalendar({
 
                 <div className="calendarEvents">
                   {day.events.length > 0 ? (
-                    day.events.map((event) => (
-                      <EventCard event={event} key={`${day.dateKey}-${event.id}`} />
-                    ))
+                    <>
+                      <div className="calendarEventsTop">
+                        {schoolEvents.map((event) => (
+                          <EventCard event={event} key={`${day.dateKey}-${event.id}`} />
+                        ))}
+                      </div>
+                      <div className="calendarEventsBottom">
+                        {otherEvents.map((event) => (
+                          <EventCard event={event} key={`${day.dateKey}-${event.id}`} />
+                        ))}
+                        {leisureEvents.map((event) => (
+                          <EventCard event={event} key={`${day.dateKey}-${event.id}`} />
+                        ))}
+                      </div>
+                    </>
                   ) : (
                     <span className="calendarNoEvents">Ingen avtaler</span>
                   )}
