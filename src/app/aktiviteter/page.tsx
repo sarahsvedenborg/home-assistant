@@ -76,22 +76,17 @@ export default async function AktiviteterPage() {
       </section>
 
       <section className="listStack">
-        <div className="listPanel">
-          <div className="panelHeading">
-            <h2>Ukeplan</h2>
+        {events.length === 0 ? (
+          <div className="emptyState">
+            <span className="emptyIcon" aria-hidden="true">
+              📅
+            </span>
+            <h3>Ingen faste aktiviteter enda</h3>
+            <p>Legg til den første aktiviteten i skjemaet.</p>
           </div>
-
-          {events.length === 0 ? (
-            <div className="emptyState">
-              <span className="emptyIcon" aria-hidden="true">
-                📅
-              </span>
-              <h3>Ingen faste aktiviteter enda</h3>
-              <p>Legg til den første aktiviteten i skjemaet.</p>
-            </div>
-          ) : (
-            <div className="groupStack">
-              {grouped.map((group) => (
+        ) : (
+          <div className="groupStack">
+            {grouped.map((group) => (
                 <section key={group.day.value} className="groupCard groupCardOpen">
                   <div className="groupHeader">
                     <h3>{group.day.label}</h3>
@@ -133,10 +128,9 @@ export default async function AktiviteterPage() {
                     })}
                   </ul>
                 </section>
-              ))}
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <AddButton title="Legg til fast aktivitet" label="Ny aktivitet">
