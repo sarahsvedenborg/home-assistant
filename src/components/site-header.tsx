@@ -12,7 +12,8 @@ type SiteHeaderProps = {
     | "handleliste"
     | "oppskrifter"
     | "forslag"
-    | "aktiviteter";
+    | "aktiviteter"
+    | "kalender";
 };
 
 export function SiteHeader({ current }: SiteHeaderProps) {
@@ -96,6 +97,13 @@ export function SiteHeader({ current }: SiteHeaderProps) {
           onClick={closeMenu}
         >
           Aktiviteter
+        </Link>
+        <Link
+          href="/kalender"
+          className={current === "kalender" ? "navLink navLinkActive" : "navLink"}
+          onClick={closeMenu}
+        >
+          Kalender
         </Link>
        {/*  <Link href="/studio" className="navLink navLinkStudio">
           Studio for voksne
