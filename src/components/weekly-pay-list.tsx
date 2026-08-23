@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { FormModal } from "@/components/form-modal";
 import type { FamilyMember } from "@/lib/types";
 
 const currencyFormatter = new Intl.NumberFormat("nb-NO", {
@@ -15,6 +16,13 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
   const [members, setMembers] = useState(initialMembers);
   const [pendingAssignment, setPendingAssignment] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [payment, setPayment] = useState<{
+    memberId: string;
+    memberName: string;
+    total: number;
+  } | null>(null);
+  const [isPaying, setIsPaying] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   useEffect(() => {
     setMembers(initialMembers);
@@ -83,6 +91,60 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
     }
   }
 
+  function closePaymentModal() {
+    if (isPaying) {
+      return;
+    }
+
+    setPayment(null);
+    setPaymentError(null);
+  }
+
+  async function confirmPayment() {
+    if (!payment) {
+      return;
+    }
+
+    setIsPaying(true);
+    setPaymentError(null);
+
+    try {
+      const response = await fetch(
+        `/api/family-members/${encodeURIComponent(payment.memberId)}/chores`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ confirmed: true }),
+        },
+      );
+      const result = (await response.json()) as { error?: string };
+
+      if (!response.ok) {
+        setPaymentError(result.error || "Kunne ikke registrere betalingen.");
+        return;
+      }
+
+      setMembers((current) =>
+        current.map((member) =>
+          member.id === payment.memberId
+            ? {
+                ...member,
+                chores: member.chores.map((assignment) => ({
+                  ...assignment,
+                  amount: 0,
+                })),
+              }
+            : member,
+        ),
+      );
+      setPayment(null);
+    } catch {
+      setPaymentError("Kunne ikke registrere betalingen. Prøv igjen.");
+    } finally {
+      setIsPaying(false);
+    }
+  }
+
   return (
     <section className="weeklyPayMembers" aria-label="Ukelønn per familiemedlem">
       {feedback ? (
@@ -104,7 +166,24 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
                 <span aria-hidden="true">{member.emoji || "👤"}</span>
                 <h2>{member.name}</h2>
               </div>
-              <strong className="weeklyPayTotal">{currencyFormatter.format(total)}</strong>
+              <div className="weeklyPayMemberActions">
+                <strong className="weeklyPayTotal">{currencyFormatter.format(total)}</strong>
+                <button
+                  type="button"
+                  className="weeklyPayButton"
+                  disabled={total <= 0}
+                  onClick={() => {
+                    setPayment({
+                      memberId: member.id,
+                      memberName: member.name,
+                      total,
+                    });
+                    setPaymentError(null);
+                  }}
+                >
+                  Betal
+                </button>
+              </div>
             </header>
 
             {member.chores.length > 0 ? (
@@ -150,6 +229,45 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
           </article>
         );
       })}
+
+      <FormModal
+        isOpen={Boolean(payment)}
+        onClose={closePaymentModal}
+        title="Bekreft betaling"
+      >
+        <div className="weeklyPayConfirmation">
+          <p>
+            En voksen må bekrefte at {payment?.memberName} skal få utbetalt{" "}
+            <strong>{currencyFormatter.format(payment?.total || 0)}</strong>.
+          </p>
+          <p>Etter betalingen blir alle antall satt tilbake til null.</p>
+
+          {paymentError ? (
+            <p className="feedback feedbackError" role="alert">
+              {paymentError}
+            </p>
+          ) : null}
+
+          <div className="formActions">
+            <button
+              type="button"
+              className="buttonSecondary"
+              disabled={isPaying}
+              onClick={closePaymentModal}
+            >
+              Avbryt
+            </button>
+            <button
+              type="button"
+              className="buttonPrimary"
+              disabled={isPaying}
+              onClick={confirmPayment}
+            >
+              {isPaying ? "Betaler..." : "Bekreft betaling"}
+            </button>
+          </div>
+        </div>
+      </FormModal>
     </section>
   );
 }

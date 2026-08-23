@@ -371,6 +371,43 @@ export async function changeMemberChoreAmount(
   return currentAmount + delta;
 }
 
+export async function resetMemberChoreAmounts(memberId: string) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const member = await client.fetch<{
+    _id: string;
+    chores?: Array<{ _key?: string }>;
+  } | null>(
+    `*[_type == "familyMember" && _id == $memberId][0]{
+      _id,
+      chores[]{_key}
+    }`,
+    { memberId },
+  );
+
+  if (!member?._id) {
+    throw new Error("Fant ikke familiemedlemmet du ville betale.");
+  }
+
+  const amountUpdates = Object.fromEntries(
+    (member.chores || [])
+      .map((assignment) => assignment._key)
+      .filter(
+        (assignmentKey): assignmentKey is string =>
+          typeof assignmentKey === "string" && /^[A-Za-z0-9_-]+$/.test(assignmentKey),
+      )
+      .map((assignmentKey) => [`chores[_key=="${assignmentKey}"].amount`, 0]),
+  );
+
+  if (Object.keys(amountUpdates).length > 0) {
+    await client.patch(member._id).set(amountUpdates).commit();
+  }
+}
+
 export async function submitSingleEvent(input: {
   title: string;
   familyMemberName: string;
