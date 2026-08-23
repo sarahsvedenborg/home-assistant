@@ -61,6 +61,9 @@ export function HomeViewTabs({ dashboard, calendar, board }: HomeViewTabsProps) 
           >
             Oppgaver
           </button>
+          <Link href="/ukelonn" className="homeGhostButton homeContextButton">
+            Ukelønn
+          </Link>
         </nav>
       ) : null}
 

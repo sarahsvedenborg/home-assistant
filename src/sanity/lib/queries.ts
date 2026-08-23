@@ -5,7 +5,17 @@ export const FAMILY_MEMBERS_QUERY = `*[_type == "familyMember"] | order(sortOrde
   name,
   role,
   emoji,
-  accentColor
+  accentColor,
+  chores[] {
+    _key,
+    amount,
+    "chore": chore-> {
+      _id,
+      title,
+      text,
+      pay
+    }
+  }
 }`;
 
 export const WISHLIST_ITEMS_QUERY = `*[_type == "wishListItem" && (!defined(status) || status == "approved")] | order(_createdAt desc) {
