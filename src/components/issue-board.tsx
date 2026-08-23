@@ -23,6 +23,19 @@ export function IssueBoard({ initialIssues, familyMembers }: IssueBoardProps) {
     setIssues(initialIssues);
   }, [initialIssues]);
 
+  useEffect(() => {
+    if (!confirmation) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setConfirmation(null);
+      setIsFormOpen(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [confirmation]);
+
   function closeForm() {
     setIsFormOpen(false);
     setConfirmation(null);
