@@ -33,12 +33,75 @@ export const FALLBACK_BOARD_ISSUES: BoardIssue[] = [
 ];
 
 export const FALLBACK_FAMILY_MEMBERS: FamilyMember[] = [
-  { id: "mom", name: "Mamma", role: "adult", emoji: "🌻", accentColor: "#ff9f6e" },
-  { id: "dad", name: "Pappa", role: "adult", emoji: "🧭", accentColor: "#4f8cff" },
-  { id: "2012", name: "Amélie", role: "child", emoji: "🎨", accentColor: "#ffcc66" },
-  { id: "2014", name: "Colette", role: "child", emoji: "🚀", accentColor: "#68c3a3" },
-  { id: "2018", name: "Linnea", role: "child", emoji: "🦖", accentColor: "#ff7b7b" },
-  { id: "2020", name: "Felix", role: "child", emoji: "🌈", accentColor: "#8f7cff" },
+  {
+    id: "mom",
+    name: "Mamma",
+    role: "adult",
+    emoji: "🌻",
+    accentColor: "#ff9f6e",
+    chores: [],
+  },
+  {
+    id: "dad",
+    name: "Pappa",
+    role: "adult",
+    emoji: "🧭",
+    accentColor: "#4f8cff",
+    chores: [],
+  },
+  {
+    id: "2012",
+    name: "Amélie",
+    role: "child",
+    emoji: "🎨",
+    accentColor: "#ffcc66",
+    chores: [
+      {
+        key: "amelie-room",
+        chore: {
+          id: "chore-room",
+          title: "Rydde rommet",
+          text: "Legg klær og ting på plass.",
+          pay: 20,
+        },
+        amount: 1,
+      },
+    ],
+  },
+  {
+    id: "2014",
+    name: "Colette",
+    role: "child",
+    emoji: "🚀",
+    accentColor: "#68c3a3",
+    chores: [
+      {
+        key: "colette-dishwasher",
+        chore: {
+          id: "chore-dishwasher",
+          title: "Tømme oppvaskmaskinen",
+          pay: 10,
+        },
+        amount: 2,
+      },
+    ],
+  },
+  {
+    id: "2018",
+    name: "Linnea",
+    role: "child",
+    emoji: "🦖",
+    accentColor: "#ff7b7b",
+    chores: [],
+  },
+  {
+    id: "2020",
+    name: "Felix",
+    role: "child",
+    emoji: "🌈",
+    accentColor: "#8f7cff",
+    chores: [],
+  },
 ];
 
 export const FALLBACK_WISHLIST_ITEMS: WishListItem[] = [

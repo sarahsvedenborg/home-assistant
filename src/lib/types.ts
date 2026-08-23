@@ -1,11 +1,25 @@
 export type FamilyRole = "adult" | "child";
 
+export type Chore = {
+  id: string;
+  title: string;
+  text?: string;
+  pay: number;
+};
+
+export type MemberChore = {
+  key: string;
+  chore: Chore;
+  amount: number;
+};
+
 export type FamilyMember = {
   id: string;
   name: string;
   role: FamilyRole;
   emoji?: string;
   accentColor?: string;
+  chores: MemberChore[];
 };
 
 export type WishListItem = {

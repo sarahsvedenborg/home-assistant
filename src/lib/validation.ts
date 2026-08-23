@@ -433,6 +433,25 @@ export function validateBoardIssueStatus(
   };
 }
 
+export function validateChoreAmountChange(
+  payload: unknown,
+): ValidationResult<{ delta: -1 | 1 }> {
+  if (!payload || typeof payload !== "object") {
+    return { success: false, error: "Prøv å registrere oppgaven på nytt." };
+  }
+
+  const delta = (payload as Record<string, unknown>).delta;
+
+  if (delta !== -1 && delta !== 1) {
+    return { success: false, error: "Antallet kan bare endres med én om gangen." };
+  }
+
+  return {
+    success: true,
+    data: { delta },
+  };
+}
+
 export function validateSingleEventSubmission(
   payload: unknown,
 ): ValidationResult<{

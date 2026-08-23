@@ -55,6 +55,16 @@ type SanityFamilyMember = {
   role: "adult" | "child";
   emoji?: string;
   accentColor?: string;
+  chores?: Array<{
+    _key: string;
+    amount?: number;
+    chore?: {
+      _id: string;
+      title: string;
+      text?: string;
+      pay?: number;
+    };
+  }>;
 };
 
 type SanityWishListItem = {
@@ -201,6 +211,18 @@ export async function getFamilyMembers(): Promise<FamilyMember[]> {
     role: member.role,
     emoji: member.emoji,
     accentColor: member.accentColor,
+    chores: (member.chores || [])
+      .filter((assignment) => assignment._key && assignment.chore?._id)
+      .map((assignment) => ({
+        key: assignment._key,
+        amount: Math.max(0, Math.floor(assignment.amount || 0)),
+        chore: {
+          id: assignment.chore!._id,
+          title: assignment.chore!.title,
+          text: assignment.chore!.text,
+          pay: Math.max(0, assignment.chore!.pay || 0),
+        },
+      })),
   }));
 }
 

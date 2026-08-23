@@ -323,6 +323,54 @@ export async function updateBoardIssueStatus(
   await client.patch(issue._id).set({ status }).commit();
 }
 
+export async function changeMemberChoreAmount(
+  memberId: string,
+  assignmentKey: string,
+  delta: -1 | 1,
+) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  if (!/^[A-Za-z0-9_-]+$/.test(assignmentKey)) {
+    throw new Error("Oppgaven har en ugyldig nøkkel.");
+  }
+
+  const member = await client.fetch<{
+    _id: string;
+    assignment?: { amount?: number };
+  } | null>(
+    `*[_type == "familyMember" && _id == $memberId][0]{
+      _id,
+      "assignment": chores[_key == $assignmentKey][0]{amount}
+    }`,
+    { memberId, assignmentKey },
+  );
+
+  if (!member?._id || !member.assignment) {
+    throw new Error("Fant ikke familieoppgaven du ville oppdatere.");
+  }
+
+  const currentAmount = Math.max(0, Math.floor(member.assignment.amount || 0));
+
+  if (delta === -1 && currentAmount === 0) {
+    return 0;
+  }
+
+  const amountPath = `chores[_key=="${assignmentKey}"].amount`;
+  const patch = client.patch(member._id);
+
+  if (typeof member.assignment.amount !== "number") {
+    patch.set({ [amountPath]: 0 });
+  }
+
+  await patch.inc({ [amountPath]: delta }).commit();
+
+  return currentAmount + delta;
+}
+
 export async function submitSingleEvent(input: {
   title: string;
   familyMemberName: string;
