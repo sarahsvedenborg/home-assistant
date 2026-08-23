@@ -39,11 +39,11 @@ export function ShoppingWidget({
   return (
     <>
       <article className="widget wDinner accentWarm">
-        <div className="widgetHead">
-          <h2 className="widgetTitle">
+        <div className="widgetHead shoppingWidgetHead">
+          <h2 className="widgetTitle shoppingWidgetTitle">
             <span aria-hidden="true">🛒</span> Handleliste
           </h2>
-          <div className="widgetMessageActions">
+          <div className="widgetMessageActions shoppingWidgetActions">
             <Link href="/handleliste" className="widgetTextLink">
               Se alle
             </Link>

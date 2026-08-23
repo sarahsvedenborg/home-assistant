@@ -31,7 +31,7 @@ function EventList({ events }: { events: DashboardEvent[] }) {
   }
 
   return (
-    <ul className="widgetList">
+    <ul className="widgetList eventWidgetList">
       {events.map((event) => {
         const timeRange = event.allDay
           ? "Hele dagen"
@@ -43,7 +43,7 @@ function EventList({ events }: { events: DashboardEvent[] }) {
         return (
           <li key={event.id} className="widgetItem">
             <strong>{event.title}</strong>
-            {meta ? <span className="itemMeta">{meta}</span> : null}
+            {meta ? <span className="itemMeta eventWidgetMeta">{meta}</span> : null}
           </li>
         );
       })}

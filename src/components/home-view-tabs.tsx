@@ -40,31 +40,37 @@ export function HomeViewTabs({ dashboard, calendar, board }: HomeViewTabsProps) 
           >
             Kalender
           </button>
-          <button
-            type="button"
-            role="tab"
-            id="board-tab"
-            aria-controls="board-panel"
-            aria-selected={view === "board"}
-            className={view === "board" ? "homeViewTab homeViewTabActive" : "homeViewTab"}
-            onClick={() => setView("board")}
-          >
-            Oppgaver
-          </button>
         </div>
 
         <div className="homeQuickLinks" aria-label="Hurtiglenker">
-          <Link href="/aktiviteter" className="homeGhostButton">
-            Faste aktiviteter
-          </Link>
           <Link href="/forslag" className="homeGhostButton">
-            Forslag til inforkjermen
+            Forslag
           </Link>
           <a href="https://svedenborg.sanity.studio" className="homeGhostButton">
             Admin
           </a>
         </div>
       </div>
+
+      {view === "dashboard" ? (
+        <nav className="homeContextNav" aria-label="Snarveier fra dashboard">
+          <button
+            type="button"
+            className="homeGhostButton homeContextButton"
+            onClick={() => setView("board")}
+          >
+            Oppgaver
+          </button>
+        </nav>
+      ) : null}
+
+      {view === "calendar" ? (
+        <nav className="homeContextNav" aria-label="Snarvei fra kalender">
+          <Link href="/aktiviteter" className="homeGhostButton homeContextButton">
+            Faste aktiviteter
+          </Link>
+        </nav>
+      ) : null}
 
       <div
         id="dashboard-panel"
@@ -88,8 +94,8 @@ export function HomeViewTabs({ dashboard, calendar, board }: HomeViewTabsProps) 
       <div
         id="board-panel"
         className="homeBoardPanel"
-        role="tabpanel"
-        aria-labelledby="board-tab"
+        role="region"
+        aria-label="Oppgaver"
         hidden={view !== "board"}
       >
         {board}
