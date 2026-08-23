@@ -629,6 +629,185 @@ button {
   justify-content: flex-end;
 }
 
+.weeklyPayCelebration {
+  position: relative;
+  display: grid;
+  min-height: 18rem;
+  place-items: center;
+  padding: 2rem;
+  text-align: center;
+  overflow: visible;
+}
+
+.weeklyPayCelebrationMessage {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 0.45rem;
+  color: var(--paper-strong);
+  text-shadow: 0 2px 16px rgba(36, 52, 71, 0.75);
+  animation: weeklyPayMessagePop 0.45s ease-out both;
+}
+
+.weeklyPayCelebrationMessage h3,
+.weeklyPayCelebrationMessage p {
+  margin: 0;
+}
+
+.weeklyPayCelebrationMessage h3 {
+  font-family: var(--font-display), cursive;
+  font-size: clamp(1.7rem, 5vw, 2.5rem);
+}
+
+.weeklyPayCelebrationMessage p {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 800;
+}
+
+.weeklyPayConfetti {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  font-size: 2.25rem;
+}
+
+.weeklyPayConfetti span {
+  --confetti-x: 5rem;
+  --confetti-y: -10rem;
+  --confetti-rotation: 180deg;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #ffd34d;
+  opacity: 0;
+  animation: weeklyPayConfettiBurst 2.4s cubic-bezier(0.16, 0.8, 0.3, 1) both;
+}
+
+.weeklyPayConfetti span:nth-child(2) {
+  --confetti-x: 7rem;
+  --confetti-y: -7rem;
+  --confetti-rotation: 260deg;
+  color: #ff7b7b;
+}
+
+.weeklyPayConfetti span:nth-child(3) {
+  --confetti-x: 11rem;
+  --confetti-y: -2rem;
+  --confetti-rotation: 340deg;
+  color: #6fd3b2;
+}
+
+.weeklyPayConfetti span:nth-child(4) {
+  --confetti-x: 9rem;
+  --confetti-y: 5rem;
+  --confetti-rotation: 420deg;
+  color: #79b8ff;
+}
+
+.weeklyPayConfetti span:nth-child(5) {
+  --confetti-x: 4rem;
+  --confetti-y: 9rem;
+  --confetti-rotation: 300deg;
+  color: #c49aef;
+}
+
+.weeklyPayConfetti span:nth-child(6) {
+  --confetti-x: -3rem;
+  --confetti-y: 10rem;
+  --confetti-rotation: -260deg;
+  color: #ffd34d;
+}
+
+.weeklyPayConfetti span:nth-child(7) {
+  --confetti-x: -9rem;
+  --confetti-y: 6rem;
+  --confetti-rotation: -380deg;
+  color: #ff7b7b;
+}
+
+.weeklyPayConfetti span:nth-child(8) {
+  --confetti-x: -11rem;
+  --confetti-y: 0rem;
+  --confetti-rotation: -300deg;
+  color: #6fd3b2;
+}
+
+.weeklyPayConfetti span:nth-child(9) {
+  --confetti-x: -9rem;
+  --confetti-y: -6rem;
+  --confetti-rotation: -420deg;
+  color: #79b8ff;
+}
+
+.weeklyPayConfetti span:nth-child(10) {
+  --confetti-x: -4rem;
+  --confetti-y: -10rem;
+  --confetti-rotation: -260deg;
+  color: #c49aef;
+}
+
+.weeklyPayConfetti span:nth-child(11) {
+  --confetti-x: 2rem;
+  --confetti-y: -11rem;
+  --confetti-rotation: 330deg;
+  color: #ffd34d;
+}
+
+.weeklyPayConfetti span:nth-child(12) {
+  --confetti-x: 10rem;
+  --confetti-y: 8rem;
+  --confetti-rotation: 460deg;
+  color: #ff8ec7;
+}
+
+@keyframes weeklyPayConfettiBurst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0) scale(0.15);
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform:
+      translate(calc(-50% + var(--confetti-x)), calc(-50% + var(--confetti-y)))
+      rotate(var(--confetti-rotation))
+      scale(1);
+  }
+}
+
+@keyframes weeklyPayMessagePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+
+  70% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weeklyPayConfetti {
+    display: none;
+  }
+
+  .weeklyPayCelebrationMessage {
+    animation: none;
+  }
+}
+
 .weeklyPayChores {
   display: grid;
   gap: 0;
@@ -2075,6 +2254,37 @@ button {
     max-height: 88dvh;
     border-radius: 1.5rem;
   }
+}
+
+.formModalBackdropCelebration {
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.formModal.formModalCelebration {
+  width: min(720px, 100%);
+  max-height: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.formModalCelebration .formModalHeader {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.formModalCelebration .formModalBody {
+  padding: 0;
+  overflow: visible;
 }
 
 /* Radio group (e.g. activity category: skole / fritid) */

@@ -8,6 +8,7 @@ type FormModalProps = {
   onClose: () => void;
   title: string;
   children: ReactNode;
+  variant?: "default" | "celebration";
   // When set, a success confirmation covers the form content.
   confirmation?: string | null;
 };
@@ -21,7 +22,14 @@ const FOCUSABLE_SELECTOR = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(",");
 
-export function FormModal({ isOpen, onClose, title, children, confirmation }: FormModalProps) {
+export function FormModal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  variant = "default",
+  confirmation,
+}: FormModalProps) {
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   // Remember what was focused before opening so we can restore it on close.
@@ -90,10 +98,19 @@ export function FormModal({ isOpen, onClose, title, children, confirmation }: Fo
   }
 
   return createPortal(
-    <div className="formModalBackdrop" onClick={onClose}>
+    <div
+      className={
+        variant === "celebration"
+          ? "formModalBackdrop formModalBackdropCelebration"
+          : "formModalBackdrop"
+      }
+      onClick={onClose}
+    >
       <div
         ref={dialogRef}
-        className="formModal"
+        className={
+          variant === "celebration" ? "formModal formModalCelebration" : "formModal"
+        }
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}

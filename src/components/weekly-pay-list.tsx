@@ -23,10 +23,20 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
   } | null>(null);
   const [isPaying, setIsPaying] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [celebrationName, setCelebrationName] = useState<string | null>(null);
 
   useEffect(() => {
     setMembers(initialMembers);
   }, [initialMembers]);
+
+  useEffect(() => {
+    if (!celebrationName) {
+      return;
+    }
+
+    const timer = setTimeout(() => setCelebrationName(null), 3000);
+    return () => clearTimeout(timer);
+  }, [celebrationName]);
 
   async function changeAmount(memberId: string, assignmentKey: string, delta: -1 | 1) {
     const pendingKey = `${memberId}:${assignmentKey}`;
@@ -98,6 +108,7 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
 
     setPayment(null);
     setPaymentError(null);
+    setCelebrationName(null);
   }
 
   async function confirmPayment() {
@@ -124,6 +135,8 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
         return;
       }
 
+      const paidMemberName = payment.memberName;
+
       setMembers((current) =>
         current.map((member) =>
           member.id === payment.memberId
@@ -138,6 +151,7 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
         ),
       );
       setPayment(null);
+      setCelebrationName(paidMemberName);
     } catch {
       setPaymentError("Kunne ikke registrere betalingen. Prøv igjen.");
     } finally {
@@ -231,42 +245,66 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
       })}
 
       <FormModal
-        isOpen={Boolean(payment)}
+        isOpen={Boolean(payment || celebrationName)}
         onClose={closePaymentModal}
-        title="Bekreft betaling"
+        title={celebrationName ? "Ukelønn betalt" : "Bekreft betaling"}
+        variant={celebrationName ? "celebration" : "default"}
       >
-        <div className="weeklyPayConfirmation">
-          <p>
-            En voksen må bekrefte at {payment?.memberName} skal få utbetalt{" "}
-            <strong>{currencyFormatter.format(payment?.total || 0)}</strong>.
-          </p>
-          <p>Etter betalingen blir alle antall satt tilbake til null.</p>
-
-          {paymentError ? (
-            <p className="feedback feedbackError" role="alert">
-              {paymentError}
-            </p>
-          ) : null}
-
-          <div className="formActions">
-            <button
-              type="button"
-              className="buttonSecondary"
-              disabled={isPaying}
-              onClick={closePaymentModal}
-            >
-              Avbryt
-            </button>
-            <button
-              type="button"
-              className="buttonPrimary"
-              disabled={isPaying}
-              onClick={confirmPayment}
-            >
-              {isPaying ? "Betaler..." : "Bekreft betaling"}
-            </button>
+        {celebrationName ? (
+          <div className="weeklyPayCelebration" role="status" aria-live="polite">
+            <div className="weeklyPayConfetti" aria-hidden="true">
+              <span>●</span>
+              <span>◆</span>
+              <span>★</span>
+              <span>■</span>
+              <span>●</span>
+              <span>▲</span>
+              <span>★</span>
+              <span>◆</span>
+              <span>■</span>
+              <span>●</span>
+              <span>▲</span>
+              <span>★</span>
+            </div>
+            <div className="weeklyPayCelebrationMessage">
+              <h3>Bra jobba, {celebrationName}!</h3>
+              <p>Ukelønnen er betalt.</p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="weeklyPayConfirmation">
+            <p>
+              En voksen må bekrefte at {payment?.memberName} skal få utbetalt{" "}
+              <strong>{currencyFormatter.format(payment?.total || 0)}</strong>.
+            </p>
+            <p>Etter betalingen blir alle antall satt tilbake til null.</p>
+
+            {paymentError ? (
+              <p className="feedback feedbackError" role="alert">
+                {paymentError}
+              </p>
+            ) : null}
+
+            <div className="formActions">
+              <button
+                type="button"
+                className="buttonSecondary"
+                disabled={isPaying}
+                onClick={closePaymentModal}
+              >
+                Avbryt
+              </button>
+              <button
+                type="button"
+                className="buttonPrimary"
+                disabled={isPaying}
+                onClick={confirmPayment}
+              >
+                {isPaying ? "Betaler..." : "Bekreft betaling"}
+              </button>
+            </div>
+          </div>
+        )}
       </FormModal>
     </section>
   );
