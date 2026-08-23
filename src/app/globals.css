@@ -338,6 +338,14 @@ button {
   gap: 0.45rem;
 }
 
+.homeContextNav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+  padding-left: 0.35rem;
+}
+
 .homeGhostButton {
   display: inline-flex;
   align-items: center;
@@ -351,6 +359,14 @@ button {
   font-size: 0.82rem;
   font-weight: 900;
   transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+.homeContextButton {
+  min-height: 2.15rem;
+  padding: 0.4rem 0.7rem;
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
 }
 
 .homeGhostButton:hover,
@@ -585,6 +601,16 @@ button {
   gap: 0.2rem;
 }
 
+.eventWidgetList > .widgetItem + .widgetItem {
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--line);
+}
+
+.eventWidgetMeta {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
 .widgetItem strong {
   font-size: 1rem;
 }
@@ -608,6 +634,24 @@ button {
   display: flex;
   align-items: center;
   gap: 0.55rem;
+}
+
+.shoppingWidgetHead {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.shoppingWidgetTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  order: 2;
+}
+
+.shoppingWidgetActions {
+  justify-content: flex-end;
+  order: 1;
+  width: 100%;
 }
 
 .widgetTextLink {
@@ -740,6 +784,10 @@ button {
   width: fit-content;
   font-size: 0.92rem;
   font-weight: 800;
+}
+
+.itemMeta {
+  font-weight: 500;
 }
 
 .statusPill {
@@ -2089,7 +2137,7 @@ button {
   }
 
   .homeViewTab {
-    flex: 1 1 33.333%;
+    flex: 1 1 50%;
     min-width: 0;
     padding-inline: 0.45rem;
   }
