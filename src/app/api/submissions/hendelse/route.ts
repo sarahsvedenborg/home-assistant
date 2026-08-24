@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { AUTH_COOKIE_NAME, isAuthEnabled, isValidAuthCookie } from "@/lib/auth";
+import { getFamilyMembers } from "@/lib/data";
 import { validateSingleEventSubmission } from "@/lib/validation";
 import { submitSingleEvent } from "@/sanity/lib/submissions";
 
@@ -20,8 +21,14 @@ export async function POST(request: Request) {
     }
   }
 
-  const payload = await request.json();
-  const result = validateSingleEventSubmission(payload);
+  const [payload, familyMembers] = await Promise.all([
+    request.json(),
+    getFamilyMembers(),
+  ]);
+  const result = validateSingleEventSubmission(
+    payload,
+    familyMembers.map((member) => member.name),
+  );
 
   if (!result.success) {
     return NextResponse.json({ error: result.error }, { status: 400 });

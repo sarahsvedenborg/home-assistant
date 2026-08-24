@@ -243,6 +243,7 @@ export const FALLBACK_SINGLE_EVENTS: SingleEvent[] = [
     time: "13:00",
     endTime: "16:00",
     note: "Gave er kjøpt, ligger i gangen.",
+    participants: ["Linnea"],
     familyMember: "Linnea",
   },
   {
@@ -251,6 +252,7 @@ export const FALLBACK_SINGLE_EVENTS: SingleEvent[] = [
     category: "avtale",
     date: "2026-08-23T00:00:00.000Z",
     time: "09:30",
+    participants: ["Colette"],
     familyMember: "Colette",
   },
   {
@@ -259,6 +261,7 @@ export const FALLBACK_SINGLE_EVENTS: SingleEvent[] = [
     category: "tur",
     date: "2026-08-29T00:00:00.000Z",
     allDay: true,
+    participants: ["Pappa"],
     familyMember: "Pappa",
   },
 ];

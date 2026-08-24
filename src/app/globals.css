@@ -382,6 +382,24 @@ button {
   color: var(--ink);
 }
 
+.homeContextButtonActive,
+.homeContextButtonActive:hover,
+.homeContextButtonActive:focus-visible {
+  background: var(--paper-strong);
+  color: var(--ink);
+  box-shadow: 0 5px 18px rgba(58, 76, 98, 0.12);
+}
+
+.homeContextButtonAction,
+.homeContextButtonAction:hover,
+.homeContextButtonAction:focus-visible {
+  margin-left: auto;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--warm), #ffbe5c);
+  color: #17212c;
+  font-weight: 900;
+}
+
 .homeViewTab {
   display: inline-flex;
   align-items: center;
@@ -2339,6 +2357,25 @@ button {
   accent-color: var(--warm);
 }
 
+.dayNoteCategoryField {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+}
+
+.dayNoteCategoryField .dayNoteCategoryLabel {
+  font-weight: 800;
+}
+
+.dayNoteCategoryField .radioRow {
+  margin-top: 0;
+}
+
+.dayNoteCategoryField .radioOption span {
+  font-weight: 700;
+}
+
 /* Read-only family calendar. The wider shell and horizontally scrollable grid
    make the week useful on a wall display without crushing it on phones. */
 .calendarShell {
@@ -2489,6 +2526,32 @@ button {
   text-transform: uppercase;
 }
 
+.calendarBirthdayNotes {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0 0 0.55rem;
+}
+
+.calendarBirthdayNotes p {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid rgba(218, 146, 51, 0.35);
+  border-radius: 0.65rem;
+  background: linear-gradient(135deg, rgba(255, 232, 167, 0.9), rgba(255, 215, 229, 0.82));
+  color: #70411f;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.calendarBirthdayNotes strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .calendarEvents {
   display: flex;
   flex: 1;
@@ -2523,6 +2586,7 @@ button {
 }
 
 .calendarEvent {
+  position: relative;
   display: grid;
   gap: 0.16rem;
   min-width: 0;
@@ -2530,6 +2594,30 @@ button {
   border-left: 4px solid var(--cool);
   border-radius: 0.7rem;
   background: rgba(223, 240, 255, 0.9);
+}
+
+.calendarEventInteractive {
+  padding-right: 1.8rem;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.calendarEventInteractive:hover,
+.calendarEventInteractive:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(58, 76, 98, 0.14);
+}
+
+.calendarEventDetailsIndicator {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.5rem;
+  color: #76549f;
+  font-size: 0.85rem;
+  font-weight: 900;
 }
 
 .calendarEventSchool {
@@ -2566,6 +2654,55 @@ button {
 
 .calendarNoEvents {
   padding-top: 0.15rem;
+}
+
+.calendarEventDetails {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.calendarEventDetails dl {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.calendarEventDetails dl > div {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.calendarEventDetails dt {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.calendarEventDetails dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.calendarEventDetailsNote {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(239, 229, 251, 0.72);
+}
+
+.calendarEventDetailsNote h3,
+.calendarEventDetailsNote p {
+  margin: 0;
+}
+
+.calendarEventDetailsNote h3 {
+  margin-bottom: 0.45rem;
+  font-size: 0.9rem;
+}
+
+.calendarEventDetailsNote p {
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 699px) {

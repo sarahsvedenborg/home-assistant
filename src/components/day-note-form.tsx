@@ -3,6 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
+import {
+  DAY_NOTE_CATEGORIES,
+  DEFAULT_DAY_NOTE_CATEGORY,
+} from "@/lib/day-note-categories";
+
 type DayNoteFormProps = {
   initialDate: string;
   onSuccess?: (message: string) => void;
@@ -12,6 +17,7 @@ export function DayNoteForm({ initialDate, onSuccess }: DayNoteFormProps) {
   const router = useRouter();
   const [form, setForm] = useState({
     date: initialDate,
+    category: DEFAULT_DAY_NOTE_CATEGORY,
     text: "",
     website: "",
   });
@@ -37,7 +43,12 @@ export function DayNoteForm({ initialDate, onSuccess }: DayNoteFormProps) {
       }
 
       const successText = result.message || "Dagsnotatet er lagt til!";
-      setForm({ date: initialDate, text: "", website: "" });
+      setForm({
+        date: initialDate,
+        category: DEFAULT_DAY_NOTE_CATEGORY,
+        text: "",
+        website: "",
+      });
       router.refresh();
 
       if (onSuccess) {
@@ -58,6 +69,35 @@ export function DayNoteForm({ initialDate, onSuccess }: DayNoteFormProps) {
       </div>
 
       <div className="formGrid">
+        <div
+          className="field fieldWide dayNoteCategoryField"
+          role="radiogroup"
+          aria-labelledby="day-note-category-label"
+        >
+          <span className="dayNoteCategoryLabel" id="day-note-category-label">
+            Kategori:
+          </span>
+          <div className="radioRow">
+            {DAY_NOTE_CATEGORIES.map((category) => (
+              <label className="radioOption" key={category.value}>
+                <input
+                  type="radio"
+                  name="day-note-category"
+                  value={category.value}
+                  checked={form.category === category.value}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      category: event.target.value as typeof DEFAULT_DAY_NOTE_CATEGORY,
+                    }))
+                  }
+                />
+                <span>{category.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
         <label className="field">
           <span>Dato</span>
           <input

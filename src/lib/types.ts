@@ -1,3 +1,5 @@
+import type { DayNoteCategory } from "@/lib/day-note-categories";
+
 export type FamilyRole = "adult" | "child";
 
 export type Chore = {
@@ -104,17 +106,19 @@ export type DayNote = {
   id: string;
   date: string;
   text: string;
+  category: DayNoteCategory;
 };
 
 export type SingleEvent = {
   id: string;
   title: string;
-  category: string;
+  category?: string;
   date: string; // ISO datetime; only the date portion is significant
   time?: string;
   endTime?: string;
   allDay?: boolean;
   note?: string;
+  participants: string[];
   familyMember: string;
 };
 

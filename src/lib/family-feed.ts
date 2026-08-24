@@ -54,6 +54,7 @@ function isActiveOn(event: RecurringEvent, dateKey: string): boolean {
 // occurrences and single-day events both normalize to this.
 export type DashboardEvent = {
   id: string;
+  source: "recurring" | "single";
   title: string;
   familyMember: string;
   time?: string;
@@ -61,6 +62,7 @@ export type DashboardEvent = {
   category?: string;
   categoryLabel?: string;
   allDay?: boolean;
+  note?: string;
 };
 
 export type CalendarDay = {
@@ -71,6 +73,7 @@ export type CalendarDay = {
 function toDashboardEvent(event: RecurringEvent): DashboardEvent {
   return {
     id: event.id,
+    source: "recurring",
     title: event.title,
     familyMember: event.familyMember,
     time: event.time,
@@ -83,13 +86,17 @@ function toDashboardEvent(event: RecurringEvent): DashboardEvent {
 function singleToDashboardEvent(event: SingleEvent): DashboardEvent {
   return {
     id: event.id,
+    source: "single",
     title: event.title,
     familyMember: event.familyMember,
     time: event.allDay ? undefined : event.time,
     endTime: event.allDay ? undefined : event.endTime,
     category: event.category,
-    categoryLabel: singleEventCategoryLabel(event.category),
+    categoryLabel: event.category
+      ? singleEventCategoryLabel(event.category)
+      : undefined,
     allDay: event.allDay,
+    note: event.note,
   };
 }
 

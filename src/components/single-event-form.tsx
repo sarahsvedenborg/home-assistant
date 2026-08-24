@@ -3,10 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
-import {
-  DEFAULT_SINGLE_EVENT_CATEGORY,
-  SINGLE_EVENT_CATEGORIES,
-} from "@/lib/single-event-categories";
+import { SINGLE_EVENT_CATEGORIES } from "@/lib/single-event-categories";
+import { EVENT_PARTICIPANT_GROUPS } from "@/lib/event-participants";
 
 type SingleEventFormProps = {
   familyMembers: string[];
@@ -17,7 +15,7 @@ type SingleEventFormProps = {
 
 type FormState = {
   title: string;
-  familyMemberName: string;
+  participants: string[];
   category: string;
   date: string;
   allDay: boolean;
@@ -27,11 +25,11 @@ type FormState = {
   website: string;
 };
 
-function initialState(familyMembers: string[]): FormState {
+function initialState(): FormState {
   return {
     title: "",
-    familyMemberName: familyMembers[0] || "",
-    category: DEFAULT_SINGLE_EVENT_CATEGORY,
+    participants: [],
+    category: "",
     date: "",
     allDay: false,
     time: "",
@@ -43,12 +41,16 @@ function initialState(familyMembers: string[]): FormState {
 
 export function SingleEventForm({ familyMembers, onSuccess }: SingleEventFormProps) {
   const router = useRouter();
+  const participantOptions = [
+    ...EVENT_PARTICIPANT_GROUPS,
+    ...familyMembers.map((member) => ({ value: member, label: member })),
+  ];
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
     kind: "error" | "success";
     text: string;
   } | null>(null);
-  const [form, setForm] = useState<FormState>(() => initialState(familyMembers));
+  const [form, setForm] = useState<FormState>(initialState);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -72,7 +74,7 @@ export function SingleEventForm({ familyMembers, onSuccess }: SingleEventFormPro
       }
 
       const successText = result.message || "Hendelsen er lagt til!";
-      setForm(initialState(familyMembers));
+      setForm(initialState());
       router.refresh();
 
       if (onSuccess) {
@@ -106,22 +108,41 @@ export function SingleEventForm({ familyMembers, onSuccess }: SingleEventFormPro
           />
         </label>
 
-        <label className="field">
-          <span>Hvem</span>
-          <select
-            value={form.familyMemberName}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, familyMemberName: event.target.value }))
-            }
-            required
-          >
-            {familyMembers.map((member) => (
-              <option key={member} value={member}>
-                {member}
-              </option>
-            ))}
-          </select>
-        </label>
+        <fieldset className="field fieldWide checkboxFieldset">
+          <legend>Hvem</legend>
+          <div className="checkboxGrid">
+            {participantOptions.map((option) => {
+              const checked = form.participants.includes(option.value);
+
+              return (
+                <label className="checkboxOption" key={option.value}>
+                  <input
+                    className="checkboxInput"
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(event) =>
+                      setForm((current) => ({
+                        ...current,
+                        participants: event.target.checked
+                          ? [...current.participants, option.value]
+                          : current.participants.filter(
+                              (participant) => participant !== option.value,
+                            ),
+                      }))
+                    }
+                  />
+                  <span
+                    className={
+                      checked ? "checkboxLabel checkboxLabelChecked" : "checkboxLabel"
+                    }
+                  >
+                    {option.label}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
 
         <label className="field">
           <span>Dato</span>
@@ -134,8 +155,20 @@ export function SingleEventForm({ familyMembers, onSuccess }: SingleEventFormPro
         </label>
 
         <fieldset className="field fieldWide">
-          <legend>Kategori</legend>
+          <legend>Kategori (valgfritt)</legend>
           <div className="radioRow">
+            <label className="radioOption">
+              <input
+                type="radio"
+                name="single-event-category"
+                value=""
+                checked={!form.category}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, category: event.target.value }))
+                }
+              />
+              <span>Ingen</span>
+            </label>
             {SINGLE_EVENT_CATEGORIES.map((eventCategory) => (
               <label key={eventCategory.value} className="radioOption">
                 <input

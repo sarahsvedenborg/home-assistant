@@ -17,13 +17,21 @@ export const singleEventType = defineType({
       title: "Family member",
       type: "reference",
       to: [{ type: "familyMember" }],
-      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "familyMemberName",
       title: "Family member (fallback)",
       type: "string",
       description: "Used when no family member document is linked yet.",
+    }),
+    defineField({
+      name: "participants",
+      title: "Deltakere",
+      description:
+        'Navn på familiemedlemmer. Bruk "parents" for voksne og "all" for alle.',
+      type: "array",
+      of: [{ type: "string" }],
+      validation: (rule) => rule.unique(),
     }),
     defineField({
       name: "date",
@@ -36,15 +44,12 @@ export const singleEventType = defineType({
       name: "category",
       title: "Category",
       type: "string",
-      initialValue: "annet",
-      validation: (rule) => rule.required(),
       options: {
         layout: "radio",
         list: [
-          { title: "Bursdag", value: "bursdag" },
-          { title: "Avtale", value: "avtale" },
-          { title: "Tur", value: "tur" },
-          { title: "Annet", value: "annet" },
+          { title: "AK", value: "ak" },
+          { title: "Filmkveld", value: "filmkveld" },
+          { title: "Spillkveld", value: "spillkveld" },
         ],
       },
     }),
@@ -92,9 +97,21 @@ export const singleEventType = defineType({
       time: "time",
       familyMemberName: "familyMember.name",
       fallbackName: "familyMemberName",
+      participants: "participants",
     },
-    prepare({ title, date, time, familyMemberName, fallbackName }) {
-      const who = familyMemberName || fallbackName || "Unknown";
+    prepare({ title, date, time, familyMemberName, fallbackName, participants }) {
+      const who =
+        Array.isArray(participants) && participants.length > 0
+          ? participants
+              .map((participant) =>
+                participant === "all"
+                  ? "Alle"
+                  : participant === "parents"
+                    ? "Voksne"
+                    : participant,
+              )
+              .join(", ")
+          : familyMemberName || fallbackName || "Unknown";
       const day = typeof date === "string" ? date.slice(0, 10) : "?";
       return {
         title,

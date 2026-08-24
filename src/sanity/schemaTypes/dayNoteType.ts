@@ -12,6 +12,20 @@ export const dayNoteType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "category",
+      title: "Kategori",
+      type: "string",
+      initialValue: "note",
+      options: {
+        layout: "radio",
+        list: [
+          { title: "Notat", value: "note" },
+          { title: "Bursdag", value: "birthday" },
+        ],
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: "text",
       title: "Notat",
       type: "string",

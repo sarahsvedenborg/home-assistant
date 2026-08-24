@@ -91,12 +91,14 @@ export const SINGLE_EVENTS_QUERY = `*[_type == "singleEvent" && (!defined(status
   endTime,
   allDay,
   note,
+  participants,
   "familyMember": coalesce(familyMember->name, familyMemberName)
 }`;
 
 export const DAY_NOTES_QUERY = `*[_type == "dayNote"] | order(date asc, _createdAt asc) {
   _id,
   date,
+  category,
   text
 }`;
 

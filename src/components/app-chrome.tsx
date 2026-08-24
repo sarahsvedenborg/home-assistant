@@ -1,19 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export function AppChrome() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   if (pathname === "/login" || pathname === "/test-route") {
     return null;
   }
 
   const isHome = pathname === "/";
+  const isBoardPage = isHome && searchParams.get("view") === "board";
+  const isDashboardPage = isHome && !isBoardPage;
+  const isWeeklyPayPage = pathname === "/ukelonn";
+  const isCalendarPage = pathname === "/kalender";
+  const isActivitiesPage = pathname === "/aktiviteter";
   const isCalendarContext =
-    pathname === "/kalender" || pathname === "/aktiviteter";
-  const isDashboardContext = pathname === "/ukelonn" || isHome;
+    isCalendarPage || isActivitiesPage;
+  const isDashboardContext = isWeeklyPayPage || isHome;
 
   return (
     <header className="appChrome">
@@ -23,9 +29,9 @@ export function AppChrome() {
             id="dashboard-tab"
             href="/"
             className={
-              isDashboardContext ? "homeViewTab homeViewTabActive" : "homeViewTab"
+              isDashboardPage ? "homeViewTab homeViewTabActive" : "homeViewTab"
             }
-            aria-current={isDashboardContext ? "page" : undefined}
+            aria-current={isDashboardPage ? "page" : undefined}
           >
             Dashboard
           </Link>
@@ -33,9 +39,9 @@ export function AppChrome() {
             id="calendar-tab"
             href="/kalender"
             className={
-              isCalendarContext ? "homeViewTab homeViewTabActive" : "homeViewTab"
+              isCalendarPage ? "homeViewTab homeViewTabActive" : "homeViewTab"
             }
-            aria-current={isCalendarContext ? "page" : undefined}
+            aria-current={isCalendarPage ? "page" : undefined}
           >
             Kalender
           </Link>
@@ -53,10 +59,26 @@ export function AppChrome() {
 
       {isDashboardContext ? (
         <nav className="homeContextNav" aria-label="Snarveier fra dashboard">
-          <Link href="/?view=board" className="homeGhostButton homeContextButton">
+          <Link
+            href="/?view=board"
+            className={
+              isBoardPage
+                ? "homeGhostButton homeContextButton homeContextButtonActive"
+                : "homeGhostButton homeContextButton"
+            }
+            aria-current={isBoardPage ? "page" : undefined}
+          >
             Oppgaver
           </Link>
-          <Link href="/ukelonn" className="homeGhostButton homeContextButton">
+          <Link
+            href="/ukelonn"
+            className={
+              isWeeklyPayPage
+                ? "homeGhostButton homeContextButton homeContextButtonActive"
+                : "homeGhostButton homeContextButton"
+            }
+            aria-current={isWeeklyPayPage ? "page" : undefined}
+          >
             Ukelønn
           </Link>
         </nav>
@@ -64,11 +86,28 @@ export function AppChrome() {
 
       {isCalendarContext ? (
         <nav className="homeContextNav" aria-label="Snarveier fra kalender">
-          <Link href="/aktiviteter" className="homeGhostButton homeContextButton">
+          <Link
+            href="/aktiviteter"
+            className={
+              isActivitiesPage
+                ? "homeGhostButton homeContextButton homeContextButtonActive"
+                : "homeGhostButton homeContextButton"
+            }
+            aria-current={isActivitiesPage ? "page" : undefined}
+          >
             Faste aktiviteter
           </Link>
-          <Link href="/kalender#add-note" className="homeGhostButton homeContextButton">
-            Nytt notat
+          <Link
+            href="/kalender#add-note"
+            className="homeGhostButton homeContextButton homeContextButtonAction"
+            onClick={(event) => {
+              if (isCalendarPage) {
+                event.preventDefault();
+                window.location.hash = "add-note";
+              }
+            }}
+          >
+            + Nytt notat
           </Link>
         </nav>
       ) : null}
