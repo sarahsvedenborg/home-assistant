@@ -17,6 +17,7 @@ export function HomeViewTabs({
     <section className="homeViews" aria-label="Velg startsidevisning">
       <div
         id="dashboard-panel"
+        className="homeDashboardPanel"
         role="region"
         aria-label="Dashboard"
         hidden={view !== "dashboard"}

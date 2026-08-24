@@ -411,6 +411,12 @@ button {
   margin-top: 0.75rem;
 }
 
+.homeDashboardPanel {
+  width: min(1600px, calc(100vw - 2rem));
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
 .homeBoardPanel {
   width: min(1600px, calc(100vw - 2rem));
   margin-top: 0.75rem;
@@ -2561,6 +2567,7 @@ button {
     justify-content: flex-end;
   }
 
+  .homeDashboardPanel,
   .homeBoardPanel {
     width: calc(100vw - 1rem);
   }
