@@ -1,13 +1,17 @@
+import { AddButton } from "@/components/add-button";
+import { DayNoteForm } from "@/components/day-note-form";
 import { FamilyCalendar } from "@/components/family-calendar";
 import { SiteHeader } from "@/components/site-header";
-import { getRecurringEvents, getSingleEvents } from "@/lib/data";
+import { getDayNotes, getRecurringEvents, getSingleEvents } from "@/lib/data";
 import { osloDateKey } from "@/lib/family-feed";
 
 export default async function KalenderPage() {
-  const [recurringEvents, singleEvents] = await Promise.all([
+  const [dayNotes, recurringEvents, singleEvents] = await Promise.all([
+    getDayNotes(),
     getRecurringEvents(),
     getSingleEvents(),
   ]);
+  const todayDateKey = osloDateKey(new Date());
 
   return (
     <main className="shell calendarShell">
@@ -27,8 +31,13 @@ export default async function KalenderPage() {
       <FamilyCalendar
         recurringEvents={recurringEvents}
         singleEvents={singleEvents}
-        todayDateKey={osloDateKey(new Date())}
+        dayNotes={dayNotes}
+        todayDateKey={todayDateKey}
       />
+
+      <AddButton title="Nytt dagsnotat" label="Nytt notat" anchor="add-note">
+        <DayNoteForm initialDate={todayDateKey} />
+      </AddButton>
     </main>
   );
 }

@@ -100,6 +100,12 @@ export type BoardIssue = {
   createdAt?: string;
 };
 
+export type DayNote = {
+  id: string;
+  date: string;
+  text: string;
+};
+
 export type SingleEvent = {
   id: string;
   title: string;

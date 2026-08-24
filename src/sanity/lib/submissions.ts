@@ -408,6 +408,22 @@ export async function resetMemberChoreAmounts(memberId: string) {
   }
 }
 
+export async function submitDayNote(input: { date: string; text: string }) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  await client.create({
+    _type: "dayNote",
+    date: input.date,
+    text: input.text,
+  });
+
+  return "Dagsnotatet er lagt til!";
+}
+
 export async function submitSingleEvent(input: {
   title: string;
   familyMemberName: string;

@@ -94,6 +94,12 @@ export const SINGLE_EVENTS_QUERY = `*[_type == "singleEvent" && (!defined(status
   "familyMember": coalesce(familyMember->name, familyMemberName)
 }`;
 
+export const DAY_NOTES_QUERY = `*[_type == "dayNote"] | order(date asc, _createdAt asc) {
+  _id,
+  date,
+  text
+}`;
+
 export const SHOPPING_LIST_ITEMS_QUERY = `*[_type == "shoppingListItem"] | order(_createdAt desc) {
   _id,
   title,

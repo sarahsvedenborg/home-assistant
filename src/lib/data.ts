@@ -2,6 +2,7 @@ import "server-only";
 
 import {
   FALLBACK_BOARD_ISSUES,
+  FALLBACK_DAY_NOTES,
   FALLBACK_FAMILY_MEMBERS,
   FALLBACK_FEATURE_SUGGESTIONS,
   FALLBACK_MOVIES,
@@ -17,6 +18,7 @@ import {
 import type {
   BoardIssue,
   BoardIssueStatus,
+  DayNote,
   FamilyMember,
   FeatureSuggestion,
   MovieRecommendation,
@@ -37,6 +39,7 @@ import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
   BOARD_ISSUES_QUERY,
+  DAY_NOTES_QUERY,
   FAMILY_MEMBERS_QUERY,
   FEATURE_SUGGESTIONS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
@@ -159,6 +162,12 @@ type SanitySingleEvent = {
   allDay?: boolean;
   note?: string;
   familyMember?: string;
+};
+
+type SanityDayNote = {
+  _id: string;
+  date: string;
+  text: string;
 };
 
 function blocksToParagraphs(blocks?: SanityBlock[]) {
@@ -437,6 +446,24 @@ export async function getSingleEvents(): Promise<SingleEvent[]> {
     allDay: Boolean(event.allDay),
     note: event.note,
     familyMember: event.familyMember || "Ukjent",
+  }));
+}
+
+export async function getDayNotes(): Promise<DayNote[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_DAY_NOTES;
+  }
+
+  const notes = await fetchFromSanity<SanityDayNote[]>(DAY_NOTES_QUERY);
+
+  if (!notes) {
+    return FALLBACK_DAY_NOTES;
+  }
+
+  return notes.map((note) => ({
+    id: note._id,
+    date: note.date,
+    text: note.text,
   }));
 }
 
