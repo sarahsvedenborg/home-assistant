@@ -2357,6 +2357,25 @@ button {
   accent-color: var(--warm);
 }
 
+.dayNoteCategoryField {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+}
+
+.dayNoteCategoryField .dayNoteCategoryLabel {
+  font-weight: 800;
+}
+
+.dayNoteCategoryField .radioRow {
+  margin-top: 0;
+}
+
+.dayNoteCategoryField .radioOption span {
+  font-weight: 700;
+}
+
 /* Read-only family calendar. The wider shell and horizontally scrollable grid
    make the week useful on a wall display without crushing it on phones. */
 .calendarShell {

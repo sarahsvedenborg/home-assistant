@@ -1,5 +1,10 @@
 import "server-only";
 
+import {
+  EVENT_PARTICIPANT_ADULTS,
+  EVENT_PARTICIPANT_ALL,
+} from "@/lib/event-participants";
+import type { DayNoteCategory } from "@/lib/day-note-categories";
 import type { BoardIssueStatus } from "@/lib/types";
 import { requireApproval } from "@/sanity/env";
 import { getReadClient, getWriteClient } from "@/sanity/lib/client";
@@ -408,7 +413,11 @@ export async function resetMemberChoreAmounts(memberId: string) {
   }
 }
 
-export async function submitDayNote(input: { date: string; text: string }) {
+export async function submitDayNote(input: {
+  date: string;
+  category: DayNoteCategory;
+  text: string;
+}) {
   const client = getWriteClient();
 
   if (!client) {
@@ -418,6 +427,7 @@ export async function submitDayNote(input: { date: string; text: string }) {
   await client.create({
     _type: "dayNote",
     date: input.date,
+    category: input.category,
     text: input.text,
   });
 
@@ -426,8 +436,8 @@ export async function submitDayNote(input: { date: string; text: string }) {
 
 export async function submitSingleEvent(input: {
   title: string;
-  familyMemberName: string;
-  category: string;
+  participants: string[];
+  category?: string;
   date: string;
   allDay: boolean;
   time?: string;
@@ -440,12 +450,21 @@ export async function submitSingleEvent(input: {
     throw new Error("Sanity writes are not configured yet.");
   }
 
-  const familyMember = await resolveFamilyMemberReference(input.familyMemberName);
+  const singleMemberName =
+    input.participants.length === 1 &&
+    input.participants[0] !== EVENT_PARTICIPANT_ALL &&
+    input.participants[0] !== EVENT_PARTICIPANT_ADULTS
+      ? input.participants[0]
+      : undefined;
+  const familyMember = singleMemberName
+    ? await resolveFamilyMemberReference(singleMemberName)
+    : undefined;
   const document: {
     _type: "singleEvent";
     title: string;
-    familyMemberName: string;
-    category: string;
+    participants: string[];
+    familyMemberName?: string;
+    category?: string;
     date: string;
     allDay: boolean;
     time?: string;
@@ -456,7 +475,8 @@ export async function submitSingleEvent(input: {
   } = {
     _type: "singleEvent",
     title: input.title,
-    familyMemberName: input.familyMemberName,
+    participants: input.participants,
+    familyMemberName: singleMemberName,
     category: input.category,
     date: input.date,
     allDay: input.allDay,

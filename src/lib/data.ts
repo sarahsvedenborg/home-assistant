@@ -32,8 +32,12 @@ import type {
   WishListGroup,
   WishListItem,
 } from "@/lib/types";
+import {
+  DEFAULT_DAY_NOTE_CATEGORY,
+  type DayNoteCategory,
+} from "@/lib/day-note-categories";
 import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
-import { DEFAULT_SINGLE_EVENT_CATEGORY } from "@/lib/single-event-categories";
+import { eventParticipantLabel } from "@/lib/event-participants";
 import { osloDateKey } from "@/lib/family-feed";
 import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -161,12 +165,14 @@ type SanitySingleEvent = {
   endTime?: string;
   allDay?: boolean;
   note?: string;
+  participants?: string[];
   familyMember?: string;
 };
 
 type SanityDayNote = {
   _id: string;
   date: string;
+  category?: DayNoteCategory;
   text: string;
 };
 
@@ -436,17 +442,34 @@ export async function getSingleEvents(): Promise<SingleEvent[]> {
     return FALLBACK_SINGLE_EVENTS;
   }
 
-  return events.map((event) => ({
-    id: event._id,
-    title: event.title,
-    category: event.category || DEFAULT_SINGLE_EVENT_CATEGORY,
-    date: event.date,
-    time: event.time,
-    endTime: event.endTime,
-    allDay: Boolean(event.allDay),
-    note: event.note,
-    familyMember: event.familyMember || "Ukjent",
-  }));
+  return events.map((event) => {
+    const participants =
+      event.participants?.filter(
+        (participant): participant is string =>
+          typeof participant === "string" && Boolean(participant.trim()),
+      ) || [];
+
+    return {
+      id: event._id,
+      title: event.title,
+      category: event.category,
+      date: event.date,
+      time: event.time,
+      endTime: event.endTime,
+      allDay: Boolean(event.allDay),
+      note: event.note,
+      participants:
+        participants.length > 0
+          ? participants
+          : event.familyMember
+            ? [event.familyMember]
+            : [],
+      familyMember:
+        participants.length > 0
+          ? participants.map(eventParticipantLabel).join(", ")
+          : event.familyMember || "Ukjent",
+    };
+  });
 }
 
 export async function getDayNotes(): Promise<DayNote[]> {
@@ -463,6 +486,7 @@ export async function getDayNotes(): Promise<DayNote[]> {
   return notes.map((note) => ({
     id: note._id,
     date: note.date,
+    category: note.category || DEFAULT_DAY_NOTE_CATEGORY,
     text: note.text,
   }));
 }

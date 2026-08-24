@@ -92,7 +92,9 @@ function singleToDashboardEvent(event: SingleEvent): DashboardEvent {
     time: event.allDay ? undefined : event.time,
     endTime: event.allDay ? undefined : event.endTime,
     category: event.category,
-    categoryLabel: singleEventCategoryLabel(event.category),
+    categoryLabel: event.category
+      ? singleEventCategoryLabel(event.category)
+      : undefined,
     allDay: event.allDay,
     note: event.note,
   };

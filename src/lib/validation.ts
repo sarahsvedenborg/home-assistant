@@ -1,4 +1,12 @@
 import { BOARD_STATUS_VALUES } from "@/lib/board";
+import {
+  DAY_NOTE_CATEGORY_VALUES,
+  type DayNoteCategory,
+} from "@/lib/day-note-categories";
+import {
+  EVENT_PARTICIPANT_ADULTS,
+  EVENT_PARTICIPANT_ALL,
+} from "@/lib/event-participants";
 import { EVENT_CATEGORY_VALUES } from "@/lib/event-categories";
 import { SINGLE_EVENT_CATEGORY_VALUES } from "@/lib/single-event-categories";
 import type { BoardIssueStatus } from "@/lib/types";
@@ -454,7 +462,7 @@ export function validateChoreAmountChange(
 
 export function validateDayNoteSubmission(
   payload: unknown,
-): ValidationResult<{ date: string; text: string }> {
+): ValidationResult<{ date: string; category: DayNoteCategory; text: string }> {
   const common = validateCommonFields(payload);
 
   if (!common.success) {
@@ -462,6 +470,7 @@ export function validateDayNoteSubmission(
   }
 
   const date = normalizeText(common.record.date);
+  const category = normalizeText(common.record.category);
   const text = normalizeText(common.record.text);
 
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
@@ -482,18 +491,27 @@ export function validateDayNoteSubmission(
     return { success: false, error: "Dagsnotatet må være under 200 tegn." };
   }
 
+  if (
+    !DAY_NOTE_CATEGORY_VALUES.includes(
+      category as (typeof DAY_NOTE_CATEGORY_VALUES)[number],
+    )
+  ) {
+    return { success: false, error: "Velg en gyldig kategori." };
+  }
+
   return {
     success: true,
-    data: { date, text },
+    data: { date, category: category as DayNoteCategory, text },
   };
 }
 
 export function validateSingleEventSubmission(
   payload: unknown,
+  familyMemberNames: string[],
 ): ValidationResult<{
   title: string;
-  familyMemberName: string;
-  category: string;
+  participants: string[];
+  category?: string;
   date: string;
   allDay: boolean;
   time?: string;
@@ -507,7 +525,12 @@ export function validateSingleEventSubmission(
   }
 
   const title = normalizeText(common.record.title);
-  const familyMemberName = normalizeText(common.record.familyMemberName);
+  const submittedParticipants = Array.isArray(common.record.participants)
+    ? common.record.participants
+        .filter((value): value is string => typeof value === "string")
+        .map((value) => value.trim())
+        .filter(Boolean)
+    : [];
   const category = normalizeText(common.record.category);
   const dateRaw = normalizeText(common.record.date);
   const allDay = common.record.allDay === true;
@@ -523,11 +546,38 @@ export function validateSingleEventSubmission(
     return { success: false, error: "Tittelen må være under 120 tegn." };
   }
 
-  if (!familyMemberName) {
+  if (submittedParticipants.length === 0) {
     return { success: false, error: "Velg hvem hendelsen gjelder." };
   }
 
-  if (!SINGLE_EVENT_CATEGORY_VALUES.includes(category as (typeof SINGLE_EVENT_CATEGORY_VALUES)[number])) {
+  const memberNamesByLowerCase = new Map(
+    familyMemberNames.map((name) => [name.toLowerCase(), name]),
+  );
+  const participants = submittedParticipants.map((participant) => {
+    const lowerParticipant = participant.toLowerCase();
+
+    if (
+      lowerParticipant === EVENT_PARTICIPANT_ALL ||
+      lowerParticipant === EVENT_PARTICIPANT_ADULTS
+    ) {
+      return lowerParticipant;
+    }
+
+    return memberNamesByLowerCase.get(lowerParticipant);
+  });
+
+  if (participants.some((participant) => !participant)) {
+    return { success: false, error: "En av deltakerne er ikke gyldig." };
+  }
+
+  const uniqueParticipants = [...new Set(participants as string[])];
+
+  if (
+    category &&
+    !SINGLE_EVENT_CATEGORY_VALUES.includes(
+      category as (typeof SINGLE_EVENT_CATEGORY_VALUES)[number],
+    )
+  ) {
     return { success: false, error: "Velg en kategori for hendelsen." };
   }
 
@@ -552,8 +602,8 @@ export function validateSingleEventSubmission(
     success: true,
     data: {
       title,
-      familyMemberName,
-      category,
+      participants: uniqueParticipants,
+      category: category || undefined,
       date,
       allDay,
       time: allDay ? undefined : time || undefined,
