@@ -17,6 +17,9 @@ export function MessageWidget({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
+  const [selectedMessage, setSelectedMessage] = useState<ShortMessage | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!confirmation) {
@@ -59,17 +62,27 @@ export function MessageWidget({
           <ul className="widgetList">
             {messages.slice(0, 4).map((message) => (
               <li key={message.id} className="widgetItem messageItem">
-                {message.createdAt ? (
-                  <time className="messageDate" dateTime={message.createdAt}>
-                    {formatMessageDate(message.createdAt)}
-                  </time>
-                ) : null}
-                <strong>{message.text}</strong>
-                {message.recipients.length > 0 ? (
-                  <span className="itemMeta">
-                    Til: {messageRecipientLabel(message.recipients)}
+                <button
+                  type="button"
+                  className="messageItemButton"
+                  aria-label={`Vis hele meldingen: ${message.text}`}
+                  onClick={() => setSelectedMessage(message)}
+                >
+                  {message.createdAt ? (
+                    <time className="messageDate" dateTime={message.createdAt}>
+                      {formatMessageDate(message.createdAt)}
+                    </time>
+                  ) : null}
+                  <strong>{message.text}</strong>
+                  {message.recipients.length > 0 ? (
+                    <span className="itemMeta">
+                      Til: {messageRecipientLabel(message.recipients)}
+                    </span>
+                  ) : null}
+                  <span className="messageDetailsIndicator" aria-hidden="true">
+                    ⓘ
                   </span>
-                ) : null}
+                </button>
               </li>
             ))}
           </ul>
@@ -86,6 +99,47 @@ export function MessageWidget({
           familyMembers={familyMembers}
           onSuccess={(message) => setConfirmation(message)}
         />
+      </FormModal>
+
+      <FormModal
+        isOpen={Boolean(selectedMessage)}
+        onClose={() => setSelectedMessage(null)}
+        title="Melding"
+      >
+        {selectedMessage ? (
+          <div className="messageDetails">
+            <dl>
+              <div>
+                <dt>Dato</dt>
+                <dd>
+                  {selectedMessage.createdAt
+                    ? formatMessageDate(selectedMessage.createdAt)
+                    : "Ikke angitt"}
+                </dd>
+              </div>
+              <div>
+                <dt>Fra</dt>
+                <dd>
+                  {selectedMessage.sender
+                    ? messageRecipientLabel([selectedMessage.sender])
+                    : "Ikke angitt"}
+                </dd>
+              </div>
+              <div>
+                <dt>Til</dt>
+                <dd>
+                  {selectedMessage.recipients.length > 0
+                    ? messageRecipientLabel(selectedMessage.recipients)
+                    : "Ingen bestemt mottaker"}
+                </dd>
+              </div>
+            </dl>
+            <div className="messageDetailsText">
+              <h3>Melding</h3>
+              <p>{selectedMessage.text}</p>
+            </div>
+          </div>
+        ) : null}
       </FormModal>
     </>
   );

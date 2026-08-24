@@ -262,6 +262,7 @@ export async function submitFeatureSuggestion(input: {
 }
 
 export async function submitShortMessage(input: {
+  sender?: string;
   recipients: string[];
   text: string;
 }) {
@@ -273,6 +274,7 @@ export async function submitShortMessage(input: {
 
   await client.create({
     _type: "shortMessage",
+    sender: input.sender,
     recipients: input.recipients,
     text: input.text,
     status: requireApproval ? "pending" : "approved",

@@ -86,6 +86,7 @@ export type FeatureSuggestion = {
 
 export type ShortMessage = {
   id: string;
+  sender?: string;
   recipients: string[];
   text: string;
   createdAt?: string;

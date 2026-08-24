@@ -40,6 +40,11 @@ export default async function MeldingerPage() {
                     </time>
                   ) : null}
                   <strong>{message.text}</strong>
+                  {message.sender ? (
+                    <span className="itemMeta">
+                      Fra: {messageRecipientLabel([message.sender])}
+                    </span>
+                  ) : null}
                   {message.recipients.length > 0 ? (
                     <span className="itemMeta">
                       Til: {messageRecipientLabel(message.recipients)}

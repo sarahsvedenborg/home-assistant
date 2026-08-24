@@ -47,6 +47,7 @@ export const SHORT_MESSAGES_QUERY = defineQuery(/* groq */ `
   *[_type == "shortMessage"]
   | order(_createdAt desc) {
     _id,
+    sender,
     recipients,
     text,
     _createdAt

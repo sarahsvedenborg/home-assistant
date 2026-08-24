@@ -129,6 +129,7 @@ type SanityFeatureSuggestion = {
 
 type SanityShortMessage = {
   _id: string;
+  sender?: string;
   recipients?: string[];
   text: string;
   _createdAt?: string;
@@ -375,6 +376,7 @@ export async function getShortMessages(): Promise<ShortMessage[]> {
 
   return messages.map((message) => ({
     id: message._id,
+    sender: message.sender,
     recipients: message.recipients || [],
     text: message.text,
     createdAt: message._createdAt,

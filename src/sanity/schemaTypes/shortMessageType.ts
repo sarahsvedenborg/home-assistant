@@ -6,6 +6,13 @@ export const shortMessageType = defineType({
   type: "document",
   fields: [
     defineField({
+      name: "sender",
+      title: "Avsender",
+      type: "string",
+      description:
+        'Navnet på avsenderen. Bruk "parents" for foreldre og "all" for alle.',
+    }),
+    defineField({
       name: "recipients",
       title: "Mottakere",
       type: "array",
@@ -36,16 +43,17 @@ export const shortMessageType = defineType({
   preview: {
     select: {
       text: "text",
+      sender: "sender",
       recipients: "recipients",
       status: "status",
     },
-    prepare({ text, recipients, status }) {
+    prepare({ text, sender, recipients, status }) {
       const recipientText =
         Array.isArray(recipients) && recipients.length > 0 ? recipients.join(", ") : "Ingen";
 
       return {
         title: text || "Tom melding",
-        subtitle: `${recipientText} · ${status || "approved"}`,
+        subtitle: `${sender ? `${sender} → ` : ""}${recipientText} · ${status || "approved"}`,
       };
     },
   },
