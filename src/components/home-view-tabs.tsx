@@ -72,6 +72,9 @@ export function HomeViewTabs({ dashboard, calendar, board }: HomeViewTabsProps) 
           <Link href="/aktiviteter" className="homeGhostButton homeContextButton">
             Faste aktiviteter
           </Link>
+          <Link href="/kalender#add-note" className="homeGhostButton homeContextButton">
+            Nytt notat
+          </Link>
         </nav>
       ) : null}
 

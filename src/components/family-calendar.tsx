@@ -3,13 +3,14 @@
 import { useMemo, useState } from "react";
 
 import { eventsForDateRange, type CalendarDay, type DashboardEvent } from "@/lib/family-feed";
-import type { RecurringEvent, SingleEvent } from "@/lib/types";
+import type { DayNote, RecurringEvent, SingleEvent } from "@/lib/types";
 
 type CalendarView = "week" | "month";
 
 type FamilyCalendarProps = {
   recurringEvents: RecurringEvent[];
   singleEvents: SingleEvent[];
+  dayNotes?: DayNote[];
   todayDateKey: string;
 };
 
@@ -96,6 +97,7 @@ function EventCard({ event }: { event: DashboardEvent }) {
 export function FamilyCalendar({
   recurringEvents,
   singleEvents,
+  dayNotes = [],
   todayDateKey,
 }: FamilyCalendarProps) {
   const [view, setView] = useState<CalendarView>("week");
@@ -226,6 +228,7 @@ export function FamilyCalendar({
             const otherEvents = day.events.filter(
               (event) => event.category !== "skole" && event.category !== "fritid",
             );
+            const notes = dayNotes.filter((note) => note.date === day.dateKey);
 
             return (
               <section className={className} key={day.dateKey}>
@@ -259,6 +262,14 @@ export function FamilyCalendar({
                     <span className="calendarNoEvents">Ingen avtaler</span>
                   )}
                 </div>
+
+                {notes.length > 0 ? (
+                  <div className="calendarDayNotes" aria-label="Dagsnotater">
+                    {notes.map((note) => (
+                      <p key={note.id}>{note.text}</p>
+                    ))}
+                  </div>
+                ) : null}
               </section>
             );
           })}

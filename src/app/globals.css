@@ -2472,6 +2472,22 @@ button {
   margin-top: auto;
 }
 
+.calendarDayNotes {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.55rem;
+  padding-top: 0.45rem;
+  border-top: 1px dashed var(--line);
+}
+
+.calendarDayNotes p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
 .calendarEvent {
   display: grid;
   gap: 0.16rem;

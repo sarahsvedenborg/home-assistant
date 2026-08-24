@@ -1,5 +1,6 @@
 import type {
   BoardIssue,
+  DayNote,
   FamilyMember,
   FeatureSuggestion,
   MovieRecommendation,
@@ -10,6 +11,8 @@ import type {
   SingleEvent,
   WishListItem,
 } from "@/lib/types";
+
+export const FALLBACK_DAY_NOTES: DayNote[] = [];
 
 export const FALLBACK_BOARD_ISSUES: BoardIssue[] = [
   {

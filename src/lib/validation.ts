@@ -452,6 +452,42 @@ export function validateChoreAmountChange(
   };
 }
 
+export function validateDayNoteSubmission(
+  payload: unknown,
+): ValidationResult<{ date: string; text: string }> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const date = normalizeText(common.record.date);
+  const text = normalizeText(common.record.text);
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return { success: false, error: "Velg en gyldig dato." };
+  }
+
+  const parsedDate = new Date(`${date}T00:00:00Z`);
+
+  if (Number.isNaN(parsedDate.getTime()) || parsedDate.toISOString().slice(0, 10) !== date) {
+    return { success: false, error: "Velg en gyldig dato." };
+  }
+
+  if (!text) {
+    return { success: false, error: "Skriv et kort dagsnotat." };
+  }
+
+  if (text.length > 200) {
+    return { success: false, error: "Dagsnotatet må være under 200 tegn." };
+  }
+
+  return {
+    success: true,
+    data: { date, text },
+  };
+}
+
 export function validateSingleEventSubmission(
   payload: unknown,
 ): ValidationResult<{
