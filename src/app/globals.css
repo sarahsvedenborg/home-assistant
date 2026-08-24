@@ -455,9 +455,11 @@ button {
   padding: 0.25rem;
 }
 
+.issueBoardToolbar h1,
 .issueBoardToolbar h2 {
+  margin: 0;
   font-family: var(--font-display), cursive;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: clamp(2rem, 3.5vw, 3rem);
 }
 
 .issueBoardColumns {

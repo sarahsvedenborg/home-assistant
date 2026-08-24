@@ -6,13 +6,11 @@ export default async function UkelonnPage() {
 
   return (
     <main className="shell weeklyPayShell">
-      <section className="sectionHero accentWarm">
+      <header className="issueBoardToolbar">
         <div>
-          <span className="kicker">Ukens oppgaver</span>
-          <h1 style={{ margin: "0.25em 0" }}>Ukelønn</h1>
-          <p>Registrer hver gang en oppgave er utført. Summen oppdateres automatisk.</p>
+          <h1>Ukelønn</h1>
         </div>
-      </section>
+      </header>
 
       <WeeklyPayList initialMembers={familyMembers} />
     </main>
