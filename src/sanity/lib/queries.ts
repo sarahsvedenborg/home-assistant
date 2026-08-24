@@ -50,6 +50,7 @@ export const SHORT_MESSAGES_QUERY = defineQuery(/* groq */ `
     sender,
     recipients,
     text,
+    isRead,
     _createdAt
   }
 `);

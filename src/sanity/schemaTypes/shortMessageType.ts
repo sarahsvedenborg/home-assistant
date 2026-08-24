@@ -27,6 +27,12 @@ export const shortMessageType = defineType({
       validation: (rule) => rule.required().max(240),
     }),
     defineField({
+      name: "isRead",
+      title: "Lest",
+      type: "boolean",
+      initialValue: false,
+    }),
+    defineField({
       name: "status",
       title: "Approval status",
       type: "string",

@@ -277,12 +277,32 @@ export async function submitShortMessage(input: {
     sender: input.sender,
     recipients: input.recipients,
     text: input.text,
+    isRead: false,
     status: requireApproval ? "pending" : "approved",
   });
 
   return requireApproval
     ? "Meldingen er sendt! En voksen kan godkjenne den i studioet."
     : "Meldingen er lagt til!";
+}
+
+export async function markShortMessageAsRead(messageId: string) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const message = await client.fetch<{ _id: string } | null>(
+    `*[_type == "shortMessage" && _id == $messageId][0]{_id}`,
+    { messageId },
+  );
+
+  if (!message?._id) {
+    throw new Error("Fant ikke meldingen du ville markere som lest.");
+  }
+
+  await client.patch(message._id).set({ isRead: true }).commit();
 }
 
 export async function submitBoardIssue(input: {

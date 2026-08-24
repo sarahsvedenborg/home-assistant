@@ -132,6 +132,7 @@ type SanityShortMessage = {
   sender?: string;
   recipients?: string[];
   text: string;
+  isRead?: boolean;
   _createdAt?: string;
 };
 
@@ -380,6 +381,7 @@ export async function getShortMessages(): Promise<ShortMessage[]> {
     recipients: message.recipients || [],
     text: message.text,
     createdAt: message._createdAt,
+    isRead: Boolean(message.isRead),
   }));
 }
 

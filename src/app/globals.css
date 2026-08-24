@@ -1073,11 +1073,18 @@ button {
   border-top: 1px solid var(--line);
 }
 
+.messageItemRow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
 .messageItemButton {
   position: relative;
   display: grid;
+  flex: 1;
   gap: 0.2rem;
-  width: 100%;
+  min-width: 0;
   padding: 0.35rem 2rem 0.35rem 0.35rem;
   border-radius: 0.65rem;
   background: transparent;
@@ -1105,6 +1112,28 @@ button {
   font-size: 0.85rem;
   font-weight: 900;
   transform: translateY(-50%);
+}
+
+.messageReadButton {
+  flex: 0 0 auto;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid rgba(94, 166, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.messageReadButton:hover,
+.messageReadButton:focus-visible {
+  background: rgba(223, 240, 255, 0.95);
+  transform: translateY(-1px);
+}
+
+.messageReadButton:disabled {
+  cursor: wait;
+  opacity: 0.6;
 }
 
 .messageDetails {
@@ -1171,6 +1200,26 @@ button {
 .messageArchive {
   display: grid;
   gap: 0.75rem;
+}
+
+.messageArchiveSection {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.messageArchiveSection + .messageArchiveSection {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.messageArchiveSection h2 {
+  font-family: var(--font-display), cursive;
+  font-size: 1.6rem;
+}
+
+.messageArchiveEmpty {
+  color: var(--muted);
 }
 
 .messageArchiveItem strong {

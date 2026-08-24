@@ -90,6 +90,7 @@ export type ShortMessage = {
   recipients: string[];
   text: string;
   createdAt?: string;
+  isRead: boolean;
 };
 
 export type BoardIssueStatus = "todo" | "inProgress" | "done";
