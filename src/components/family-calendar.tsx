@@ -260,6 +260,12 @@ export function FamilyCalendar({
               (event) => event.category !== "skole" && event.category !== "fritid",
             );
             const notes = dayNotes.filter((note) => note.date === day.dateKey);
+            const birthdayNotes = notes.filter(
+              (note) => note.category === "birthday",
+            );
+            const regularNotes = notes.filter(
+              (note) => note.category !== "birthday",
+            );
 
             return (
               <section className={className} key={day.dateKey}>
@@ -271,6 +277,17 @@ export function FamilyCalendar({
                   </time>
                   {isToday ? <span>I dag</span> : null}
                 </div>
+
+                {birthdayNotes.length > 0 ? (
+                  <div className="calendarBirthdayNotes" aria-label="Bursdager">
+                    {birthdayNotes.map((note) => (
+                      <p key={note.id}>
+                        <span aria-hidden="true">🎂</span>
+                        <strong>{note.text} bursdag</strong>
+                      </p>
+                    ))}
+                  </div>
+                ) : null}
 
                 <div className="calendarEvents">
                   {day.events.length > 0 ? (
@@ -312,9 +329,9 @@ export function FamilyCalendar({
                   )}
                 </div>
 
-                {notes.length > 0 ? (
+                {regularNotes.length > 0 ? (
                   <div className="calendarDayNotes" aria-label="Dagsnotater">
-                    {notes.map((note) => (
+                    {regularNotes.map((note) => (
                       <p key={note.id}>{note.text}</p>
                     ))}
                   </div>

@@ -2526,6 +2526,32 @@ button {
   text-transform: uppercase;
 }
 
+.calendarBirthdayNotes {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0 0 0.55rem;
+}
+
+.calendarBirthdayNotes p {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid rgba(218, 146, 51, 0.35);
+  border-radius: 0.65rem;
+  background: linear-gradient(135deg, rgba(255, 232, 167, 0.9), rgba(255, 215, 229, 0.82));
+  color: #70411f;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.calendarBirthdayNotes strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .calendarEvents {
   display: flex;
   flex: 1;
