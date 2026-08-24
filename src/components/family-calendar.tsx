@@ -124,7 +124,7 @@ function EventCard({
         </span>
       ) : null}
       <span className="calendarEventMeta">
-        {[event.familyMember, event.categoryLabel].filter(Boolean).join(" · ")}
+        {event.familyMember}
       </span>
       {event.source === "single" && event.note ? (
         <span className="calendarEventDetailsIndicator" aria-hidden="true">
