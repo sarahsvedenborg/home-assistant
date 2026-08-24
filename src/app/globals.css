@@ -2541,6 +2541,7 @@ button {
 }
 
 .calendarEvent {
+  position: relative;
   display: grid;
   gap: 0.16rem;
   min-width: 0;
@@ -2548,6 +2549,30 @@ button {
   border-left: 4px solid var(--cool);
   border-radius: 0.7rem;
   background: rgba(223, 240, 255, 0.9);
+}
+
+.calendarEventInteractive {
+  padding-right: 1.8rem;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.calendarEventInteractive:hover,
+.calendarEventInteractive:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(58, 76, 98, 0.14);
+}
+
+.calendarEventDetailsIndicator {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.5rem;
+  color: #76549f;
+  font-size: 0.85rem;
+  font-weight: 900;
 }
 
 .calendarEventSchool {
@@ -2584,6 +2609,55 @@ button {
 
 .calendarNoEvents {
   padding-top: 0.15rem;
+}
+
+.calendarEventDetails {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.calendarEventDetails dl {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.calendarEventDetails dl > div {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.calendarEventDetails dt {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.calendarEventDetails dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.calendarEventDetailsNote {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(239, 229, 251, 0.72);
+}
+
+.calendarEventDetailsNote h3,
+.calendarEventDetailsNote p {
+  margin: 0;
+}
+
+.calendarEventDetailsNote h3 {
+  margin-bottom: 0.45rem;
+  font-size: 0.9rem;
+}
+
+.calendarEventDetailsNote p {
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 699px) {

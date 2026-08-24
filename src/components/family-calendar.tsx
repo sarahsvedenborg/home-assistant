@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { FormModal } from "@/components/form-modal";
 import { eventsForDateRange, type CalendarDay, type DashboardEvent } from "@/lib/family-feed";
 import type { DayNote, RecurringEvent, SingleEvent } from "@/lib/types";
 
@@ -72,7 +73,13 @@ function periodTitle(view: CalendarView, anchor: Date, days: CalendarDay[]): str
   })} – ${formatDate(end, { day: "numeric", month: "short", year: "numeric" })}`;
 }
 
-function EventCard({ event }: { event: DashboardEvent }) {
+function EventCard({
+  event,
+  onOpen,
+}: {
+  event: DashboardEvent;
+  onOpen: (event: DashboardEvent) => void;
+}) {
   const time = event.allDay
     ? "Hele dagen"
     : [event.time, event.endTime].filter(Boolean).join("–") || null;
@@ -83,15 +90,35 @@ function EventCard({ event }: { event: DashboardEvent }) {
         ? "calendarEventLeisure"
         : "calendarEventSingle";
 
-  return (
-    <article className={`calendarEvent ${categoryClass}`}>
+  const content = (
+    <>
       {time ? <span className="calendarEventTime">{time}</span> : null}
       <strong>{event.title}</strong>
       <span className="calendarEventMeta">
         {[event.familyMember, event.categoryLabel].filter(Boolean).join(" · ")}
       </span>
-    </article>
+      {event.source === "single" && event.note ? (
+        <span className="calendarEventDetailsIndicator" aria-hidden="true">
+          ⓘ
+        </span>
+      ) : null}
+    </>
   );
+
+  if (event.source === "single" && event.note) {
+    return (
+      <button
+        type="button"
+        className={`calendarEvent calendarEventInteractive ${categoryClass}`}
+        aria-label={`Vis all informasjon om ${event.title}`}
+        onClick={() => onOpen(event)}
+      >
+        {content}
+      </button>
+    );
+  }
+
+  return <article className={`calendarEvent ${categoryClass}`}>{content}</article>;
 }
 
 export function FamilyCalendar({
@@ -102,6 +129,10 @@ export function FamilyCalendar({
 }: FamilyCalendarProps) {
   const [view, setView] = useState<CalendarView>("week");
   const [anchorDateKey, setAnchorDateKey] = useState(todayDateKey);
+  const [selectedEvent, setSelectedEvent] = useState<{
+    event: DashboardEvent;
+    dateKey: string;
+  } | null>(null);
   const anchor = useMemo(() => dateFromKey(anchorDateKey), [anchorDateKey]);
 
   const { days, visibleMonth } = useMemo(() => {
@@ -246,15 +277,33 @@ export function FamilyCalendar({
                     <>
                       <div className="calendarEventsTop">
                         {schoolEvents.map((event) => (
-                          <EventCard event={event} key={`${day.dateKey}-${event.id}`} />
+                          <EventCard
+                            event={event}
+                            key={`${day.dateKey}-${event.id}`}
+                            onOpen={(selected) =>
+                              setSelectedEvent({ event: selected, dateKey: day.dateKey })
+                            }
+                          />
                         ))}
                       </div>
                       <div className="calendarEventsBottom">
                         {otherEvents.map((event) => (
-                          <EventCard event={event} key={`${day.dateKey}-${event.id}`} />
+                          <EventCard
+                            event={event}
+                            key={`${day.dateKey}-${event.id}`}
+                            onOpen={(selected) =>
+                              setSelectedEvent({ event: selected, dateKey: day.dateKey })
+                            }
+                          />
                         ))}
                         {leisureEvents.map((event) => (
-                          <EventCard event={event} key={`${day.dateKey}-${event.id}`} />
+                          <EventCard
+                            event={event}
+                            key={`${day.dateKey}-${event.id}`}
+                            onOpen={(selected) =>
+                              setSelectedEvent({ event: selected, dateKey: day.dateKey })
+                            }
+                          />
                         ))}
                       </div>
                     </>
@@ -275,6 +324,57 @@ export function FamilyCalendar({
           })}
         </div>
       </div>
+
+      <FormModal
+        isOpen={Boolean(selectedEvent)}
+        onClose={() => setSelectedEvent(null)}
+        title={selectedEvent?.event.title || "Hendelse"}
+      >
+        {selectedEvent ? (
+          <div className="calendarEventDetails">
+            <dl>
+              <div>
+                <dt>Dato</dt>
+                <dd>
+                  {capitalize(
+                    formatDate(dateFromKey(selectedEvent.dateKey), {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    }),
+                  )}
+                </dd>
+              </div>
+              <div>
+                <dt>Hvem</dt>
+                <dd>{selectedEvent.event.familyMember}</dd>
+              </div>
+              <div>
+                <dt>Tid</dt>
+                <dd>
+                  {selectedEvent.event.allDay
+                    ? "Hele dagen"
+                    : [selectedEvent.event.time, selectedEvent.event.endTime]
+                        .filter(Boolean)
+                        .join("–") || "Ikke angitt"}
+                </dd>
+              </div>
+              {selectedEvent.event.categoryLabel ? (
+                <div>
+                  <dt>Kategori</dt>
+                  <dd>{selectedEvent.event.categoryLabel}</dd>
+                </div>
+              ) : null}
+            </dl>
+
+            <div className="calendarEventDetailsNote">
+              <h3>Notat</h3>
+              <p>{selectedEvent.event.note}</p>
+            </div>
+          </div>
+        ) : null}
+      </FormModal>
     </section>
   );
 }
