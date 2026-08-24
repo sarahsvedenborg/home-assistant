@@ -124,7 +124,12 @@ export default async function Home({ searchParams }: HomePageProps) {
         }
       />
 
-      <AddButton title="Legg til hendelse" label="Ny hendelse" anchor="add-event">
+      <AddButton
+        title="Legg til hendelse"
+        label="Ny hendelse"
+        anchor="add-event"
+        wide
+      >
         <SingleEventForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>
 

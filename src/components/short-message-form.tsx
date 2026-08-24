@@ -9,6 +9,7 @@ type ShortMessageFormProps = {
 };
 
 type FormState = {
+  sender: string;
   recipients: string[];
   text: string;
   website: string;
@@ -22,6 +23,7 @@ export function ShortMessageForm({ familyMembers, onSuccess }: ShortMessageFormP
     ...familyMembers.map((member) => ({ value: member, label: member })),
   ];
   const [form, setForm] = useState<FormState>({
+    sender: "",
     recipients: [],
     text: "",
     website: "",
@@ -62,7 +64,7 @@ export function ShortMessageForm({ familyMembers, onSuccess }: ShortMessageFormP
       }
 
       const successText = result.message || "Meldingen er lagt til!";
-      setForm({ recipients: [], text: "", website: "" });
+      setForm({ sender: "", recipients: [], text: "", website: "" });
       router.refresh();
 
       if (onSuccess) {
@@ -85,9 +87,26 @@ export function ShortMessageForm({ familyMembers, onSuccess }: ShortMessageFormP
       </div>
 
       <div className="formGrid">
+        <label className="field fieldWide">
+          <span>Avsender (valgfritt)</span>
+          <select
+            value={form.sender}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, sender: event.target.value }))
+            }
+          >
+            <option value="">Ingen avsender</option>
+            {recipientOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
         <fieldset className="field fieldWide checkboxFieldset">
           <legend>Mottakere (valgfritt)</legend>
-          <div className="checkboxGrid">
+          <div className="checkboxGrid messageRecipientGrid">
             {recipientOptions.map((option) => {
               const checked = form.recipients.includes(option.value);
 

@@ -285,12 +285,14 @@ export const FALLBACK_SHORT_MESSAGES: ShortMessage[] = [
     recipients: ["all"],
     text: "Husk å sette skoene på plass i gangen.",
     createdAt: "2026-08-22T08:00:00.000Z",
+    isRead: false,
   },
   {
     id: "message-2",
     recipients: ["parents"],
     text: "Foreldremøte på tirsdag kl. 18.",
     createdAt: "2026-08-21T16:30:00.000Z",
+    isRead: false,
   },
 ];
 

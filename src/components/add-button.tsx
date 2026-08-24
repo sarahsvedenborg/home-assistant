@@ -18,6 +18,8 @@ type AddButtonProps = {
   anchor?: string;
   // Keep the modal available to hash links without rendering another floating button.
   hideTrigger?: boolean;
+  // Use a wider dialog for forms with horizontal option groups.
+  wide?: boolean;
   // The form to render inside the modal; receives an injected onSuccess.
   children: ReactElement<FormChildProps>;
 };
@@ -27,6 +29,7 @@ export function AddButton({
   label,
   anchor,
   hideTrigger = false,
+  wide = false,
   children,
 }: AddButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -89,7 +92,13 @@ export function AddButton({
         </button>
       )}
 
-      <FormModal isOpen={isOpen} onClose={handleClose} title={title} confirmation={confirmation}>
+      <FormModal
+        isOpen={isOpen}
+        onClose={handleClose}
+        title={title}
+        confirmation={confirmation}
+        size={wide ? "wide" : "default"}
+      >
         {form}
       </FormModal>
     </>

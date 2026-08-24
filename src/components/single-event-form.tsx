@@ -96,21 +96,71 @@ export function SingleEventForm({ familyMembers, onSuccess }: SingleEventFormPro
       </div>
 
       <div className="formGrid">
+        <div
+          className="field fieldWide inlineCategoryField"
+          role="radiogroup"
+          aria-labelledby="single-event-category-label"
+        >
+          <span className="inlineCategoryLabel" id="single-event-category-label">
+            Kategori:
+          </span>
+          <div className="radioRow">
+            <label className="radioOption">
+              <input
+                type="radio"
+                name="single-event-category"
+                value=""
+                checked={!form.category}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, category: event.target.value }))
+                }
+              />
+              <span>Ingen</span>
+            </label>
+            {SINGLE_EVENT_CATEGORIES.map((eventCategory) => (
+              <label key={eventCategory.value} className="radioOption">
+                <input
+                  type="radio"
+                  name="single-event-category"
+                  value={eventCategory.value}
+                  checked={form.category === eventCategory.value}
+                  onChange={(event) =>
+                    setForm((current) => ({ ...current, category: event.target.value }))
+                  }
+                />
+                <span>{eventCategory.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <label className="field">
+          <span>Dato</span>
+          <input
+            type="date"
+            value={form.date}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, date: event.target.value }))
+            }
+            required
+          />
+        </label>
+
         <label className="field fieldWide">
-          <span>Hendelse</span>
+          <span>Hendelse{form.category ? " (valgfritt)" : ""}</span>
           <input
             type="text"
             value={form.title}
             onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
             placeholder="Bursdag, tannlege, tur..."
             maxLength={120}
-            required
+            required={!form.category}
           />
         </label>
 
         <fieldset className="field fieldWide checkboxFieldset">
           <legend>Hvem</legend>
-          <div className="checkboxGrid">
+          <div className="checkboxGrid eventParticipantGrid">
             {participantOptions.map((option) => {
               const checked = form.participants.includes(option.value);
 
@@ -141,48 +191,6 @@ export function SingleEventForm({ familyMembers, onSuccess }: SingleEventFormPro
                 </label>
               );
             })}
-          </div>
-        </fieldset>
-
-        <label className="field">
-          <span>Dato</span>
-          <input
-            type="date"
-            value={form.date}
-            onChange={(event) => setForm((current) => ({ ...current, date: event.target.value }))}
-            required
-          />
-        </label>
-
-        <fieldset className="field fieldWide">
-          <legend>Kategori (valgfritt)</legend>
-          <div className="radioRow">
-            <label className="radioOption">
-              <input
-                type="radio"
-                name="single-event-category"
-                value=""
-                checked={!form.category}
-                onChange={(event) =>
-                  setForm((current) => ({ ...current, category: event.target.value }))
-                }
-              />
-              <span>Ingen</span>
-            </label>
-            {SINGLE_EVENT_CATEGORIES.map((eventCategory) => (
-              <label key={eventCategory.value} className="radioOption">
-                <input
-                  type="radio"
-                  name="single-event-category"
-                  value={eventCategory.value}
-                  checked={form.category === eventCategory.value}
-                  onChange={(event) =>
-                    setForm((current) => ({ ...current, category: event.target.value }))
-                  }
-                />
-                <span>{eventCategory.label}</span>
-              </label>
-            ))}
           </div>
         </fieldset>
 

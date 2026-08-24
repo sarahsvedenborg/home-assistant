@@ -10,7 +10,12 @@ export const singleEventType = defineType({
       title: "Title",
       type: "string",
       description: "E.g. Dentist appointment, birthday party",
-      validation: (rule) => rule.required().max(120),
+      validation: (rule) =>
+        rule.max(120).custom((title, context) =>
+          title || context.document?.category
+            ? true
+            : "Add a title or select a category.",
+        ),
     }),
     defineField({
       name: "familyMember",
@@ -93,13 +98,27 @@ export const singleEventType = defineType({
   preview: {
     select: {
       title: "title",
+      category: "category",
       date: "date",
       time: "time",
       familyMemberName: "familyMember.name",
       fallbackName: "familyMemberName",
       participants: "participants",
     },
-    prepare({ title, date, time, familyMemberName, fallbackName, participants }) {
+    prepare({
+      title,
+      category,
+      date,
+      time,
+      familyMemberName,
+      fallbackName,
+      participants,
+    }) {
+      const categoryTitles: Record<string, string> = {
+        ak: "AK",
+        filmkveld: "Filmkveld",
+        spillkveld: "Spillkveld",
+      };
       const who =
         Array.isArray(participants) && participants.length > 0
           ? participants
@@ -114,7 +133,7 @@ export const singleEventType = defineType({
           : familyMemberName || fallbackName || "Unknown";
       const day = typeof date === "string" ? date.slice(0, 10) : "?";
       return {
-        title,
+        title: title || categoryTitles[category] || "Hendelse",
         subtitle: `${day}${time ? ` ${time}` : ""} - ${who}`,
       };
     },

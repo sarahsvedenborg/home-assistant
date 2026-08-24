@@ -87,7 +87,14 @@ function singleToDashboardEvent(event: SingleEvent): DashboardEvent {
   return {
     id: event.id,
     source: "single",
-    title: event.title,
+    title:
+      event.category === "ak"
+        ? "AK"
+        : event.category === "filmkveld"
+        ? "Filmkveld"
+        : event.category === "spillkveld"
+          ? "Spillkveld"
+          : event.title,
     familyMember: event.familyMember,
     time: event.allDay ? undefined : event.time,
     endTime: event.allDay ? undefined : event.endTime,

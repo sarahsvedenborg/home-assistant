@@ -455,9 +455,11 @@ button {
   padding: 0.25rem;
 }
 
+.issueBoardToolbar h1,
 .issueBoardToolbar h2 {
+  margin: 0;
   font-family: var(--font-display), cursive;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: clamp(2rem, 3.5vw, 3rem);
 }
 
 .issueBoardColumns {
@@ -1071,6 +1073,118 @@ button {
   border-top: 1px solid var(--line);
 }
 
+.messageItemRow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.messageItemButton {
+  position: relative;
+  display: grid;
+  flex: 1;
+  gap: 0.2rem;
+  min-width: 0;
+  padding: 0.35rem 2rem 0.35rem 0.35rem;
+  border-radius: 0.65rem;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.messageItemButton:hover,
+.messageItemButton:focus-visible {
+  background: rgba(255, 255, 255, 0.55);
+  transform: translateY(-1px);
+}
+
+.messageItemButton:focus-visible {
+  outline: 2px solid var(--cool);
+  outline-offset: 2px;
+}
+
+.messageDetailsIndicator {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  color: var(--cool);
+  font-size: 0.85rem;
+  font-weight: 900;
+  transform: translateY(-50%);
+}
+
+.messageReadButton {
+  flex: 0 0 auto;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid rgba(94, 166, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.messageReadButton:hover,
+.messageReadButton:focus-visible {
+  background: rgba(223, 240, 255, 0.95);
+  transform: translateY(-1px);
+}
+
+.messageReadButton:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.messageDetails {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.messageDetails dl {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.messageDetails dl > div {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.messageDetails dt {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.messageDetails dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.messageDetailsText {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(223, 240, 255, 0.72);
+}
+
+.messageDetailsText h3,
+.messageDetailsText p {
+  margin: 0;
+}
+
+.messageDetailsText h3 {
+  margin-bottom: 0.45rem;
+  font-size: 0.9rem;
+}
+
+.messageDetailsText p {
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .shoppingWidgetItem + .shoppingWidgetItem {
   padding-top: 0.65rem;
   border-top: 1px solid var(--line);
@@ -1086,6 +1200,26 @@ button {
 .messageArchive {
   display: grid;
   gap: 0.75rem;
+}
+
+.messageArchiveSection {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.messageArchiveSection + .messageArchiveSection {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.messageArchiveSection h2 {
+  font-family: var(--font-display), cursive;
+  font-size: 1.6rem;
+}
+
+.messageArchiveEmpty {
+  color: var(--muted);
 }
 
 .messageArchiveItem strong {
@@ -1562,6 +1696,24 @@ button {
   display: grid;
   gap: 0.35rem;
   grid-template-columns: 1fr;
+}
+
+.messageRecipientGrid,
+.eventParticipantGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+}
+
+.messageRecipientGrid .checkboxOption,
+.eventParticipantGrid .checkboxOption {
+  flex: 0 0 auto;
+  min-height: 2.2rem;
+}
+
+.messageRecipientGrid .checkboxLabel,
+.eventParticipantGrid .checkboxLabel {
+  flex: 0 0 auto;
 }
 
 .checkboxOption {
@@ -2302,6 +2454,10 @@ button {
     max-height: 88dvh;
     border-radius: 1.5rem;
   }
+
+  .formModal.formModalWide {
+    width: min(720px, 100%);
+  }
 }
 
 .formModalBackdropCelebration {
@@ -2357,22 +2513,22 @@ button {
   accent-color: var(--warm);
 }
 
-.dayNoteCategoryField {
+.inlineCategoryField {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin: 0;
 }
 
-.dayNoteCategoryField .dayNoteCategoryLabel {
+.inlineCategoryField .inlineCategoryLabel {
   font-weight: 800;
 }
 
-.dayNoteCategoryField .radioRow {
+.inlineCategoryField .radioRow {
   margin-top: 0;
 }
 
-.dayNoteCategoryField .radioOption span {
+.inlineCategoryField .radioOption span {
   font-weight: 700;
 }
 
@@ -2633,6 +2789,30 @@ button {
 .calendarEventSingle {
   border-left-color: #9b72cf;
   background: rgba(239, 229, 251, 0.92);
+}
+
+.calendarEventMovieNight,
+.calendarEventGameNight {
+  border-left-color: #d58b2d;
+  background: linear-gradient(135deg, rgba(255, 235, 190, 0.96), rgba(255, 246, 222, 0.94));
+}
+
+.calendarEventAkTime {
+  border-left-color: #ee7d6c;
+  background: linear-gradient(135deg, rgba(255, 211, 184, 0.98), rgba(255, 232, 196, 0.96) 48%, rgba(255, 220, 234, 0.94));
+}
+
+.calendarSpecialEventTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.calendarSpecialEventDescription {
+  color: #8c4d48;
+  font-size: 0.74rem;
+  font-weight: 800;
+  line-height: 1.3;
 }
 
 .calendarEvent strong {

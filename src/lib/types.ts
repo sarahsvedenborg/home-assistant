@@ -86,9 +86,11 @@ export type FeatureSuggestion = {
 
 export type ShortMessage = {
   id: string;
+  sender?: string;
   recipients: string[];
   text: string;
   createdAt?: string;
+  isRead: boolean;
 };
 
 export type BoardIssueStatus = "todo" | "inProgress" | "done";

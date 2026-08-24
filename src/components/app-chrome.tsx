@@ -68,7 +68,7 @@ export function AppChrome() {
             }
             aria-current={isBoardPage ? "page" : undefined}
           >
-            Oppgaver
+            Må gjøres
           </Link>
           <Link
             href="/ukelonn"

@@ -316,6 +316,7 @@ export function validateShortMessageSubmission(
   payload: unknown,
   familyMemberNames: string[],
 ): ValidationResult<{
+  sender?: string;
   recipients: string[];
   text: string;
 }> {
@@ -326,6 +327,7 @@ export function validateShortMessageSubmission(
   }
 
   const text = normalizeText(common.record.text);
+  const submittedSender = normalizeText(common.record.sender);
   const submittedRecipients = Array.isArray(common.record.recipients)
     ? common.record.recipients
         .filter((value): value is string => typeof value === "string")
@@ -344,6 +346,17 @@ export function validateShortMessageSubmission(
   const memberNamesByLowerCase = new Map(
     familyMemberNames.map((name) => [name.toLowerCase(), name]),
   );
+  const lowerSender = submittedSender.toLowerCase();
+  const sender = submittedSender
+    ? lowerSender === "all" || lowerSender === "parents"
+      ? lowerSender
+      : memberNamesByLowerCase.get(lowerSender)
+    : undefined;
+
+  if (submittedSender && !sender) {
+    return { success: false, error: "Velg en gyldig avsender." };
+  }
+
   const recipients = submittedRecipients.map((recipient) => {
     const lowerRecipient = recipient.toLowerCase();
 
@@ -363,6 +376,7 @@ export function validateShortMessageSubmission(
   return {
     success: true,
     data: {
+      sender,
       recipients: uniqueRecipients,
       text,
     },
@@ -509,7 +523,7 @@ export function validateSingleEventSubmission(
   payload: unknown,
   familyMemberNames: string[],
 ): ValidationResult<{
-  title: string;
+  title?: string;
   participants: string[];
   category?: string;
   date: string;
@@ -538,8 +552,11 @@ export function validateSingleEventSubmission(
   const endTime = normalizeText(common.record.endTime);
   const note = normalizeText(common.record.note);
 
-  if (!title) {
-    return { success: false, error: "Legg til en tittel på hendelsen." };
+  if (!title && !category) {
+    return {
+      success: false,
+      error: "Legg til en tittel eller velg en kategori for hendelsen.",
+    };
   }
 
   if (title.length > 120) {
@@ -601,7 +618,7 @@ export function validateSingleEventSubmission(
   return {
     success: true,
     data: {
-      title,
+      title: title || undefined,
       participants: uniqueParticipants,
       category: category || undefined,
       date,
