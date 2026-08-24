@@ -1,7 +1,6 @@
 import { AddButton } from "@/components/add-button";
 import { ShoppingListBrowser } from "@/components/shopping-list-browser";
 import { ShoppingListForm } from "@/components/shopping-list-form";
-import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getShoppingList } from "@/lib/data";
 
 export default async function HandlelistePage() {
@@ -14,8 +13,6 @@ export default async function HandlelistePage() {
 
   return (
     <main className="shell">
-      <SiteHeader current="handleliste" />
-
       <section className="sectionHero accentFuture">
         <div>
           <span className="kicker">Handleliste</span>

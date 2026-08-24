@@ -1,4 +1,3 @@
-import { SiteHeader } from "@/components/site-header";
 import { WeeklyPayList } from "@/components/weekly-pay-list";
 import { getFamilyMembers } from "@/lib/data";
 
@@ -7,8 +6,6 @@ export default async function UkelonnPage() {
 
   return (
     <main className="shell weeklyPayShell">
-      <SiteHeader current="ukelonn" />
-
       <section className="sectionHero accentWarm">
         <div>
           <span className="kicker">Ukens oppgaver</span>

@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { AddButton } from "@/components/add-button";
 import { RecipeForm } from "@/components/recipe-form";
-import { SiteHeader } from "@/components/site-header";
 import { getRecipes } from "@/lib/data";
 
 export default async function OppskrifterPage() {
@@ -12,8 +11,6 @@ export default async function OppskrifterPage() {
 
   return (
     <main className="shell">
-      <SiteHeader current="oppskrifter" />
-
       <section className="sectionHero accentCoolPanel">
         <div>
           <span className="kicker">Oppskrifter</span>

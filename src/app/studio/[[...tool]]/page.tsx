@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 
-import { SiteHeader } from "@/components/site-header";
-
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
@@ -20,8 +18,6 @@ export const viewport: Viewport = {
 export default function StudioPage() {
   return (
     <main className="shell">
-      <SiteHeader current="home" />
-
       <section className="sectionHero accentFuture">
         <div>
           <span className="kicker">Studio for voksne</span>

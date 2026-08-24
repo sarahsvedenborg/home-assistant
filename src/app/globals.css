@@ -312,6 +312,12 @@ button {
   padding-top: 0.5rem;
 }
 
+.appChrome {
+  width: min(1600px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding-top: 0.5rem;
+}
+
 .homeViews {
   margin-top: 0;
 }
@@ -377,6 +383,9 @@ button {
 }
 
 .homeViewTab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 8rem;
   min-height: 3rem;
   padding: 0.7rem 1.1rem;
@@ -398,19 +407,18 @@ button {
   box-shadow: 0 5px 18px rgba(58, 76, 98, 0.1);
 }
 
-.homeViews .dashboard,
-.homeViews .calendarPanel {
+.homeViews .dashboard {
   margin-top: 0.75rem;
 }
 
-.homeCalendarPanel {
+.homeDashboardPanel {
   width: min(1600px, calc(100vw - 2rem));
   margin-left: 50%;
   transform: translateX(-50%);
 }
 
 .homeBoardPanel {
-  width: min(1400px, calc(100vw - 2rem));
+  width: min(1600px, calc(100vw - 2rem));
   margin-top: 0.75rem;
   margin-left: 50%;
   transform: translateX(-50%);
@@ -539,7 +547,7 @@ button {
 }
 
 .weeklyPayShell {
-  width: min(1400px, calc(100% - 2rem));
+  width: min(1600px, calc(100% - 2rem));
 }
 
 .weeklyPayMembers {
@@ -576,6 +584,11 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
+.weeklyPayMemberHeaderCollapsed {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
 .weeklyPayMemberName {
   gap: 0.6rem;
 }
@@ -587,6 +600,23 @@ button {
 .weeklyPayMemberName h2 {
   margin: 0;
   font-family: var(--font-display), cursive;
+}
+
+.weeklyPayCollapseButton {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-strong);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.weeklyPayCollapseButton:hover,
+.weeklyPayCollapseButton:focus-visible {
+  color: var(--ink);
 }
 
 .weeklyPayMemberActions {
@@ -2315,6 +2345,10 @@ button {
   width: min(1600px, calc(100% - 2rem));
 }
 
+.calendarShell .calendarPanel {
+  margin-top: 0.75rem;
+}
+
 .calendarHero h1 {
   max-width: none;
 }
@@ -2555,7 +2589,7 @@ button {
     justify-content: flex-end;
   }
 
-  .homeCalendarPanel,
+  .homeDashboardPanel,
   .homeBoardPanel {
     width: calc(100vw - 1rem);
   }

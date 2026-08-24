@@ -1,6 +1,5 @@
 import { AddButton } from "@/components/add-button";
 import { ShortMessageForm } from "@/components/short-message-form";
-import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getShortMessages } from "@/lib/data";
 import { formatMessageDate, messageRecipientLabel } from "@/lib/messages";
 
@@ -12,8 +11,6 @@ export default async function MeldingerPage() {
 
   return (
     <main className="shell">
-      <SiteHeader current="meldinger" />
-
       <section className="sectionHero accentCoolPanel">
         <div>
           <span className="kicker">Beskjeder</span>

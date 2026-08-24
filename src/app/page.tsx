@@ -1,12 +1,11 @@
 import { AddButton } from "@/components/add-button";
-import { FamilyCalendar } from "@/components/family-calendar";
 import { FamilyDashboard } from "@/components/family-dashboard";
 import { HomeViewTabs } from "@/components/home-view-tabs";
 import { HubCard } from "@/components/hub-card";
 import { IssueBoard } from "@/components/issue-board";
 import { SingleEventForm } from "@/components/single-event-form";
-import { getBoardIssues, getDayNotes, getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
-import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
+import { getBoardIssues, getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
+import { buildRecentActivity, eventsForDate } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
 function formatOsloDateLabel(date: Date): string {
@@ -20,10 +19,15 @@ function formatOsloDateLabel(date: Date): string {
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
-export default async function Home() {
+type HomePageProps = {
+  searchParams: Promise<{ view?: string | string[] }>;
+};
+
+export default async function Home({ searchParams }: HomePageProps) {
+  const params = await searchParams;
+  const view = params.view === "board" ? "board" : "dashboard";
   const [
     boardIssues,
-    dayNotes,
     familyMembers,
     messages,
     movies,
@@ -35,7 +39,6 @@ export default async function Home() {
     weather,
   ] = await Promise.all([
     getBoardIssues(),
-    getDayNotes(),
     getFamilyMembers(),
     getShortMessages(),
     getMovieRecommendations(),
@@ -55,6 +58,7 @@ export default async function Home() {
   return (
     <main className="shell homeShell">
       <HomeViewTabs
+        view={view}
         dashboard={
           <>
             <FamilyDashboard
@@ -111,14 +115,6 @@ export default async function Home() {
               /> */}
             </section>
           </>
-        }
-        calendar={
-          <FamilyCalendar
-            recurringEvents={recurringEvents}
-            singleEvents={singleEvents}
-            dayNotes={dayNotes}
-            todayDateKey={osloDateKey(now)}
-          />
         }
         board={
           <IssueBoard
