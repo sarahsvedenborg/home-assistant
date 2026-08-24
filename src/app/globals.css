@@ -407,15 +407,8 @@ button {
   box-shadow: 0 5px 18px rgba(58, 76, 98, 0.1);
 }
 
-.homeViews .dashboard,
-.homeViews .calendarPanel {
+.homeViews .dashboard {
   margin-top: 0.75rem;
-}
-
-.homeCalendarPanel {
-  width: min(1600px, calc(100vw - 2rem));
-  margin-left: 50%;
-  transform: translateX(-50%);
 }
 
 .homeBoardPanel {
@@ -2324,6 +2317,10 @@ button {
   width: min(1600px, calc(100% - 2rem));
 }
 
+.calendarShell .calendarPanel {
+  margin-top: 0.75rem;
+}
+
 .calendarHero h1 {
   max-width: none;
 }
@@ -2564,7 +2561,6 @@ button {
     justify-content: flex-end;
   }
 
-  .homeCalendarPanel,
   .homeBoardPanel {
     width: calc(100vw - 1rem);
   }

@@ -16,11 +16,19 @@ type AddButtonProps = {
   // Optional URL hash (without the "#") that auto-opens the modal, so links
   // like /handleliste#add-item can open the form straight from the dashboard.
   anchor?: string;
+  // Keep the modal available to hash links without rendering another floating button.
+  hideTrigger?: boolean;
   // The form to render inside the modal; receives an injected onSuccess.
   children: ReactElement<FormChildProps>;
 };
 
-export function AddButton({ title, label, anchor, children }: AddButtonProps) {
+export function AddButton({
+  title,
+  label,
+  anchor,
+  hideTrigger = false,
+  children,
+}: AddButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
 
@@ -72,12 +80,14 @@ export function AddButton({ title, label, anchor, children }: AddButtonProps) {
 
   return (
     <>
-      <button type="button" className="addFab" onClick={() => setIsOpen(true)}>
-        <span className="addFabIcon" aria-hidden="true">
-          +
-        </span>
-        <span className="addFabLabel">{label}</span>
-      </button>
+      {hideTrigger ? null : (
+        <button type="button" className="addFab" onClick={() => setIsOpen(true)}>
+          <span className="addFabIcon" aria-hidden="true">
+            +
+          </span>
+          <span className="addFabLabel">{label}</span>
+        </button>
+      )}
 
       <FormModal isOpen={isOpen} onClose={handleClose} title={title} confirmation={confirmation}>
         {form}

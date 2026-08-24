@@ -1,12 +1,11 @@
 import { AddButton } from "@/components/add-button";
-import { FamilyCalendar } from "@/components/family-calendar";
 import { FamilyDashboard } from "@/components/family-dashboard";
 import { HomeViewTabs } from "@/components/home-view-tabs";
 import { HubCard } from "@/components/hub-card";
 import { IssueBoard } from "@/components/issue-board";
 import { SingleEventForm } from "@/components/single-event-form";
-import { getBoardIssues, getDayNotes, getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
-import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
+import { getBoardIssues, getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
+import { buildRecentActivity, eventsForDate } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
 function formatOsloDateLabel(date: Date): string {
@@ -26,11 +25,9 @@ type HomePageProps = {
 
 export default async function Home({ searchParams }: HomePageProps) {
   const params = await searchParams;
-  const view =
-    params.view === "calendar" || params.view === "board" ? params.view : "dashboard";
+  const view = params.view === "board" ? "board" : "dashboard";
   const [
     boardIssues,
-    dayNotes,
     familyMembers,
     messages,
     movies,
@@ -42,7 +39,6 @@ export default async function Home({ searchParams }: HomePageProps) {
     weather,
   ] = await Promise.all([
     getBoardIssues(),
-    getDayNotes(),
     getFamilyMembers(),
     getShortMessages(),
     getMovieRecommendations(),
@@ -119,14 +115,6 @@ export default async function Home({ searchParams }: HomePageProps) {
               /> */}
             </section>
           </>
-        }
-        calendar={
-          <FamilyCalendar
-            recurringEvents={recurringEvents}
-            singleEvents={singleEvents}
-            dayNotes={dayNotes}
-            todayDateKey={osloDateKey(now)}
-          />
         }
         board={
           <IssueBoard

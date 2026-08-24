@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export function AppChrome() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const homeView = searchParams.get("view");
 
   if (pathname === "/login" || pathname === "/test-route") {
     return null;
@@ -14,11 +12,8 @@ export function AppChrome() {
 
   const isHome = pathname === "/";
   const isCalendarContext =
-    pathname === "/kalender" ||
-    pathname === "/aktiviteter" ||
-    (isHome && homeView === "calendar");
-  const isDashboardContext =
-    pathname === "/ukelonn" || (isHome && homeView !== "calendar");
+    pathname === "/kalender" || pathname === "/aktiviteter";
+  const isDashboardContext = pathname === "/ukelonn" || isHome;
 
   return (
     <header className="appChrome">
@@ -26,7 +21,7 @@ export function AppChrome() {
         <nav className="homeViewTabs" aria-label="Hovedvisning">
           <Link
             id="dashboard-tab"
-            href="/?view=dashboard"
+            href="/"
             className={
               isDashboardContext ? "homeViewTab homeViewTabActive" : "homeViewTab"
             }
@@ -36,7 +31,7 @@ export function AppChrome() {
           </Link>
           <Link
             id="calendar-tab"
-            href="/?view=calendar"
+            href="/kalender"
             className={
               isCalendarContext ? "homeViewTab homeViewTabActive" : "homeViewTab"
             }
