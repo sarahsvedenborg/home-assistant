@@ -61,7 +61,7 @@ export default async function MeldingerPage() {
       </section>
 
       <section className="listStack">
-        <div className="listPanel">
+        <div className="messageArchiveGroups">
           <section className="messageArchiveSection" aria-labelledby="unread-messages-title">
             <h2 id="unread-messages-title">Ulest</h2>
             <MessageArchive
