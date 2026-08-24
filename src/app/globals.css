@@ -313,7 +313,7 @@ button {
 }
 
 .appChrome {
-  width: min(1120px, calc(100% - 2rem));
+  width: min(1600px, calc(100% - 2rem));
   margin: 0 auto;
   padding-top: 0.5rem;
 }
@@ -412,7 +412,7 @@ button {
 }
 
 .homeBoardPanel {
-  width: min(1400px, calc(100vw - 2rem));
+  width: min(1600px, calc(100vw - 2rem));
   margin-top: 0.75rem;
   margin-left: 50%;
   transform: translateX(-50%);
@@ -541,7 +541,7 @@ button {
 }
 
 .weeklyPayShell {
-  width: min(1400px, calc(100% - 2rem));
+  width: min(1600px, calc(100% - 2rem));
 }
 
 .weeklyPayMembers {
