@@ -14,6 +14,9 @@ const currencyFormatter = new Intl.NumberFormat("nb-NO", {
 
 export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember[] }) {
   const [members, setMembers] = useState(initialMembers);
+  const [collapsedMembers, setCollapsedMembers] = useState<Set<string>>(
+    () => new Set(initialMembers.map((member) => member.id)),
+  );
   const [pendingAssignment, setPendingAssignment] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [payment, setPayment] = useState<{
@@ -101,6 +104,20 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
     }
   }
 
+  function toggleMember(memberId: string) {
+    setCollapsedMembers((current) => {
+      const next = new Set(current);
+
+      if (next.has(memberId)) {
+        next.delete(memberId);
+      } else {
+        next.add(memberId);
+      }
+
+      return next;
+    });
+  }
+
   function closePaymentModal() {
     if (isPaying) {
       return;
@@ -172,13 +189,31 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
           (sum, assignment) => sum + assignment.chore.pay * assignment.amount,
           0,
         );
+        const isCollapsed = collapsedMembers.has(member.id);
+        const choresId = `member-chores-${member.id}`;
 
         return (
           <article className="weeklyPayMember" key={member.id}>
-            <header className="weeklyPayMemberHeader">
+            <header
+              className={
+                isCollapsed
+                  ? "weeklyPayMemberHeader weeklyPayMemberHeaderCollapsed"
+                  : "weeklyPayMemberHeader"
+              }
+            >
               <div className="weeklyPayMemberName">
                 <span aria-hidden="true">{member.emoji || "👤"}</span>
                 <h2>{member.name}</h2>
+                <button
+                  type="button"
+                  className="weeklyPayCollapseButton"
+                  aria-label={`${isCollapsed ? "Vis" : "Skjul"} oppgaver for ${member.name}`}
+                  aria-expanded={!isCollapsed}
+                  aria-controls={choresId}
+                  onClick={() => toggleMember(member.id)}
+                >
+                  <span aria-hidden="true">{isCollapsed ? "▾" : "▴"}</span>
+                </button>
               </div>
               <div className="weeklyPayMemberActions">
                 <strong className="weeklyPayTotal">{currencyFormatter.format(total)}</strong>
@@ -200,8 +235,8 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
               </div>
             </header>
 
-            {member.chores.length > 0 ? (
-              <ul className="weeklyPayChores">
+            {!isCollapsed && member.chores.length > 0 ? (
+              <ul className="weeklyPayChores" id={choresId}>
                 {member.chores.map((assignment) => {
                   const pendingKey = `${member.id}:${assignment.key}`;
                   const isPending = pendingAssignment === pendingKey;
@@ -237,9 +272,11 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
                   );
                 })}
               </ul>
-            ) : (
-              <p className="weeklyPayEmpty">Ingen oppgaver er lagt til for {member.name}.</p>
-            )}
+            ) : !isCollapsed ? (
+              <p className="weeklyPayEmpty" id={choresId}>
+                Ingen oppgaver er lagt til for {member.name}.
+              </p>
+            ) : null}
           </article>
         );
       })}

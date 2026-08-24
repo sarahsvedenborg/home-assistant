@@ -584,6 +584,11 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
+.weeklyPayMemberHeaderCollapsed {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
 .weeklyPayMemberName {
   gap: 0.6rem;
 }
@@ -595,6 +600,23 @@ button {
 .weeklyPayMemberName h2 {
   margin: 0;
   font-family: var(--font-display), cursive;
+}
+
+.weeklyPayCollapseButton {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-strong);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.weeklyPayCollapseButton:hover,
+.weeklyPayCollapseButton:focus-visible {
+  color: var(--ink);
 }
 
 .weeklyPayMemberActions {
