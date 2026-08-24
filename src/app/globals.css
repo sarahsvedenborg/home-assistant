@@ -1698,18 +1698,21 @@ button {
   grid-template-columns: 1fr;
 }
 
-.messageRecipientGrid {
+.messageRecipientGrid,
+.eventParticipantGrid {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem 0.75rem;
 }
 
-.messageRecipientGrid .checkboxOption {
+.messageRecipientGrid .checkboxOption,
+.eventParticipantGrid .checkboxOption {
   flex: 0 0 auto;
   min-height: 2.2rem;
 }
 
-.messageRecipientGrid .checkboxLabel {
+.messageRecipientGrid .checkboxLabel,
+.eventParticipantGrid .checkboxLabel {
   flex: 0 0 auto;
 }
 
@@ -2451,6 +2454,10 @@ button {
     max-height: 88dvh;
     border-radius: 1.5rem;
   }
+
+  .formModal.formModalWide {
+    width: min(720px, 100%);
+  }
 }
 
 .formModalBackdropCelebration {
@@ -2506,22 +2513,22 @@ button {
   accent-color: var(--warm);
 }
 
-.dayNoteCategoryField {
+.inlineCategoryField {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin: 0;
 }
 
-.dayNoteCategoryField .dayNoteCategoryLabel {
+.inlineCategoryField .inlineCategoryLabel {
   font-weight: 800;
 }
 
-.dayNoteCategoryField .radioRow {
+.inlineCategoryField .radioRow {
   margin-top: 0;
 }
 
-.dayNoteCategoryField .radioOption span {
+.inlineCategoryField .radioOption span {
   font-weight: 700;
 }
 

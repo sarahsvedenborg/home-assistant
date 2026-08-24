@@ -523,7 +523,7 @@ export function validateSingleEventSubmission(
   payload: unknown,
   familyMemberNames: string[],
 ): ValidationResult<{
-  title: string;
+  title?: string;
   participants: string[];
   category?: string;
   date: string;
@@ -552,8 +552,11 @@ export function validateSingleEventSubmission(
   const endTime = normalizeText(common.record.endTime);
   const note = normalizeText(common.record.note);
 
-  if (!title) {
-    return { success: false, error: "Legg til en tittel på hendelsen." };
+  if (!title && !category) {
+    return {
+      success: false,
+      error: "Legg til en tittel eller velg en kategori for hendelsen.",
+    };
   }
 
   if (title.length > 120) {
@@ -615,7 +618,7 @@ export function validateSingleEventSubmission(
   return {
     success: true,
     data: {
-      title,
+      title: title || undefined,
       participants: uniqueParticipants,
       category: category || undefined,
       date,

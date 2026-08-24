@@ -457,7 +457,7 @@ export async function submitDayNote(input: {
 }
 
 export async function submitSingleEvent(input: {
-  title: string;
+  title?: string;
   participants: string[];
   category?: string;
   date: string;
@@ -483,7 +483,7 @@ export async function submitSingleEvent(input: {
     : undefined;
   const document: {
     _type: "singleEvent";
-    title: string;
+    title?: string;
     participants: string[];
     familyMemberName?: string;
     category?: string;

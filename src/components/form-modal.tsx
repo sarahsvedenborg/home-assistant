@@ -9,6 +9,7 @@ type FormModalProps = {
   title: string;
   children: ReactNode;
   variant?: "default" | "celebration";
+  size?: "default" | "wide";
   // When set, a success confirmation covers the form content.
   confirmation?: string | null;
 };
@@ -28,6 +29,7 @@ export function FormModal({
   title,
   children,
   variant = "default",
+  size = "default",
   confirmation,
 }: FormModalProps) {
   const titleId = useId();
@@ -108,9 +110,13 @@ export function FormModal({
     >
       <div
         ref={dialogRef}
-        className={
-          variant === "celebration" ? "formModal formModalCelebration" : "formModal"
-        }
+        className={[
+          "formModal",
+          variant === "celebration" ? "formModalCelebration" : "",
+          size === "wide" ? "formModalWide" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}

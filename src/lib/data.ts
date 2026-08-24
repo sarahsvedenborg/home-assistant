@@ -38,6 +38,7 @@ import {
 } from "@/lib/day-note-categories";
 import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
 import { eventParticipantLabel } from "@/lib/event-participants";
+import { singleEventCategoryLabel } from "@/lib/single-event-categories";
 import { osloDateKey } from "@/lib/family-feed";
 import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -160,7 +161,7 @@ type SanityRecurringEvent = {
 
 type SanitySingleEvent = {
   _id: string;
-  title: string;
+  title?: string;
   category?: string;
   date: string;
   time?: string;
@@ -455,7 +456,11 @@ export async function getSingleEvents(): Promise<SingleEvent[]> {
 
     return {
       id: event._id,
-      title: event.title,
+      title:
+        event.title ||
+        (event.category
+          ? singleEventCategoryLabel(event.category)
+          : "Hendelse"),
       category: event.category,
       date: event.date,
       time: event.time,

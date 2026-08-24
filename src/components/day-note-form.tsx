@@ -70,11 +70,11 @@ export function DayNoteForm({ initialDate, onSuccess }: DayNoteFormProps) {
 
       <div className="formGrid">
         <div
-          className="field fieldWide dayNoteCategoryField"
+          className="field fieldWide inlineCategoryField"
           role="radiogroup"
           aria-labelledby="day-note-category-label"
         >
-          <span className="dayNoteCategoryLabel" id="day-note-category-label">
+          <span className="inlineCategoryLabel" id="day-note-category-label">
             Kategori:
           </span>
           <div className="radioRow">
