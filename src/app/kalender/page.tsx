@@ -1,7 +1,6 @@
 import { AddButton } from "@/components/add-button";
 import { DayNoteForm } from "@/components/day-note-form";
 import { FamilyCalendar } from "@/components/family-calendar";
-import { SiteHeader } from "@/components/site-header";
 import { getDayNotes, getRecurringEvents, getSingleEvents } from "@/lib/data";
 import { osloDateKey } from "@/lib/family-feed";
 
@@ -15,8 +14,6 @@ export default async function KalenderPage() {
 
   return (
     <main className="shell calendarShell">
-      <SiteHeader current="kalender" />
-
       <section className="sectionHero calendarHero accentCoolPanel">
         <div>
           <span className="kicker">Familieoversikt</span>

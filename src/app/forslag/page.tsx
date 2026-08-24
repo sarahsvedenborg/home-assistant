@@ -1,6 +1,5 @@
 import { AddButton } from "@/components/add-button";
 import { FeatureSuggestionForm } from "@/components/feature-suggestion-form";
-import { SiteHeader } from "@/components/site-header";
 import { getFeatureSuggestions } from "@/lib/data";
 
 export default async function ForslagPage() {
@@ -8,8 +7,6 @@ export default async function ForslagPage() {
 
   return (
     <main className="shell">
-      <SiteHeader current="forslag" />
-
       <section className="sectionHero accentFuture">
         <div>
           <span className="kicker">Forslag</span>

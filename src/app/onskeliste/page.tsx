@@ -1,5 +1,4 @@
 import { OnskelisteTabs } from "@/components/onskeliste-tabs";
-import { SiteHeader } from "@/components/site-header";
 import { getFamilyMembers, getWishListItems } from "@/lib/data";
 
 export default async function OnskelistePage() {
@@ -10,8 +9,6 @@ export default async function OnskelistePage() {
 
   return (
     <main className="shell">
-      <SiteHeader current="onskeliste" />
-
       <section className="sectionHero accentWarmPanel">
         <div>
           <span className="kicker">Ønskeliste</span>

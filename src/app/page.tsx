@@ -20,7 +20,14 @@ function formatOsloDateLabel(date: Date): string {
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
-export default async function Home() {
+type HomePageProps = {
+  searchParams: Promise<{ view?: string | string[] }>;
+};
+
+export default async function Home({ searchParams }: HomePageProps) {
+  const params = await searchParams;
+  const view =
+    params.view === "calendar" || params.view === "board" ? params.view : "dashboard";
   const [
     boardIssues,
     dayNotes,
@@ -55,6 +62,7 @@ export default async function Home() {
   return (
     <main className="shell homeShell">
       <HomeViewTabs
+        view={view}
         dashboard={
           <>
             <FamilyDashboard

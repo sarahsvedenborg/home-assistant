@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import { SiteHeader } from "@/components/site-header";
 import { getRecipeById } from "@/lib/data";
 
 type RecipeDetailPageProps = {
@@ -26,8 +25,6 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
 
   return (
     <main className="shell">
-      <SiteHeader current="oppskrifter" />
-
       <section className="sectionHeroCompact">
         <div>
           <Link href="/oppskrifter" className="recipeBackLink">

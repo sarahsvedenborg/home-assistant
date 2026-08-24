@@ -1,5 +1,5 @@
 {
-  "createdAt": "2026-04-12T18:10:58.652Z",
+  "createdAt": "2026-08-24T10:31:01.761Z",
   "studioVersion": "5.20.0",
   "version": 3,
   "workspaces": [
@@ -13,7 +13,7 @@
       },
       "name": "default",
       "projectId": "p51d587r",
-      "schema": "4b337b63.create-schema.json",
+      "schema": "6dc63f11.create-schema.json",
       "title": "Family Hub Studio",
       "tools": "ef87c8fe.create-tools.json"
     }

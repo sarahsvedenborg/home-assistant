@@ -312,6 +312,12 @@ button {
   padding-top: 0.5rem;
 }
 
+.appChrome {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding-top: 0.5rem;
+}
+
 .homeViews {
   margin-top: 0;
 }
@@ -377,6 +383,9 @@ button {
 }
 
 .homeViewTab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 8rem;
   min-height: 3rem;
   padding: 0.7rem 1.1rem;
