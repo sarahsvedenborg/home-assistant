@@ -1649,6 +1649,21 @@ button {
   grid-template-columns: 1fr;
 }
 
+.messageRecipientGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+}
+
+.messageRecipientGrid .checkboxOption {
+  flex: 0 0 auto;
+  min-height: 2.2rem;
+}
+
+.messageRecipientGrid .checkboxLabel {
+  flex: 0 0 auto;
+}
+
 .checkboxOption {
   display: flex;
   align-items: center;

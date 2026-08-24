@@ -106,7 +106,7 @@ export function ShortMessageForm({ familyMembers, onSuccess }: ShortMessageFormP
 
         <fieldset className="field fieldWide checkboxFieldset">
           <legend>Mottakere (valgfritt)</legend>
-          <div className="checkboxGrid">
+          <div className="checkboxGrid messageRecipientGrid">
             {recipientOptions.map((option) => {
               const checked = form.recipients.includes(option.value);
 
