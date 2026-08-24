@@ -89,11 +89,40 @@ function EventCard({
       : event.category === "fritid"
         ? "calendarEventLeisure"
         : "calendarEventSingle";
+  const isMovieNight =
+    event.source === "single" && event.category === "filmkveld";
+  const isGameNight =
+    event.source === "single" && event.category === "spillkveld";
+  const isAkTime = event.source === "single" && event.category === "ak";
+  const movieNightClass = isMovieNight ? "calendarEventMovieNight" : "";
+  const gameNightClass = isGameNight ? "calendarEventGameNight" : "";
+  const akTimeClass = isAkTime ? "calendarEventAkTime" : "";
+  const specialEventIcon = isAkTime
+    ? "✨"
+    : isMovieNight
+      ? "🎬"
+      : isGameNight
+        ? "🎲"
+        : null;
 
   const content = (
     <>
       {time ? <span className="calendarEventTime">{time}</span> : null}
-      <strong>{event.title}</strong>
+      <strong
+        className={
+          specialEventIcon ? "calendarSpecialEventTitle" : undefined
+        }
+      >
+        {specialEventIcon ? (
+          <span aria-hidden="true">{specialEventIcon}</span>
+        ) : null}
+        {event.title}
+      </strong>
+      {isAkTime ? (
+        <span className="calendarSpecialEventDescription">
+          Storesøstertid med foreldrene
+        </span>
+      ) : null}
       <span className="calendarEventMeta">
         {[event.familyMember, event.categoryLabel].filter(Boolean).join(" · ")}
       </span>
@@ -109,7 +138,7 @@ function EventCard({
     return (
       <button
         type="button"
-        className={`calendarEvent calendarEventInteractive ${categoryClass}`}
+        className={`calendarEvent calendarEventInteractive ${categoryClass} ${movieNightClass} ${gameNightClass} ${akTimeClass}`}
         aria-label={`Vis all informasjon om ${event.title}`}
         onClick={() => onOpen(event)}
       >
@@ -118,7 +147,13 @@ function EventCard({
     );
   }
 
-  return <article className={`calendarEvent ${categoryClass}`}>{content}</article>;
+  return (
+    <article
+      className={`calendarEvent ${categoryClass} ${movieNightClass} ${gameNightClass} ${akTimeClass}`}
+    >
+      {content}
+    </article>
+  );
 }
 
 export function FamilyCalendar({
