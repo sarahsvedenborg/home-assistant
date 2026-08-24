@@ -382,6 +382,24 @@ button {
   color: var(--ink);
 }
 
+.homeContextButtonActive,
+.homeContextButtonActive:hover,
+.homeContextButtonActive:focus-visible {
+  background: var(--paper-strong);
+  color: var(--ink);
+  box-shadow: 0 5px 18px rgba(58, 76, 98, 0.12);
+}
+
+.homeContextButtonAction,
+.homeContextButtonAction:hover,
+.homeContextButtonAction:focus-visible {
+  margin-left: auto;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--warm), #ffbe5c);
+  color: #17212c;
+  font-weight: 900;
+}
+
 .homeViewTab {
   display: inline-flex;
   align-items: center;
