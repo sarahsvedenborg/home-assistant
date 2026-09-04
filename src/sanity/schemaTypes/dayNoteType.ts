@@ -38,6 +38,7 @@ export const dayNoteType = defineType({
           { title: "Notat", value: "note" },
           { title: "Bursdag", value: "birthday" },
           { title: "Ferie", value: "vacation" },
+          { title: "Holyday", value: "holyday" },
         ],
       },
       validation: (rule) => rule.required(),

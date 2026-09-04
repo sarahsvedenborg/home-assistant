@@ -4,15 +4,23 @@ import { FamilyCalendar } from "@/components/family-calendar";
 import { SingleEventForm } from "@/components/single-event-form";
 import { getDayNotes, getFamilyMembers, getRecurringEvents, getSingleEvents } from "@/lib/data";
 import { osloDateKey } from "@/lib/family-feed";
+import { getNorwegianPublicHolidays } from "@/lib/norwegian-holidays";
 
 export default async function KalenderPage() {
-  const [dayNotes, familyMembers, recurringEvents, singleEvents] = await Promise.all([
-    getDayNotes(),
-    getFamilyMembers(),
-    getRecurringEvents(),
-    getSingleEvents(),
-  ]);
   const todayDateKey = osloDateKey(new Date());
+  const currentYear = Number(todayDateKey.slice(0, 4));
+  const [dayNotes, familyMembers, holidays, recurringEvents, singleEvents] =
+    await Promise.all([
+      getDayNotes(),
+      getFamilyMembers(),
+      getNorwegianPublicHolidays([
+        currentYear - 1,
+        currentYear,
+        currentYear + 1,
+      ]),
+      getRecurringEvents(),
+      getSingleEvents(),
+    ]);
 
   return (
     <main className="shell calendarShell">
@@ -22,6 +30,7 @@ export default async function KalenderPage() {
         recurringEvents={recurringEvents}
         singleEvents={singleEvents}
         dayNotes={dayNotes}
+        holidays={holidays}
         todayDateKey={todayDateKey}
       />
 

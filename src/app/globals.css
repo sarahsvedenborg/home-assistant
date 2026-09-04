@@ -2690,14 +2690,29 @@ button {
   border-bottom: 1px dashed var(--line);
 }
 
+.calendarPublicHolidays {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.calendarPublicHolidays p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
 .calendarBirthdayNotes,
-.calendarVacationNotes {
+.calendarVacationNotes,
+.calendarHolydayNotes {
   display: grid;
   gap: 0.3rem;
 }
 
 .calendarBirthdayNotes p,
-.calendarVacationNotes p {
+.calendarVacationNotes p,
+.calendarHolydayNotes p {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -2722,8 +2737,22 @@ button {
   color: #fff;
 }
 
+.calendarHolydayNotes p {
+  border: 1px solid #d9272e;
+  background: #fff;
+  color: #d9272e;
+}
+
+.calendarHolydayIcon {
+  flex: 0 0 1.15rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  background: center / contain no-repeat url("/holyday-icon.png");
+}
+
 .calendarBirthdayNotes strong,
-.calendarVacationNotes strong {
+.calendarVacationNotes strong,
+.calendarHolydayNotes strong {
   min-width: 0;
   overflow-wrap: anywhere;
 }

@@ -4,7 +4,12 @@ import { useMemo, useState } from "react";
 
 import { FormModal } from "@/components/form-modal";
 import { eventsForDateRange, type CalendarDay, type DashboardEvent } from "@/lib/family-feed";
-import type { DayNote, RecurringEvent, SingleEvent } from "@/lib/types";
+import type {
+  DayNote,
+  NorwegianHoliday,
+  RecurringEvent,
+  SingleEvent,
+} from "@/lib/types";
 
 type CalendarView = "week" | "month";
 
@@ -12,6 +17,7 @@ type FamilyCalendarProps = {
   recurringEvents: RecurringEvent[];
   singleEvents: SingleEvent[];
   dayNotes?: DayNote[];
+  holidays?: NorwegianHoliday[];
   todayDateKey: string;
 };
 
@@ -171,6 +177,7 @@ export function FamilyCalendar({
   recurringEvents,
   singleEvents,
   dayNotes = [],
+  holidays = [],
   todayDateKey,
 }: FamilyCalendarProps) {
   const [view, setView] = useState<CalendarView>("week");
@@ -316,10 +323,17 @@ export function FamilyCalendar({
             const vacationNotes = notes.filter(
               (note) => note.category === "vacation",
             );
+            const holydayNotes = notes.filter(
+              (note) => note.category === "holyday",
+            );
+            const publicHolidays = holidays.filter(
+              (holiday) => holiday.date === day.dateKey,
+            );
             const regularNotes = notes.filter(
               (note) =>
                 note.category !== "birthday" &&
-                note.category !== "vacation",
+                note.category !== "vacation" &&
+                note.category !== "holyday",
             );
 
             return (
@@ -333,8 +347,24 @@ export function FamilyCalendar({
                   {isToday ? <span>I dag</span> : null}
                 </div>
 
-                {birthdayNotes.length > 0 || vacationNotes.length > 0 ? (
+                {birthdayNotes.length > 0 ||
+                vacationNotes.length > 0 ||
+                holydayNotes.length > 0 ||
+                publicHolidays.length > 0 ? (
                   <div className="calendarTopNotes">
+                    {publicHolidays.length > 0 ? (
+                      <div
+                        className="calendarPublicHolidays"
+                        aria-label="Norske helligdager"
+                      >
+                        {publicHolidays.map((holiday) => (
+                          <p key={`${holiday.date}-${holiday.name}`}>
+                            {holiday.name}
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
+
                     {birthdayNotes.length > 0 ? (
                       <div className="calendarBirthdayNotes" aria-label="Bursdager">
                         {birthdayNotes.map((note) => (
@@ -350,6 +380,20 @@ export function FamilyCalendar({
                       <div className="calendarVacationNotes" aria-label="Ferie">
                         {vacationNotes.map((note) => (
                           <p key={note.id}>
+                            <strong>{note.text}</strong>
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    {holydayNotes.length > 0 ? (
+                      <div className="calendarHolydayNotes" aria-label="Holyday">
+                        {holydayNotes.map((note) => (
+                          <p key={note.id}>
+                            <span
+                              className="calendarHolydayIcon"
+                              aria-hidden="true"
+                            />
                             <strong>{note.text}</strong>
                           </p>
                         ))}

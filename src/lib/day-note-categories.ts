@@ -1,4 +1,4 @@
-export type DayNoteCategory = "note" | "birthday" | "vacation";
+export type DayNoteCategory = "note" | "birthday" | "vacation" | "holyday";
 
 export const DAY_NOTE_CATEGORIES: {
   value: DayNoteCategory;
@@ -7,6 +7,7 @@ export const DAY_NOTE_CATEGORIES: {
   { value: "note", label: "Notat" },
   { value: "birthday", label: "Bursdag" },
   { value: "vacation", label: "Ferie" },
+  { value: "holyday", label: "Holyday" },
 ];
 
 export const DAY_NOTE_CATEGORY_VALUES = DAY_NOTE_CATEGORIES.map(
