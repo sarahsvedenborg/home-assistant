@@ -476,7 +476,12 @@ export function validateChoreAmountChange(
 
 export function validateDayNoteSubmission(
   payload: unknown,
-): ValidationResult<{ date: string; category: DayNoteCategory; text: string }> {
+): ValidationResult<{
+  date: string;
+  endDate: string;
+  category: DayNoteCategory;
+  text: string;
+}> {
   const common = validateCommonFields(payload);
 
   if (!common.success) {
@@ -484,6 +489,7 @@ export function validateDayNoteSubmission(
   }
 
   const date = normalizeText(common.record.date);
+  const submittedEndDate = normalizeText(common.record.endDate);
   const category = normalizeText(common.record.category);
   const text = normalizeText(common.record.text);
 
@@ -495,6 +501,21 @@ export function validateDayNoteSubmission(
 
   if (Number.isNaN(parsedDate.getTime()) || parsedDate.toISOString().slice(0, 10) !== date) {
     return { success: false, error: "Velg en gyldig dato." };
+  }
+
+  const endDate = submittedEndDate || date;
+  const parsedEndDate = new Date(`${endDate}T00:00:00Z`);
+
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(endDate) ||
+    Number.isNaN(parsedEndDate.getTime()) ||
+    parsedEndDate.toISOString().slice(0, 10) !== endDate
+  ) {
+    return { success: false, error: "Velg en gyldig sluttdato." };
+  }
+
+  if (endDate < date) {
+    return { success: false, error: "Sluttdato kan ikke være før startdato." };
   }
 
   if (!text) {
@@ -515,7 +536,7 @@ export function validateDayNoteSubmission(
 
   return {
     success: true,
-    data: { date, category: category as DayNoteCategory, text },
+    data: { date, endDate, category: category as DayNoteCategory, text },
   };
 }
 

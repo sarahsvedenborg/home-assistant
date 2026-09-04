@@ -176,6 +176,7 @@ type SanitySingleEvent = {
 type SanityDayNote = {
   _id: string;
   date: string;
+  endDate?: string;
   category?: DayNoteCategory;
   text: string;
 };
@@ -497,6 +498,7 @@ export async function getDayNotes(): Promise<DayNote[]> {
   return notes.map((note) => ({
     id: note._id,
     date: note.date,
+    endDate: note.endDate || note.date,
     category: note.category || DEFAULT_DAY_NOTE_CATEGORY,
     text: note.text,
   }));

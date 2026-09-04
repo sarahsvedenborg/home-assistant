@@ -305,12 +305,21 @@ export function FamilyCalendar({
             const otherEvents = day.events.filter(
               (event) => event.category !== "skole" && event.category !== "fritid",
             );
-            const notes = dayNotes.filter((note) => note.date === day.dateKey);
+            const notes = dayNotes.filter(
+              (note) =>
+                day.dateKey >= note.date &&
+                day.dateKey <= (note.endDate || note.date),
+            );
             const birthdayNotes = notes.filter(
               (note) => note.category === "birthday",
             );
+            const vacationNotes = notes.filter(
+              (note) => note.category === "vacation",
+            );
             const regularNotes = notes.filter(
-              (note) => note.category !== "birthday",
+              (note) =>
+                note.category !== "birthday" &&
+                note.category !== "vacation",
             );
 
             return (
@@ -324,14 +333,28 @@ export function FamilyCalendar({
                   {isToday ? <span>I dag</span> : null}
                 </div>
 
-                {birthdayNotes.length > 0 ? (
-                  <div className="calendarBirthdayNotes" aria-label="Bursdager">
-                    {birthdayNotes.map((note) => (
-                      <p key={note.id}>
-                        <span aria-hidden="true">🎂</span>
-                        <strong>{note.text} bursdag</strong>
-                      </p>
-                    ))}
+                {birthdayNotes.length > 0 || vacationNotes.length > 0 ? (
+                  <div className="calendarTopNotes">
+                    {birthdayNotes.length > 0 ? (
+                      <div className="calendarBirthdayNotes" aria-label="Bursdager">
+                        {birthdayNotes.map((note) => (
+                          <p key={note.id}>
+                            <span aria-hidden="true">🎂</span>
+                            <strong>{note.text} bursdag</strong>
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    {vacationNotes.length > 0 ? (
+                      <div className="calendarVacationNotes" aria-label="Ferie">
+                        {vacationNotes.map((note) => (
+                          <p key={note.id}>
+                            <strong>{note.text}</strong>
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
                   </div>
                 ) : null}
 

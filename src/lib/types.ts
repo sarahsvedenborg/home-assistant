@@ -107,6 +107,7 @@ export type BoardIssue = {
 export type DayNote = {
   id: string;
   date: string;
+  endDate?: string;
   text: string;
   category: DayNoteCategory;
 };

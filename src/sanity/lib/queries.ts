@@ -101,6 +101,7 @@ export const SINGLE_EVENTS_QUERY = `*[_type == "singleEvent" && (!defined(status
 export const DAY_NOTES_QUERY = `*[_type == "dayNote"] | order(date asc, _createdAt asc) {
   _id,
   date,
+  endDate,
   category,
   text
 }`;
