@@ -117,6 +117,12 @@ export type NorwegianHoliday = {
   name: string;
 };
 
+export type DailyQuote = {
+  text: string;
+  author: string;
+  source: "zenquotes" | "fallback";
+};
+
 export type SingleEvent = {
   id: string;
   title: string;

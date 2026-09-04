@@ -2,10 +2,16 @@ import { MessageWidget } from "@/components/message-widget";
 import { ShoppingWidget } from "@/components/shopping-widget";
 import type { DashboardEvent, RecentActivity } from "@/lib/family-feed";
 import { describeWeather } from "@/lib/weather";
-import type { ShoppingListEntry, ShortMessage, Weather } from "@/lib/types";
+import type {
+  DailyQuote,
+  ShoppingListEntry,
+  ShortMessage,
+  Weather,
+} from "@/lib/types";
 
 type FamilyDashboardProps = {
   dateLabel: string;
+  dailyQuote: DailyQuote;
   todayEvents: DashboardEvent[];
   tomorrowEvents: DashboardEvent[];
   activity: RecentActivity[];
@@ -105,6 +111,7 @@ function WeatherWidget({ weather }: { weather: Weather }) {
 
 export function FamilyDashboard({
   dateLabel,
+  dailyQuote,
   todayEvents,
   tomorrowEvents,
   activity,
@@ -116,18 +123,24 @@ export function FamilyDashboard({
   return (
     <section className="dashboard" aria-label="Familieoversikt">
       <article className="widget wGreet accentWarm">
-      {/*   <span className="itemMeta">{dateLabel}</span> */}
-     {/*    <span className="kicker">{dateLabel}</span> */}
-        <h1 className="dashboardTitle">Dagens oversikt</h1>
-         <span className="itemMeta">{dateLabel}</span> 
-      {/*   <div className="heroActions">
-          <Link className="buttonPrimary" href="/onskeliste#add-wish">
-            Legg til et ønske
-          </Link>
-          <Link className="buttonSecondary" href="/movies#add-movie">
-            Legg til en film
-          </Link>
-        </div> */}
+        <div className="dashboardGreeting">
+          <h1 className="dashboardTitle">Dagens oversikt</h1>
+          <span className="itemMeta">{dateLabel}</span>
+        </div>
+
+        <figure className="dailyQuote">
+          <blockquote>“{dailyQuote.text}”</blockquote>
+          <figcaption>— {dailyQuote.author}</figcaption>
+        {/*   {dailyQuote.source === "zenquotes" ? (
+            <a
+              href="https://zenquotes.io/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Inspirational quotes provided by ZenQuotes API
+            </a>
+          ) : null} */}
+        </figure>
       </article>
 
       <article className="widget wToday accentFuture">
