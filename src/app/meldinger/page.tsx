@@ -1,4 +1,5 @@
 import { AddButton } from "@/components/add-button";
+import { MarkMessageUnreadButton } from "@/components/mark-message-unread-button";
 import { ShortMessageForm } from "@/components/short-message-form";
 import { getFamilyMembers, getShortMessages } from "@/lib/data";
 import { formatMessageDate, messageRecipientLabel } from "@/lib/messages";
@@ -34,6 +35,9 @@ function MessageArchive({
             <span className="itemMeta">
               Til: {messageRecipientLabel(message.recipients)}
             </span>
+          ) : null}
+          {message.isRead ? (
+            <MarkMessageUnreadButton messageId={message.id} />
           ) : null}
         </article>
       ))}

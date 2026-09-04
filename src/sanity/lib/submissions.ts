@@ -286,7 +286,10 @@ export async function submitShortMessage(input: {
     : "Meldingen er lagt til!";
 }
 
-export async function markShortMessageAsRead(messageId: string) {
+export async function setShortMessageReadState(
+  messageId: string,
+  isRead: boolean,
+) {
   const client = getWriteClient();
 
   if (!client) {
@@ -302,7 +305,7 @@ export async function markShortMessageAsRead(messageId: string) {
     throw new Error("Fant ikke meldingen du ville markere som lest.");
   }
 
-  await client.patch(message._id).set({ isRead: true }).commit();
+  await client.patch(message._id).set({ isRead }).commit();
 }
 
 export async function submitBoardIssue(input: {
