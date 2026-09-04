@@ -124,8 +124,7 @@ export function FamilyDashboard({
     <section className="dashboard" aria-label="Familieoversikt">
       <article className="widget wGreet accentWarm">
         <div className="dashboardGreeting">
-          <h1 className="dashboardTitle">Dagens oversikt</h1>
-          <span className="itemMeta">{dateLabel}</span>
+          <h1 className="dashboardTitle">{dateLabel}</h1>
         </div>
 
         <figure className="dailyQuote">
