@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { AUTH_COOKIE_NAME, isAuthEnabled, isValidAuthCookie } from "@/lib/auth";
-import { markShortMessageAsRead } from "@/sanity/lib/submissions";
+import { setShortMessageReadState } from "@/sanity/lib/submissions";
 
 type RouteContext = {
   params: Promise<{ messageId: string }>;
@@ -23,10 +23,18 @@ export async function PATCH(request: Request, context: RouteContext) {
     }
   }
 
+  const payload = (await request.json()) as { isRead?: unknown };
+  if (typeof payload.isRead !== "boolean") {
+    return NextResponse.json(
+      { error: "Velg om meldingen skal være lest eller ulest." },
+      { status: 400 },
+    );
+  }
+
   try {
     const { messageId } = await context.params;
-    await markShortMessageAsRead(messageId);
-    return NextResponse.json({ isRead: true });
+    await setShortMessageReadState(messageId, payload.isRead);
+    return NextResponse.json({ isRead: payload.isRead });
   } catch (error) {
     const errorMessage =
       error instanceof Error

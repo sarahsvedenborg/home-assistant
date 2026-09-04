@@ -56,7 +56,11 @@ export function MessageWidget({
     try {
       const response = await fetch(
         `/api/meldinger/${encodeURIComponent(messageId)}/read`,
-        { method: "PATCH" },
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ isRead: true }),
+        },
       );
       const result = (await response.json()) as { error?: string };
 
