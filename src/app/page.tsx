@@ -133,6 +133,7 @@ export default async function Home({ searchParams }: HomePageProps) {
         title="Legg til hendelse"
         label="Ny hendelse"
         anchor="add-event"
+        hideTriggerOnMobile
         wide
       >
         <SingleEventForm familyMembers={familyMembers.map((member) => member.name)} />

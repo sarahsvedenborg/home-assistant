@@ -38,6 +38,7 @@ export default async function KalenderPage() {
         title="Legg til hendelse"
         label="Ny hendelse"
         anchor="add-event"
+        hideTriggerOnMobile
         wide
       >
         <SingleEventForm familyMembers={familyMembers.map((member) => member.name)} />

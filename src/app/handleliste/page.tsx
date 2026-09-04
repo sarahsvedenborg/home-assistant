@@ -42,7 +42,12 @@ export default async function HandlelistePage() {
         </div>
       </section>
 
-      <AddButton title="Legg til vare" label="Legg til vare" anchor="add-item">
+      <AddButton
+        title="Legg til vare"
+        label="Legg til vare"
+        anchor="add-item"
+        hideTriggerOnMobile
+      >
         <ShoppingListForm
           familyMembers={familyMembers.map((member) => member.name)}
           previousItems={shoppingList.items}

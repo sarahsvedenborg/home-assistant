@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import "./globals.css";
 
 import { AppChrome } from "@/components/app-chrome";
+import { MobileActionMenu } from "@/components/mobile-action-menu";
 import { SanityLive } from "@/sanity/lib/live";
 
 const displayFont = Baloo_2({
@@ -33,6 +34,7 @@ export default function RootLayout({
           <AppChrome />
         </Suspense>
         {children}
+        <MobileActionMenu />
         <SanityLive />
       </body>
     </html>
