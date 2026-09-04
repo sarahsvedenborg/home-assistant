@@ -316,10 +316,14 @@ export function FamilyCalendar({
             const vacationNotes = notes.filter(
               (note) => note.category === "vacation",
             );
+            const holydayNotes = notes.filter(
+              (note) => note.category === "holyday",
+            );
             const regularNotes = notes.filter(
               (note) =>
                 note.category !== "birthday" &&
-                note.category !== "vacation",
+                note.category !== "vacation" &&
+                note.category !== "holyday",
             );
 
             return (
@@ -333,7 +337,9 @@ export function FamilyCalendar({
                   {isToday ? <span>I dag</span> : null}
                 </div>
 
-                {birthdayNotes.length > 0 || vacationNotes.length > 0 ? (
+                {birthdayNotes.length > 0 ||
+                vacationNotes.length > 0 ||
+                holydayNotes.length > 0 ? (
                   <div className="calendarTopNotes">
                     {birthdayNotes.length > 0 ? (
                       <div className="calendarBirthdayNotes" aria-label="Bursdager">
@@ -350,6 +356,20 @@ export function FamilyCalendar({
                       <div className="calendarVacationNotes" aria-label="Ferie">
                         {vacationNotes.map((note) => (
                           <p key={note.id}>
+                            <strong>{note.text}</strong>
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    {holydayNotes.length > 0 ? (
+                      <div className="calendarHolydayNotes" aria-label="Holyday">
+                        {holydayNotes.map((note) => (
+                          <p key={note.id}>
+                            <span
+                              className="calendarHolydayIcon"
+                              aria-hidden="true"
+                            />
                             <strong>{note.text}</strong>
                           </p>
                         ))}
