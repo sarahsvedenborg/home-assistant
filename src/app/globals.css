@@ -970,6 +970,39 @@ button {
   margin: 0.1em 0 0;
 }
 
+.dashboardGreeting {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.dailyQuote {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(123, 91, 68, 0.16);
+}
+
+.dailyQuote blockquote {
+  max-width: 48ch;
+  font-family: var(--font-display), cursive;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  line-height: 1.35;
+}
+
+.dailyQuote figcaption {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.dailyQuote a {
+  width: fit-content;
+  color: var(--muted);
+  font-size: 0.62rem;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .widgetBadge {
   display: inline-flex;
   align-items: center;
@@ -1302,6 +1335,15 @@ button {
 
   .wGreet {
     grid-area: greet;
+    grid-template-columns: minmax(12rem, 0.75fr) minmax(0, 1.25fr);
+    align-items: center;
+  }
+
+  .wGreet .dailyQuote {
+    padding-top: 0;
+    padding-left: 1.25rem;
+    border-top: 0;
+    border-left: 1px solid rgba(123, 91, 68, 0.16);
   }
 
   .wWeather {
