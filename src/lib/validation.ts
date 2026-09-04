@@ -476,7 +476,12 @@ export function validateChoreAmountChange(
 
 export function validateDayNoteSubmission(
   payload: unknown,
-): ValidationResult<{ date: string; category: DayNoteCategory; text: string }> {
+): ValidationResult<{
+  date: string;
+  endDate: string;
+  category: DayNoteCategory;
+  text: string;
+}> {
   const common = validateCommonFields(payload);
 
   if (!common.success) {
@@ -484,6 +489,7 @@ export function validateDayNoteSubmission(
   }
 
   const date = normalizeText(common.record.date);
+  const submittedEndDate = normalizeText(common.record.endDate);
   const category = normalizeText(common.record.category);
   const text = normalizeText(common.record.text);
 
@@ -495,6 +501,21 @@ export function validateDayNoteSubmission(
 
   if (Number.isNaN(parsedDate.getTime()) || parsedDate.toISOString().slice(0, 10) !== date) {
     return { success: false, error: "Velg en gyldig dato." };
+  }
+
+  const endDate = submittedEndDate || date;
+  const parsedEndDate = new Date(`${endDate}T00:00:00Z`);
+
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(endDate) ||
+    Number.isNaN(parsedEndDate.getTime()) ||
+    parsedEndDate.toISOString().slice(0, 10) !== endDate
+  ) {
+    return { success: false, error: "Velg en gyldig sluttdato." };
+  }
+
+  if (endDate < date) {
+    return { success: false, error: "Sluttdato kan ikke være før startdato." };
   }
 
   if (!text) {
@@ -515,7 +536,7 @@ export function validateDayNoteSubmission(
 
   return {
     success: true,
-    data: { date, category: category as DayNoteCategory, text },
+    data: { date, endDate, category: category as DayNoteCategory, text },
   };
 }
 
@@ -527,6 +548,7 @@ export function validateSingleEventSubmission(
   participants: string[];
   category?: string;
   date: string;
+  endDate: string;
   allDay: boolean;
   time?: string;
   endTime?: string;
@@ -546,7 +568,9 @@ export function validateSingleEventSubmission(
         .filter(Boolean)
     : [];
   const category = normalizeText(common.record.category);
-  const dateRaw = normalizeText(common.record.date);
+  const dateRaw =
+    normalizeText(common.record.startDate) || normalizeText(common.record.date);
+  const endDateRaw = normalizeText(common.record.endDate);
   const allDay = common.record.allDay === true;
   const time = normalizeText(common.record.time);
   const endTime = normalizeText(common.record.endTime);
@@ -600,7 +624,16 @@ export function validateSingleEventSubmission(
 
   const date = toIsoDateTime(dateRaw);
   if (!dateRaw || !date) {
-    return { success: false, error: "Velg en gyldig dato for hendelsen." };
+    return { success: false, error: "Velg en gyldig startdato for hendelsen." };
+  }
+
+  const endDate = endDateRaw ? toIsoDateTime(endDateRaw) : date;
+  if (!endDate) {
+    return { success: false, error: "Velg en gyldig sluttdato for hendelsen." };
+  }
+
+  if (new Date(endDate) < new Date(date)) {
+    return { success: false, error: "Sluttdato kan ikke være før startdato." };
   }
 
   if (time.length > 40) {
@@ -622,6 +655,7 @@ export function validateSingleEventSubmission(
       participants: uniqueParticipants,
       category: category || undefined,
       date,
+      endDate,
       allDay,
       time: allDay ? undefined : time || undefined,
       endTime: allDay ? undefined : endTime || undefined,

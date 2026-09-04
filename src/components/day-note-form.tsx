@@ -17,6 +17,7 @@ export function DayNoteForm({ initialDate, onSuccess }: DayNoteFormProps) {
   const router = useRouter();
   const [form, setForm] = useState({
     date: initialDate,
+    endDate: "",
     category: DEFAULT_DAY_NOTE_CATEGORY,
     text: "",
     website: "",
@@ -45,6 +46,7 @@ export function DayNoteForm({ initialDate, onSuccess }: DayNoteFormProps) {
       const successText = result.message || "Dagsnotatet er lagt til!";
       setForm({
         date: initialDate,
+        endDate: "",
         category: DEFAULT_DAY_NOTE_CATEGORY,
         text: "",
         website: "",
@@ -99,14 +101,33 @@ export function DayNoteForm({ initialDate, onSuccess }: DayNoteFormProps) {
         </div>
 
         <label className="field">
-          <span>Dato</span>
+          <span>Startdato</span>
           <input
             type="date"
             value={form.date}
             onChange={(event) =>
-              setForm((current) => ({ ...current, date: event.target.value }))
+              setForm((current) => ({
+                ...current,
+                date: event.target.value,
+                endDate:
+                  current.endDate && current.endDate < event.target.value
+                    ? ""
+                    : current.endDate,
+              }))
             }
             required
+          />
+        </label>
+
+        <label className="field">
+          <span>Sluttdato (valgfritt)</span>
+          <input
+            type="date"
+            value={form.endDate}
+            min={form.date}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, endDate: event.target.value }))
+            }
           />
         </label>
 

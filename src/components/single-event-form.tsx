@@ -17,7 +17,8 @@ type FormState = {
   title: string;
   participants: string[];
   category: string;
-  date: string;
+  startDate: string;
+  endDate: string;
   allDay: boolean;
   time: string;
   endTime: string;
@@ -30,7 +31,8 @@ function initialState(): FormState {
     title: "",
     participants: [],
     category: "",
-    date: "",
+    startDate: "",
+    endDate: "",
     allDay: false,
     time: "",
     endTime: "",
@@ -135,14 +137,33 @@ export function SingleEventForm({ familyMembers, onSuccess }: SingleEventFormPro
         </div>
 
         <label className="field">
-          <span>Dato</span>
+          <span>Startdato</span>
           <input
             type="date"
-            value={form.date}
+            value={form.startDate}
             onChange={(event) =>
-              setForm((current) => ({ ...current, date: event.target.value }))
+              setForm((current) => ({
+                ...current,
+                startDate: event.target.value,
+                endDate:
+                  current.endDate && current.endDate < event.target.value
+                    ? ""
+                    : current.endDate,
+              }))
             }
             required
+          />
+        </label>
+
+        <label className="field">
+          <span>Sluttdato (valgfritt)</span>
+          <input
+            type="date"
+            value={form.endDate}
+            min={form.startDate || undefined}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, endDate: event.target.value }))
+            }
           />
         </label>
 

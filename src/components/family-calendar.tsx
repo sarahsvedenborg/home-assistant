@@ -48,6 +48,17 @@ function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
+function formatLongDateKey(value: string): string {
+  return capitalize(
+    formatDate(dateFromKey(value), {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }),
+  );
+}
+
 function periodTitle(view: CalendarView, anchor: Date, days: CalendarDay[]): string {
   if (view === "month") {
     return capitalize(formatDate(anchor, { month: "long", year: "numeric" }));
@@ -294,12 +305,21 @@ export function FamilyCalendar({
             const otherEvents = day.events.filter(
               (event) => event.category !== "skole" && event.category !== "fritid",
             );
-            const notes = dayNotes.filter((note) => note.date === day.dateKey);
+            const notes = dayNotes.filter(
+              (note) =>
+                day.dateKey >= note.date &&
+                day.dateKey <= (note.endDate || note.date),
+            );
             const birthdayNotes = notes.filter(
               (note) => note.category === "birthday",
             );
+            const vacationNotes = notes.filter(
+              (note) => note.category === "vacation",
+            );
             const regularNotes = notes.filter(
-              (note) => note.category !== "birthday",
+              (note) =>
+                note.category !== "birthday" &&
+                note.category !== "vacation",
             );
 
             return (
@@ -313,14 +333,28 @@ export function FamilyCalendar({
                   {isToday ? <span>I dag</span> : null}
                 </div>
 
-                {birthdayNotes.length > 0 ? (
-                  <div className="calendarBirthdayNotes" aria-label="Bursdager">
-                    {birthdayNotes.map((note) => (
-                      <p key={note.id}>
-                        <span aria-hidden="true">🎂</span>
-                        <strong>{note.text} bursdag</strong>
-                      </p>
-                    ))}
+                {birthdayNotes.length > 0 || vacationNotes.length > 0 ? (
+                  <div className="calendarTopNotes">
+                    {birthdayNotes.length > 0 ? (
+                      <div className="calendarBirthdayNotes" aria-label="Bursdager">
+                        {birthdayNotes.map((note) => (
+                          <p key={note.id}>
+                            <span aria-hidden="true">🎂</span>
+                            <strong>{note.text} bursdag</strong>
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    {vacationNotes.length > 0 ? (
+                      <div className="calendarVacationNotes" aria-label="Ferie">
+                        {vacationNotes.map((note) => (
+                          <p key={note.id}>
+                            <strong>{note.text}</strong>
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
                   </div>
                 ) : null}
 
@@ -388,14 +422,15 @@ export function FamilyCalendar({
               <div>
                 <dt>Dato</dt>
                 <dd>
-                  {capitalize(
-                    formatDate(dateFromKey(selectedEvent.dateKey), {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    }),
-                  )}
+                  {selectedEvent.event.startDateKey &&
+                  selectedEvent.event.endDateKey &&
+                  selectedEvent.event.startDateKey !==
+                    selectedEvent.event.endDateKey
+                    ? `${formatLongDateKey(selectedEvent.event.startDateKey)} – ${formatLongDateKey(selectedEvent.event.endDateKey)}`
+                    : formatLongDateKey(
+                        selectedEvent.event.startDateKey ||
+                          selectedEvent.dateKey,
+                      )}
                 </dd>
               </div>
               <div>

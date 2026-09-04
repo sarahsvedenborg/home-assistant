@@ -164,6 +164,7 @@ type SanitySingleEvent = {
   title?: string;
   category?: string;
   date: string;
+  endDate?: string;
   time?: string;
   endTime?: string;
   allDay?: boolean;
@@ -175,6 +176,7 @@ type SanitySingleEvent = {
 type SanityDayNote = {
   _id: string;
   date: string;
+  endDate?: string;
   category?: DayNoteCategory;
   text: string;
 };
@@ -463,6 +465,7 @@ export async function getSingleEvents(): Promise<SingleEvent[]> {
           : "Hendelse"),
       category: event.category,
       date: event.date,
+      endDate: event.endDate || event.date,
       time: event.time,
       endTime: event.endTime,
       allDay: Boolean(event.allDay),
@@ -495,6 +498,7 @@ export async function getDayNotes(): Promise<DayNote[]> {
   return notes.map((note) => ({
     id: note._id,
     date: note.date,
+    endDate: note.endDate || note.date,
     category: note.category || DEFAULT_DAY_NOTE_CATEGORY,
     text: note.text,
   }));

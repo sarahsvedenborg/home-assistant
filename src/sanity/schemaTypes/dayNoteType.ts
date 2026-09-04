@@ -7,9 +7,25 @@ export const dayNoteType = defineType({
   fields: [
     defineField({
       name: "date",
-      title: "Dato",
+      title: "Startdato",
       type: "date",
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "endDate",
+      title: "Sluttdato",
+      description: "Bruker startdatoen når feltet står tomt.",
+      type: "date",
+      validation: (rule) =>
+        rule.custom((endDate, context) => {
+          const startDate = context.document?.date;
+
+          return !endDate ||
+            typeof startDate !== "string" ||
+            endDate >= startDate
+            ? true
+            : "Sluttdato kan ikke være før startdato.";
+        }),
     }),
     defineField({
       name: "category",
@@ -21,6 +37,7 @@ export const dayNoteType = defineType({
         list: [
           { title: "Notat", value: "note" },
           { title: "Bursdag", value: "birthday" },
+          { title: "Ferie", value: "vacation" },
         ],
       },
       validation: (rule) => rule.required(),

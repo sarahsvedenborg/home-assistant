@@ -437,6 +437,7 @@ export async function resetMemberChoreAmounts(memberId: string) {
 
 export async function submitDayNote(input: {
   date: string;
+  endDate: string;
   category: DayNoteCategory;
   text: string;
 }) {
@@ -449,6 +450,7 @@ export async function submitDayNote(input: {
   await client.create({
     _type: "dayNote",
     date: input.date,
+    endDate: input.endDate,
     category: input.category,
     text: input.text,
   });
@@ -461,6 +463,7 @@ export async function submitSingleEvent(input: {
   participants: string[];
   category?: string;
   date: string;
+  endDate: string;
   allDay: boolean;
   time?: string;
   endTime?: string;
@@ -488,6 +491,7 @@ export async function submitSingleEvent(input: {
     familyMemberName?: string;
     category?: string;
     date: string;
+    endDate: string;
     allDay: boolean;
     time?: string;
     endTime?: string;
@@ -501,6 +505,7 @@ export async function submitSingleEvent(input: {
     familyMemberName: singleMemberName,
     category: input.category,
     date: input.date,
+    endDate: input.endDate,
     allDay: input.allDay,
     time: input.time,
     endTime: input.endTime,

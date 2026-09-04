@@ -40,10 +40,26 @@ export const singleEventType = defineType({
     }),
     defineField({
       name: "date",
-      title: "Date",
+      title: "Start date",
       type: "datetime",
-      description: "The single day this event happens on.",
+      description: "The first day of the event.",
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "endDate",
+      title: "Finishing date",
+      type: "datetime",
+      description: "Defaults to the start date when left empty.",
+      validation: (rule) =>
+        rule.custom((endDate, context) => {
+          const startDate = context.document?.date;
+
+          return !endDate ||
+            typeof startDate !== "string" ||
+            endDate >= startDate
+            ? true
+            : "Finishing date cannot be before the start date.";
+        }),
     }),
     defineField({
       name: "category",
