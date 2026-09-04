@@ -84,7 +84,12 @@ export default async function MeldingerPage() {
         </div>
       </section>
 
-      <AddButton title="Ny melding" label="Ny melding" anchor="add-message">
+      <AddButton
+        title="Ny melding"
+        label="Ny melding"
+        anchor="add-message"
+        hideTriggerOnMobile
+      >
         <ShortMessageForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>
     </main>

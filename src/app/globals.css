@@ -2390,6 +2390,92 @@ button {
   font-weight: 700;
 }
 
+.mobileActionMenu {
+  position: fixed;
+  left: 50%;
+  bottom: max(0.5rem, env(safe-area-inset-bottom));
+  z-index: 45;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+  width: min(32rem, calc(100% - 1rem));
+  min-height: 4.6rem;
+  padding: 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: rgba(255, 253, 248, 0.96);
+  box-shadow: 0 14px 36px rgba(39, 54, 70, 0.22);
+  backdrop-filter: blur(14px);
+  transform: translateX(-50%);
+}
+
+.mobileActionItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+  min-height: 3.6rem;
+  border-radius: 0.9rem;
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+}
+
+.mobileActionItem:active,
+.mobileActionItem:focus-visible {
+  background: rgba(223, 240, 255, 0.7);
+  color: var(--ink);
+}
+
+.mobileActionIcon {
+  display: grid;
+  min-height: 1.45rem;
+  place-items: center;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.mobileActionItemPrimary {
+  color: var(--ink);
+  font-size: 0.68rem;
+  font-weight: 900;
+  transform: translateY(-0.4rem);
+}
+
+.mobileActionItemPrimary .mobileActionIcon {
+  width: 2.65rem;
+  height: 2.65rem;
+  border-radius: 999px;
+  background: var(--warm);
+  box-shadow: 0 7px 18px rgba(179, 91, 47, 0.28);
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+@media (max-width: 699px) {
+  .shell {
+    padding-bottom: 7rem;
+  }
+
+  .addFabHiddenOnMobile {
+    display: none;
+  }
+
+  .addFab:not(.addFabHiddenOnMobile) {
+    bottom: calc(6rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 700px) {
+  .mobileActionMenu {
+    display: none;
+  }
+}
+
 /* Overlay backdrop */
 .formModalBackdrop {
   position: fixed;

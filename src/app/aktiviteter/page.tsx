@@ -130,7 +130,12 @@ export default async function AktiviteterPage() {
         )}
       </section>
 
-      <AddButton title="Legg til fast aktivitet" label="Ny aktivitet">
+      <AddButton
+        title="Legg til fast aktivitet"
+        label="Ny aktivitet"
+        anchor="add-activity"
+        hideTriggerOnMobile
+      >
         <RecurringEventForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>
     </main>

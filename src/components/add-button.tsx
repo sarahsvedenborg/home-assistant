@@ -18,6 +18,8 @@ type AddButtonProps = {
   anchor?: string;
   // Keep the modal available to hash links without rendering another floating button.
   hideTrigger?: boolean;
+  // Hide duplicate actions that are already present in the mobile action menu.
+  hideTriggerOnMobile?: boolean;
   // Use a wider dialog for forms with horizontal option groups.
   wide?: boolean;
   // The form to render inside the modal; receives an injected onSuccess.
@@ -29,6 +31,7 @@ export function AddButton({
   label,
   anchor,
   hideTrigger = false,
+  hideTriggerOnMobile = false,
   wide = false,
   children,
 }: AddButtonProps) {
@@ -84,7 +87,13 @@ export function AddButton({
   return (
     <>
       {hideTrigger ? null : (
-        <button type="button" className="addFab" onClick={() => setIsOpen(true)}>
+        <button
+          type="button"
+          className={
+            hideTriggerOnMobile ? "addFab addFabHiddenOnMobile" : "addFab"
+          }
+          onClick={() => setIsOpen(true)}
+        >
           <span className="addFabIcon" aria-hidden="true">
             +
           </span>
