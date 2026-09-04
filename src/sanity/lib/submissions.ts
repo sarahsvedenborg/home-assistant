@@ -461,6 +461,7 @@ export async function submitSingleEvent(input: {
   participants: string[];
   category?: string;
   date: string;
+  endDate: string;
   allDay: boolean;
   time?: string;
   endTime?: string;
@@ -488,6 +489,7 @@ export async function submitSingleEvent(input: {
     familyMemberName?: string;
     category?: string;
     date: string;
+    endDate: string;
     allDay: boolean;
     time?: string;
     endTime?: string;
@@ -501,6 +503,7 @@ export async function submitSingleEvent(input: {
     familyMemberName: singleMemberName,
     category: input.category,
     date: input.date,
+    endDate: input.endDate,
     allDay: input.allDay,
     time: input.time,
     endTime: input.endTime,

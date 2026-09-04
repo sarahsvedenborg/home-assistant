@@ -164,6 +164,7 @@ type SanitySingleEvent = {
   title?: string;
   category?: string;
   date: string;
+  endDate?: string;
   time?: string;
   endTime?: string;
   allDay?: boolean;
@@ -463,6 +464,7 @@ export async function getSingleEvents(): Promise<SingleEvent[]> {
           : "Hendelse"),
       category: event.category,
       date: event.date,
+      endDate: event.endDate || event.date,
       time: event.time,
       endTime: event.endTime,
       allDay: Boolean(event.allDay),

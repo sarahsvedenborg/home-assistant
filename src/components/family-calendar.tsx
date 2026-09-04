@@ -48,6 +48,17 @@ function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
+function formatLongDateKey(value: string): string {
+  return capitalize(
+    formatDate(dateFromKey(value), {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }),
+  );
+}
+
 function periodTitle(view: CalendarView, anchor: Date, days: CalendarDay[]): string {
   if (view === "month") {
     return capitalize(formatDate(anchor, { month: "long", year: "numeric" }));
@@ -388,14 +399,15 @@ export function FamilyCalendar({
               <div>
                 <dt>Dato</dt>
                 <dd>
-                  {capitalize(
-                    formatDate(dateFromKey(selectedEvent.dateKey), {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    }),
-                  )}
+                  {selectedEvent.event.startDateKey &&
+                  selectedEvent.event.endDateKey &&
+                  selectedEvent.event.startDateKey !==
+                    selectedEvent.event.endDateKey
+                    ? `${formatLongDateKey(selectedEvent.event.startDateKey)} – ${formatLongDateKey(selectedEvent.event.endDateKey)}`
+                    : formatLongDateKey(
+                        selectedEvent.event.startDateKey ||
+                          selectedEvent.dateKey,
+                      )}
                 </dd>
               </div>
               <div>

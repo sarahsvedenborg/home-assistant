@@ -115,7 +115,8 @@ export type SingleEvent = {
   id: string;
   title: string;
   category?: string;
-  date: string; // ISO datetime; only the date portion is significant
+  date: string; // ISO datetime for the first day
+  endDate?: string; // ISO datetime; defaults to date for legacy events
   time?: string;
   endTime?: string;
   allDay?: boolean;

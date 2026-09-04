@@ -51,7 +51,7 @@ function isActiveOn(event: RecurringEvent, dateKey: string): boolean {
 }
 
 // A unified event shape the dashboard renders, whatever the source. Recurring
-// occurrences and single-day events both normalize to this.
+// occurrences and dated events both normalize to this.
 export type DashboardEvent = {
   id: string;
   source: "recurring" | "single";
@@ -63,6 +63,8 @@ export type DashboardEvent = {
   categoryLabel?: string;
   allDay?: boolean;
   note?: string;
+  startDateKey?: string;
+  endDateKey?: string;
 };
 
 export type CalendarDay = {
@@ -104,6 +106,8 @@ function singleToDashboardEvent(event: SingleEvent): DashboardEvent {
       : undefined,
     allDay: event.allDay,
     note: event.note,
+    startDateKey: event.date.slice(0, 10),
+    endDateKey: (event.endDate || event.date).slice(0, 10),
   };
 }
 
@@ -130,7 +134,12 @@ export function eventsForDateKey(
     .map(toDashboardEvent);
 
   const singleToday = single
-    .filter((event) => osloDateKey(new Date(event.date)) === dateKey)
+    .filter((event) => {
+      const startDateKey = event.date.slice(0, 10);
+      const endDateKey = (event.endDate || event.date).slice(0, 10);
+
+      return dateKey >= startDateKey && dateKey <= endDateKey;
+    })
     .map(singleToDashboardEvent);
 
   return [...recurringToday, ...singleToday].sort((left, right) =>
