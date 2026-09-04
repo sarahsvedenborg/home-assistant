@@ -2690,6 +2690,19 @@ button {
   border-bottom: 1px dashed var(--line);
 }
 
+.calendarPublicHolidays {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.calendarPublicHolidays p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
 .calendarBirthdayNotes,
 .calendarVacationNotes,
 .calendarHolydayNotes {

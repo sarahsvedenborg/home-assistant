@@ -112,6 +112,11 @@ export type DayNote = {
   category: DayNoteCategory;
 };
 
+export type NorwegianHoliday = {
+  date: string;
+  name: string;
+};
+
 export type SingleEvent = {
   id: string;
   title: string;
