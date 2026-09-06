@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { ShoppingListEntry } from "@/lib/types";
 
@@ -10,20 +9,9 @@ type ShoppingListBrowserProps = {
 };
 
 export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
-  const router = useRouter();
   const [localItems, setLocalItems] = useState(items);
-  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [pendingIds, setPendingIds] = useState<Set<string>>(() => new Set());
   const [error, setError] = useState<string | null>(null);
-
-  const sortedItems = useMemo(() => {
-    return [...localItems].sort((left, right) => {
-      if (left.checked === right.checked) {
-        return 0;
-      }
-
-      return left.checked ? 1 : -1;
-    });
-  }, [localItems]);
 
   useEffect(() => {
     setLocalItems(items);
@@ -38,7 +26,7 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
 
     const nextChecked = !currentItem.checked;
 
-    setPendingId(id);
+    setPendingIds((current) => new Set(current).add(id));
     setError(null);
     setLocalItems((current) =>
       current.map((item) => (item.id === id ? { ...item, checked: nextChecked } : item)),
@@ -50,7 +38,7 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ id, checked: nextChecked }),
       });
 
       if (!response.ok) {
@@ -72,45 +60,93 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
       );
       setError("Noe gikk galt. Proev igjen.");
     } finally {
-      setPendingId(null);
-      router.refresh();
+      setPendingIds((current) => {
+        const next = new Set(current);
+        next.delete(id);
+        return next;
+      });
     }
+  }
+
+  const remainingItems = localItems.filter((item) => !item.checked);
+  const boughtItems = localItems.filter((item) => item.checked);
+
+  function renderItems(list: ShoppingListEntry[], emptyText: string) {
+    if (list.length === 0) {
+      return <p className="shoppingColumnEmpty">{emptyText}</p>;
+    }
+
+    return (
+      <div className="shoppingItemList">
+        {list.map((item) => {
+          const isPending = pendingIds.has(item.id);
+
+          return (
+            <article
+              key={item.id}
+              className={
+                item.checked ? "shoppingItem shoppingItemChecked" : "shoppingItem"
+              }
+            >
+              <div className="itemTitleRow">
+                <strong
+                  className={
+                    item.checked
+                      ? "shoppingItemTitle shoppingItemTitleChecked"
+                      : "shoppingItemTitle"
+                  }
+                >
+                  {item.title}
+                </strong>
+                <button
+                  type="button"
+                  className={
+                    item.checked
+                      ? "shoppingToggle shoppingToggleChecked"
+                      : "shoppingToggle"
+                  }
+                  onClick={() => toggleItem(item.id)}
+                  disabled={isPending}
+                  aria-label={
+                    item.checked
+                      ? `Flytt ${item.title} til må kjøpes`
+                      : `Marker ${item.title} som kjøpt`
+                  }
+                >
+                  {isPending
+                    ? "Oppdaterer…"
+                    : item.checked
+                      ? "Må kjøpes"
+                      : "Marker som kjøpt"}
+                </button>
+              </div>
+              {item.quantity ? <p>Mengde: {item.quantity}</p> : null}
+              {item.note ? <p>{item.note}</p> : null}
+            </article>
+          );
+        })}
+      </div>
+    );
   }
 
   return (
     <>
-      <div className="groupStack">
-        {sortedItems.map((item) => {
-          const isPending = pendingId === item.id;
+      <div className="shoppingListColumns">
+        <section
+          className="shoppingListColumn"
+          aria-labelledby="shopping-needed-title"
+        >
+          <h2 id="shopping-needed-title">Må kjøpes</h2>
+          {renderItems(remainingItems, "Ingenting mangler akkurat nå.")}
+        </section>
 
-          return (
-            <button
-              key={item.id}
-              type="button"
-              className={item.checked ? "shoppingToggle shoppingToggleChecked" : "shoppingToggle"}
-              onClick={() => toggleItem(item.id)}
-              disabled={isPending}
-            >
-              <article className={item.checked ? "itemCard shoppingItemChecked" : "itemCard"}>
-                <div className="itemTitleRow">
-                  <div className="shoppingItemTitleWrap">
-                    <span className={item.checked ? "shoppingCheckbox shoppingCheckboxChecked" : "shoppingCheckbox"} aria-hidden="true">
-                      {item.checked ? "✓" : ""}
-                    </span>
-                    <strong className={item.checked ? "shoppingItemTitle shoppingItemTitleChecked" : "shoppingItemTitle"}>
-                      {item.title}
-                    </strong>
-                  </div>
-                  <span className="itemMeta">
-                    {isPending ? "Oppdaterer..." : item.checked ? "Kjøpt" : "Mangler"}
-                  </span>
-                </div>
-                {item.quantity ? <p>Mengde: {item.quantity}</p> : null}
-                {item.note ? <p>{item.note}</p> : null}
-              </article>
-            </button>
-          );
-        })}
+        <section
+          className="shoppingListColumn shoppingListColumnBought"
+          aria-labelledby="shopping-usual-title"
+        >
+          <h2 id="shopping-usual-title">Pleier å kjøpe</h2>
+          {renderItems(boughtItems, "Ingen tidligere kjøpte varer.")}
+        </section>
       </div>
 
       {error ? <p className="feedback feedbackError">{error}</p> : null}

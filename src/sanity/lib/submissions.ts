@@ -176,15 +176,18 @@ export async function addShoppingListItem(input: {
   return "Varen er lagt til i handlelisten!";
 }
 
-export async function toggleShoppingListItem(itemId: string) {
+export async function setShoppingListItemChecked(
+  itemId: string,
+  checked: boolean,
+) {
   const client = getWriteClient();
 
   if (!client) {
     throw new Error("Sanity writes are not configured yet.");
   }
 
-  const currentItem = await client.fetch<{ _id: string; checked?: boolean } | null>(
-    `*[_type == "shoppingListItem" && _id == $id][0]{_id, checked}`,
+  const currentItem = await client.fetch<{ _id: string } | null>(
+    `*[_type == "shoppingListItem" && _id == $id][0]{_id}`,
     { id: itemId },
   );
 
@@ -192,11 +195,9 @@ export async function toggleShoppingListItem(itemId: string) {
     throw new Error("Fant ikke varen du ville oppdatere.");
   }
 
-  const nextChecked = !Boolean(currentItem.checked);
+  await client.patch(currentItem._id).set({ checked }).commit();
 
-  await client.patch(currentItem._id).set({ checked: nextChecked }).commit();
-
-  return nextChecked;
+  return checked;
 }
 
 export async function submitRecipe(input: {

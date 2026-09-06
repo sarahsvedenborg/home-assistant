@@ -1,6 +1,7 @@
 import { boardIssueType } from "./boardIssueType";
 import { choreType } from "./choreType";
 import { dayNoteType } from "./dayNoteType";
+import { dinnerType } from "./dinnerType";
 import { familyMemberType } from "./familyMemberType";
 import { featureSuggestionType } from "./featureSuggestionType";
 import { movieRecommendationType } from "./movieRecommendationType";
@@ -16,6 +17,7 @@ export const schemaTypes = [
   boardIssueType,
   choreType,
   dayNoteType,
+  dinnerType,
   familyMemberType,
   wishListItemType,
   movieRecommendationType,

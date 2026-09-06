@@ -78,6 +78,16 @@ export type Recipe = {
   comments: string[];
 };
 
+export type DinnerCategory = "regular" | "cozy" | "simple" | "trip";
+
+export type Dinner = {
+  id: string;
+  title: string;
+  ingredients: string[];
+  categories: DinnerCategory[];
+  day?: number;
+};
+
 export type FeatureSuggestion = {
   id: string;
   title: string;

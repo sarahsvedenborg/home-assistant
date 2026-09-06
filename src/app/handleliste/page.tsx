@@ -23,12 +23,8 @@ export default async function HandlelistePage() {
       </section>
 
       <section className="listStack">
-        <div className="listPanel">
-          <div className="panelHeading">
-            <h2>{shoppingList.title}</h2>
-          </div>
-
-          {shoppingList.items.length === 0 ? (
+        {shoppingList.items.length === 0 ? (
+          <div className="listPanel">
             <div className="emptyState">
               <span className="emptyIcon" aria-hidden="true">
                 🛒
@@ -36,10 +32,10 @@ export default async function HandlelistePage() {
               <h3>Handlelisten er tom</h3>
               <p>Legg til den foerste varen i skjemaet.</p>
             </div>
-          ) : (
-            <ShoppingListBrowser items={shoppingList.items} />
-          )}
-        </div>
+          </div>
+        ) : (
+          <ShoppingListBrowser items={shoppingList.items} />
+        )}
       </section>
 
       <AddButton

@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 
 import { AUTH_COOKIE_NAME, isAuthEnabled, isValidAuthCookie } from "@/lib/auth";
 import { validateShoppingListSubmission } from "@/lib/validation";
-import { addShoppingListItem, toggleShoppingListItem } from "@/sanity/lib/submissions";
+import {
+  addShoppingListItem,
+  setShoppingListItemChecked,
+} from "@/sanity/lib/submissions";
 
 async function assertAuthorized(request: Request) {
   if (!isAuthEnabled()) {
@@ -57,14 +60,27 @@ export async function PATCH(request: Request) {
     return unauthorizedResponse;
   }
 
-  const payload = (await request.json()) as { id?: string };
+  const payload = (await request.json()) as {
+    id?: unknown;
+    checked?: unknown;
+  };
 
-  if (!payload.id) {
+  if (typeof payload.id !== "string" || !payload.id) {
     return NextResponse.json({ error: "Mangler vare-id." }, { status: 400 });
   }
 
+  if (typeof payload.checked !== "boolean") {
+    return NextResponse.json(
+      { error: "Mangler gyldig status for varen." },
+      { status: 400 },
+    );
+  }
+
   try {
-    const checked = await toggleShoppingListItem(payload.id);
+    const checked = await setShoppingListItemChecked(
+      payload.id,
+      payload.checked,
+    );
     return NextResponse.json({ checked });
   } catch (error) {
     const errorMessage =

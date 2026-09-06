@@ -462,6 +462,118 @@ button {
   font-size: clamp(2rem, 3.5vw, 3rem);
 }
 
+.issueBoardToolbar p {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.mealPlanShell {
+  width: min(1600px, calc(100% - 2rem));
+}
+
+.mealPlanWeeks {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+}
+
+.mealPlanWeek {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.mealPlanWeek > h2 {
+  padding-inline: 0.25rem;
+  font-family: var(--font-display), cursive;
+  font-size: 1.45rem;
+}
+
+.mealPlanGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.mealPlanDay {
+  min-width: 0;
+  min-height: 15rem;
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 12px 35px rgba(58, 76, 98, 0.08);
+}
+
+.mealPlanDayHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mealPlanDayHeader strong {
+  color: var(--ink);
+  font-size: 1.35rem;
+}
+
+.mealPlanDayContent,
+.mealPlanDinner {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.mealPlanDayContent {
+  margin-top: 0.8rem;
+}
+
+.mealPlanDinner + .mealPlanDinner {
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--line);
+}
+
+.mealPlanDinner h3 {
+  overflow-wrap: anywhere;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.mealPlanCategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.mealPlanCategories span {
+  padding: 0.22rem 0.45rem;
+  border-radius: 999px;
+  background: var(--warm-soft);
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.mealPlanIngredients {
+  display: grid;
+  gap: 0.25rem;
+  padding-left: 1rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.mealPlanEmpty {
+  margin-top: 0.8rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
 .issueBoardColumns {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2059,34 +2171,90 @@ button {
   color: var(--ink);
 }
 
+.shoppingItemList {
+  display: grid;
+}
+
+.shoppingItem {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.95rem 0.15rem;
+}
+
+.shoppingItem + .shoppingItem {
+  border-top: 1px solid rgba(77, 96, 122, 0.16);
+}
+
 .shoppingItemChecked {
   opacity: 0.72;
-  background: rgba(130, 209, 174, 0.16);
+}
+
+.shoppingListColumns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.shoppingListColumn {
+  display: grid;
+  gap: 0.9rem;
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.shoppingListColumn > h2 {
+  padding: 0 0.2rem 0.65rem;
+  border-bottom: 2px solid rgba(255, 159, 110, 0.42);
+  font-family: var(--font-display), cursive;
+  font-size: 1.45rem;
+}
+
+.shoppingListColumnBought > h2 {
+  border-bottom-color: rgba(130, 209, 174, 0.55);
+}
+
+.shoppingColumnEmpty {
+  padding: 1rem;
+  border: 1px dashed var(--line);
+  border-radius: 1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .shoppingToggle {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  text-align: left;
+  flex: 0 0 auto;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid rgba(32, 89, 61, 0.2);
+  border-radius: 0.7rem;
+  background: rgba(130, 209, 174, 0.22);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
 }
 
 .shoppingToggle:disabled {
   cursor: wait;
+  opacity: 0.65;
 }
 
-.shoppingToggle .itemCard {
-  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
-}
-
-.shoppingToggle:hover .itemCard,
-.shoppingToggle:focus-visible .itemCard {
+.shoppingToggle:hover,
+.shoppingToggle:focus-visible {
   transform: translateY(-1px);
-  outline: 2px solid rgba(94, 166, 255, 0.28);
+  border-color: rgba(32, 89, 61, 0.4);
 }
 
-.shoppingToggleChecked .itemCard {
-  background: rgba(130, 209, 174, 0.16);
+.shoppingToggleChecked {
+  border-color: rgba(255, 159, 110, 0.3);
+  background: rgba(255, 226, 199, 0.62);
 }
 
 .recipeContentStack {
@@ -2135,31 +2303,6 @@ button {
   color: var(--muted);
   font-size: 0.95rem;
   font-weight: 800;
-}
-
-.shoppingItemTitleWrap {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.shoppingCheckbox {
-  display: inline-grid;
-  place-items: center;
-  width: 1.35rem;
-  height: 1.35rem;
-  border: 2px solid rgba(75, 98, 124, 0.35);
-  border-radius: 0.35rem;
-  background: rgba(255, 255, 255, 0.92);
-  color: #20593d;
-  font-size: 0.9rem;
-  font-weight: 900;
-  flex-shrink: 0;
-}
-
-.shoppingCheckboxChecked {
-  border-color: rgba(32, 89, 61, 0.45);
-  background: rgba(130, 209, 174, 0.38);
 }
 
 .shoppingItemTitle {
@@ -3100,6 +3243,10 @@ button {
 }
 
 @media (max-width: 699px) {
+  .shoppingListColumns {
+    grid-template-columns: 1fr;
+  }
+
   .homeViewBar {
     align-items: stretch;
     flex-direction: column;
@@ -3140,6 +3287,18 @@ button {
     flex: 0 0 min(84vw, 22rem);
     min-height: 22rem;
     scroll-snap-align: start;
+  }
+
+  .mealPlanShell {
+    width: calc(100% - 1rem);
+  }
+
+  .mealPlanGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mealPlanDay {
+    min-height: 12rem;
   }
 
   .calendarShell {
@@ -3183,5 +3342,11 @@ button {
 
   .calendarGridWeek .calendarDay {
     min-height: 420px;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 1199px) {
+  .mealPlanGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
