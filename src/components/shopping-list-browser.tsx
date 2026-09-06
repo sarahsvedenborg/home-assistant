@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { ShoppingListEntry } from "@/lib/types";
 
@@ -14,16 +14,6 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
   const [localItems, setLocalItems] = useState(items);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const sortedItems = useMemo(() => {
-    return [...localItems].sort((left, right) => {
-      if (left.checked === right.checked) {
-        return 0;
-      }
-
-      return left.checked ? 1 : -1;
-    });
-  }, [localItems]);
 
   useEffect(() => {
     setLocalItems(items);
@@ -77,40 +67,97 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
     }
   }
 
-  return (
-    <>
+  const remainingItems = localItems.filter((item) => !item.checked);
+  const boughtItems = localItems.filter((item) => item.checked);
+
+  function renderItems(list: ShoppingListEntry[], emptyText: string) {
+    if (list.length === 0) {
+      return <p className="shoppingColumnEmpty">{emptyText}</p>;
+    }
+
+    return (
       <div className="groupStack">
-        {sortedItems.map((item) => {
+        {list.map((item) => {
           const isPending = pendingId === item.id;
 
           return (
-            <button
+            <article
               key={item.id}
-              type="button"
-              className={item.checked ? "shoppingToggle shoppingToggleChecked" : "shoppingToggle"}
-              onClick={() => toggleItem(item.id)}
-              disabled={isPending}
+              className={
+                item.checked ? "itemCard shoppingItemChecked" : "itemCard"
+              }
             >
-              <article className={item.checked ? "itemCard shoppingItemChecked" : "itemCard"}>
-                <div className="itemTitleRow">
-                  <div className="shoppingItemTitleWrap">
-                    <span className={item.checked ? "shoppingCheckbox shoppingCheckboxChecked" : "shoppingCheckbox"} aria-hidden="true">
-                      {item.checked ? "✓" : ""}
-                    </span>
-                    <strong className={item.checked ? "shoppingItemTitle shoppingItemTitleChecked" : "shoppingItemTitle"}>
-                      {item.title}
-                    </strong>
-                  </div>
-                  <span className="itemMeta">
-                    {isPending ? "Oppdaterer..." : item.checked ? "Kjøpt" : "Mangler"}
+              <div className="itemTitleRow">
+                <div className="shoppingItemTitleWrap">
+                  <span
+                    className={
+                      item.checked
+                        ? "shoppingCheckbox shoppingCheckboxChecked"
+                        : "shoppingCheckbox"
+                    }
+                    aria-hidden="true"
+                  >
+                    {item.checked ? "✓" : ""}
                   </span>
+                  <strong
+                    className={
+                      item.checked
+                        ? "shoppingItemTitle shoppingItemTitleChecked"
+                        : "shoppingItemTitle"
+                    }
+                  >
+                    {item.title}
+                  </strong>
                 </div>
-                {item.quantity ? <p>Mengde: {item.quantity}</p> : null}
-                {item.note ? <p>{item.note}</p> : null}
-              </article>
-            </button>
+                <button
+                  type="button"
+                  className={
+                    item.checked
+                      ? "shoppingToggle shoppingToggleChecked"
+                      : "shoppingToggle"
+                  }
+                  onClick={() => toggleItem(item.id)}
+                  disabled={isPending}
+                  aria-label={
+                    item.checked
+                      ? `Flytt ${item.title} til må kjøpes`
+                      : `Marker ${item.title} som kjøpt`
+                  }
+                >
+                  {isPending
+                    ? "Oppdaterer…"
+                    : item.checked
+                      ? "Må kjøpes"
+                      : "Marker som kjøpt"}
+                </button>
+              </div>
+              {item.quantity ? <p>Mengde: {item.quantity}</p> : null}
+              {item.note ? <p>{item.note}</p> : null}
+            </article>
           );
         })}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="shoppingListColumns">
+        <section
+          className="shoppingListColumn"
+          aria-labelledby="shopping-needed-title"
+        >
+          <h2 id="shopping-needed-title">Må kjøpes</h2>
+          {renderItems(remainingItems, "Ingenting mangler akkurat nå.")}
+        </section>
+
+        <section
+          className="shoppingListColumn shoppingListColumnBought"
+          aria-labelledby="shopping-usual-title"
+        >
+          <h2 id="shopping-usual-title">Pleier å kjøpe</h2>
+          {renderItems(boughtItems, "Ingen tidligere kjøpte varer.")}
+        </section>
       </div>
 
       {error ? <p className="feedback feedbackError">{error}</p> : null}

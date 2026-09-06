@@ -2176,29 +2176,72 @@ button {
   background: rgba(130, 209, 174, 0.16);
 }
 
+.shoppingListColumns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.shoppingListColumn {
+  display: grid;
+  gap: 0.9rem;
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.shoppingListColumn > h2 {
+  padding: 0 0.2rem 0.65rem;
+  border-bottom: 2px solid rgba(255, 159, 110, 0.42);
+  font-family: var(--font-display), cursive;
+  font-size: 1.45rem;
+}
+
+.shoppingListColumnBought > h2 {
+  border-bottom-color: rgba(130, 209, 174, 0.55);
+}
+
+.shoppingColumnEmpty {
+  padding: 1rem;
+  border: 1px dashed var(--line);
+  border-radius: 1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 .shoppingToggle {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  text-align: left;
+  flex: 0 0 auto;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid rgba(32, 89, 61, 0.2);
+  border-radius: 0.7rem;
+  background: rgba(130, 209, 174, 0.22);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
 }
 
 .shoppingToggle:disabled {
   cursor: wait;
+  opacity: 0.65;
 }
 
-.shoppingToggle .itemCard {
-  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
-}
-
-.shoppingToggle:hover .itemCard,
-.shoppingToggle:focus-visible .itemCard {
+.shoppingToggle:hover,
+.shoppingToggle:focus-visible {
   transform: translateY(-1px);
-  outline: 2px solid rgba(94, 166, 255, 0.28);
+  border-color: rgba(32, 89, 61, 0.4);
 }
 
-.shoppingToggleChecked .itemCard {
-  background: rgba(130, 209, 174, 0.16);
+.shoppingToggleChecked {
+  border-color: rgba(255, 159, 110, 0.3);
+  background: rgba(255, 226, 199, 0.62);
 }
 
 .recipeContentStack {
@@ -3212,6 +3255,10 @@ button {
 }
 
 @media (max-width: 699px) {
+  .shoppingListColumns {
+    grid-template-columns: 1fr;
+  }
+
   .homeViewBar {
     align-items: stretch;
     flex-direction: column;
