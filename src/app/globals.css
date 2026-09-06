@@ -462,6 +462,118 @@ button {
   font-size: clamp(2rem, 3.5vw, 3rem);
 }
 
+.issueBoardToolbar p {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.mealPlanShell {
+  width: min(1600px, calc(100% - 2rem));
+}
+
+.mealPlanWeeks {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+}
+
+.mealPlanWeek {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.mealPlanWeek > h2 {
+  padding-inline: 0.25rem;
+  font-family: var(--font-display), cursive;
+  font-size: 1.45rem;
+}
+
+.mealPlanGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.mealPlanDay {
+  min-width: 0;
+  min-height: 15rem;
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 12px 35px rgba(58, 76, 98, 0.08);
+}
+
+.mealPlanDayHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mealPlanDayHeader strong {
+  color: var(--ink);
+  font-size: 1.35rem;
+}
+
+.mealPlanDayContent,
+.mealPlanDinner {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.mealPlanDayContent {
+  margin-top: 0.8rem;
+}
+
+.mealPlanDinner + .mealPlanDinner {
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--line);
+}
+
+.mealPlanDinner h3 {
+  overflow-wrap: anywhere;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.mealPlanCategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.mealPlanCategories span {
+  padding: 0.22rem 0.45rem;
+  border-radius: 999px;
+  background: var(--warm-soft);
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.mealPlanIngredients {
+  display: grid;
+  gap: 0.25rem;
+  padding-left: 1rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.mealPlanEmpty {
+  margin-top: 0.8rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
 .issueBoardColumns {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -3142,6 +3254,18 @@ button {
     scroll-snap-align: start;
   }
 
+  .mealPlanShell {
+    width: calc(100% - 1rem);
+  }
+
+  .mealPlanGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mealPlanDay {
+    min-height: 12rem;
+  }
+
   .calendarShell {
     width: min(100% - 1rem, 1600px);
   }
@@ -3183,5 +3307,11 @@ button {
 
   .calendarGridWeek .calendarDay {
     min-height: 420px;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 1199px) {
+  .mealPlanGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

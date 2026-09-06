@@ -19,6 +19,8 @@ import type {
   BoardIssue,
   BoardIssueStatus,
   DayNote,
+  Dinner,
+  DinnerCategory,
   FamilyMember,
   FeatureSuggestion,
   MovieRecommendation,
@@ -45,6 +47,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import {
   BOARD_ISSUES_QUERY,
   DAY_NOTES_QUERY,
+  DINNERS_QUERY,
   FAMILY_MEMBERS_QUERY,
   FEATURE_SUGGESTIONS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
@@ -120,6 +123,14 @@ type SanityRecipe = {
   ingredients?: SanityBlock[];
   steps?: SanityBlock[];
   comments?: SanityBlock[];
+};
+
+type SanityDinner = {
+  _id: string;
+  title: string;
+  ingredients?: string[];
+  categories?: string[];
+  day?: number;
 };
 
 type SanityFeatureSuggestion = {
@@ -345,6 +356,42 @@ export async function getRecipes(): Promise<Recipe[]> {
 export async function getRecipeById(id: string): Promise<Recipe | null> {
   const recipes = await getRecipes();
   return recipes.find((recipe) => recipe.id === id) || null;
+}
+
+const DINNER_CATEGORY_VALUES: DinnerCategory[] = [
+  "regular",
+  "cozy",
+  "simple",
+  "trip",
+];
+
+function isDinnerCategory(value: string): value is DinnerCategory {
+  return DINNER_CATEGORY_VALUES.includes(value as DinnerCategory);
+}
+
+export async function getDinners(): Promise<Dinner[]> {
+  if (!isSanityConfigured) {
+    return [];
+  }
+
+  const dinners = await fetchFromSanity<SanityDinner[]>(DINNERS_QUERY);
+  if (!dinners) {
+    return [];
+  }
+
+  return dinners.map((dinner) => ({
+    id: dinner._id,
+    title: dinner.title,
+    ingredients: dinner.ingredients?.filter(Boolean) || [],
+    categories: (dinner.categories || []).filter(isDinnerCategory),
+    day:
+      typeof dinner.day === "number" &&
+      Number.isInteger(dinner.day) &&
+      dinner.day >= 1 &&
+      dinner.day <= 14
+        ? dinner.day
+        : undefined,
+  }));
 }
 
 export async function getFeatureSuggestions(): Promise<FeatureSuggestion[]> {
