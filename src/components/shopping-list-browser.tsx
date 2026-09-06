@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import type { ShoppingListEntry } from "@/lib/types";
@@ -10,9 +9,8 @@ type ShoppingListBrowserProps = {
 };
 
 export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
-  const router = useRouter();
   const [localItems, setLocalItems] = useState(items);
-  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [pendingIds, setPendingIds] = useState<Set<string>>(() => new Set());
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -28,7 +26,7 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
 
     const nextChecked = !currentItem.checked;
 
-    setPendingId(id);
+    setPendingIds((current) => new Set(current).add(id));
     setError(null);
     setLocalItems((current) =>
       current.map((item) => (item.id === id ? { ...item, checked: nextChecked } : item)),
@@ -40,7 +38,7 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ id, checked: nextChecked }),
       });
 
       if (!response.ok) {
@@ -62,8 +60,11 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
       );
       setError("Noe gikk galt. Proev igjen.");
     } finally {
-      setPendingId(null);
-      router.refresh();
+      setPendingIds((current) => {
+        const next = new Set(current);
+        next.delete(id);
+        return next;
+      });
     }
   }
 
@@ -76,39 +77,27 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
     }
 
     return (
-      <div className="groupStack">
+      <div className="shoppingItemList">
         {list.map((item) => {
-          const isPending = pendingId === item.id;
+          const isPending = pendingIds.has(item.id);
 
           return (
             <article
               key={item.id}
               className={
-                item.checked ? "itemCard shoppingItemChecked" : "itemCard"
+                item.checked ? "shoppingItem shoppingItemChecked" : "shoppingItem"
               }
             >
               <div className="itemTitleRow">
-                <div className="shoppingItemTitleWrap">
-                  <span
-                    className={
-                      item.checked
-                        ? "shoppingCheckbox shoppingCheckboxChecked"
-                        : "shoppingCheckbox"
-                    }
-                    aria-hidden="true"
-                  >
-                    {item.checked ? "✓" : ""}
-                  </span>
-                  <strong
-                    className={
-                      item.checked
-                        ? "shoppingItemTitle shoppingItemTitleChecked"
-                        : "shoppingItemTitle"
-                    }
-                  >
-                    {item.title}
-                  </strong>
-                </div>
+                <strong
+                  className={
+                    item.checked
+                      ? "shoppingItemTitle shoppingItemTitleChecked"
+                      : "shoppingItemTitle"
+                  }
+                >
+                  {item.title}
+                </strong>
                 <button
                   type="button"
                   className={

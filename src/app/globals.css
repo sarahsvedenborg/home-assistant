@@ -2171,9 +2171,22 @@ button {
   color: var(--ink);
 }
 
+.shoppingItemList {
+  display: grid;
+}
+
+.shoppingItem {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.95rem 0.15rem;
+}
+
+.shoppingItem + .shoppingItem {
+  border-top: 1px solid rgba(77, 96, 122, 0.16);
+}
+
 .shoppingItemChecked {
   opacity: 0.72;
-  background: rgba(130, 209, 174, 0.16);
 }
 
 .shoppingListColumns {
@@ -2290,31 +2303,6 @@ button {
   color: var(--muted);
   font-size: 0.95rem;
   font-weight: 800;
-}
-
-.shoppingItemTitleWrap {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.shoppingCheckbox {
-  display: inline-grid;
-  place-items: center;
-  width: 1.35rem;
-  height: 1.35rem;
-  border: 2px solid rgba(75, 98, 124, 0.35);
-  border-radius: 0.35rem;
-  background: rgba(255, 255, 255, 0.92);
-  color: #20593d;
-  font-size: 0.9rem;
-  font-weight: 900;
-  flex-shrink: 0;
-}
-
-.shoppingCheckboxChecked {
-  border-color: rgba(32, 89, 61, 0.45);
-  background: rgba(130, 209, 174, 0.38);
 }
 
 .shoppingItemTitle {
