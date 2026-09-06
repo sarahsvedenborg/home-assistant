@@ -31,29 +31,61 @@ const ACTIVITY_VERB: Record<RecentActivity["type"], string> = {
   shopping: "la til",
 };
 
+const EVENT_GROUPS = [
+  {
+    id: "skole",
+    title: "Skole",
+    match: (event: DashboardEvent) =>
+      event.source === "recurring" && event.category === "skole",
+  },
+  {
+    id: "fritid",
+    title: "Faste aktiviteter",
+    match: (event: DashboardEvent) =>
+      event.source === "recurring" && event.category === "fritid",
+  },
+  {
+    id: "annet",
+    title: "Annet",
+    match: (event: DashboardEvent) => event.source === "single",
+  },
+] as const;
+
 function EventList({ events }: { events: DashboardEvent[] }) {
-  if (events.length === 0) {
+  const groups = EVENT_GROUPS.map((group) => ({
+    ...group,
+    events: events.filter(group.match),
+  })).filter((group) => group.events.length > 0);
+
+  if (groups.length === 0) {
     return <p className="widgetEmpty">Ingen aktiviteter 🎉</p>;
   }
 
   return (
-    <ul className="widgetList eventWidgetList">
-      {events.map((event) => {
-        const timeRange = event.allDay
-          ? "Hele dagen"
-          : [event.time, event.endTime].filter(Boolean).join("–");
-        const meta = [event.familyMember, timeRange, event.categoryLabel]
-          .filter(Boolean)
-          .join(" · ");
+    <div className="eventWidgetGroups">
+      {groups.map((group) => (
+        <section className="eventWidgetGroup" key={group.id} aria-label={group.title}>
+          <h3 className="eventWidgetGroupTitle">{group.title}</h3>
+          <ul className="widgetList eventWidgetList">
+            {group.events.map((event) => {
+              const timeRange = event.allDay
+                ? "Hele dagen"
+                : [event.time, event.endTime].filter(Boolean).join("–");
+              const meta = [event.familyMember, timeRange].filter(Boolean).join(" · ");
 
-        return (
-          <li key={event.id} className="widgetItem">
-            <strong>{event.title}</strong>
-            {meta ? <span className="itemMeta eventWidgetMeta">{meta}</span> : null}
-          </li>
-        );
-      })}
-    </ul>
+              return (
+                <li key={event.id} className="widgetItem">
+                  <strong>{event.title}</strong>
+                  {meta ? (
+                    <span className="itemMeta eventWidgetMeta">{meta}</span>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))}
+    </div>
   );
 }
 

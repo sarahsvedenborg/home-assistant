@@ -1143,6 +1143,25 @@ button {
   gap: 0.2rem;
 }
 
+.eventWidgetGroups {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.eventWidgetGroup + .eventWidgetGroup {
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line);
+}
+
+.eventWidgetGroupTitle {
+  margin: 0 0 0.45rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 .eventWidgetList > .widgetItem + .widgetItem {
   padding-top: 0.65rem;
   border-top: 1px solid var(--line);
