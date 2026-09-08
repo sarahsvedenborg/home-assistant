@@ -111,7 +111,6 @@ export const SHOPPING_LIST_ITEMS_QUERY = `*[_type == "shoppingListItem"] | order
   title,
   quantity,
   note,
-  addedBy,
   checked,
   _createdAt
 }`;

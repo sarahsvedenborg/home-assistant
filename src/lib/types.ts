@@ -58,7 +58,6 @@ export type ShoppingListEntry = {
   title: string;
   quantity?: string;
   note?: string;
-  addedBy?: string;
   checked: boolean;
   createdAt?: string;
 };

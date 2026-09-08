@@ -37,11 +37,6 @@ export const shoppingListType = defineType({
               type: "string",
             }),
             defineField({
-              name: "addedBy",
-              title: "Lagt til av",
-              type: "string",
-            }),
-            defineField({
               name: "checked",
               title: "Kjøpt",
               type: "boolean",

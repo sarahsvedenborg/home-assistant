@@ -1,13 +1,10 @@
 import { AddButton } from "@/components/add-button";
 import { ShoppingListBrowser } from "@/components/shopping-list-browser";
 import { ShoppingListForm } from "@/components/shopping-list-form";
-import { getFamilyMembers, getShoppingList } from "@/lib/data";
+import { getShoppingList } from "@/lib/data";
 
 export default async function HandlelistePage() {
-  const [familyMembers, shoppingList] = await Promise.all([
-    getFamilyMembers(),
-    getShoppingList(),
-  ]);
+  const shoppingList = await getShoppingList();
 
   const remainingItems = shoppingList.items.filter((item) => !item.checked);
 
@@ -44,10 +41,7 @@ export default async function HandlelistePage() {
         anchor="add-item"
         hideTriggerOnMobile
       >
-        <ShoppingListForm
-          familyMembers={familyMembers.map((member) => member.name)}
-          previousItems={shoppingList.items}
-        />
+        <ShoppingListForm previousItems={shoppingList.items} />
       </AddButton>
     </main>
   );

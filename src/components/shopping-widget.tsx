@@ -9,10 +9,8 @@ import type { ShoppingListEntry } from "@/lib/types";
 
 export function ShoppingWidget({
   items,
-  familyMembers,
 }: {
   items: ShoppingListEntry[];
-  familyMembers: string[];
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
@@ -78,7 +76,6 @@ export function ShoppingWidget({
         confirmation={confirmation}
       >
         <ShoppingListForm
-          familyMembers={familyMembers}
           previousItems={items}
           onSuccess={(message) => setConfirmation(message)}
         />
