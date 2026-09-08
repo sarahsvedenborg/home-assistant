@@ -229,7 +229,6 @@ export function buildRecentActivity(
         id: item.id,
         type: "shopping",
         title: item.title,
-        person: item.addedBy,
         createdAt: item.createdAt,
       });
     }

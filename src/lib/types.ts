@@ -58,7 +58,6 @@ export type ShoppingListEntry = {
   title: string;
   quantity?: string;
   note?: string;
-  addedBy?: string;
   checked: boolean;
   createdAt?: string;
 };
@@ -131,6 +130,16 @@ export type DailyQuote = {
   text: string;
   author: string;
   source: "zenquotes" | "fallback";
+};
+
+export type Country = {
+  code: string;
+  name: string;
+  flagUrl: string;
+  flagSvgUrl: string;
+  mapUrl: string;
+  capital?: string;
+  continent?: string;
 };
 
 export type SingleEvent = {

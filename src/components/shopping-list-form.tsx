@@ -6,7 +6,6 @@ import { useMemo, useState, type FormEvent } from "react";
 import type { ShoppingListEntry } from "@/lib/types";
 
 type ShoppingListFormProps = {
-  familyMembers: string[];
   previousItems: ShoppingListEntry[];
   // Called after a successful submit so a parent (e.g. the modal) can show
   // its own confirmation and close. When omitted, an inline message is shown.
@@ -17,11 +16,10 @@ type FormState = {
   title: string;
   quantity: string;
   note: string;
-  addedBy: string;
   website: string;
 };
 
-export function ShoppingListForm({ familyMembers, previousItems, onSuccess }: ShoppingListFormProps) {
+export function ShoppingListForm({ previousItems, onSuccess }: ShoppingListFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
@@ -32,7 +30,6 @@ export function ShoppingListForm({ familyMembers, previousItems, onSuccess }: Sh
     title: "",
     quantity: "",
     note: "",
-    addedBy: familyMembers[0] || "",
     website: "",
   });
 
@@ -73,7 +70,6 @@ export function ShoppingListForm({ familyMembers, previousItems, onSuccess }: Sh
         title: "",
         quantity: "",
         note: "",
-        addedBy: familyMembers[0] || "",
         website: "",
       });
       router.refresh();
@@ -130,20 +126,6 @@ export function ShoppingListForm({ familyMembers, previousItems, onSuccess }: Sh
             maxLength={60}
           />
         </label>
-
-      {/*   <label className="field">
-          <span>Lagt til av</span>
-          <select
-            value={form.addedBy}
-            onChange={(event) => setForm((current) => ({ ...current, addedBy: event.target.value }))}
-          >
-            {familyMembers.map((member) => (
-              <option key={member} value={member}>
-                {member}
-              </option>
-            ))}
-          </select>
-        </label> */}
 
         <label className="field fieldWide">
           <span>Kommentar (valgfritt)</span>

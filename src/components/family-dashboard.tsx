@@ -26,11 +26,6 @@ const ACTIVITY_ICON: Record<RecentActivity["type"], string> = {
   shopping: "🛒",
 };
 
-const ACTIVITY_VERB: Record<RecentActivity["type"], string> = {
-  wish: "ønsket seg",
-  shopping: "la til",
-};
-
 const EVENT_GROUPS = [
   {
     id: "skole",
@@ -201,10 +196,10 @@ export function FamilyDashboard({
                 <strong>
                   <span aria-hidden="true">{ACTIVITY_ICON[item.type]}</span> {item.title}
                 </strong>
-                {item.person ? (
-                  <span className="itemMeta">
-                    {item.person} {ACTIVITY_VERB[item.type]}
-                  </span>
+                {item.type === "shopping" ? (
+                  <span className="itemMeta">lagt til i handlelisten</span>
+                ) : item.person ? (
+                  <span className="itemMeta">{item.person} ønsket seg</span>
                 ) : null}
               </li>
             ))}
@@ -224,7 +219,7 @@ export function FamilyDashboard({
         />
       )}
 
-      <ShoppingWidget items={shoppingItems} familyMembers={familyMembers} />
+      <ShoppingWidget items={shoppingItems} />
 
       <MessageWidget messages={messages} familyMembers={familyMembers} />
     </section>

@@ -102,7 +102,6 @@ type SanityShoppingListItem = {
   title: string;
   quantity?: string;
   note?: string;
-  addedBy?: string;
   checked?: boolean;
   _createdAt?: string;
 };
@@ -320,7 +319,6 @@ export async function getShoppingList(): Promise<ShoppingList> {
     title: item.title,
     quantity: item.quantity,
     note: item.note,
-    addedBy: item.addedBy,
     checked: Boolean(item.checked),
     createdAt: item._createdAt,
   }));

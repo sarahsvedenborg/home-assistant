@@ -156,7 +156,6 @@ export async function addShoppingListItem(input: {
   title: string;
   quantity?: string;
   note?: string;
-  addedBy?: string;
 }) {
   const client = getWriteClient();
 
@@ -169,7 +168,6 @@ export async function addShoppingListItem(input: {
     title: input.title,
     quantity: input.quantity,
     note: input.note,
-    addedBy: input.addedBy,
     checked: false,
   });
 

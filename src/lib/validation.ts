@@ -183,7 +183,6 @@ export function validateShoppingListSubmission(
   title: string;
   quantity?: string;
   note?: string;
-  addedBy?: string;
 }> {
   const common = validateCommonFields(payload);
 
@@ -194,7 +193,6 @@ export function validateShoppingListSubmission(
   const title = normalizeText(common.record.title);
   const quantity = normalizeText(common.record.quantity);
   const note = normalizeText(common.record.note);
-  const addedBy = normalizeText(common.record.addedBy);
 
   if (!title) {
     return { success: false, error: "Legg til en vare du vil kjope." };
@@ -218,7 +216,6 @@ export function validateShoppingListSubmission(
       title,
       quantity: quantity || undefined,
       note: note || undefined,
-      addedBy: addedBy || undefined,
     },
   };
 }
