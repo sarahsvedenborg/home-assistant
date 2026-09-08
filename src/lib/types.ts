@@ -132,6 +132,16 @@ export type DailyQuote = {
   source: "zenquotes" | "fallback";
 };
 
+export type Country = {
+  code: string;
+  name: string;
+  flagUrl: string;
+  flagSvgUrl: string;
+  mapUrl: string;
+  capital?: string;
+  continent?: string;
+};
+
 export type SingleEvent = {
   id: string;
   title: string;

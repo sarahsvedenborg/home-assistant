@@ -3261,8 +3261,156 @@ button {
   overflow-wrap: anywhere;
 }
 
+.flagHero {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.flagHero h2 {
+  margin: 0;
+  font-family: var(--font-display), cursive;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+.flagMedia {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.flagMediaFeatured {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.flagImage,
+.flagMap {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.flagImage {
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.flagMap {
+  max-height: 12rem;
+}
+
+.flagMediaFeatured .flagMap {
+  max-height: 18rem;
+}
+
+.flagBrowser {
+  margin-top: 1.5rem;
+}
+
+.flagBrowserHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.flagBrowserHeader h2 {
+  margin: 0;
+  font-family: var(--font-display), cursive;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+.flagSearch {
+  min-width: min(100%, 18rem);
+}
+
+.flagSearch input {
+  width: 100%;
+  min-height: 2.8rem;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid rgba(75, 98, 124, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ink);
+}
+
+.flagBrowserEmpty {
+  color: var(--muted);
+}
+
+.flagGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  gap: 0.85rem;
+}
+
+.flagCard {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 1.15rem;
+  background: rgba(255, 255, 255, 0.68);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.flagCardSelected {
+  border-color: rgba(94, 166, 255, 0.45);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.flagCard h3 {
+  overflow-wrap: anywhere;
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+
+.flagCardFacts {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.flagCardFacts div {
+  display: grid;
+  gap: 0.05rem;
+}
+
+.flagCardFacts dt {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.flagCardFacts dd {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.flagCard .flagMap {
+  max-height: 5.5rem;
+}
+
 @media (max-width: 699px) {
   .shoppingListColumns {
+    grid-template-columns: 1fr;
+  }
+
+  .flagMediaFeatured {
     grid-template-columns: 1fr;
   }
 
