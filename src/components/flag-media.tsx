@@ -8,10 +8,12 @@ export function FlagMedia({
   country,
   featured = false,
   showMap = true,
+  alt,
 }: {
   country: Country;
   featured?: boolean;
   showMap?: boolean;
+  alt?: string;
 }) {
   const [flagSrc, setFlagSrc] = useState(country.flagUrl);
   const [mapFailed, setMapFailed] = useState(false);
@@ -20,7 +22,7 @@ export function FlagMedia({
     <div className={featured ? "flagMedia flagMediaFeatured" : "flagMedia"}>
       <img
         src={flagSrc}
-        alt={`Flagget til ${country.name}`}
+        alt={alt ?? `Flagget til ${country.name}`}
         className="flagImage"
         onError={() => {
           if (flagSrc !== country.flagSvgUrl) {
