@@ -3278,6 +3278,11 @@ button {
   font-size: clamp(1.8rem, 3vw, 2.6rem);
 }
 
+.flagHeroFacts {
+  grid-template-columns: repeat(2, max-content);
+  gap: 0.85rem 1.5rem;
+}
+
 .flagMedia {
   display: grid;
   gap: 0.75rem;

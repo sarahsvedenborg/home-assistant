@@ -19,6 +19,22 @@ export default async function FlagsPage() {
         <section className="flagHero" aria-labelledby="daily-flag-title">
           <span className="kicker">Dagens flagg</span>
           <h2 id="daily-flag-title">{dailyCountry.name}</h2>
+          {dailyCountry.capital || dailyCountry.continent ? (
+            <dl className="flagCardFacts flagHeroFacts">
+              {dailyCountry.capital ? (
+                <div>
+                  <dt>Hovedstad</dt>
+                  <dd>{dailyCountry.capital}</dd>
+                </div>
+              ) : null}
+              {dailyCountry.continent ? (
+                <div>
+                  <dt>Kontinent</dt>
+                  <dd>{dailyCountry.continent}</dd>
+                </div>
+              ) : null}
+            </dl>
+          ) : null}
           <FlagMedia country={dailyCountry} featured />
         </section>
       ) : null}
