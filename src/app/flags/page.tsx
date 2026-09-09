@@ -1,10 +1,13 @@
-import { FeaturedFlag } from "@/components/featured-flag";
-import { FlagBrowser } from "@/components/flag-browser";
+import { FlagsWorkspace } from "@/components/flags-workspace";
 import { getCountries, getDailyCountry } from "@/lib/countries";
+import { getStudiedFlagCodes } from "@/lib/data";
 import { osloDateKey } from "@/lib/family-feed";
 
 export default async function FlagsPage() {
-  const countries = await getCountries();
+  const [countries, studiedCodes] = await Promise.all([
+    getCountries(),
+    getStudiedFlagCodes(),
+  ]);
   const dailyCountry = getDailyCountry(countries, osloDateKey(new Date()));
 
   return (
@@ -16,10 +19,12 @@ export default async function FlagsPage() {
       </header>
 
       {dailyCountry ? (
-        <FeaturedFlag countries={countries} initialCode={dailyCountry.code} />
+        <FlagsWorkspace
+          countries={countries}
+          initialCode={dailyCountry.code}
+          studiedCodes={studiedCodes}
+        />
       ) : null}
-
-      <FlagBrowser countries={countries} />
     </main>
   );
 }

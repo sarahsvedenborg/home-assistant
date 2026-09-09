@@ -8,9 +8,15 @@ import type { Country } from "@/lib/types";
 export function FeaturedFlag({
   countries,
   initialCode,
+  studiedCodes,
+  pendingCode,
+  onToggleStudied,
 }: {
   countries: Country[];
   initialCode: string;
+  studiedCodes: Set<string>;
+  pendingCode: string | null;
+  onToggleStudied: (country: Country, studied: boolean) => void;
 }) {
   const startIndex = useMemo(() => {
     const index = countries.findIndex((country) => country.code === initialCode);
@@ -24,6 +30,8 @@ export function FeaturedFlag({
   }
 
   const canNavigate = countries.length > 1;
+  const isStudied = studiedCodes.has(country.code);
+  const isPending = pendingCode === country.code;
 
   function showPrevious() {
     setIndex((current) => (current - 1 + countries.length) % countries.length);
@@ -82,6 +90,25 @@ export function FeaturedFlag({
       ) : null}
 
       <FlagMedia country={country} featured key={country.code} />
+
+      <div className="flagHeroActions">
+        <button
+          type="button"
+          className={
+            isStudied
+              ? "flagStudyButton flagStudyButtonActive"
+              : "flagStudyButton"
+          }
+          disabled={isPending}
+          onClick={() => onToggleStudied(country, !isStudied)}
+        >
+          {isPending
+            ? "Lagrer…"
+            : isStudied
+              ? "Studert"
+              : "Marker som studert"}
+        </button>
+      </div>
     </section>
   );
 }

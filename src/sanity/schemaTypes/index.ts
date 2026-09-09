@@ -11,6 +11,7 @@ import { shoppingListItemType } from "./shoppingListItemType";
 import { shoppingListType } from "./shoppingListType";
 import { shortMessageType } from "./shortMessageType";
 import { singleEventType } from "./singleEventType";
+import { studiedFlagType } from "./studiedFlagType";
 import { wishListItemType } from "./wishListItemType";
 
 export const schemaTypes = [
@@ -28,4 +29,5 @@ export const schemaTypes = [
   recurringEventType,
   singleEventType,
   shortMessageType,
+  studiedFlagType,
 ];

@@ -5,7 +5,17 @@ import { useMemo, useState } from "react";
 import { FlagMedia } from "@/components/flag-media";
 import type { Country } from "@/lib/types";
 
-export function FlagBrowser({ countries }: { countries: Country[] }) {
+export function FlagBrowser({
+  countries,
+  studiedCodes,
+  pendingCode,
+  onToggleStudied,
+}: {
+  countries: Country[];
+  studiedCodes: Set<string>;
+  pendingCode: string | null;
+  onToggleStudied: (country: Country, studied: boolean) => void;
+}) {
   const [query, setQuery] = useState("");
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
 
@@ -44,36 +54,71 @@ export function FlagBrowser({ countries }: { countries: Country[] }) {
         <div className="flagGrid">
           {visibleCountries.map((country) => {
             const isSelected = selectedCode === country.code;
+            const isStudied = studiedCodes.has(country.code);
+            const isPending = pendingCode === country.code;
 
             return (
-              <button
-                type="button"
-                className={isSelected ? "flagCard flagCardSelected" : "flagCard"}
-                aria-pressed={isSelected}
-                key={country.code}
-                onClick={() =>
-                  setSelectedCode(isSelected ? null : country.code)
+              <article
+                className={
+                  [
+                    "flagCard",
+                    isSelected ? "flagCardSelected" : "",
+                    isStudied ? "flagCardStudied" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")
                 }
+                key={country.code}
               >
-                <FlagMedia country={country} showMap={isSelected} />
-                <h3>{country.name}</h3>
-                {isSelected && (country.capital || country.continent) ? (
-                  <dl className="flagCardFacts">
-                    {country.capital ? (
-                      <div>
-                        <dt>Hovedstad</dt>
-                        <dd>{country.capital}</dd>
-                      </div>
-                    ) : null}
-                    {country.continent ? (
-                      <div>
-                        <dt>Kontinent</dt>
-                        <dd>{country.continent}</dd>
-                      </div>
-                    ) : null}
-                  </dl>
+                <button
+                  type="button"
+                  className="flagCardToggle"
+                  aria-pressed={isSelected}
+                  onClick={() =>
+                    setSelectedCode(isSelected ? null : country.code)
+                  }
+                >
+                  <FlagMedia country={country} showMap={isSelected} />
+                  <h3>{country.name}</h3>
+                  {isStudied ? (
+                    <span className="flagStudiedBadge">Studert</span>
+                  ) : null}
+                  {isSelected && (country.capital || country.continent) ? (
+                    <dl className="flagCardFacts">
+                      {country.capital ? (
+                        <div>
+                          <dt>Hovedstad</dt>
+                          <dd>{country.capital}</dd>
+                        </div>
+                      ) : null}
+                      {country.continent ? (
+                        <div>
+                          <dt>Kontinent</dt>
+                          <dd>{country.continent}</dd>
+                        </div>
+                      ) : null}
+                    </dl>
+                  ) : null}
+                </button>
+                {isSelected ? (
+                  <button
+                    type="button"
+                    className={
+                      isStudied
+                        ? "flagStudyButton flagStudyButtonActive"
+                        : "flagStudyButton"
+                    }
+                    disabled={isPending}
+                    onClick={() => onToggleStudied(country, !isStudied)}
+                  >
+                    {isPending
+                      ? "Lagrer…"
+                      : isStudied
+                        ? "Studert"
+                        : "Marker som studert"}
+                  </button>
                 ) : null}
-              </button>
+              </article>
             );
           })}
         </div>

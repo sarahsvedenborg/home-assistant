@@ -3298,6 +3298,31 @@ button {
   justify-content: center;
 }
 
+.flagHeroActions {
+  display: flex;
+  justify-content: center;
+}
+
+.flagStudyButton {
+  padding: 0.5rem 0.85rem;
+  border: 1px solid rgba(32, 89, 61, 0.2);
+  border-radius: 0.8rem;
+  background: rgba(130, 209, 174, 0.22);
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.flagStudyButtonActive {
+  border-color: rgba(32, 89, 61, 0.35);
+  background: rgba(130, 209, 174, 0.4);
+}
+
+.flagStudyButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 .flagMedia {
   display: grid;
   gap: 0.75rem;
@@ -3381,9 +3406,32 @@ button {
   border: 1px solid var(--line);
   border-radius: 1.15rem;
   background: rgba(255, 255, 255, 0.68);
+}
+
+.flagCardToggle {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: inherit;
   text-align: left;
   cursor: pointer;
+}
+
+.flagCardStudied {
+  border-color: rgba(130, 209, 174, 0.55);
+}
+
+.flagStudiedBadge {
+  width: fit-content;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(130, 209, 174, 0.28);
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .flagCardSelected {

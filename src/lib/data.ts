@@ -56,6 +56,7 @@ import {
   SHORT_MESSAGES_QUERY,
   SHOPPING_LIST_ITEMS_QUERY,
   SINGLE_EVENTS_QUERY,
+  STUDIED_FLAGS_QUERY,
   WISHLIST_ITEMS_QUERY,
 
 } from "@/sanity/lib/queries";
@@ -390,6 +391,20 @@ export async function getDinners(): Promise<Dinner[]> {
         ? dinner.day
         : undefined,
   }));
+}
+
+export async function getStudiedFlagCodes(): Promise<string[]> {
+  if (!isSanityConfigured) {
+    return [];
+  }
+
+  const document = await fetchFromSanity<{ codes?: string[] }>(
+    STUDIED_FLAGS_QUERY,
+  );
+
+  return (document?.codes || []).filter(
+    (code): code is string => typeof code === "string" && /^[a-z]{2}$/.test(code),
+  );
 }
 
 export async function getFeatureSuggestions(): Promise<FeatureSuggestion[]> {
