@@ -133,6 +133,12 @@ export const RECIPES_QUERY = `*[_type == "recipe"] | order(_createdAt desc) {
   }
 }`;
 
+export const STUDIED_FLAGS_QUERY = defineQuery(/* groq */ `
+  *[_id == "studiedFlags"][0]{
+    "codes": flags[].code
+  }
+`);
+
 export const DINNERS_QUERY = defineQuery(/* groq */ `
   *[_type == "dinner" && defined(day) && day >= 1 && day <= 14]
   | order(day asc) {

@@ -198,6 +198,46 @@ export async function setShoppingListItemChecked(
   return checked;
 }
 
+const STUDIED_FLAGS_DOCUMENT_ID = "studiedFlags";
+
+type StudiedFlagEntry = {
+  _key?: string;
+  code?: string;
+  name?: string;
+};
+
+export async function setStudiedFlag(
+  code: string,
+  studied: boolean,
+  name?: string,
+) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const existing = await client.fetch<{ flags?: StudiedFlagEntry[] } | null>(
+    `*[_id == $id][0]{ flags }`,
+    { id: STUDIED_FLAGS_DOCUMENT_ID },
+  );
+  const currentFlags = Array.isArray(existing?.flags) ? existing.flags : [];
+  const nextFlags = studied
+    ? currentFlags.some((flag) => flag.code === code)
+      ? currentFlags
+      : [...currentFlags, { _key: code, code, name }]
+    : currentFlags.filter((flag) => flag.code !== code);
+
+  await client.createIfNotExists({
+    _id: STUDIED_FLAGS_DOCUMENT_ID,
+    _type: "studiedFlags",
+    flags: [],
+  });
+  await client.patch(STUDIED_FLAGS_DOCUMENT_ID).set({ flags: nextFlags }).commit();
+
+  return studied;
+}
+
 export async function submitRecipe(input: {
   title: string;
   url?: string;

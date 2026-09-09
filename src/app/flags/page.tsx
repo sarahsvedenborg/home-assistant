@@ -1,10 +1,15 @@
-import { FlagBrowser } from "@/components/flag-browser";
-import { FlagMedia } from "@/components/flag-media";
+import Link from "next/link";
+
+import { FlagsWorkspace } from "@/components/flags-workspace";
 import { getCountries, getDailyCountry } from "@/lib/countries";
+import { getStudiedFlagCodes } from "@/lib/data";
 import { osloDateKey } from "@/lib/family-feed";
 
 export default async function FlagsPage() {
-  const countries = await getCountries();
+  const [countries, studiedCodes] = await Promise.all([
+    getCountries(),
+    getStudiedFlagCodes(),
+  ]);
   const dailyCountry = getDailyCountry(countries, osloDateKey(new Date()));
 
   return (
@@ -13,17 +18,18 @@ export default async function FlagsPage() {
         <div>
           <h1>Flagg</h1>
         </div>
+        <Link href="/flags/quiz" className="buttonPrimary">
+          Start quiz
+        </Link>
       </header>
 
       {dailyCountry ? (
-        <section className="flagHero" aria-labelledby="daily-flag-title">
-          <span className="kicker">Dagens flagg</span>
-          <h2 id="daily-flag-title">{dailyCountry.name}</h2>
-          <FlagMedia country={dailyCountry} featured />
-        </section>
+        <FlagsWorkspace
+          countries={countries}
+          initialCode={dailyCountry.code}
+          studiedCodes={studiedCodes}
+        />
       ) : null}
-
-      <FlagBrowser countries={countries} />
     </main>
   );
 }

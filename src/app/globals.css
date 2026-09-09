@@ -3272,10 +3272,55 @@ button {
   box-shadow: var(--shadow);
 }
 
+.flagHeroToolbar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.flagHeroHeading {
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+  text-align: center;
+}
+
 .flagHero h2 {
   margin: 0;
   font-family: var(--font-display), cursive;
   font-size: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+.flagHeroFacts {
+  grid-template-columns: repeat(2, max-content);
+  gap: 0.85rem 1.5rem;
+  justify-content: center;
+}
+
+.flagHeroActions {
+  display: flex;
+  justify-content: center;
+}
+
+.flagStudyButton {
+  padding: 0.5rem 0.85rem;
+  border: 1px solid rgba(32, 89, 61, 0.2);
+  border-radius: 0.8rem;
+  background: rgba(130, 209, 174, 0.22);
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.flagStudyButtonActive {
+  border-color: rgba(32, 89, 61, 0.35);
+  background: rgba(130, 209, 174, 0.4);
+}
+
+.flagStudyButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 
 .flagMedia {
@@ -3361,9 +3406,32 @@ button {
   border: 1px solid var(--line);
   border-radius: 1.15rem;
   background: rgba(255, 255, 255, 0.68);
+}
+
+.flagCardToggle {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: inherit;
   text-align: left;
   cursor: pointer;
+}
+
+.flagCardStudied {
+  border-color: rgba(130, 209, 174, 0.55);
+}
+
+.flagStudiedBadge {
+  width: fit-content;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(130, 209, 174, 0.28);
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .flagCardSelected {
@@ -3405,12 +3473,100 @@ button {
   max-height: 5.5rem;
 }
 
+.flagQuiz {
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.flagQuizHeader {
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.flagQuiz h2 {
+  margin: 0;
+  font-family: var(--font-display), cursive;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+.flagQuizFlag {
+  max-width: 28rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.flagQuizFlag .flagImage {
+  max-height: 14rem;
+}
+
+.flagQuizOptions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.flagQuizChoice {
+  min-height: 3.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.flagQuizChoiceCorrect {
+  border-color: rgba(32, 89, 61, 0.35);
+  background: rgba(130, 209, 174, 0.4);
+}
+
+.flagQuizChoiceWrong {
+  border-color: rgba(122, 38, 50, 0.28);
+  background: rgba(255, 123, 123, 0.18);
+}
+
+.flagQuizFeedback {
+  margin: 0;
+  text-align: center;
+  font-weight: 800;
+}
+
+.flagQuizFeedbackCorrect {
+  color: #20593d;
+}
+
+.flagQuizScore {
+  margin: 0;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.flagQuizActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
 @media (max-width: 699px) {
   .shoppingListColumns {
     grid-template-columns: 1fr;
   }
 
   .flagMediaFeatured {
+    grid-template-columns: 1fr;
+  }
+
+  .flagQuizOptions {
     grid-template-columns: 1fr;
   }
 
