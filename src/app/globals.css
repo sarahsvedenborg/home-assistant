@@ -2969,11 +2969,13 @@ button {
 }
 
 .calendarDay {
+  --calendar-day-pad: 0.7rem;
   display: flex;
   flex-direction: column;
   min-width: 0;
   min-height: 150px;
-  padding: 0.7rem;
+  overflow: visible;
+  padding: var(--calendar-day-pad);
   background: rgba(255, 253, 248, 0.9);
 }
 
@@ -3115,6 +3117,120 @@ button {
   font-size: 0.74rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
+}
+
+.calendarSpanningEvents {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 0.2rem;
+  z-index: 1;
+  margin-top: 0.55rem;
+}
+
+.calendarSpanningEvent,
+.calendarSpanningSlot {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 2.15rem;
+}
+
+.calendarSpanningEvent {
+  display: flex;
+  align-items: stretch;
+  padding: 0.35rem 0.65rem;
+  border: 0;
+  border-left: 0 solid transparent;
+  border-radius: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.calendarSpanningEvent.calendarEventSingle,
+.calendarSpanningEvent.calendarEventSchool,
+.calendarSpanningEvent.calendarEventLeisure,
+.calendarSpanningEvent.calendarEventMovieNight,
+.calendarSpanningEvent.calendarEventGameNight,
+.calendarSpanningEvent.calendarEventAkTime {
+  border-left-width: 0;
+}
+
+.calendarSpanningRoundLeft {
+  border-top-left-radius: 0.7rem;
+  border-bottom-left-radius: 0.7rem;
+}
+
+.calendarSpanningRoundLeft.calendarEventSingle,
+.calendarSpanningRoundLeft.calendarEventSchool,
+.calendarSpanningRoundLeft.calendarEventLeisure,
+.calendarSpanningRoundLeft.calendarEventMovieNight,
+.calendarSpanningRoundLeft.calendarEventGameNight,
+.calendarSpanningRoundLeft.calendarEventAkTime {
+  border-left-width: 4px;
+}
+
+.calendarSpanningRoundRight {
+  border-top-right-radius: 0.7rem;
+  border-bottom-right-radius: 0.7rem;
+}
+
+.calendarSpanningExtendLeft {
+  margin-left: calc(-1 * var(--calendar-day-pad) - 1px);
+  padding-left: calc(0.65rem + var(--calendar-day-pad) + 1px);
+}
+
+.calendarSpanningExtendRight {
+  margin-right: calc(-1 * var(--calendar-day-pad) - 1px);
+  padding-right: calc(0.65rem + var(--calendar-day-pad) + 1px);
+}
+
+.calendarSpanningEvent strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendarSpanningEventStart {
+  position: relative;
+  display: grid;
+  align-items: start;
+  gap: 0.16rem;
+  min-height: 0;
+  padding: 0.55rem 0.6rem;
+  white-space: normal;
+}
+
+.calendarSpanningEventStart strong {
+  overflow: visible;
+  text-overflow: unset;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.calendarSpanningEvent.calendarEventInteractive {
+  padding-right: 0.65rem;
+}
+
+.calendarSpanningEventStart.calendarEventInteractive {
+  padding-right: 1.8rem;
+}
+
+.calendarSpanningEventStart.calendarSpanningExtendRight {
+  padding-right: calc(0.6rem + var(--calendar-day-pad) + 1px);
+}
+
+.calendarSpanningEventStart.calendarEventInteractive.calendarSpanningExtendRight {
+  padding-right: calc(1.8rem + var(--calendar-day-pad) + 1px);
+}
+
+.calendarSpanningEvent.calendarEventInteractive:hover,
+.calendarSpanningEvent.calendarEventInteractive:focus-visible {
+  transform: none;
+  box-shadow: none;
+  filter: brightness(0.97);
 }
 
 .calendarEvent {
