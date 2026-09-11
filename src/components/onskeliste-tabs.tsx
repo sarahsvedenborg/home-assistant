@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 
 import { AddButton } from "@/components/add-button";
 import { WishlistForm } from "@/components/wishlist-form";
@@ -18,28 +18,72 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
     [familyMembers, wishListItems],
   );
   const [activeMemberName, setActiveMemberName] = useState(groups[0]?.member.name || "");
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  const activeGroup = groups.find((group) => group.member.name === activeMemberName) || groups[0];
+  const activeIndex = Math.max(
+    0,
+    groups.findIndex((group) => group.member.name === activeMemberName),
+  );
+  const activeGroup = groups[activeIndex];
 
   if (!activeGroup) {
     return null;
+  }
+
+  function moveToTab(nextIndex: number) {
+    const nextGroup = groups[nextIndex];
+
+    if (!nextGroup) {
+      return;
+    }
+
+    setActiveMemberName(nextGroup.member.name);
+    tabRefs.current[nextIndex]?.focus();
+  }
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    const lastIndex = groups.length - 1;
+    let nextIndex = index;
+
+    if (event.key === "ArrowRight") {
+      nextIndex = index === lastIndex ? 0 : index + 1;
+    } else if (event.key === "ArrowLeft") {
+      nextIndex = index === 0 ? lastIndex : index - 1;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = lastIndex;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    moveToTab(nextIndex);
   }
 
   return (
     <section className="listStack">
       <div className="listPanel tabsPanel">
         <div className="tabList" role="tablist" aria-label="Familiemedlemmer">
-          {groups.map((group) => {
-            const isActive = group.member.name === activeGroup.member.name;
+          {groups.map((group, index) => {
+            const isActive = index === activeIndex;
+            const panelId = `wish-panel-${group.member.id}`;
 
             return (
               <button
                 key={group.member.id}
                 type="button"
                 role="tab"
+                id={`wish-tab-${group.member.id}`}
+                aria-controls={panelId}
                 aria-selected={isActive}
+                tabIndex={isActive ? 0 : -1}
                 className={isActive ? "tabButton tabButtonActive" : "tabButton"}
+                ref={(element) => {
+                  tabRefs.current[index] = element;
+                }}
                 onClick={() => setActiveMemberName(group.member.name)}
+                onKeyDown={(event) => handleTabKeyDown(event, index)}
               >
                 {group.member.name}
               </button>
@@ -47,7 +91,12 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
           })}
         </div>
 
-        <div className="tabPanel" role="tabpanel" aria-label={activeGroup.member.name}>
+        <div
+          className="tabPanel"
+          role="tabpanel"
+          id={`wish-panel-${activeGroup.member.id}`}
+          aria-labelledby={`wish-tab-${activeGroup.member.id}`}
+        >
           <div className="wishTabsContent">
             <div>
               <div className="wishTableHeader">
@@ -56,25 +105,31 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
               </div>
 
               {activeGroup.items.length === 0 ? (
-                <div className="wishTableEmpty">
+                <p className="wishTableEmpty">
                   Ingen ønsker registrert for {activeGroup.member.name} ennå.
-                </div>
+                </p>
               ) : (
-                <div className="wishTableBody">
-                  {activeGroup.items.map((item) => (
-                    <div key={item.id} className="wishTableRow wishTableRowCompact">
-                      <div className="wishTitleCell">
-                        <strong>{item.title}</strong>
-                        {item.link ? (
-                          <a href={item.link} target="_blank" rel="noreferrer" className="wishInlineLink">
-                            {item.link}
-                          </a>
-                        ) : null}
-                      </div>
-                      <span>{item.description || "-"}</span>
-                    </div>
-                  ))}
-                </div>
+                <ul className="wishTableBody">
+                  {activeGroup.items.map((item) => {
+                    const comment = item.description?.trim() ?? "";
+
+                    return (
+                      <li key={item.id} className="wishTableRow wishTableRowCompact">
+                        <div className="wishTitleCell">
+                          <strong>{item.title}</strong>
+                          {item.link ? (
+                            <a href={item.link} target="_blank" rel="noreferrer" className="wishInlineLink">
+                              {item.link}
+                            </a>
+                          ) : null}
+                        </div>
+                        <span className={comment ? "wishComment" : "wishComment wishCommentEmpty"}>
+                          {comment || "-"}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
               )}
             </div>
           </div>
