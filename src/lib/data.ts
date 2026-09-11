@@ -94,7 +94,7 @@ type SanityMovieRecommendation = {
   posterUrl?: string;
   link?: string;
   suggestedBy?: string;
-  suitableFor?: string[];
+  suitableFor?: string | string[];
   watched?: boolean;
 };
 
@@ -278,6 +278,18 @@ export async function getWishListItems(): Promise<WishListItem[]> {
   }));
 }
 
+function normalizeMovieAudience(value: string | string[] | undefined): string {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.find((item) => typeof item === "string" && item.trim()) || "";
+  }
+
+  return "";
+}
+
 export async function getMovieRecommendations(): Promise<MovieRecommendation[]> {
   if (!isSanityConfigured) {
     return FALLBACK_MOVIES;
@@ -297,7 +309,7 @@ export async function getMovieRecommendations(): Promise<MovieRecommendation[]> 
     posterUrl: movie.posterUrl,
     link: movie.link,
     suggestedBy: movie.suggestedBy || "Someone",
-    suitableFor: movie.suitableFor || [],
+    suitableFor: normalizeMovieAudience(movie.suitableFor),
     watched: Boolean(movie.watched),
   }));
 }

@@ -3,15 +3,15 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { EmptyState } from "@/components/empty-state";
+import { MOVIE_AUDIENCES } from "@/lib/movie-audiences";
 import type { MovieRecommendation } from "@/lib/types";
 
 type MovieBrowserProps = {
-  familyMembers: string[];
   movies: MovieRecommendation[];
 };
 
-export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
-  const [selectedMember, setSelectedMember] = useState<string>("alle");
+export function MovieBrowser({ movies }: MovieBrowserProps) {
+  const [selectedAudience, setSelectedAudience] = useState<string>("alle");
   const [localMovies, setLocalMovies] = useState(movies);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -22,12 +22,12 @@ export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
 
   const filteredMovies = useMemo(() => {
     const relevantMovies =
-      selectedMember === "alle"
+      selectedAudience === "alle"
         ? localMovies
-        : localMovies.filter((movie) => movie.suitableFor.includes(selectedMember));
+        : localMovies.filter((movie) => movie.suitableFor === selectedAudience);
 
     return [...relevantMovies].sort((left, right) => Number(left.watched) - Number(right.watched));
-  }, [localMovies, selectedMember]);
+  }, [localMovies, selectedAudience]);
 
   async function toggleMovie(id: string) {
     const currentMovie = localMovies.find((movie) => movie.id === id);
@@ -80,22 +80,26 @@ export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
     <div className="listPanel">
       <div className="panelHeading panelHeadingStacked">
         <h2>Filmforslag</h2>
-        <div className="filterChipRow" aria-label="Filtrer filmer etter familiemedlem">
+        <div className="filterChipRow" aria-label="Filtrer filmer etter hvem de passer for">
           <button
             type="button"
-            className={selectedMember === "alle" ? "filterChip filterChipActive" : "filterChip"}
-            onClick={() => setSelectedMember("alle")}
+            className={selectedAudience === "alle" ? "filterChip filterChipActive" : "filterChip"}
+            onClick={() => setSelectedAudience("alle")}
           >
             Alle
           </button>
-          {familyMembers.map((member) => (
+          {MOVIE_AUDIENCES.map((audience) => (
             <button
-              key={member}
+              key={audience.value}
               type="button"
-              className={selectedMember === member ? "filterChip filterChipActive" : "filterChip"}
-              onClick={() => setSelectedMember(member)}
+              className={
+                selectedAudience === audience.value
+                  ? "filterChip filterChipActive"
+                  : "filterChip"
+              }
+              onClick={() => setSelectedAudience(audience.value)}
             >
-              {member}
+              {audience.label}
             </button>
           ))}
         </div>
@@ -103,8 +107,8 @@ export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
 
       {filteredMovies.length === 0 ? (
         <EmptyState
-          title="Ingen filmer passer akkurat naa"
-          description="Velg et annet familiemedlem eller legg til et nytt forslag."
+          title="Ingen filmer registrert for denne gruppen"
+          description="Velg en annen gruppe eller legg til et nytt forslag."
         />
       ) : (
         <div className="movieTable">

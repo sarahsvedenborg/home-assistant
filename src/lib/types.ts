@@ -39,7 +39,7 @@ export type MovieRecommendation = {
   posterUrl?: string;
   link?: string;
   suggestedBy: string;
-  suitableFor: string[];
+  suitableFor: string;
   watched: boolean;
 };
 
