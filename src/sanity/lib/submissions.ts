@@ -90,7 +90,7 @@ export async function submitMovieRecommendation(input: {
   link?: string;
   posterUrl?: string;
   suggestedByName: string;
-  suitableFor: string[];
+  suitableFor: string;
 }) {
   const client = getWriteClient();
 
@@ -104,7 +104,7 @@ export async function submitMovieRecommendation(input: {
     title: string;
     link?: string;
     posterUrl?: string;
-    suitableFor: string[];
+    suitableFor: string;
     familyMember?: { _type: "reference"; _ref: string };
     watched: boolean;
     status: "pending" | "approved";

@@ -3,6 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
+import {
+  MOVIE_AUDIENCES,
+  type MovieAudience,
+} from "@/lib/movie-audiences";
+
 type MovieFormProps = {
   familyMembers: string[];
   // Called after a successful submit so a parent (e.g. the modal) can show
@@ -12,7 +17,7 @@ type MovieFormProps = {
 
 type FormState = {
   suggestedByName: string;
-  suitableFor: string[];
+  suitableFor: MovieAudience | "";
   title: string;
   link: string;
   website: string;
@@ -32,7 +37,7 @@ export function MovieForm({ familyMembers, onSuccess }: MovieFormProps) {
   } | null>(null);
   const [form, setForm] = useState<FormState>({
     suggestedByName: familyMembers[0] || "",
-    suitableFor: [],
+    suitableFor: "",
     title: "",
     link: "",
     website: "",
@@ -62,7 +67,7 @@ export function MovieForm({ familyMembers, onSuccess }: MovieFormProps) {
       const successText = result.message || "Filmen er lagt til!";
       setForm({
         suggestedByName: familyMembers[0] || "",
-        suitableFor: [],
+        suitableFor: "",
         title: "",
         link: "",
         website: "",
@@ -130,37 +135,33 @@ export function MovieForm({ familyMembers, onSuccess }: MovieFormProps) {
         </label>
 
         <fieldset className="field fieldWide checkboxFieldset">
-          <div className="checkboxFieldsetHeader">
-            <legend>Passer for</legend>
-            <button
-              type="button"
-              className="checkboxAction"
-              onClick={() => setForm((current) => ({ ...current, suitableFor: [...familyMembers] }))}
-            >
-              Velg alle
-            </button>
-          </div>
-          <div className="checkboxGrid">
-            {familyMembers.map((member) => {
-              const checked = form.suitableFor.includes(member);
+          <legend>Passer for</legend>
+          <div className="checkboxGrid eventParticipantGrid">
+            {MOVIE_AUDIENCES.map((audience) => {
+              const checked = form.suitableFor === audience.value;
 
               return (
-                <label key={member} className="checkboxOption">
+                <label className="checkboxOption" key={audience.value}>
                   <input
-                    className="checkboxInput"
-                    type="checkbox"
+                    className="radioInput"
+                    type="radio"
+                    name="suitable-for"
+                    value={audience.value}
                     checked={checked}
-                    onChange={(event) => {
+                    onChange={() =>
                       setForm((current) => ({
                         ...current,
-                        suitableFor: event.target.checked
-                          ? [...current.suitableFor, member]
-                          : current.suitableFor.filter((value) => value !== member),
-                        }));
-                    }}
+                        suitableFor: audience.value,
+                      }))
+                    }
+                    required
                   />
-                  <span className={checked ? "checkboxLabel checkboxLabelChecked" : "checkboxLabel"}>
-                    {member}
+                  <span
+                    className={
+                      checked ? "checkboxLabel checkboxLabelChecked" : "checkboxLabel"
+                    }
+                  >
+                    {audience.label}
                   </span>
                 </label>
               );

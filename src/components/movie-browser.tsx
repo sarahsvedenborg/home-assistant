@@ -3,15 +3,15 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { EmptyState } from "@/components/empty-state";
+import { MOVIE_AUDIENCES } from "@/lib/movie-audiences";
 import type { MovieRecommendation } from "@/lib/types";
 
 type MovieBrowserProps = {
-  familyMembers: string[];
   movies: MovieRecommendation[];
 };
 
-export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
-  const [selectedMember, setSelectedMember] = useState<string>("alle");
+export function MovieBrowser({ movies }: MovieBrowserProps) {
+  const [selectedAudience, setSelectedAudience] = useState<string>("alle");
   const [localMovies, setLocalMovies] = useState(movies);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -21,13 +21,19 @@ export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
   }, [movies]);
 
   const filteredMovies = useMemo(() => {
-    const relevantMovies =
-      selectedMember === "alle"
-        ? localMovies
-        : localMovies.filter((movie) => movie.suitableFor.includes(selectedMember));
+    return selectedAudience === "alle"
+      ? localMovies
+      : localMovies.filter((movie) => movie.suitableFor === selectedAudience);
+  }, [localMovies, selectedAudience]);
 
-    return [...relevantMovies].sort((left, right) => Number(left.watched) - Number(right.watched));
-  }, [localMovies, selectedMember]);
+  const unseenMovies = useMemo(
+    () => filteredMovies.filter((movie) => !movie.watched),
+    [filteredMovies],
+  );
+  const seenMovies = useMemo(
+    () => filteredMovies.filter((movie) => movie.watched),
+    [filteredMovies],
+  );
 
   async function toggleMovie(id: string) {
     const currentMovie = localMovies.find((movie) => movie.id === id);
@@ -80,22 +86,26 @@ export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
     <div className="listPanel">
       <div className="panelHeading panelHeadingStacked">
         <h2>Filmforslag</h2>
-        <div className="filterChipRow" aria-label="Filtrer filmer etter familiemedlem">
+        <div className="filterChipRow" aria-label="Filtrer filmer etter hvem de passer for">
           <button
             type="button"
-            className={selectedMember === "alle" ? "filterChip filterChipActive" : "filterChip"}
-            onClick={() => setSelectedMember("alle")}
+            className={selectedAudience === "alle" ? "filterChip filterChipActive" : "filterChip"}
+            onClick={() => setSelectedAudience("alle")}
           >
             Alle
           </button>
-          {familyMembers.map((member) => (
+          {MOVIE_AUDIENCES.map((audience) => (
             <button
-              key={member}
+              key={audience.value}
               type="button"
-              className={selectedMember === member ? "filterChip filterChipActive" : "filterChip"}
-              onClick={() => setSelectedMember(member)}
+              className={
+                selectedAudience === audience.value
+                  ? "filterChip filterChipActive"
+                  : "filterChip"
+              }
+              onClick={() => setSelectedAudience(audience.value)}
             >
-              {member}
+              {audience.label}
             </button>
           ))}
         </div>
@@ -103,71 +113,98 @@ export function MovieBrowser({ familyMembers, movies }: MovieBrowserProps) {
 
       {filteredMovies.length === 0 ? (
         <EmptyState
-          title="Ingen filmer passer akkurat naa"
-          description="Velg et annet familiemedlem eller legg til et nytt forslag."
+          title="Ingen filmer registrert for denne gruppen"
+          description="Velg en annen gruppe eller legg til et nytt forslag."
         />
       ) : (
-        <div className="movieTable">
-          <div className="movieTableHeader">
-            <span>Tittel</span>
-            <span>Status</span>
-            <span>Trailer</span>
-          </div>
+        <div className="messageArchiveGroups">
+          <section className="messageArchiveSection" aria-labelledby="unseen-movies-title">
+            <h3 id="unseen-movies-title">Ikke sett</h3>
+            <MovieTable
+              movies={unseenMovies}
+              emptyText="Ingen usette filmer."
+              pendingId={pendingId}
+              onToggle={toggleMovie}
+            />
+          </section>
 
-          <div className="movieTableBody">
-            {filteredMovies.map((movie) => {
-              const isPending = pendingId === movie.id;
-
-              return (
-                <button
-                  key={movie.id}
-                  type="button"
-                  className={movie.watched ? "movieTableButton movieTableButtonWatched" : "movieTableButton"}
-                  onClick={() => toggleMovie(movie.id)}
-                  disabled={isPending}
-                >
-                  <article className="movieTableRow">
-                    <div className="movieTitleCell">
-                      <strong>{movie.title}</strong>
-                     {/*  {movie.link ? (
-                        <a
-                          href={movie.link}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inlineLink movieInlineLink"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          Se trailer
-                        </a>
-                      ) : null} */}
-                    </div>
-                    <span className="movieStatusCell">
-                      {isPending ? "Oppdaterer..." : movie.watched ? "Sett" : "Ikke sett"}
-                    </span>
-                    <span className="movieTrailerCell">
-                      {movie.link ? (
-                        <a
-                          href={movie.link}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inlineLink"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          Se trailer
-                        </a>
-                      ) : (
-                      null
-                      )}
-                    </span>
-                  </article>
-                </button>
-              );
-            })}
-          </div>
+          <section className="messageArchiveSection" aria-labelledby="seen-movies-title">
+            <h3 id="seen-movies-title">Sett</h3>
+            <MovieTable
+              movies={seenMovies}
+              emptyText="Ingen sette filmer."
+              pendingId={pendingId}
+              onToggle={toggleMovie}
+            />
+          </section>
         </div>
       )}
 
       {error ? <p className="feedback feedbackError">{error}</p> : null}
+    </div>
+  );
+}
+
+function MovieTable({
+  movies,
+  emptyText,
+  pendingId,
+  onToggle,
+}: {
+  movies: MovieRecommendation[];
+  emptyText: string;
+  pendingId: string | null;
+  onToggle: (id: string) => void;
+}) {
+  if (movies.length === 0) {
+    return <p className="messageArchiveEmpty">{emptyText}</p>;
+  }
+
+  return (
+    <div className="movieTable">
+      <div className="movieTableHeader">
+        <span>Tittel</span>
+        <span>Status</span>
+        <span>Trailer</span>
+      </div>
+
+      <div className="movieTableBody">
+        {movies.map((movie) => {
+          const isPending = pendingId === movie.id;
+
+          return (
+            <button
+              key={movie.id}
+              type="button"
+              className={movie.watched ? "movieTableButton movieTableButtonWatched" : "movieTableButton"}
+              onClick={() => onToggle(movie.id)}
+              disabled={isPending}
+            >
+              <article className="movieTableRow">
+                <div className="movieTitleCell">
+                  <strong>{movie.title}</strong>
+                </div>
+                <span className="movieStatusCell">
+                  {isPending ? "Oppdaterer..." : movie.watched ? "Sett" : "Ikke sett"}
+                </span>
+                <span className="movieTrailerCell">
+                  {movie.link ? (
+                    <a
+                      href={movie.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inlineLink"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      Se trailer
+                    </a>
+                  ) : null}
+                </span>
+              </article>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

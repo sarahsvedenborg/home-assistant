@@ -8,6 +8,7 @@ import {
   EVENT_PARTICIPANT_ALL,
 } from "@/lib/event-participants";
 import { EVENT_CATEGORY_VALUES } from "@/lib/event-categories";
+import { isMovieAudience, type MovieAudience } from "@/lib/movie-audiences";
 import { SINGLE_EVENT_CATEGORY_VALUES } from "@/lib/single-event-categories";
 import type { BoardIssueStatus } from "@/lib/types";
 import { WEEKDAY_VALUES } from "@/lib/weekdays";
@@ -133,7 +134,7 @@ export function validateMovieSubmission(
   link?: string;
   posterUrl?: string;
   suggestedByName: string;
-  suitableFor: string[];
+  suitableFor: MovieAudience;
 }> {
   const common = validateCommonFields(payload);
 
@@ -145,9 +146,9 @@ export function validateMovieSubmission(
   const link = normalizeText(common.record.link);
   const posterUrl = normalizeText(common.record.posterUrl);
   const suggestedByName = normalizeText(common.record.suggestedByName);
-  const suitableFor = Array.isArray(common.record.suitableFor)
-    ? common.record.suitableFor.filter((value): value is string => typeof value === "string").map((value) => value.trim()).filter(Boolean)
-    : [];
+  const suitableForRaw = Array.isArray(common.record.suitableFor)
+    ? normalizeText(common.record.suitableFor[0])
+    : normalizeText(common.record.suitableFor);
 
   if (!suggestedByName) {
     return { success: false, error: "Velg hvem som foreslo filmen." };
@@ -161,6 +162,10 @@ export function validateMovieSubmission(
     return { success: false, error: "Filmtittelen må være under 120 tegn." };
   }
 
+  if (!suitableForRaw || !isMovieAudience(suitableForRaw)) {
+    return { success: false, error: "Velg hvem filmen passer for." };
+  }
+
   if (!isValidOptionalUrl(link) || !isValidOptionalUrl(posterUrl)) {
     return { success: false, error: "Lenker må starte med http:// eller https://." };
   }
@@ -172,7 +177,7 @@ export function validateMovieSubmission(
       link: link || undefined,
       posterUrl: posterUrl || undefined,
       suggestedByName,
-      suitableFor,
+      suitableFor: suitableForRaw,
     },
   };
 }

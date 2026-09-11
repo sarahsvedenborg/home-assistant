@@ -21,7 +21,7 @@ export default async function MoviesPage() {
       </section>
 
       <section className="listStack">
-        <MovieBrowser familyMembers={familyMembers.map((member) => member.name)} movies={movies} />
+        <MovieBrowser movies={movies} />
       </section>
 
       <AddButton title="Legg til filmforslag" label="Legg til film" anchor="add-movie">
