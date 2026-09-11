@@ -65,6 +65,13 @@ function formatLongDateKey(value: string): string {
   );
 }
 
+type SpanningRange = {
+  id: string;
+  startDateKey: string;
+  endDateKey: string;
+  title: string;
+};
+
 function isMultiDayEvent(event: DashboardEvent): boolean {
   return (
     event.source === "single" &&
@@ -90,14 +97,14 @@ function uniqueSpanningEvents(days: CalendarDay[]): DashboardEvent[] {
   return [...events.values()];
 }
 
-function assignSpanningLanes(events: DashboardEvent[]): Map<string, number> {
-  const sorted = [...events].sort((left, right) => {
-    const start = (left.startDateKey || "").localeCompare(right.startDateKey || "");
+function assignSpanningLanes(items: SpanningRange[]): Map<string, number> {
+  const sorted = [...items].sort((left, right) => {
+    const start = left.startDateKey.localeCompare(right.startDateKey);
     if (start !== 0) {
       return start;
     }
 
-    const longerLast = (right.endDateKey || "").localeCompare(left.endDateKey || "");
+    const longerLast = right.endDateKey.localeCompare(left.endDateKey);
     if (longerLast !== 0) {
       return longerLast;
     }
@@ -107,19 +114,17 @@ function assignSpanningLanes(events: DashboardEvent[]): Map<string, number> {
   const laneEndKeys: string[] = [];
   const lanes = new Map<string, number>();
 
-  for (const event of sorted) {
-    const start = event.startDateKey || "";
-    const end = event.endDateKey || "";
-    let lane = laneEndKeys.findIndex((laneEnd) => laneEnd < start);
+  for (const item of sorted) {
+    let lane = laneEndKeys.findIndex((laneEnd) => laneEnd < item.startDateKey);
 
     if (lane < 0) {
       lane = laneEndKeys.length;
-      laneEndKeys.push(end);
+      laneEndKeys.push(item.endDateKey);
     } else {
-      laneEndKeys[lane] = end;
+      laneEndKeys[lane] = item.endDateKey;
     }
 
-    lanes.set(event.id, lane);
+    lanes.set(item.id, lane);
   }
 
   return lanes;
@@ -129,7 +134,62 @@ function spanningWeeksFromDays(days: CalendarDay[]): Array<Map<string, number>> 
   const weeks: Array<Map<string, number>> = [];
 
   for (let index = 0; index < days.length; index += 7) {
-    weeks.push(assignSpanningLanes(uniqueSpanningEvents(days.slice(index, index + 7))));
+    weeks.push(
+      assignSpanningLanes(
+        uniqueSpanningEvents(days.slice(index, index + 7)).map((event) => ({
+          id: event.id,
+          startDateKey: event.startDateKey || "",
+          endDateKey: event.endDateKey || "",
+          title: event.title,
+        })),
+      ),
+    );
+  }
+
+  return weeks;
+}
+
+function spanningWeeksFromVacationNotes(
+  days: CalendarDay[],
+  dayNotes: DayNote[],
+): Array<Map<string, number>> {
+  const weeks: Array<Map<string, number>> = [];
+
+  for (let index = 0; index < days.length; index += 7) {
+    const weekDays = days.slice(index, index + 7);
+    const weekStart = weekDays[0]?.dateKey;
+    const weekEnd = weekDays.at(-1)?.dateKey;
+
+    if (!weekStart || !weekEnd) {
+      weeks.push(new Map());
+      continue;
+    }
+
+    const ranges: SpanningRange[] = [];
+    const seen = new Set<string>();
+
+    for (const note of dayNotes) {
+      if (note.category !== "vacation" || seen.has(note.id)) {
+        continue;
+      }
+
+      const startDateKey = note.date;
+      const endDateKey = note.endDate || note.date;
+
+      if (endDateKey < weekStart || startDateKey > weekEnd) {
+        continue;
+      }
+
+      seen.add(note.id);
+      ranges.push({
+        id: note.id,
+        startDateKey,
+        endDateKey,
+        title: note.text,
+      });
+    }
+
+    weeks.push(assignSpanningLanes(ranges));
   }
 
   return weeks;
@@ -346,6 +406,38 @@ function SpanningEventCard({
   );
 }
 
+function SpanningVacationNote({
+  note,
+  dateKey,
+}: {
+  note: DayNote;
+  dateKey: string;
+}) {
+  const date = dateFromKey(dateKey);
+  const weekdayIndex = (date.getUTCDay() + 6) % 7;
+  const startDateKey = note.date;
+  const endDateKey = note.endDate || note.date;
+  const isStart = dateKey === startDateKey;
+  const roundLeft = isStart || weekdayIndex === 0;
+  const roundRight = dateKey === endDateKey || weekdayIndex === 6;
+  const className = [
+    "calendarSpanningEvent",
+    "calendarSpanningVacation",
+    roundLeft ? "calendarSpanningRoundLeft" : "",
+    roundRight ? "calendarSpanningRoundRight" : "",
+    roundLeft ? "" : "calendarSpanningExtendLeft",
+    roundRight ? "" : "calendarSpanningExtendRight",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <article className={className} data-spanning-id={note.id}>
+      <strong className={roundLeft ? undefined : "srOnly"}>{note.text}</strong>
+    </article>
+  );
+}
+
 export function FamilyCalendar({
   recurringEvents,
   singleEvents,
@@ -362,7 +454,7 @@ export function FamilyCalendar({
   const gridRef = useRef<HTMLDivElement>(null);
   const anchor = useMemo(() => dateFromKey(anchorDateKey), [anchorDateKey]);
 
-  const { days, spanningWeeks, visibleMonth } = useMemo(() => {
+  const { days, spanningWeeks, vacationWeeks, visibleMonth } = useMemo(() => {
     const start =
       view === "week" ? startOfWeek(anchor) : monthGridStart(anchor);
     const end = addDays(start, view === "week" ? 6 : 41);
@@ -376,9 +468,10 @@ export function FamilyCalendar({
     return {
       days,
       spanningWeeks: spanningWeeksFromDays(days),
+      vacationWeeks: spanningWeeksFromVacationNotes(days, dayNotes),
       visibleMonth: anchor.getUTCMonth(),
     };
-  }, [anchor, recurringEvents, singleEvents, view]);
+  }, [anchor, dayNotes, recurringEvents, singleEvents, view]);
 
   useLayoutEffect(() => {
     const calendarGrid = gridRef.current;
@@ -435,7 +528,7 @@ export function FamilyCalendar({
       cancelAnimationFrame(frame);
       observer.disconnect();
     };
-  }, [days, view]);
+  }, [dayNotes, days, view]);
 
   function movePeriod(direction: -1 | 1) {
     const next = new Date(anchor);
@@ -574,6 +667,22 @@ export function FamilyCalendar({
                 note.category !== "vacation" &&
                 note.category !== "holyday",
             );
+            const weekVacationLanes = vacationWeeks[Math.floor(dayIndex / 7)];
+            const vacationHighestLane = vacationNotes.reduce((highest, note) => {
+              const lane = weekVacationLanes?.get(note.id) ?? 0;
+              return Math.max(highest, lane);
+            }, 0);
+            const vacationSlots: Array<DayNote | null> = [];
+
+            if (vacationNotes.length > 0) {
+              for (let lane = 0; lane <= vacationHighestLane; lane += 1) {
+                vacationSlots.push(
+                  vacationNotes.find(
+                    (note) => (weekVacationLanes?.get(note.id) ?? 0) === lane,
+                  ) ?? null,
+                );
+              }
+            }
 
             return (
               <section className={className} key={day.dateKey}>
@@ -586,8 +695,26 @@ export function FamilyCalendar({
                   {isToday ? <span>I dag</span> : null}
                 </div>
 
+                {vacationSlots.length > 0 ? (
+                  <div className="calendarSpanningVacations" aria-label="Ferie">
+                    {vacationSlots.map((note, slotIndex) =>
+                      note ? (
+                        <SpanningVacationNote
+                          note={note}
+                          dateKey={day.dateKey}
+                          key={`${day.dateKey}-${note.id}`}
+                        />
+                      ) : (
+                        <div
+                          className="calendarSpanningSlot"
+                          key={`${day.dateKey}-vacation-lane-${slotIndex}`}
+                        />
+                      ),
+                    )}
+                  </div>
+                ) : null}
+
                 {birthdayNotes.length > 0 ||
-                vacationNotes.length > 0 ||
                 holydayNotes.length > 0 ||
                 publicHolidays.length > 0 ? (
                   <div className="calendarTopNotes">
@@ -610,16 +737,6 @@ export function FamilyCalendar({
                           <p key={note.id}>
                             <span aria-hidden="true">🎂</span>
                             <strong>{note.text} bursdag</strong>
-                          </p>
-                        ))}
-                      </div>
-                    ) : null}
-
-                    {vacationNotes.length > 0 ? (
-                      <div className="calendarVacationNotes" aria-label="Ferie">
-                        {vacationNotes.map((note) => (
-                          <p key={note.id}>
-                            <strong>{note.text}</strong>
                           </p>
                         ))}
                       </div>

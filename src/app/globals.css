@@ -3033,14 +3033,12 @@ button {
 }
 
 .calendarBirthdayNotes,
-.calendarVacationNotes,
 .calendarHolydayNotes {
   display: grid;
   gap: 0.3rem;
 }
 
 .calendarBirthdayNotes p,
-.calendarVacationNotes p,
 .calendarHolydayNotes p {
   display: flex;
   align-items: center;
@@ -3059,13 +3057,6 @@ button {
   color: #70411f;
 }
 
-.calendarVacationNotes p {
-  border: 0;
-  border-radius: 2px;
-  background: #4f8f78;
-  color: #fff;
-}
-
 .calendarHolydayNotes p {
   border: 1px solid #d9272e;
   background: #fff;
@@ -3080,7 +3071,6 @@ button {
 }
 
 .calendarBirthdayNotes strong,
-.calendarVacationNotes strong,
 .calendarHolydayNotes strong {
   min-width: 0;
   overflow-wrap: anywhere;
@@ -3126,6 +3116,53 @@ button {
   gap: 0.2rem;
   z-index: 1;
   margin-top: 0.55rem;
+}
+
+.calendarSpanningVacations {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 0.2rem;
+  z-index: 1;
+  margin-bottom: 0.55rem;
+}
+
+.calendarSpanningEvent.calendarSpanningVacation {
+  min-height: 0;
+  padding: 0.25rem 0.5rem;
+  background: #4f8f78;
+  color: #fff;
+  font: 600 0.78rem/1.25 var(--font-body), sans-serif;
+}
+
+.calendarSpanningVacation.calendarSpanningRoundLeft {
+  border-top-left-radius: 0.4rem;
+  border-bottom-left-radius: 0.4rem;
+}
+
+.calendarSpanningVacation.calendarSpanningRoundRight {
+  border-top-right-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
+}
+
+.calendarSpanningVacation.calendarSpanningExtendLeft {
+  padding-left: calc(0.5rem + var(--calendar-day-pad) + 1px);
+}
+
+.calendarSpanningVacation.calendarSpanningExtendRight {
+  padding-right: calc(0.5rem + var(--calendar-day-pad) + 1px);
+}
+
+.calendarSpanningVacation strong {
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.calendarSpanningVacations .calendarSpanningSlot {
+  min-height: 1.45rem;
 }
 
 .calendarSpanningEvent,
