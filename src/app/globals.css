@@ -1730,6 +1730,10 @@ button {
   padding: 1.25rem;
 }
 
+.field.tabMemberSelect {
+  display: none;
+}
+
 .wishTabsContent {
   display: grid;
   gap: 1.25rem;
@@ -2571,6 +2575,17 @@ button {
 
   .wishCommentEmpty {
     display: none;
+  }
+
+  .tabList {
+    display: none;
+  }
+
+  .field.tabMemberSelect {
+    display: grid;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.42);
   }
 
   .movieTableHeader {

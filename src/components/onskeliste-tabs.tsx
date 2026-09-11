@@ -64,6 +64,21 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
   return (
     <section className="listStack">
       <div className="listPanel tabsPanel">
+        <label className="field tabMemberSelect">
+          <span>Viser ønsker for: </span>
+          <select
+            value={activeGroup.member.name}
+            aria-label="Familiemedlem"
+            onChange={(event) => setActiveMemberName(event.target.value)}
+          >
+            {groups.map((group) => (
+              <option key={group.member.id} value={group.member.name}>
+                {group.member.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
         <div className="tabList" role="tablist" aria-label="Familiemedlemmer">
           {groups.map((group, index) => {
             const isActive = index === activeIndex;
@@ -95,6 +110,7 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
           className="tabPanel"
           role="tabpanel"
           id={`wish-panel-${activeGroup.member.id}`}
+          aria-label={activeGroup.member.name}
           aria-labelledby={`wish-tab-${activeGroup.member.id}`}
         >
           <div className="wishTabsContent">
