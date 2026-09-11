@@ -2,7 +2,7 @@ import { defineField, defineType } from "sanity";
 
 export const wishListItemType = defineType({
   name: "wishListItem",
-  title: "Wish List Item",
+  title: "Ønskeliste",
   type: "document",
   fields: [
     defineField({

@@ -2,7 +2,7 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const familyMemberType = defineType({
   name: "familyMember",
-  title: "Family Member",
+  title: "Familiemedlem",
   type: "document",
   fields: [
     defineField({

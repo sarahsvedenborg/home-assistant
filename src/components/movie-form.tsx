@@ -134,27 +134,38 @@ export function MovieForm({ familyMembers, onSuccess }: MovieFormProps) {
           />
         </label>
 
-        <fieldset className="field fieldWide">
+        <fieldset className="field fieldWide checkboxFieldset">
           <legend>Passer for</legend>
-          <div className="radioRow">
-            {MOVIE_AUDIENCES.map((audience) => (
-              <label className="radioOption" key={audience.value}>
-                <input
-                  type="radio"
-                  name="suitable-for"
-                  value={audience.value}
-                  checked={form.suitableFor === audience.value}
-                  onChange={() =>
-                    setForm((current) => ({
-                      ...current,
-                      suitableFor: audience.value,
-                    }))
-                  }
-                  required
-                />
-                <span>{audience.label}</span>
-              </label>
-            ))}
+          <div className="checkboxGrid eventParticipantGrid">
+            {MOVIE_AUDIENCES.map((audience) => {
+              const checked = form.suitableFor === audience.value;
+
+              return (
+                <label className="checkboxOption" key={audience.value}>
+                  <input
+                    className="radioInput"
+                    type="radio"
+                    name="suitable-for"
+                    value={audience.value}
+                    checked={checked}
+                    onChange={() =>
+                      setForm((current) => ({
+                        ...current,
+                        suitableFor: audience.value,
+                      }))
+                    }
+                    required
+                  />
+                  <span
+                    className={
+                      checked ? "checkboxLabel checkboxLabelChecked" : "checkboxLabel"
+                    }
+                  >
+                    {audience.label}
+                  </span>
+                </label>
+              );
+            })}
           </div>
         </fieldset>
 
