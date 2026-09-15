@@ -1662,6 +1662,86 @@ button {
   .homeDashboardPanel .weatherEmoji {
     font-size: 3.1rem;
   }
+
+  .shell.weeklyPayShell {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 3rem);
+    height: calc(100dvh - 12.75rem);
+    min-height: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .weeklyPayShell .issueBoardToolbar h1 {
+    font-size: clamp(2.4rem, 3vw, 3.4rem);
+  }
+
+  .weeklyPayShell .weeklyPayMembers {
+    flex: 1;
+    min-height: 0;
+    margin-top: 1.25rem;
+    gap: 1.25rem;
+    align-content: start;
+    align-items: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .weeklyPayShell .weeklyPayMember {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .weeklyPayShell .weeklyPayMemberName > span {
+    font-size: 2.4rem;
+  }
+
+  .weeklyPayShell .weeklyPayMemberName h2 {
+    font-size: 2.1rem;
+  }
+
+  .weeklyPayShell .weeklyPayCollapseButton {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.2rem;
+  }
+
+  .weeklyPayShell .weeklyPayTotal {
+    padding: 0.6rem 1rem;
+    font-size: 1.35rem;
+  }
+
+  .weeklyPayShell .weeklyPayButton {
+    min-height: 3.25rem;
+    padding: 0.6rem 1.15rem;
+    font-size: 1.15rem;
+  }
+
+  .weeklyPayShell .weeklyPayChores {
+    overflow: auto;
+  }
+
+  .weeklyPayShell .weeklyPayChoreCopy p,
+  .weeklyPayShell .weeklyPayChoreCopy strong {
+    font-size: 1.22rem;
+  }
+
+  .weeklyPayShell .weeklyPayChoreCopy span,
+  .weeklyPayShell .weeklyPayEmpty {
+    font-size: 1rem;
+  }
+
+  .weeklyPayShell .weeklyPayCounter button {
+    width: 3.25rem;
+    height: 3.25rem;
+    font-size: 1.7rem;
+  }
+
+  .weeklyPayShell .weeklyPayCounter strong {
+    font-size: 1.35rem;
+  }
 }
 
 .statusPill,
