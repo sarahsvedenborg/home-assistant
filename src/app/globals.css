@@ -1795,6 +1795,67 @@ button {
     font-size: 1.35rem;
   }
 
+  .shell.boardShell {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 3rem);
+    height: calc(100dvh - 12.75rem);
+    min-height: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .boardShell .issueBoard {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .boardShell .issueBoardToolbar h1 {
+    font-size: clamp(2.4rem, 3vw, 3.4rem);
+  }
+
+  .boardShell .issueBoardToolbar .buttonPrimary {
+    min-height: 4.25rem;
+    padding: 0.95rem 1.6rem;
+    font-size: 1.55rem;
+  }
+
+  .boardShell .issueBoardColumns {
+    flex: 1;
+    min-height: 0;
+    align-items: stretch;
+  }
+
+  .boardShell .issueBoardColumn {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .boardShell .issueBoardColumnHeader h3 {
+    font-size: 1.7rem;
+  }
+
+  .boardShell .issueBoardColumnHeader span,
+  .boardShell .issueBoardAssigned,
+  .boardShell .issueBoardEmpty,
+  .boardShell .issueBoardStatus select {
+    font-size: 1.35rem;
+  }
+
+  .boardShell .issueBoardCard strong {
+    font-size: 1.55rem;
+  }
+
+  .boardShell .issueBoardCard p {
+    font-size: 1.35rem;
+  }
+
   .shell.calendarShell {
     display: flex;
     flex-direction: column;

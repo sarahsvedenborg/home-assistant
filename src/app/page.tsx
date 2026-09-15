@@ -1,11 +1,9 @@
 import { AddButton } from "@/components/add-button";
 import { FamilyDashboard } from "@/components/family-dashboard";
-import { HomeViewTabs } from "@/components/home-view-tabs";
 import { HubCard } from "@/components/hub-card";
-import { IssueBoard } from "@/components/issue-board";
 import { SingleEventForm } from "@/components/single-event-form";
 import { getDailyQuote } from "@/lib/daily-quote";
-import { getBoardIssues, getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getStudiedFlagCodes, getWeather, getWishListItems } from "@/lib/data";
+import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getStudiedFlagCodes, getWeather, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
@@ -20,17 +18,10 @@ function formatOsloDateLabel(date: Date): string {
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
-type HomePageProps = {
-  searchParams: Promise<{ view?: string | string[] }>;
-};
-
-export default async function Home({ searchParams }: HomePageProps) {
-  const params = await searchParams;
-  const view = params.view === "board" ? "board" : "dashboard";
+export default async function Home() {
   const now = new Date();
   const todayDateKey = osloDateKey(now);
   const [
-    boardIssues,
     dailyQuote,
     familyMembers,
     messages,
@@ -43,7 +34,6 @@ export default async function Home({ searchParams }: HomePageProps) {
     wishListItems,
     weather,
   ] = await Promise.all([
-    getBoardIssues(),
     getDailyQuote(todayDateKey),
     getFamilyMembers(),
     getShortMessages(),
@@ -63,10 +53,8 @@ export default async function Home({ searchParams }: HomePageProps) {
   const activity = buildRecentActivity(wishListItems, shoppingList.items, { now });
   return (
     <main className="shell homeShell">
-      <HomeViewTabs
-        view={view}
-        dashboard={
-          <>
+      <section className="homeViews" aria-label="Dashboard">
+        <div className="homeDashboardPanel" role="region" aria-label="Dashboard">
             <FamilyDashboard
               dateLabel={formatOsloDateLabel(now)}
               dailyQuote={dailyQuote}
@@ -135,15 +123,8 @@ export default async function Home({ searchParams }: HomePageProps) {
                 addLabel="Legg til hendelse"
               /> */}
             </section>
-          </>
-        }
-        board={
-          <IssueBoard
-            initialIssues={boardIssues}
-            familyMembers={familyMembers.map((member) => member.name)}
-          />
-        }
-      />
+        </div>
+      </section>
 
       <AddButton
         title="Legg til hendelse"
