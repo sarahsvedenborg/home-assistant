@@ -1528,6 +1528,106 @@ button {
   }
 }
 
+/* Large wall / desktop displays such as 2560×1440. Laptop viewports stay as-is. */
+@media (min-width: 2000px) and (min-height: 1200px) {
+  .appChrome {
+    width: calc(100% - 3rem);
+  }
+
+  .shell.homeShell {
+    width: calc(100% - 3rem);
+    padding-bottom: 1.25rem;
+  }
+
+  .homeDashboardPanel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 24rem);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 1.25rem;
+    width: 100%;
+    height: calc(100dvh - 8.75rem);
+    margin-left: 0;
+    transform: none;
+  }
+
+  .homeViews .dashboard {
+    min-height: 0;
+    height: 100%;
+    gap: 1.25rem;
+    grid-template-rows: auto minmax(0, 1.35fr) minmax(0, 1fr);
+  }
+
+  .homeDashboardPanel .widget {
+    min-height: 0;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .homeDashboardPanel .hubGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+    height: 100%;
+    min-height: 0;
+    margin-top: 0;
+  }
+
+  .homeDashboardPanel .hubCard {
+    min-height: 0;
+  }
+
+  .homeDashboardPanel .hubCardPrompt {
+    font-size: 1.02rem;
+  }
+
+  .homeDashboardPanel .dashboardTitle {
+    font-size: clamp(2.4rem, 3vw, 3.4rem);
+  }
+
+  .homeDashboardPanel .dailyQuote blockquote {
+    font-size: clamp(1.25rem, 1.35vw, 1.75rem);
+  }
+
+  .homeDashboardPanel .widgetTitle {
+    font-size: 1.45rem;
+  }
+
+  .homeDashboardPanel .wToday .widgetTitle,
+  .homeDashboardPanel .wTomorrow .widgetTitle {
+    font-size: clamp(2.1rem, 2vw, 2.75rem);
+    font-family: var(--font-display), cursive;
+  }
+
+  .homeDashboardPanel .widgetItem strong {
+    font-size: 1.22rem;
+  }
+
+  .homeDashboardPanel .wToday .widgetItem strong,
+  .homeDashboardPanel .wTomorrow .widgetItem strong {
+    font-size: 1.38rem;
+  }
+
+  .homeDashboardPanel .itemMeta,
+  .homeDashboardPanel .eventWidgetMeta,
+  .homeDashboardPanel .eventWidgetGroupTitle,
+  .homeDashboardPanel .widgetEmpty,
+  .homeDashboardPanel .widgetTextLink,
+  .homeDashboardPanel .widgetAddButton,
+  .homeDashboardPanel .shoppingWidgetMoreLink,
+  .homeDashboardPanel .messageDate {
+    font-size: 1rem;
+  }
+
+  .homeDashboardPanel .weatherTemp {
+    font-size: 2.85rem;
+  }
+
+  .homeDashboardPanel .weatherEmoji {
+    font-size: 3.1rem;
+  }
+}
+
 .statusPill,
 .sectionBadge,
 .hubStat,
@@ -1569,6 +1669,19 @@ button {
   gap: 0.95rem;
   padding: 1.25rem;
   border-radius: 1.75rem;
+}
+
+.hubCardPrompt {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.hubCardLearn {
+  border-color: rgba(79, 143, 120, 0.28);
+  background: linear-gradient(180deg, rgba(196, 236, 214, 0.98), rgba(255, 249, 232, 0.94));
 }
 
 /* Two CTAs per card (open the list + open the add form), pinned to the
@@ -2480,7 +2593,7 @@ button {
   }
 
   .hubGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .contentGrid {
@@ -2504,6 +2617,12 @@ button {
 @media (min-width: 900px) {
   .weeklyPayMembers {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .hubGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -2651,6 +2770,12 @@ button {
   font-size: 1.15rem;
   box-shadow: var(--shadow);
   cursor: pointer;
+}
+
+@media (min-width: 2000px) and (min-height: 1200px) {
+  .addFab {
+    right: calc(24rem + 4.5rem);
+  }
 }
 
 .addFabIcon {

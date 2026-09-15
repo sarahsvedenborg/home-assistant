@@ -5,7 +5,7 @@ import { HubCard } from "@/components/hub-card";
 import { IssueBoard } from "@/components/issue-board";
 import { SingleEventForm } from "@/components/single-event-form";
 import { getDailyQuote } from "@/lib/daily-quote";
-import { getBoardIssues, getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getWeather, getWishListItems } from "@/lib/data";
+import { getBoardIssues, getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getStudiedFlagCodes, getWeather, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
@@ -39,6 +39,7 @@ export default async function Home({ searchParams }: HomePageProps) {
     recurringEvents,
     singleEvents,
     shoppingList,
+    studiedFlagCodes,
     wishListItems,
     weather,
   ] = await Promise.all([
@@ -51,6 +52,7 @@ export default async function Home({ searchParams }: HomePageProps) {
     getRecurringEvents(),
     getSingleEvents(),
     getShoppingList(),
+    getStudiedFlagCodes(),
     getWishListItems(),
     getWeather(),
   ]);
@@ -78,6 +80,21 @@ export default async function Home({ searchParams }: HomePageProps) {
             />
 
             <section className="hubGrid" aria-label="Hovedseksjoner">
+              <HubCard
+                href="/flags"
+                formHref="/flags/quiz"
+                icon="🌍"
+                title="Lær flagg"
+                stat={
+                  studiedFlagCodes.length === 1
+                    ? "1 land lært"
+                    : `${studiedFlagCodes.length} land lært`
+                }
+                prompt="Hvilket flagg kjenner du i dag?"
+                accentClass="accentFuture hubCardLearn"
+                openLabel="Utforsk flagg"
+                addLabel="Start quiz"
+              />
               <HubCard
                 href="/onskeliste"
                 formHref="/onskeliste#add-wish"
