@@ -13,7 +13,7 @@ export default async function FlagsPage() {
   const dailyCountry = getDailyCountry(countries, osloDateKey(new Date()));
 
   return (
-    <main className="shell">
+    <main className="shell flagsShell">
       <header className="issueBoardToolbar">
         <div>
           <h1>Flagg</h1>

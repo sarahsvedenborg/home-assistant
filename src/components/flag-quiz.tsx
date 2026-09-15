@@ -68,7 +68,7 @@ export function FlagQuiz({
 
   if (isComplete) {
     return (
-      <section className="flagQuiz" aria-labelledby="flag-quiz-result-title">
+      <section className="flagQuiz flagQuizResult" aria-labelledby="flag-quiz-result-title">
         <h2 id="flag-quiz-result-title">Ferdig!</h2>
         <p className="flagQuizScore">
           Du fikk {score} av {questions.length} riktige.

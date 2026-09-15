@@ -15,7 +15,7 @@ export default async function FlagQuizPage() {
   );
 
   return (
-    <main className="shell">
+    <main className="shell flagsQuizShell">
       <header className="issueBoardToolbar">
         <div>
           <Link href="/flags" className="recipeBackLink">
