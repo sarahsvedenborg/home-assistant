@@ -1768,20 +1768,20 @@ button {
   }
 
   .calendarShell .calendarToolbar h2 {
-    font-size: clamp(2.2rem, 2.4vw, 3rem);
+    font-size: clamp(2.6rem, 3vw, 3.6rem);
   }
 
   .calendarShell .calendarTodayButton,
   .calendarShell .calendarViewToggle button {
-    min-height: 3.6rem;
-    padding: 0.8rem 1.2rem;
-    font-size: 1.25rem;
+    min-height: 4rem;
+    padding: 0.9rem 1.35rem;
+    font-size: 1.5rem;
   }
 
   .calendarShell .calendarIconButton {
-    min-width: 3.6rem;
-    min-height: 3.6rem;
-    font-size: 1.6rem;
+    min-width: 4rem;
+    min-height: 4rem;
+    font-size: 1.85rem;
   }
 
   .calendarShell .calendarScroll {
@@ -1807,26 +1807,32 @@ button {
   }
 
   .calendarShell .calendarWeekday {
-    padding: 0.95rem 0.7rem;
-    font-size: 1.2rem;
+    padding: 1.05rem 0.7rem;
+    font-size: 1.55rem;
   }
 
   .calendarShell .calendarDayHeading {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 
   .calendarShell .calendarDayHeading span {
-    font-size: 0.95rem;
+    padding: 0.28rem 0.6rem;
+    font-size: 1.15rem;
   }
 
   .calendarShell .calendarEvent {
-    padding: 0.7rem 0.75rem;
+    gap: 0.28rem;
+    padding: 0.85rem 0.9rem;
+  }
+
+  .calendarShell .calendarEventDetailsIndicator {
+    font-size: 1.2rem;
   }
 
   .calendarShell .calendarEvent strong,
   .calendarShell .calendarSpanningEvent strong,
   .calendarShell .calendarSpanningVacation strong {
-    font-size: 1.18rem;
+    font-size: 1.65rem;
   }
 
   .calendarShell .calendarEventTime,
@@ -1835,21 +1841,21 @@ button {
   .calendarShell .calendarDayNotes p,
   .calendarShell .calendarPublicHolidays p,
   .calendarShell .calendarSpecialEventDescription {
-    font-size: 1.05rem;
+    font-size: 1.35rem;
   }
 
   .calendarShell .calendarBirthdayNotes p,
   .calendarShell .calendarHolydayNotes p {
-    font-size: 1.1rem;
+    font-size: 1.45rem;
   }
 
   .calendarShell .calendarSpanningEvent.calendarSpanningVacation {
-    font-size: 1.1rem;
+    font-size: 1.45rem;
   }
 
   .calendarShell .calendarSpanningEvent,
   .calendarShell .calendarSpanningSlot {
-    min-height: 2.6rem;
+    min-height: 3.15rem;
   }
 }
 
