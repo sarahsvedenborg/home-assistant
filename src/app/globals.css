@@ -1354,6 +1354,17 @@ button {
   border-top: 1px solid var(--line);
 }
 
+.shoppingWidgetMoreLink {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.shoppingWidgetMoreLink:hover,
+.shoppingWidgetMoreLink:focus-visible {
+  color: var(--ink);
+}
+
 .messageDate {
   color: var(--muted);
   font-size: 0.72rem;

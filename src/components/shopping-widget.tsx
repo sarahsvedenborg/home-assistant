@@ -7,6 +7,8 @@ import { FormModal } from "@/components/form-modal";
 import { ShoppingListForm } from "@/components/shopping-list-form";
 import type { ShoppingListEntry } from "@/lib/types";
 
+const VISIBLE_ITEM_COUNT = 6;
+
 export function ShoppingWidget({
   items,
 }: {
@@ -15,6 +17,8 @@ export function ShoppingWidget({
   const [isOpen, setIsOpen] = useState(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const remainingItems = items.filter((item) => !item.checked);
+  const visibleItems = remainingItems.slice(0, VISIBLE_ITEM_COUNT);
+  const hiddenCount = remainingItems.length - visibleItems.length;
 
   useEffect(() => {
     if (!confirmation) {
@@ -55,7 +59,7 @@ export function ShoppingWidget({
           <p className="widgetEmpty">Handlelisten er tom 🎉</p>
         ) : (
           <ul className="widgetList">
-            {remainingItems.slice(0, 6).map((item) => (
+            {visibleItems.map((item) => (
               <li key={item.id} className="widgetItem shoppingWidgetItem">
                 <strong>{item.title}</strong>
                 {item.quantity || item.note ? (
@@ -65,6 +69,13 @@ export function ShoppingWidget({
                 ) : null}
               </li>
             ))}
+            {hiddenCount > 0 ? (
+              <li className="widgetItem shoppingWidgetItem shoppingWidgetMore">
+                <Link href="/handleliste" className="shoppingWidgetMoreLink">
+                  +{hiddenCount} flere
+                </Link>
+              </li>
+            ) : null}
           </ul>
         )}
       </article>
