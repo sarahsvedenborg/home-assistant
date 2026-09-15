@@ -1982,6 +1982,113 @@ button {
   .flagsShell .flagHeroFacts dd {
     font-size: 1.7rem;
   }
+
+  .shell.flagsQuizShell {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 3rem);
+    height: calc(100dvh - 7.5rem);
+    min-height: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .flagsQuizShell .issueBoardToolbar h1 {
+    font-size: clamp(3rem, 3.4vw, 4rem);
+  }
+
+  .flagsQuizShell .recipeBackLink {
+    font-size: 1.45rem;
+  }
+
+  .flagsQuizShell .flagBrowserEmpty {
+    font-size: 1.45rem;
+  }
+
+  .flagsQuizShell .flagQuiz {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    margin-top: 0.75rem;
+    padding: 1.75rem 2.25rem;
+    gap: 1.5rem;
+  }
+
+  .flagsQuizShell .flagQuizResult {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .flagsQuizShell .flagQuizHeader,
+  .flagsQuizShell .flagQuizOptions,
+  .flagsQuizShell .flagQuizFeedback,
+  .flagsQuizShell .flagQuizActions {
+    flex-shrink: 0;
+  }
+
+  .flagsQuizShell .flagQuizHeader .kicker {
+    font-size: 1.4rem;
+  }
+
+  .flagsQuizShell .flagQuiz h2 {
+    font-size: clamp(3.2rem, 3.2vw, 4.2rem);
+  }
+
+  .flagsQuizShell .flagQuizFlag {
+    position: relative;
+    flex: 1;
+    align-self: center;
+    width: min(80rem, 90%);
+    min-height: 0;
+    max-width: none;
+  }
+
+  .flagsQuizShell .flagQuizFlag .flagMedia,
+  .flagsQuizShell .flagQuizFlag .flagImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+  }
+
+  .flagsQuizShell .flagQuizFlag .flagMedia {
+    display: block;
+    overflow: hidden;
+  }
+
+  .flagsQuizShell .flagQuizFlag .flagImage {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .flagsQuizShell .flagQuizOptions {
+    gap: 1.1rem;
+  }
+
+  .flagsQuizShell .flagQuizChoice {
+    min-height: 5.25rem;
+    padding: 1.1rem 1.35rem;
+    border-radius: 1.25rem;
+    font-size: 1.85rem;
+  }
+
+  .flagsQuizShell .flagQuizFeedback {
+    font-size: 1.7rem;
+  }
+
+  .flagsQuizShell .flagQuizScore {
+    font-size: 2.1rem;
+  }
+
+  .flagsQuizShell .flagQuizActions .buttonPrimary,
+  .flagsQuizShell .flagQuizActions .buttonSecondary {
+    min-height: 4.5rem;
+    padding: 1rem 1.8rem;
+    font-size: 1.55rem;
+  }
 }
 
 .statusPill,
@@ -4131,6 +4238,13 @@ button {
   border: 1px solid var(--line);
   border-radius: 0.8rem;
   background: rgba(255, 255, 255, 0.92);
+}
+
+.flagMediaFeatured .flagImage,
+.flagQuizFlag .flagImage {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .flagMap {
