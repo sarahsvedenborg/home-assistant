@@ -1742,6 +1742,115 @@ button {
   .weeklyPayShell .weeklyPayCounter strong {
     font-size: 1.35rem;
   }
+
+  .shell.calendarShell {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 3rem);
+    height: calc(100dvh - 12.75rem);
+    min-height: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .calendarShell .calendarPanel {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    margin-top: 0.75rem;
+    padding: 1.25rem;
+  }
+
+  .calendarShell .calendarToolbar {
+    padding-bottom: 1.15rem;
+  }
+
+  .calendarShell .calendarToolbar h2 {
+    font-size: clamp(2.2rem, 2.4vw, 3rem);
+  }
+
+  .calendarShell .calendarTodayButton,
+  .calendarShell .calendarViewToggle button {
+    min-height: 3.6rem;
+    padding: 0.8rem 1.2rem;
+    font-size: 1.25rem;
+  }
+
+  .calendarShell .calendarIconButton {
+    min-width: 3.6rem;
+    min-height: 3.6rem;
+    font-size: 1.6rem;
+  }
+
+  .calendarShell .calendarScroll {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .calendarShell .calendarGrid {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    grid-template-rows: auto;
+    grid-auto-rows: minmax(0, 1fr);
+  }
+
+  .calendarShell .calendarDay,
+  .calendarShell .calendarGridWeek .calendarDay {
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .calendarShell .calendarWeekday {
+    padding: 0.95rem 0.7rem;
+    font-size: 1.2rem;
+  }
+
+  .calendarShell .calendarDayHeading {
+    font-size: 1.5rem;
+  }
+
+  .calendarShell .calendarDayHeading span {
+    font-size: 0.95rem;
+  }
+
+  .calendarShell .calendarEvent {
+    padding: 0.7rem 0.75rem;
+  }
+
+  .calendarShell .calendarEvent strong,
+  .calendarShell .calendarSpanningEvent strong,
+  .calendarShell .calendarSpanningVacation strong {
+    font-size: 1.18rem;
+  }
+
+  .calendarShell .calendarEventTime,
+  .calendarShell .calendarEventMeta,
+  .calendarShell .calendarNoEvents,
+  .calendarShell .calendarDayNotes p,
+  .calendarShell .calendarPublicHolidays p,
+  .calendarShell .calendarSpecialEventDescription {
+    font-size: 1.05rem;
+  }
+
+  .calendarShell .calendarBirthdayNotes p,
+  .calendarShell .calendarHolydayNotes p {
+    font-size: 1.1rem;
+  }
+
+  .calendarShell .calendarSpanningEvent.calendarSpanningVacation {
+    font-size: 1.1rem;
+  }
+
+  .calendarShell .calendarSpanningEvent,
+  .calendarShell .calendarSpanningSlot {
+    min-height: 2.6rem;
+  }
 }
 
 .statusPill,
@@ -2891,6 +3000,10 @@ button {
 @media (min-width: 2000px) and (min-height: 1200px) {
   .addFab {
     right: calc(24rem + 4.5rem);
+  }
+
+  .calendarShell .addFab {
+    right: max(1.5rem, env(safe-area-inset-right));
   }
 }
 
