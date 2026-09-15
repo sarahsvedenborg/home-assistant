@@ -22,6 +22,8 @@ type AddButtonProps = {
   hideTriggerOnMobile?: boolean;
   // Use a wider dialog for forms with horizontal option groups.
   wide?: boolean;
+  // Extra class on the dialog, used for page-specific large-screen sizing.
+  modalClassName?: string;
   // The form to render inside the modal; receives an injected onSuccess.
   children: ReactElement<FormChildProps>;
 };
@@ -33,6 +35,7 @@ export function AddButton({
   hideTrigger = false,
   hideTriggerOnMobile = false,
   wide = false,
+  modalClassName,
   children,
 }: AddButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -107,6 +110,7 @@ export function AddButton({
         title={title}
         confirmation={confirmation}
         size={wide ? "wide" : "default"}
+        className={modalClassName}
       >
         {form}
       </FormModal>

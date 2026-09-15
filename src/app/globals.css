@@ -3812,6 +3812,97 @@ button {
   }
 }
 
+@media (min-width: 2000px) and (min-height: 1200px) {
+  .formModalBackdrop:has(.formModalMovies) {
+    padding: 4vh 2rem 2rem;
+  }
+
+  .formModal.formModalMovies {
+    width: min(56rem, 100%);
+    max-height: 90dvh;
+    border-radius: 2rem;
+  }
+
+  .formModalMovies .formModalHeader {
+    padding: 1.5rem 1.85rem;
+  }
+
+  .formModalMovies .formModalHeader h2 {
+    font-size: 2.6rem;
+  }
+
+  .formModalMovies .formModalClose {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 2.5rem;
+  }
+
+  .formModalMovies .formModalBody {
+    padding: 1.75rem 2rem 2.1rem;
+  }
+
+  .formModalMovies .formGrid {
+    gap: 1.35rem;
+  }
+
+  .formModalMovies .formModalBody .field span,
+  .formModalMovies .formModalBody legend {
+    font-size: 1.55rem;
+  }
+
+  .formModalMovies .formModalBody .field input:not([type="checkbox"]):not([type="radio"]) {
+    min-height: 4.5rem;
+    padding: 1rem 1.2rem;
+    border-radius: 1.15rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalMovies .eventParticipantGrid {
+    gap: 0.75rem 1rem;
+  }
+
+  .formModalMovies .eventParticipantGrid .checkboxOption {
+    min-height: 4.25rem;
+    padding: 0.7rem 0.95rem;
+    border-radius: 1rem;
+  }
+
+  .formModalMovies .eventParticipantGrid .checkboxLabel {
+    font-size: 1.55rem;
+  }
+
+  .formModalMovies .radioInput {
+    width: 1.75rem !important;
+    min-width: 1.75rem;
+    max-width: 1.75rem;
+    height: 1.75rem !important;
+    min-height: 1.75rem;
+    max-height: 1.75rem;
+    line-height: 1.75rem;
+  }
+
+  .formModalMovies .radioInput::after {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+
+  .formModalMovies .formModalBody .buttonPrimary {
+    min-height: 5rem;
+    padding: 1.05rem 1.9rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalMovies .formModalConfirmation p {
+    font-size: 2.1rem;
+  }
+
+  .formModalMovies .formModalConfirmationIcon {
+    width: 5.25rem;
+    height: 5.25rem;
+    font-size: 2.6rem;
+  }
+}
+
 .formModalBackdropCelebration {
   align-items: center;
   padding: 1.5rem;

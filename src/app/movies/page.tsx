@@ -23,7 +23,12 @@ export default async function MoviesPage() {
         <MovieBrowser movies={movies} />
       </section>
 
-      <AddButton title="Legg til filmforslag" label="Legg til film" anchor="add-movie">
+      <AddButton
+        title="Legg til filmforslag"
+        label="Legg til film"
+        anchor="add-movie"
+        modalClassName="formModalMovies"
+      >
         <MovieForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>
     </main>
