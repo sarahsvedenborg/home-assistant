@@ -54,6 +54,10 @@ function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
+function eventCountLabel(count: number): string {
+  return count === 1 ? "1 hendelse" : `${count} hendelser`;
+}
+
 function formatLongDateKey(value: string): string {
   return capitalize(
     formatDate(dateFromKey(value), {
@@ -684,15 +688,27 @@ export function FamilyCalendar({
               }
             }
 
+            const eventCount = day.events.length;
+
             return (
               <section className={className} key={day.dateKey}>
                 <div className="calendarDayHeading">
-                  <time dateTime={day.dateKey}>
-                    {view === "week"
-                      ? capitalize(formatDate(date, { day: "numeric", month: "short" }))
-                      : date.getUTCDate()}
-                  </time>
-                  {isToday ? <span>I dag</span> : null}
+                  <div className="calendarDayHeadingStart">
+                    <time dateTime={day.dateKey}>
+                      {view === "week"
+                        ? capitalize(formatDate(date, { day: "numeric", month: "short" }))
+                        : date.getUTCDate()}
+                    </time>
+                    {view === "month" && eventCount > 0 ? (
+                      <span
+                        className="calendarDayEventCount"
+                        aria-label={eventCountLabel(eventCount)}
+                      >
+                        {eventCount}
+                      </span>
+                    ) : null}
+                  </div>
+                  {isToday ? <span className="calendarDayTodayLabel">I dag</span> : null}
                 </div>
 
                 {vacationSlots.length > 0 ? (
@@ -793,7 +809,7 @@ export function FamilyCalendar({
                         ))}
                       </div>
                     </>
-                  ) : spanningEvents.length === 0 ? (
+                  ) : spanningEvents.length === 0 && view !== "month" ? (
                     <span className="calendarNoEvents">Ingen avtaler</span>
                   ) : null}
                 </div>

@@ -1528,6 +1528,343 @@ button {
   }
 }
 
+/* Large wall / desktop displays such as 2560×1440. Laptop viewports stay as-is. */
+@media (min-width: 2000px) and (min-height: 1200px) {
+  .appChrome {
+    width: calc(100% - 3rem);
+  }
+
+  .appChrome .homeViewTabs {
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 1.35rem;
+  }
+
+  .appChrome .homeViewTab {
+    min-width: 12.5rem;
+    min-height: 4.5rem;
+    padding: 0.95rem 1.6rem;
+    border-radius: 1rem;
+    font-size: 2rem;
+  }
+
+  .appChrome .homeQuickLinks {
+    gap: 0.7rem;
+  }
+
+  .appChrome .homeGhostButton {
+    min-height: 4.25rem;
+    padding: 0.85rem 1.4rem;
+    border-radius: 1rem;
+    font-size: 1.64rem;
+  }
+
+  .appChrome .homeContextNav {
+    gap: 0.65rem;
+    margin-top: 0.75rem;
+  }
+
+  .appChrome .homeContextButton {
+    min-height: 3.85rem;
+    padding: 0.7rem 1.2rem;
+    font-size: 1.52rem;
+  }
+
+  .shell.homeShell {
+    width: calc(100% - 3rem);
+    padding-bottom: 1.25rem;
+  }
+
+  .homeDashboardPanel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 24rem);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 1.25rem;
+    width: 100%;
+    height: calc(100dvh - 12.75rem);
+    margin-left: 0;
+    transform: none;
+  }
+
+  .homeViews .dashboard {
+    min-height: 0;
+    height: 100%;
+    gap: 1.25rem;
+    grid-template-rows: auto minmax(0, 1.02fr) minmax(0, 1.2fr);
+  }
+
+  .homeDashboardPanel .widget {
+    min-height: 0;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .homeDashboardPanel .hubGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+    height: 100%;
+    min-height: 0;
+    margin-top: 0;
+  }
+
+  .homeDashboardPanel .hubCard {
+    min-height: 0;
+  }
+
+  .homeDashboardPanel .hubCardPrompt {
+    font-size: 1.02rem;
+  }
+
+  .homeDashboardPanel .dashboardTitle {
+    font-size: clamp(2.4rem, 3vw, 3.4rem);
+  }
+
+  .homeDashboardPanel .dailyQuote blockquote {
+    font-size: clamp(1.25rem, 1.35vw, 1.75rem);
+  }
+
+  .homeDashboardPanel .widgetTitle {
+    font-size: 1.45rem;
+  }
+
+  .homeDashboardPanel .wToday .widgetTitle,
+  .homeDashboardPanel .wTomorrow .widgetTitle {
+    font-size: clamp(2.1rem, 2vw, 2.75rem);
+    font-family: var(--font-display), cursive;
+  }
+
+  .homeDashboardPanel .widgetItem strong {
+    font-size: 1.22rem;
+  }
+
+  .homeDashboardPanel .wToday .widgetItem strong,
+  .homeDashboardPanel .wTomorrow .widgetItem strong {
+    font-size: 1.38rem;
+  }
+
+  .homeDashboardPanel .itemMeta,
+  .homeDashboardPanel .eventWidgetMeta,
+  .homeDashboardPanel .eventWidgetGroupTitle,
+  .homeDashboardPanel .widgetEmpty,
+  .homeDashboardPanel .widgetTextLink,
+  .homeDashboardPanel .widgetAddButton,
+  .homeDashboardPanel .shoppingWidgetMoreLink,
+  .homeDashboardPanel .messageDate {
+    font-size: 1rem;
+  }
+
+  .homeDashboardPanel .weatherTemp {
+    font-size: 2.85rem;
+  }
+
+  .homeDashboardPanel .weatherEmoji {
+    font-size: 3.1rem;
+  }
+
+  .shell.weeklyPayShell {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 3rem);
+    height: calc(100dvh - 12.75rem);
+    min-height: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .weeklyPayShell .issueBoardToolbar h1 {
+    font-size: clamp(2.4rem, 3vw, 3.4rem);
+  }
+
+  .weeklyPayShell .weeklyPayMembers {
+    flex: 1;
+    min-height: 0;
+    margin-top: 1.25rem;
+    gap: 1.25rem;
+    align-content: start;
+    align-items: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .weeklyPayShell .weeklyPayMember {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .weeklyPayShell .weeklyPayMemberName > span {
+    font-size: 2.4rem;
+  }
+
+  .weeklyPayShell .weeklyPayMemberName h2 {
+    font-size: 2.1rem;
+  }
+
+  .weeklyPayShell .weeklyPayCollapseButton {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.2rem;
+  }
+
+  .weeklyPayShell .weeklyPayTotal {
+    padding: 0.6rem 1rem;
+    font-size: 1.35rem;
+  }
+
+  .weeklyPayShell .weeklyPayButton {
+    min-height: 3.25rem;
+    padding: 0.6rem 1.15rem;
+    font-size: 1.15rem;
+  }
+
+  .weeklyPayShell .weeklyPayChores {
+    overflow: auto;
+  }
+
+  .weeklyPayShell .weeklyPayChoreCopy p,
+  .weeklyPayShell .weeklyPayChoreCopy strong {
+    font-size: 1.22rem;
+  }
+
+  .weeklyPayShell .weeklyPayChoreCopy span,
+  .weeklyPayShell .weeklyPayEmpty {
+    font-size: 1rem;
+  }
+
+  .weeklyPayShell .weeklyPayCounter button {
+    width: 3.25rem;
+    height: 3.25rem;
+    font-size: 1.7rem;
+  }
+
+  .weeklyPayShell .weeklyPayCounter strong {
+    font-size: 1.35rem;
+  }
+
+  .shell.calendarShell {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 3rem);
+    height: calc(100dvh - 12.75rem);
+    min-height: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .calendarShell .calendarPanel {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    margin-top: 0.75rem;
+    padding: 1.25rem;
+  }
+
+  .calendarShell .calendarToolbar {
+    padding-bottom: 1.15rem;
+  }
+
+  .calendarShell .calendarToolbar h2 {
+    font-size: clamp(2.6rem, 3vw, 3.6rem);
+  }
+
+  .calendarShell .calendarTodayButton,
+  .calendarShell .calendarViewToggle button {
+    min-height: 4rem;
+    padding: 0.9rem 1.35rem;
+    font-size: 1.5rem;
+  }
+
+  .calendarShell .calendarIconButton {
+    min-width: 4rem;
+    min-height: 4rem;
+    font-size: 1.85rem;
+  }
+
+  .calendarShell .calendarScroll {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .calendarShell .calendarGrid {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    grid-template-rows: auto;
+    grid-auto-rows: minmax(0, 1fr);
+  }
+
+  .calendarShell .calendarDay,
+  .calendarShell .calendarGridWeek .calendarDay {
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .calendarShell .calendarWeekday {
+    padding: 1.05rem 0.7rem;
+    font-size: 1.55rem;
+  }
+
+  .calendarShell .calendarDayHeading {
+    font-size: 2rem;
+  }
+
+  .calendarShell .calendarDayTodayLabel {
+    padding: 0.28rem 0.6rem;
+    font-size: 1.15rem;
+  }
+
+  .calendarShell .calendarDayEventCount {
+    min-width: 2.1rem;
+    padding: 0.2rem 0.55rem;
+    font-size: 1.35rem;
+  }
+
+  .calendarShell .calendarEvent {
+    gap: 0.28rem;
+    padding: 0.85rem 0.9rem;
+  }
+
+  .calendarShell .calendarEventDetailsIndicator {
+    font-size: 1.2rem;
+  }
+
+  .calendarShell .calendarEvent strong,
+  .calendarShell .calendarSpanningEvent strong,
+  .calendarShell .calendarSpanningVacation strong {
+    font-size: 1.65rem;
+  }
+
+  .calendarShell .calendarEventTime,
+  .calendarShell .calendarEventMeta,
+  .calendarShell .calendarNoEvents,
+  .calendarShell .calendarDayNotes p,
+  .calendarShell .calendarPublicHolidays p,
+  .calendarShell .calendarSpecialEventDescription {
+    font-size: 1.35rem;
+  }
+
+  .calendarShell .calendarBirthdayNotes p,
+  .calendarShell .calendarHolydayNotes p {
+    font-size: 1.45rem;
+  }
+
+  .calendarShell .calendarSpanningEvent.calendarSpanningVacation {
+    font-size: 1.45rem;
+  }
+
+  .calendarShell .calendarSpanningEvent,
+  .calendarShell .calendarSpanningSlot {
+    min-height: 3.15rem;
+  }
+}
+
 .statusPill,
 .sectionBadge,
 .hubStat,
@@ -1569,6 +1906,19 @@ button {
   gap: 0.95rem;
   padding: 1.25rem;
   border-radius: 1.75rem;
+}
+
+.hubCardPrompt {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.hubCardLearn {
+  border-color: rgba(79, 143, 120, 0.28);
+  background: linear-gradient(180deg, rgba(196, 236, 214, 0.98), rgba(255, 249, 232, 0.94));
 }
 
 /* Two CTAs per card (open the list + open the add form), pinned to the
@@ -2480,7 +2830,7 @@ button {
   }
 
   .hubGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .contentGrid {
@@ -2504,6 +2854,12 @@ button {
 @media (min-width: 900px) {
   .weeklyPayMembers {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .hubGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -2651,6 +3007,16 @@ button {
   font-size: 1.15rem;
   box-shadow: var(--shadow);
   cursor: pointer;
+}
+
+@media (min-width: 2000px) and (min-height: 1200px) {
+  .addFab {
+    right: calc(24rem + 4.5rem);
+  }
+
+  .calendarShell .addFab {
+    right: max(1.5rem, env(safe-area-inset-right));
+  }
 }
 
 .addFabIcon {
@@ -3109,13 +3475,54 @@ button {
   font-weight: 900;
 }
 
-.calendarDayHeading span {
+.calendarDayHeadingStart {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.calendarDayEventCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.45rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(94, 166, 255, 0.24);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.calendarDayTodayLabel {
   padding: 0.2rem 0.45rem;
   border-radius: 999px;
   background: var(--warm);
   color: #17212c;
   font-size: 0.68rem;
   text-transform: uppercase;
+}
+
+.calendarGridMonth .calendarDay {
+  overflow: auto;
+}
+
+.calendarGridMonth .calendarDayHeading {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding-bottom: 0.35rem;
+  background: rgba(255, 253, 248, 0.96);
+}
+
+.calendarGridMonth .calendarDayToday .calendarDayHeading {
+  background: rgba(255, 244, 225, 0.98);
+}
+
+.calendarGridMonth .calendarDayOutside .calendarDayHeading {
+  background: rgba(241, 244, 247, 0.94);
 }
 
 .calendarTopNotes {

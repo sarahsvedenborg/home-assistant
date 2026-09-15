@@ -9,6 +9,7 @@ type HubCardProps = {
   title: string;
   stat: string;
   accentClass: string;
+  prompt?: string;
   // Label for the button that opens the list page.
   openLabel: string;
   // Label for the button that opens the submission form.
@@ -22,6 +23,7 @@ export function HubCard({
   title,
   stat,
   accentClass,
+  prompt,
   openLabel,
   addLabel,
 }: HubCardProps) {
@@ -34,6 +36,7 @@ export function HubCard({
         <span className="hubStat">{stat}</span>
       </div>
       <h2>{title}</h2>
+      {prompt ? <p className="hubCardPrompt">{prompt}</p> : null}
       <div className="hubCardActions">
         <Link href={href} className="buttonSecondary">
           {openLabel}
