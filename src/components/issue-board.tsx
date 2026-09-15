@@ -73,7 +73,7 @@ export function IssueBoard({ initialIssues, familyMembers }: IssueBoardProps) {
     <section className="issueBoard" aria-labelledby="issue-board-title">
       <div className="issueBoardToolbar">
         <div>
-          <h2 id="issue-board-title">Må gjøres</h2>
+          <h1 id="issue-board-title">Må gjøres</h1>
         </div>
         <button
           className="buttonPrimary"

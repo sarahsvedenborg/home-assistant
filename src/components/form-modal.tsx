@@ -10,6 +10,7 @@ type FormModalProps = {
   children: ReactNode;
   variant?: "default" | "celebration";
   size?: "default" | "wide";
+  className?: string;
   // When set, a success confirmation covers the form content.
   confirmation?: string | null;
 };
@@ -30,6 +31,7 @@ export function FormModal({
   children,
   variant = "default",
   size = "default",
+  className,
   confirmation,
 }: FormModalProps) {
   const titleId = useId();
@@ -114,6 +116,7 @@ export function FormModal({
           "formModal",
           variant === "celebration" ? "formModalCelebration" : "",
           size === "wide" ? "formModalWide" : "",
+          className ?? "",
         ]
           .filter(Boolean)
           .join(" ")}

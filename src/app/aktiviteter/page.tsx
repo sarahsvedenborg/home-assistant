@@ -50,7 +50,7 @@ export default async function AktiviteterPage() {
     getRecurringEvents(),
   ]);
 
-  // Group by weekday and keep the days in Monday-to-Sunday order.
+  // Keep Monday–Sunday order so the large-screen week grid can show every day.
   const grouped = WEEKDAYS.map((day) => ({
     day,
     events: events
@@ -60,31 +60,36 @@ export default async function AktiviteterPage() {
           activityCategoryOrder(left.category) - activityCategoryOrder(right.category) ||
           (left.time || "").localeCompare(right.time || ""),
       ),
-  })).filter((group) => group.events.length > 0);
+  }));
 
   return (
-    <main className="shell">
+    <main className="shell activitiesShell">
       <section className="sectionHero accentFuture">
         <div>
           <span className="kicker">Ukeplan</span>
-          <h1 style={{ margin: "0.25em 0" }}>Faste aktiviteter</h1>
+          <h1>Faste aktiviteter</h1>
         </div>
         <div className="sectionBadge">{events.length} aktiviteter</div>
       </section>
 
       <section className="listStack">
         {events.length === 0 ? (
-          <div className="emptyState">
+          <div className="emptyState activitiesPageEmpty">
             <span className="emptyIcon" aria-hidden="true">
               📅
             </span>
             <h3>Ingen faste aktiviteter enda</h3>
             <p>Legg til den første aktiviteten i skjemaet.</p>
           </div>
-        ) : (
-          <div className="groupStack">
-            {grouped.map((group) => (
-                <section key={group.day.value} className="groupCard groupCardOpen">
+        ) : null}
+        <div className="groupStack">
+          {grouped.map((group) => (
+                <section
+                  key={group.day.value}
+                  className={
+                    group.events.length > 0 ? "groupCard groupCardOpen" : "groupCard groupCardEmpty"
+                  }
+                >
                   <div className="groupHeader">
                     <h3>{group.day.label}</h3>
                     <span>
@@ -92,6 +97,9 @@ export default async function AktiviteterPage() {
                     </span>
                   </div>
 
+                  {group.events.length === 0 ? (
+                    <p className="widgetEmpty">Ingen aktiviteter</p>
+                  ) : (
                   <ul className="itemList">
                     {group.events.map((event: RecurringEvent, index) => {
                       const timeRange = [event.time, event.endTime].filter(Boolean).join("–");
@@ -124,10 +132,10 @@ export default async function AktiviteterPage() {
                       );
                     })}
                   </ul>
+                  )}
                 </section>
-            ))}
-          </div>
-        )}
+          ))}
+        </div>
       </section>
 
       <AddButton

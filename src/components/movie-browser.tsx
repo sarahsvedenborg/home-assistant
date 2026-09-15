@@ -92,7 +92,7 @@ export function MovieBrowser({ movies }: MovieBrowserProps) {
             className={selectedAudience === "alle" ? "filterChip filterChipActive" : "filterChip"}
             onClick={() => setSelectedAudience("alle")}
           >
-            Alle
+            Alle filmer
           </button>
           {MOVIE_AUDIENCES.map((audience) => (
             <button

@@ -10,12 +10,11 @@ export default async function MoviesPage() {
   ]);
 
   return (
-    <main className="shell">
+    <main className="shell moviesShell">
       <section className="sectionHero accentCoolPanel">
         <div>
           <span className="kicker">Filmkveld</span>
-          <h1 style={{margin: '0.2em 0'}}>Filmliste</h1>
-
+          <h1>Filmliste</h1>
         </div>
         <div className="sectionBadge">{movies.filter((movie) => !movie.watched).length} igjen å se</div>
       </section>
@@ -24,7 +23,12 @@ export default async function MoviesPage() {
         <MovieBrowser movies={movies} />
       </section>
 
-      <AddButton title="Legg til filmforslag" label="Legg til film" anchor="add-movie">
+      <AddButton
+        title="Legg til filmforslag"
+        label="Legg til film"
+        anchor="add-movie"
+        modalClassName="formModalMovies"
+      >
         <MovieForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>
     </main>

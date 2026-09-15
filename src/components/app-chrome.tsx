@@ -1,25 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export function AppChrome() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   if (pathname === "/login" || pathname === "/test-route") {
     return null;
   }
 
   const isHome = pathname === "/";
-  const isBoardPage = isHome && searchParams.get("view") === "board";
-  const isDashboardPage = isHome && !isBoardPage;
+  const isBoardPage = pathname === "/ma-gjores";
+  const isDashboardPage = isHome;
   const isWeeklyPayPage = pathname === "/ukelonn";
   const isCalendarPage = pathname === "/kalender";
   const isActivitiesPage = pathname === "/aktiviteter";
   const isCalendarContext =
     isCalendarPage || isActivitiesPage;
-  const isDashboardContext = isWeeklyPayPage || isHome;
+  const isDashboardContext = isWeeklyPayPage || isBoardPage || isHome;
 
   return (
     <header className="appChrome">
@@ -60,7 +59,7 @@ export function AppChrome() {
       {isDashboardContext ? (
         <nav className="homeContextNav" aria-label="Snarveier fra dashboard">
           <Link
-            href="/?view=board"
+            href="/ma-gjores"
             className={
               isBoardPage
                 ? "homeGhostButton homeContextButton homeContextButtonActive"

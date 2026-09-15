@@ -30,12 +30,14 @@ export function HubCard({
   return (
     <article className={`hubCard ${accentClass}`}>
       <div className="hubCardTop">
-        <span className="hubIcon" aria-hidden="true">
-          {icon}
-        </span>
+        <div className="hubCardTitle">
+          <span className="hubIcon" aria-hidden="true">
+            {icon}
+          </span>
+          <h2>{title}</h2>
+        </div>
         <span className="hubStat">{stat}</span>
       </div>
-      <h2>{title}</h2>
       {prompt ? <p className="hubCardPrompt">{prompt}</p> : null}
       <div className="hubCardActions">
         <Link href={href} className="buttonSecondary">
