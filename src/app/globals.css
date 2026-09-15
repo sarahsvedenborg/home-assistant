@@ -1815,9 +1815,15 @@ button {
     font-size: 2rem;
   }
 
-  .calendarShell .calendarDayHeading span {
+  .calendarShell .calendarDayTodayLabel {
     padding: 0.28rem 0.6rem;
     font-size: 1.15rem;
+  }
+
+  .calendarShell .calendarDayEventCount {
+    min-width: 2.1rem;
+    padding: 0.2rem 0.55rem;
+    font-size: 1.35rem;
   }
 
   .calendarShell .calendarEvent {
@@ -3469,13 +3475,54 @@ button {
   font-weight: 900;
 }
 
-.calendarDayHeading span {
+.calendarDayHeadingStart {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.calendarDayEventCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.45rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(94, 166, 255, 0.24);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.calendarDayTodayLabel {
   padding: 0.2rem 0.45rem;
   border-radius: 999px;
   background: var(--warm);
   color: #17212c;
   font-size: 0.68rem;
   text-transform: uppercase;
+}
+
+.calendarGridMonth .calendarDay {
+  overflow: auto;
+}
+
+.calendarGridMonth .calendarDayHeading {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding-bottom: 0.35rem;
+  background: rgba(255, 253, 248, 0.96);
+}
+
+.calendarGridMonth .calendarDayToday .calendarDayHeading {
+  background: rgba(255, 244, 225, 0.98);
+}
+
+.calendarGridMonth .calendarDayOutside .calendarDayHeading {
+  background: rgba(241, 244, 247, 0.94);
 }
 
 .calendarTopNotes {
