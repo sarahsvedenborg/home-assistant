@@ -2019,6 +2019,138 @@ button {
     font-size: 1.2rem;
   }
 
+  .shell.moviesShell {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 3rem);
+    height: calc(100dvh - 7.5rem);
+    min-height: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .moviesShell .sectionHero {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0;
+    padding: 1rem 1.5rem;
+  }
+
+  .moviesShell .sectionHero h1 {
+    max-width: none;
+    margin: 0.2em 0 0;
+    font-size: clamp(2.8rem, 3vw, 3.6rem);
+  }
+
+  .moviesShell .sectionHero .kicker,
+  .moviesShell .sectionHero .sectionBadge {
+    font-size: 1.35rem;
+  }
+
+  .moviesShell .listStack {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    margin-top: 1rem;
+  }
+
+  .moviesShell .listPanel {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 1.5rem 1.75rem;
+    overflow: hidden;
+  }
+
+  .moviesShell .panelHeading h2 {
+    font-size: clamp(2.4rem, 2.4vw, 3rem);
+  }
+
+  .moviesShell .filterChip {
+    min-height: 3.5rem;
+    padding: 0.8rem 1.3rem;
+    font-size: 1.45rem;
+  }
+
+  .moviesShell .messageArchiveGroups {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    min-height: 0;
+    margin-top: 1.25rem;
+  }
+
+  .moviesShell .messageArchiveSection,
+  .moviesShell .messageArchiveSection + .messageArchiveSection {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    margin-top: 0;
+    padding: 1.25rem 1.35rem;
+    border: 1px solid var(--line);
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.42);
+    overflow: hidden;
+  }
+
+  .moviesShell .messageArchiveSection h3 {
+    font-size: 2.2rem;
+  }
+
+  .moviesShell .movieTable {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .moviesShell .movieTableHeader,
+  .moviesShell .movieTableRow {
+    grid-template-columns: minmax(0, 1.7fr) minmax(9rem, 0.7fr) minmax(8rem, 0.55fr);
+  }
+
+  .moviesShell .movieTableHeader {
+    flex-shrink: 0;
+    font-size: 1.35rem;
+  }
+
+  .moviesShell .movieTableBody {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .moviesShell .movieTableRow {
+    padding: 1.15rem 0.4rem;
+  }
+
+  .moviesShell .movieTableRow strong {
+    font-size: 1.7rem;
+  }
+
+  .moviesShell .movieStatusCell,
+  .moviesShell .movieTrailerCell,
+  .moviesShell .movieTrailerCell .inlineLink,
+  .moviesShell .messageArchiveEmpty {
+    font-size: 1.45rem;
+  }
+
+  .moviesShell .emptyState h3 {
+    font-size: 2.2rem;
+  }
+
+  .moviesShell .emptyState p {
+    font-size: 1.45rem;
+  }
+
   .shell.flagsShell {
     display: flex;
     flex-direction: column;
@@ -3384,7 +3516,8 @@ button {
   margin-top: 1.5rem;
 }
 
-.activitiesShell .sectionHero h1 {
+.activitiesShell .sectionHero h1,
+.moviesShell .sectionHero h1 {
   margin: 0.25em 0;
 }
 
@@ -3421,7 +3554,8 @@ button {
   }
 
   .calendarShell .addFab,
-  .activitiesShell .addFab {
+  .activitiesShell .addFab,
+  .moviesShell .addFab {
     right: max(1.5rem, env(safe-area-inset-right));
   }
 }
