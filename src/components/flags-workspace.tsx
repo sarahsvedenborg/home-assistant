@@ -64,7 +64,7 @@ export function FlagsWorkspace({
   }
 
   return (
-    <>
+    <div className="flagsWorkspace">
       <FeaturedFlag
         countries={countries}
         initialCode={initialCode}
@@ -83,6 +83,6 @@ export function FlagsWorkspace({
           {error}
         </p>
       ) : null}
-    </>
+    </div>
   );
 }
