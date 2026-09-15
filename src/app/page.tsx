@@ -90,7 +90,6 @@ export default async function Home({ searchParams }: HomePageProps) {
                     ? "1 land lært"
                     : `${studiedFlagCodes.length} land lært`
                 }
-                prompt="Hvilket flagg kjenner du i dag?"
                 accentClass="accentFuture hubCardLearn"
                 openLabel="Utforsk flagg"
                 addLabel="Start quiz"

@@ -1577,7 +1577,7 @@ button {
 
   .homeDashboardPanel {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(20rem, 24rem);
+    grid-template-columns: minmax(0, 1fr) minmax(26rem, 32rem);
     grid-template-rows: minmax(0, 1fr);
     gap: 1.25rem;
     width: 100%;
@@ -1603,7 +1603,7 @@ button {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, minmax(0, 1fr));
-    gap: 1.25rem;
+    gap: 1rem;
     height: 100%;
     min-height: 0;
     margin-top: 0;
@@ -1611,37 +1611,78 @@ button {
 
   .homeDashboardPanel .hubCard {
     min-height: 0;
+    justify-content: space-between;
+    gap: 0.85rem;
+    padding: 1.15rem 1.35rem;
+    overflow: hidden;
+  }
+
+  .homeDashboardPanel .hubCard h2 {
+    font-size: 2.15rem;
+    line-height: 1.15;
   }
 
   .homeDashboardPanel .hubCardPrompt {
-    font-size: 1.02rem;
+    font-size: 1.55rem;
+  }
+
+  .homeDashboardPanel .hubStat {
+    font-size: 1.3rem;
+    white-space: nowrap;
+  }
+
+  .homeDashboardPanel .hubIcon {
+    width: 3.15rem;
+    height: 3.15rem;
+    border-radius: 1rem;
+    font-size: 1.7rem;
+  }
+
+  .homeDashboardPanel .hubCardActions {
+    flex-wrap: nowrap;
+  }
+
+  .homeDashboardPanel .hubCardActions .buttonPrimary,
+  .homeDashboardPanel .hubCardActions .buttonSecondary {
+    min-height: 3.15rem;
+    padding: 0.65rem 0.95rem;
+    font-size: 1.25rem;
+    white-space: nowrap;
   }
 
   .homeDashboardPanel .dashboardTitle {
-    font-size: clamp(2.4rem, 3vw, 3.4rem);
+    font-size: clamp(3.2rem, 3.4vw, 4.2rem);
   }
 
   .homeDashboardPanel .dailyQuote blockquote {
-    font-size: clamp(1.25rem, 1.35vw, 1.75rem);
+    font-size: clamp(1.85rem, 2vw, 2.4rem);
+  }
+
+  .homeDashboardPanel .dailyQuote figcaption {
+    font-size: 1.35rem;
   }
 
   .homeDashboardPanel .widgetTitle {
-    font-size: 1.45rem;
+    font-size: 2.15rem;
   }
 
   .homeDashboardPanel .wToday .widgetTitle,
   .homeDashboardPanel .wTomorrow .widgetTitle {
-    font-size: clamp(2.1rem, 2vw, 2.75rem);
+    font-size: clamp(2.8rem, 2.8vw, 3.5rem);
     font-family: var(--font-display), cursive;
   }
 
+  .homeDashboardPanel .widgetBadge {
+    font-size: 1.15rem;
+  }
+
   .homeDashboardPanel .widgetItem strong {
-    font-size: 1.22rem;
+    font-size: 1.7rem;
   }
 
   .homeDashboardPanel .wToday .widgetItem strong,
   .homeDashboardPanel .wTomorrow .widgetItem strong {
-    font-size: 1.38rem;
+    font-size: 1.95rem;
   }
 
   .homeDashboardPanel .itemMeta,
@@ -1651,16 +1692,27 @@ button {
   .homeDashboardPanel .widgetTextLink,
   .homeDashboardPanel .widgetAddButton,
   .homeDashboardPanel .shoppingWidgetMoreLink,
-  .homeDashboardPanel .messageDate {
-    font-size: 1rem;
+  .homeDashboardPanel .messageDate,
+  .homeDashboardPanel .messageReadButton {
+    font-size: 1.45rem;
+  }
+
+  .homeDashboardPanel .widgetAddButton,
+  .homeDashboardPanel .messageReadButton {
+    min-height: 2.85rem;
+    padding: 0.55rem 0.95rem;
+  }
+
+  .homeDashboardPanel .messageDetailsIndicator {
+    font-size: 1.45rem;
   }
 
   .homeDashboardPanel .weatherTemp {
-    font-size: 2.85rem;
+    font-size: 4.2rem;
   }
 
   .homeDashboardPanel .weatherEmoji {
-    font-size: 3.1rem;
+    font-size: 4.4rem;
   }
 
   .shell.weeklyPayShell {
@@ -2172,6 +2224,21 @@ button {
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
+}
+
+.hubCardTop {
+  align-items: center;
+}
+
+.hubCardTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.hubCardTitle h2 {
+  margin: 0;
 }
 
 .hubIcon {
@@ -3237,7 +3304,7 @@ button {
 
 @media (min-width: 2000px) and (min-height: 1200px) {
   .addFab {
-    right: calc(24rem + 4.5rem);
+    right: calc(32rem + 4.5rem);
   }
 
   .calendarShell .addFab {
