@@ -3558,6 +3558,17 @@ button {
   .moviesShell .addFab {
     right: max(1.5rem, env(safe-area-inset-right));
   }
+
+  .moviesShell .addFab {
+    min-height: 5.5rem;
+    padding: 0 2.1rem;
+    gap: 0.85rem;
+    font-size: 1.85rem;
+  }
+
+  .moviesShell .addFabIcon {
+    font-size: 2.7rem;
+  }
 }
 
 .addFabIcon {
