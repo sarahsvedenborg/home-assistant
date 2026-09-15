@@ -1916,6 +1916,109 @@ button {
     min-height: 3.15rem;
   }
 
+  .shell.activitiesShell {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 3rem);
+    height: calc(100dvh - 12.75rem);
+    min-height: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .activitiesShell .sectionHero {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0;
+    padding: 1rem 1.5rem;
+  }
+
+  .activitiesShell .sectionHero h1 {
+    max-width: none;
+    margin: 0.2em 0 0;
+    font-size: clamp(2.8rem, 3vw, 3.6rem);
+  }
+
+  .activitiesShell .sectionHero .kicker,
+  .activitiesShell .sectionHero .sectionBadge {
+    font-size: 1.35rem;
+  }
+
+  .activitiesShell .listStack {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    margin-top: 1rem;
+  }
+
+  .activitiesShell .activitiesPageEmpty {
+    display: none;
+  }
+
+  .activitiesShell .groupStack {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 1rem;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .activitiesShell .groupCard,
+  .activitiesShell .groupCardEmpty {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    margin-top: 0;
+    padding: 1.1rem 1rem 1.2rem;
+    overflow: auto;
+  }
+
+  .activitiesShell .groupHeader {
+    flex-shrink: 0;
+    align-items: baseline;
+  }
+
+  .activitiesShell .groupHeader h3 {
+    font-size: 2.1rem;
+  }
+
+  .activitiesShell .groupHeader span {
+    font-size: 1.2rem;
+  }
+
+  .activitiesShell .itemList {
+    display: grid;
+    flex: 1;
+    align-content: start;
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+  }
+
+  .activitiesShell .itemCard {
+    padding: 0.9rem;
+  }
+
+  .activitiesShell .itemTitleRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .activitiesShell .itemTitleRow strong {
+    font-size: 1.45rem;
+  }
+
+  .activitiesShell .itemMeta,
+  .activitiesShell .widgetEmpty,
+  .activitiesShell .itemCard p {
+    font-size: 1.2rem;
+  }
+
   .shell.flagsShell {
     display: flex;
     flex-direction: column;
@@ -3281,6 +3384,16 @@ button {
   margin-top: 1.5rem;
 }
 
+.activitiesShell .sectionHero h1 {
+  margin: 0.25em 0;
+}
+
+@media (max-width: 1999px), (max-height: 1199px) {
+  .activitiesShell .groupCardEmpty {
+    display: none;
+  }
+}
+
 /* Floating "+" action button that opens the add-form overlay */
 .addFab {
   position: fixed;
@@ -3307,7 +3420,8 @@ button {
     right: calc(32rem + 4.5rem);
   }
 
-  .calendarShell .addFab {
+  .calendarShell .addFab,
+  .activitiesShell .addFab {
     right: max(1.5rem, env(safe-area-inset-right));
   }
 }
