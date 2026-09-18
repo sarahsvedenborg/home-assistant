@@ -1,5 +1,6 @@
 import { boardIssueType } from "./boardIssueType";
 import { choreType } from "./choreType";
+import {dailyHoonDok} from './dailyHdh'
 import { dayNoteType } from "./dayNoteType";
 import { dinnerType } from "./dinnerType";
 import { familyMemberType } from "./familyMemberType";
@@ -17,6 +18,7 @@ import { wishListItemType } from "./wishListItemType";
 export const schemaTypes = [
   boardIssueType,
   choreType,
+  dailyHoonDok,
   dayNoteType,
   dinnerType,
   familyMemberType,
