@@ -1,11 +1,23 @@
 import type { Country } from "@/lib/types";
 
-export const FLAG_QUIZ_MAX_QUESTIONS = 5;
+export const FLAG_QUIZ_COUNTS = [5, 10, 15, 20] as const;
+export const FLAG_QUIZ_DEFAULT_COUNT = FLAG_QUIZ_COUNTS[0];
+export const FLAG_QUIZ_MAX_QUESTIONS = FLAG_QUIZ_DEFAULT_COUNT;
 export const FLAG_QUIZ_CHOICE_COUNT = 4;
+export const FLAG_QUIZ_SOURCES = ["studied", "all"] as const;
+export const FLAG_QUIZ_DEFAULT_SOURCE = FLAG_QUIZ_SOURCES[0];
+
+export type FlagQuizCount = (typeof FLAG_QUIZ_COUNTS)[number];
+export type FlagQuizSource = (typeof FLAG_QUIZ_SOURCES)[number];
 
 export type FlagQuizQuestion = {
   country: Country;
   choices: Country[];
+};
+
+export type FlagQuizOptions = {
+  count?: FlagQuizCount;
+  source?: FlagQuizSource;
 };
 
 function shuffled<T>(items: T[]): T[] {
@@ -27,17 +39,30 @@ function shuffled<T>(items: T[]): T[] {
   return copy;
 }
 
+export function parseFlagQuizCount(value?: string): FlagQuizCount {
+  const parsed = Number(value);
+
+  return FLAG_QUIZ_COUNTS.includes(parsed as FlagQuizCount)
+    ? (parsed as FlagQuizCount)
+    : FLAG_QUIZ_DEFAULT_COUNT;
+}
+
+export function parseFlagQuizSource(value?: string): FlagQuizSource {
+  return FLAG_QUIZ_SOURCES.includes(value as FlagQuizSource)
+    ? (value as FlagQuizSource)
+    : FLAG_QUIZ_DEFAULT_SOURCE;
+}
+
 export function buildFlagQuiz(
   studiedCountries: Country[],
   allCountries: Country[],
+  options: FlagQuizOptions = {},
 ): FlagQuizQuestion[] {
-  const uniqueStudied = [
-    ...new Map(studiedCountries.map((country) => [country.code, country])).values(),
-  ];
-  const questionCountries = shuffled(uniqueStudied).slice(
-    0,
-    FLAG_QUIZ_MAX_QUESTIONS,
-  );
+  const count = options.count ?? FLAG_QUIZ_DEFAULT_COUNT;
+  const source = options.source ?? FLAG_QUIZ_DEFAULT_SOURCE;
+  const pool = source === "all" ? allCountries : studiedCountries;
+  const uniquePool = [...new Map(pool.map((country) => [country.code, country])).values()];
+  const questionCountries = shuffled(uniquePool).slice(0, count);
 
   return questionCountries.map((country) => {
     const distractors = shuffled(

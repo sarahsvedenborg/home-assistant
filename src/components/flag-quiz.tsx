@@ -1,29 +1,47 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { FlagMedia } from "@/components/flag-media";
-import { buildFlagQuiz } from "@/lib/flag-quiz";
+import {
+  buildFlagQuiz,
+  FLAG_QUIZ_DEFAULT_COUNT,
+  FLAG_QUIZ_DEFAULT_SOURCE,
+  type FlagQuizCount,
+  type FlagQuizQuestion,
+  type FlagQuizSource,
+} from "@/lib/flag-quiz";
 import type { Country } from "@/lib/types";
 
 export function FlagQuiz({
   studiedCountries,
   countries,
+  questionCount = FLAG_QUIZ_DEFAULT_COUNT,
+  source = FLAG_QUIZ_DEFAULT_SOURCE,
 }: {
   studiedCountries: Country[];
   countries: Country[];
+  questionCount?: FlagQuizCount;
+  source?: FlagQuizSource;
 }) {
-  const [questions, setQuestions] = useState(() =>
-    buildFlagQuiz(studiedCountries, countries),
-  );
+  const [questions, setQuestions] = useState<FlagQuizQuestion[] | null>(null);
   const [index, setIndex] = useState(0);
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
-  const question = questions[index];
-  const isLastQuestion = index === questions.length - 1;
+  const question = questions?.[index];
+  const isLastQuestion = questions ? index === questions.length - 1 : false;
   const isCorrect = selectedCode === question?.country.code;
+
+  useEffect(() => {
+    setQuestions(
+      buildFlagQuiz(studiedCountries, countries, {
+        count: questionCount,
+        source,
+      }),
+    );
+  }, [studiedCountries, countries, questionCount, source]);
 
   function selectChoice(code: string) {
     if (selectedCode || !question) {
@@ -51,17 +69,28 @@ export function FlagQuiz({
   }
 
   function restart() {
-    setQuestions(buildFlagQuiz(studiedCountries, countries));
+    setQuestions(
+      buildFlagQuiz(studiedCountries, countries, {
+        count: questionCount,
+        source,
+      }),
+    );
     setIndex(0);
     setSelectedCode(null);
     setScore(0);
     setIsComplete(false);
   }
 
+  if (!questions) {
+    return <p className="flagBrowserEmpty">Laster quiz...</p>;
+  }
+
   if (!question) {
     return (
       <p className="flagBrowserEmpty">
-        Marker minst ett flagg som studert for å starte quizen.
+        {source === "all"
+          ? "Ingen flagg er tilgjengelige for quizen."
+          : "Marker minst ett flagg som studert for å starte quizen."}
       </p>
     );
   }
