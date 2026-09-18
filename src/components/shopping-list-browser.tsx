@@ -130,7 +130,7 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
   }
 
   return (
-    <>
+    <div className="shoppingListLayout">
       <div className="shoppingListColumns">
         <section
           className="shoppingListColumn"
@@ -150,6 +150,6 @@ export function ShoppingListBrowser({ items }: ShoppingListBrowserProps) {
       </div>
 
       {error ? <p className="feedback feedbackError">{error}</p> : null}
-    </>
+    </div>
   );
 }

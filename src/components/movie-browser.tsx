@@ -11,7 +11,7 @@ type MovieBrowserProps = {
 };
 
 export function MovieBrowser({ movies }: MovieBrowserProps) {
-  const [selectedAudience, setSelectedAudience] = useState<string>("alle");
+  const [selectedAudience, setSelectedAudience] = useState<string>("Hele familien");
   const [localMovies, setLocalMovies] = useState(movies);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -85,15 +85,7 @@ export function MovieBrowser({ movies }: MovieBrowserProps) {
   return (
     <div className="listPanel">
       <div className="panelHeading panelHeadingStacked">
-        <h2>Filmforslag</h2>
         <div className="filterChipRow" aria-label="Filtrer filmer etter hvem de passer for">
-          <button
-            type="button"
-            className={selectedAudience === "alle" ? "filterChip filterChipActive" : "filterChip"}
-            onClick={() => setSelectedAudience("alle")}
-          >
-            Alle filmer
-          </button>
           {MOVIE_AUDIENCES.map((audience) => (
             <button
               key={audience.value}
@@ -108,6 +100,13 @@ export function MovieBrowser({ movies }: MovieBrowserProps) {
               {audience.label}
             </button>
           ))}
+           <button
+            type="button"
+            className={selectedAudience === "alle" ? "filterChip filterChipActive" : "filterChip"}
+            onClick={() => setSelectedAudience("alle")}
+          >
+            Alle filmer
+          </button>
         </div>
       </div>
 
@@ -164,8 +163,8 @@ function MovieTable({
     <div className="movieTable">
       <div className="movieTableHeader">
         <span>Tittel</span>
-        <span>Status</span>
         <span>Trailer</span>
+        <span aria-hidden="true" />
       </div>
 
       <div className="movieTableBody">
@@ -173,35 +172,46 @@ function MovieTable({
           const isPending = pendingId === movie.id;
 
           return (
-            <button
-              key={movie.id}
-              type="button"
-              className={movie.watched ? "movieTableButton movieTableButtonWatched" : "movieTableButton"}
-              onClick={() => onToggle(movie.id)}
-              disabled={isPending}
-            >
-              <article className="movieTableRow">
-                <div className="movieTitleCell">
-                  <strong>{movie.title}</strong>
-                </div>
-                <span className="movieStatusCell">
-                  {isPending ? "Oppdaterer..." : movie.watched ? "Sett" : "Ikke sett"}
-                </span>
-                <span className="movieTrailerCell">
-                  {movie.link ? (
-                    <a
-                      href={movie.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inlineLink"
-                      onClick={(event) => event.stopPropagation()}
-                    >
-                      Se trailer
-                    </a>
-                  ) : null}
-                </span>
-              </article>
-            </button>
+            <article key={movie.id} className="movieTableRow">
+              <div className="movieTitleCell">
+                <strong>{movie.title}</strong>
+              </div>
+              <span className="movieTrailerCell">
+                {movie.link ? (
+                  <a
+                    href={movie.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inlineLink"
+                  >
+                    Se trailer
+                  </a>
+                ) : null}
+              </span>
+              <div className="movieActionCell">
+                <button
+                  type="button"
+                  className={
+                    movie.watched
+                      ? "shoppingToggle shoppingToggleChecked"
+                      : "shoppingToggle"
+                  }
+                  onClick={() => onToggle(movie.id)}
+                  disabled={isPending}
+                  aria-label={
+                    movie.watched
+                      ? `Marker ${movie.title} som usett`
+                      : `Marker ${movie.title} som sett`
+                  }
+                >
+                  {isPending
+                    ? "Oppdaterer…"
+                    : movie.watched
+                      ? "Marker som usett"
+                      : "Marker som sett"}
+                </button>
+              </div>
+            </article>
           );
         })}
       </div>

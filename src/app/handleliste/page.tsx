@@ -6,18 +6,13 @@ import { getShoppingList } from "@/lib/data";
 export default async function HandlelistePage() {
   const shoppingList = await getShoppingList();
 
-  const remainingItems = shoppingList.items.filter((item) => !item.checked);
-
   return (
-    <main className="shell">
-      <section className="sectionHero accentFuture">
+    <main className="shell shoppingShell">
+      <header className="issueBoardToolbar">
         <div>
-          <span className="kicker">Handleliste</span>
           <h1>Handleliste</h1>
-{/*           <p>Alle kan legge til varer raskt, mens voksne kan holde orden i Sanity Studio.</p> */}
         </div>
-        <div className="sectionBadge">{remainingItems.length} må kjøpes</div>
-      </section>
+      </header>
 
       <section className="listStack">
         {shoppingList.items.length === 0 ? (
@@ -40,6 +35,7 @@ export default async function HandlelistePage() {
         label="Legg til vare"
         anchor="add-item"
         hideTriggerOnMobile
+        modalClassName="formModalShopping"
       >
         <ShoppingListForm previousItems={shoppingList.items} />
       </AddButton>

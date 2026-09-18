@@ -163,6 +163,46 @@ export async function addShoppingListItem(input: {
     throw new Error("Sanity writes are not configured yet.");
   }
 
+  const existingItems = await client.fetch<
+    Array<{ _id: string; title?: string; checked?: boolean }>
+  >(
+    `*[_type == "shoppingListItem" && lower(title) == $title] | order(_updatedAt desc) {
+      _id,
+      title,
+      checked
+    }`,
+    { title: input.title.toLowerCase() },
+  );
+  const matchesTitle = (item: { title?: string }) =>
+    (item.title || "").trim().toLowerCase() === input.title.toLowerCase();
+  const alreadyNeeded = existingItems.find(
+    (item) => matchesTitle(item) && !item.checked,
+  );
+  const boughtItem = existingItems.find(
+    (item) => matchesTitle(item) && item.checked,
+  );
+
+  if (alreadyNeeded) {
+    return "Varen står allerede på listen.";
+  }
+
+  if (boughtItem) {
+    const updates: { checked: false; quantity?: string; note?: string } = {
+      checked: false,
+    };
+
+    if (input.quantity) {
+      updates.quantity = input.quantity;
+    }
+
+    if (input.note) {
+      updates.note = input.note;
+    }
+
+    await client.patch(boughtItem._id).set(updates).commit();
+    return "Varen er flyttet tilbake til må kjøpes.";
+  }
+
   await client.create({
     _type: "shoppingListItem",
     title: input.title,
