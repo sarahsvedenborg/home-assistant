@@ -145,23 +145,34 @@ export function RecurringEventForm({ familyMembers, onSuccess }: RecurringEventF
           </select>
         </label>
 
-        <fieldset className="field fieldWide">
+        <fieldset className="field fieldWide checkboxFieldset">
           <legend>Type</legend>
-          <div className="radioRow">
-            {EVENT_CATEGORIES.map((eventCategory) => (
-              <label key={eventCategory.value} className="radioOption">
-                <input
-                  type="radio"
-                  name="category"
-                  value={eventCategory.value}
-                  checked={form.category === eventCategory.value}
-                  onChange={(event) =>
-                    setForm((current) => ({ ...current, category: event.target.value }))
-                  }
-                />
-                <span>{eventCategory.label}</span>
-              </label>
-            ))}
+          <div className="checkboxGrid eventParticipantGrid">
+            {EVENT_CATEGORIES.map((eventCategory) => {
+              const checked = form.category === eventCategory.value;
+
+              return (
+                <label className="checkboxOption" key={eventCategory.value}>
+                  <input
+                    className="radioInput"
+                    type="radio"
+                    name="category"
+                    value={eventCategory.value}
+                    checked={checked}
+                    onChange={(event) =>
+                      setForm((current) => ({ ...current, category: event.target.value }))
+                    }
+                  />
+                  <span
+                    className={
+                      checked ? "checkboxLabel checkboxLabelChecked" : "checkboxLabel"
+                    }
+                  >
+                    {eventCategory.label}
+                  </span>
+                </label>
+              );
+            })}
           </div>
         </fieldset>
 

@@ -132,6 +132,7 @@ export default async function Home() {
         anchor="add-event"
         hideTriggerOnMobile
         wide
+        modalClassName="formModalEvents"
       >
         <SingleEventForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>

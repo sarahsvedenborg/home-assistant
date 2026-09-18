@@ -853,6 +853,7 @@ export function FamilyCalendar({
         isOpen={Boolean(selectedEvent)}
         onClose={() => setSelectedEvent(null)}
         title={selectedEvent?.event.title || "Hendelse"}
+        className="formModalEventDetails"
       >
         {selectedEvent ? (
           <div className="calendarEventDetails">

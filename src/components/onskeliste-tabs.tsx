@@ -4,7 +4,7 @@ import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 
 import { AddButton } from "@/components/add-button";
 import { WishlistForm } from "@/components/wishlist-form";
-import { buildWishListGroupsForFamily } from "@/lib/wishlist";
+import { buildWishListGroupsForFamily, formatWishLinkLabel } from "@/lib/wishlist";
 import type { FamilyMember, WishListItem } from "@/lib/types";
 
 type OnskelisteTabsProps = {
@@ -63,7 +63,7 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
 
   return (
     <section className="listStack">
-      <div className="listPanel tabsPanel">
+      <div className="listPanel tabsPanel kartotekPanel">
         <label className="field tabMemberSelect">
           <span>Viser ønsker for: </span>
           <select
@@ -134,8 +134,14 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
                         <div className="wishTitleCell">
                           <strong>{item.title}</strong>
                           {item.link ? (
-                            <a href={item.link} target="_blank" rel="noreferrer" className="wishInlineLink">
-                              {item.link}
+                            <a
+                              href={item.link}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="wishInlineLink"
+                              title={item.link}
+                            >
+                              {formatWishLinkLabel(item.link)}
                             </a>
                           ) : null}
                         </div>
@@ -152,7 +158,12 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
         </div>
       </div>
 
-      <AddButton title={`Legg til ønske for ${activeGroup.member.name}`} label="Legg til ønske" anchor="add-wish">
+      <AddButton
+        title={`Legg til ønske for ${activeGroup.member.name}`}
+        label="Legg til ønske"
+        anchor="add-wish"
+        modalClassName="formModalWish"
+      >
         <WishlistForm
           familyMembers={familyMembers.map((member) => member.name)}
           selectedMemberName={activeGroup.member.name}

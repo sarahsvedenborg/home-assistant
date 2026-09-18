@@ -143,6 +143,7 @@ export default async function AktiviteterPage() {
         label="Ny aktivitet"
         anchor="add-activity"
         hideTriggerOnMobile
+        modalClassName="formModalActivities"
       >
         <RecurringEventForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>

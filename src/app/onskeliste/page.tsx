@@ -8,14 +8,12 @@ export default async function OnskelistePage() {
   ]);
 
   return (
-    <main className="shell">
-      <section className="sectionHero accentWarmPanel">
+    <main className="shell wishShell">
+      <header className="issueBoardToolbar">
         <div>
-          <span className="kicker">Ønskeliste</span>
-          <h1 style={{ padding: "0.5em 0" }}>Familiens ønskelister</h1>
+          <h1>Ønskeliste</h1>
         </div>
-        <div className="sectionBadge">{wishListItems.length} lagrede ønsker</div>
-      </section>
+      </header>
 
       <OnskelisteTabs familyMembers={familyMembers} wishListItems={wishListItems} />
     </main>
