@@ -1572,7 +1572,8 @@ button {
 
   .shell.homeShell {
     width: calc(100% - 3rem);
-    padding-bottom: 1.25rem;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
   }
 
   .homeDashboardPanel {
@@ -1581,7 +1582,7 @@ button {
     grid-template-rows: minmax(0, 1fr);
     gap: 1.25rem;
     width: 100%;
-    height: calc(100dvh - 12.75rem);
+    height: calc(100dvh - 14.5rem);
     margin-left: 0;
     transform: none;
   }
@@ -1721,8 +1722,8 @@ button {
     width: calc(100% - 3rem);
     height: calc(100dvh - 12.75rem);
     min-height: 0;
-    padding-top: 0.5rem;
-    padding-bottom: 1.25rem;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
   }
 
   .weeklyPayShell .issueBoardToolbar h1 {
@@ -1801,8 +1802,8 @@ button {
     width: calc(100% - 3rem);
     height: calc(100dvh - 12.75rem);
     min-height: 0;
-    padding-top: 0.5rem;
-    padding-bottom: 1.25rem;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
   }
 
   .boardShell .issueBoard {
@@ -1862,8 +1863,8 @@ button {
     width: calc(100% - 3rem);
     height: calc(100dvh - 12.75rem);
     min-height: 0;
-    padding-top: 0.5rem;
-    padding-bottom: 1.25rem;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
   }
 
   .calendarShell .calendarPanel {
@@ -1983,8 +1984,8 @@ button {
     width: calc(100% - 3rem);
     height: calc(100dvh - 12.75rem);
     min-height: 0;
-    padding-top: 0.5rem;
-    padding-bottom: 1.25rem;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
   }
 
   .activitiesShell .sectionHero {
@@ -2086,8 +2087,8 @@ button {
     width: calc(100% - 3rem);
     height: calc(100dvh - 7.5rem);
     min-height: 0;
-    padding-top: 0.5rem;
-    padding-bottom: 1.25rem;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
   }
 
   .moviesShell .sectionHero {
@@ -2217,8 +2218,8 @@ button {
     flex-direction: column;
     width: calc(100% - 3rem);
     min-height: calc(100dvh - 7.5rem);
-    padding-top: 0.5rem;
-    padding-bottom: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 4rem;
   }
 
   .flagsShell .issueBoardToolbar h1 {
@@ -2337,8 +2338,8 @@ button {
     width: calc(100% - 3rem);
     height: calc(100dvh - 7.5rem);
     min-height: 0;
-    padding-top: 0.5rem;
-    padding-bottom: 1.25rem;
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
   }
 
   .flagsQuizShell .issueBoardToolbar h1 {
@@ -3620,6 +3621,7 @@ button {
     right: max(1.5rem, env(safe-area-inset-right));
   }
 
+  .calendarShell .addFab,
   .moviesShell .addFab,
   .activitiesShell .addFab {
     min-height: 5.5rem;
@@ -3628,6 +3630,7 @@ button {
     font-size: 1.85rem;
   }
 
+  .calendarShell .addFabIcon,
   .moviesShell .addFabIcon,
   .activitiesShell .addFabIcon {
     font-size: 2.7rem;
@@ -3960,6 +3963,363 @@ button {
   }
 
   .formModalMovies .formModalConfirmationIcon {
+    width: 5.25rem;
+    height: 5.25rem;
+    font-size: 2.6rem;
+  }
+
+  .formModalBackdrop:has(.formModalNotes) {
+    padding: 4vh 2rem 2rem;
+  }
+
+  .formModal.formModalNotes {
+    width: min(56rem, 100%);
+    max-height: 90dvh;
+    border-radius: 2rem;
+  }
+
+  .formModalNotes .formModalHeader {
+    padding: 1.5rem 1.85rem;
+  }
+
+  .formModalNotes .formModalHeader h2 {
+    font-size: 2.6rem;
+  }
+
+  .formModalNotes .formModalClose {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 2.5rem;
+  }
+
+  .formModalNotes .formModalBody {
+    padding: 1.75rem 2rem 2.1rem;
+  }
+
+  .formModalNotes .formGrid {
+    gap: 1.35rem;
+  }
+
+  .formModalNotes .formModalBody .field span,
+  .formModalNotes .formModalBody .inlineCategoryLabel {
+    font-size: 1.55rem;
+  }
+
+  .formModalNotes .formModalBody .field input:not([type="checkbox"]):not([type="radio"]) {
+    min-height: 4.5rem;
+    padding: 1rem 1.2rem;
+    border-radius: 1.15rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalNotes .inlineCategoryField {
+    gap: 1.25rem;
+  }
+
+  .formModalNotes .radioRow {
+    gap: 1.5rem;
+  }
+
+  .formModalNotes .radioOption {
+    min-height: 3.5rem;
+    gap: 0.7rem;
+    font-size: 1.55rem;
+  }
+
+  .formModalNotes .radioOption input[type="radio"] {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .formModalNotes .smallNote {
+    font-size: 1.35rem;
+  }
+
+  .formModalNotes .formModalBody .buttonPrimary {
+    min-height: 5rem;
+    padding: 1.05rem 1.9rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalNotes .formModalConfirmation p {
+    font-size: 2.1rem;
+  }
+
+  .formModalNotes .formModalConfirmationIcon {
+    width: 5.25rem;
+    height: 5.25rem;
+    font-size: 2.6rem;
+  }
+
+  .formModalBackdrop:has(.formModalEvents) {
+    padding: 4vh 2rem 2rem;
+  }
+
+  .formModal.formModalEvents {
+    width: min(56rem, 100%);
+    max-height: 90dvh;
+    border-radius: 2rem;
+  }
+
+  .formModalEvents .formModalHeader {
+    padding: 1.5rem 1.85rem;
+  }
+
+  .formModalEvents .formModalHeader h2 {
+    font-size: 2.6rem;
+  }
+
+  .formModalEvents .formModalClose {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 2.5rem;
+  }
+
+  .formModalEvents .formModalBody {
+    padding: 1.75rem 2rem 2.1rem;
+  }
+
+  .formModalEvents .formGrid {
+    gap: 1.35rem;
+  }
+
+  .formModalEvents .formModalBody .field span,
+  .formModalEvents .formModalBody .inlineCategoryLabel,
+  .formModalEvents .formModalBody legend {
+    font-size: 1.55rem;
+  }
+
+  .formModalEvents .formModalBody .field input:not([type="checkbox"]):not([type="radio"]),
+  .formModalEvents .formModalBody .field textarea {
+    min-height: 4.5rem;
+    padding: 1rem 1.2rem;
+    border-radius: 1.15rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalEvents .formModalBody .field textarea {
+    min-height: 9rem;
+  }
+
+  .formModalEvents .inlineCategoryField {
+    gap: 1.25rem;
+  }
+
+  .formModalEvents .radioRow {
+    gap: 1.5rem;
+  }
+
+  .formModalEvents .radioOption {
+    min-height: 3.5rem;
+    gap: 0.7rem;
+    font-size: 1.55rem;
+  }
+
+  .formModalEvents .radioOption input[type="radio"] {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .formModalEvents .eventParticipantGrid {
+    gap: 0.75rem 1rem;
+  }
+
+  .formModalEvents .eventParticipantGrid .checkboxOption {
+    min-height: 4.25rem;
+    padding: 0.7rem 0.95rem;
+    border-radius: 1rem;
+  }
+
+  .formModalEvents .eventParticipantGrid .checkboxLabel {
+    font-size: 1.55rem;
+  }
+
+  .formModalEvents .checkboxInput {
+    width: 1.75rem !important;
+    min-width: 1.75rem;
+    max-width: 1.75rem;
+    height: 1.75rem !important;
+    min-height: 1.75rem;
+    max-height: 1.75rem;
+    line-height: 1.75rem;
+  }
+
+  .formModalEvents .checkboxInput::after {
+    width: 0.34rem;
+    height: 0.62rem;
+  }
+
+  .formModalEvents .checkboxField {
+    min-height: 3.5rem;
+    gap: 0.85rem;
+  }
+
+  .formModalEvents .formModalBody .buttonPrimary {
+    min-height: 5rem;
+    padding: 1.05rem 1.9rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalEvents .formModalConfirmation p {
+    font-size: 2.1rem;
+  }
+
+  .formModalEvents .formModalConfirmationIcon {
+    width: 5.25rem;
+    height: 5.25rem;
+    font-size: 2.6rem;
+  }
+
+  .formModalBackdrop:has(.formModalEventDetails) {
+    padding: 4vh 2rem 2rem;
+  }
+
+  .formModal.formModalEventDetails {
+    width: min(56rem, 100%);
+    max-height: 90dvh;
+    border-radius: 2rem;
+  }
+
+  .formModalEventDetails .formModalHeader {
+    padding: 1.5rem 1.85rem;
+  }
+
+  .formModalEventDetails .formModalHeader h2 {
+    font-size: 2.6rem;
+  }
+
+  .formModalEventDetails .formModalClose {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 2.5rem;
+  }
+
+  .formModalEventDetails .formModalBody {
+    padding: 1.75rem 2rem 2.1rem;
+  }
+
+  .formModalEventDetails .calendarEventDetails {
+    gap: 1.75rem;
+  }
+
+  .formModalEventDetails .calendarEventDetails dl {
+    gap: 1.1rem;
+  }
+
+  .formModalEventDetails .calendarEventDetails dl > div {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1.1rem;
+  }
+
+  .formModalEventDetails .calendarEventDetails dt,
+  .formModalEventDetails .calendarEventDetails dd {
+    font-size: 1.7rem;
+  }
+
+  .formModalEventDetails .calendarEventDetailsNote {
+    padding: 1.35rem 1.5rem;
+    border-radius: 1.25rem;
+  }
+
+  .formModalEventDetails .calendarEventDetailsNote h3 {
+    margin-bottom: 0.6rem;
+    font-size: 1.45rem;
+  }
+
+  .formModalEventDetails .calendarEventDetailsNote p {
+    font-size: 1.7rem;
+  }
+
+  .formModalBackdrop:has(.formModalActivities) {
+    padding: 4vh 2rem 2rem;
+  }
+
+  .formModal.formModalActivities {
+    width: min(56rem, 100%);
+    max-height: 90dvh;
+    border-radius: 2rem;
+  }
+
+  .formModalActivities .formModalHeader {
+    padding: 1.5rem 1.85rem;
+  }
+
+  .formModalActivities .formModalHeader h2 {
+    font-size: 2.6rem;
+  }
+
+  .formModalActivities .formModalClose {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 2.5rem;
+  }
+
+  .formModalActivities .formModalBody {
+    padding: 1.75rem 2rem 2.1rem;
+  }
+
+  .formModalActivities .formGrid {
+    gap: 1.35rem;
+  }
+
+  .formModalActivities .formModalBody .field span,
+  .formModalActivities .formModalBody legend {
+    font-size: 1.55rem;
+  }
+
+  .formModalActivities .formModalBody .field input:not([type="checkbox"]):not([type="radio"]),
+  .formModalActivities .formModalBody .field select,
+  .formModalActivities .formModalBody .field textarea {
+    min-height: 4.5rem;
+    padding: 1rem 1.2rem;
+    border-radius: 1.15rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalActivities .formModalBody .field textarea {
+    min-height: 9rem;
+  }
+
+  .formModalActivities .eventParticipantGrid {
+    gap: 0.75rem 1rem;
+  }
+
+  .formModalActivities .eventParticipantGrid .checkboxOption {
+    min-height: 4.25rem;
+    padding: 0.7rem 0.95rem;
+    border-radius: 1rem;
+  }
+
+  .formModalActivities .eventParticipantGrid .checkboxLabel {
+    font-size: 1.55rem;
+  }
+
+  .formModalActivities .radioInput {
+    width: 1.75rem !important;
+    min-width: 1.75rem;
+    max-width: 1.75rem;
+    height: 1.75rem !important;
+    min-height: 1.75rem;
+    max-height: 1.75rem;
+    line-height: 1.75rem;
+  }
+
+  .formModalActivities .radioInput::after {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+
+  .formModalActivities .formModalBody .buttonPrimary {
+    min-height: 5rem;
+    padding: 1.05rem 1.9rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalActivities .formModalConfirmation p {
+    font-size: 2.1rem;
+  }
+
+  .formModalActivities .formModalConfirmationIcon {
     width: 5.25rem;
     height: 5.25rem;
     font-size: 2.6rem;

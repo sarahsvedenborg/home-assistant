@@ -40,6 +40,7 @@ export default async function KalenderPage() {
         anchor="add-event"
         hideTriggerOnMobile
         wide
+        modalClassName="formModalEvents"
       >
         <SingleEventForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>
@@ -49,6 +50,7 @@ export default async function KalenderPage() {
         label="Nytt notat"
         anchor="add-note"
         hideTrigger
+        modalClassName="formModalNotes"
       >
         <DayNoteForm initialDate={todayDateKey} />
       </AddButton>
