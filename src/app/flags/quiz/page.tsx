@@ -3,8 +3,23 @@ import Link from "next/link";
 import { FlagQuiz } from "@/components/flag-quiz";
 import { getCountries } from "@/lib/countries";
 import { getStudiedFlagCodes } from "@/lib/data";
+import { parseFlagQuizCount, parseFlagQuizSource } from "@/lib/flag-quiz";
 
-export default async function FlagQuizPage() {
+type FlagQuizPageProps = {
+  searchParams: Promise<{
+    count?: string | string[];
+    source?: string | string[];
+  }>;
+};
+
+function firstSearchParam(value?: string | string[]) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function FlagQuizPage({ searchParams }: FlagQuizPageProps) {
+  const params = await searchParams;
+  const questionCount = parseFlagQuizCount(firstSearchParam(params.count));
+  const source = parseFlagQuizSource(firstSearchParam(params.source));
   const [countries, studiedCodes] = await Promise.all([
     getCountries(),
     getStudiedFlagCodes(),
@@ -13,6 +28,7 @@ export default async function FlagQuizPage() {
   const studiedCountries = countries.filter((country) =>
     studiedCodeSet.has(country.code),
   );
+  const pool = source === "all" ? countries : studiedCountries;
 
   return (
     <main className="shell flagsQuizShell">
@@ -26,12 +42,20 @@ export default async function FlagQuizPage() {
         </div>
       </header>
 
-      {studiedCountries.length === 0 ? (
+      {pool.length === 0 ? (
         <p className="flagBrowserEmpty">
-          Marker minst ett flagg som studert for å starte quizen.
+          {source === "all"
+            ? "Ingen flagg er tilgjengelige for quizen."
+            : "Marker minst ett flagg som studert for å starte quizen."}
         </p>
       ) : (
-        <FlagQuiz studiedCountries={studiedCountries} countries={countries} />
+        <FlagQuiz
+          key={`${source}-${questionCount}`}
+          studiedCountries={studiedCountries}
+          countries={countries}
+          questionCount={questionCount}
+          source={source}
+        />
       )}
     </main>
   );
