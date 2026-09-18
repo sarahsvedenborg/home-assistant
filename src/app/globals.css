@@ -1965,8 +1965,16 @@ button {
   }
 
   .calendarShell .calendarBirthdayNotes p,
-  .calendarShell .calendarHolydayNotes p {
+  .calendarShell .calendarHolydayNotes p,
+  .calendarShell .calendarProveNotes p {
     font-size: 1.45rem;
+  }
+
+  .calendarShell .calendarHolydayIcon,
+  .calendarShell .calendarProveIcon {
+    flex-basis: 1.55rem;
+    width: 1.55rem;
+    height: 1.55rem;
   }
 
   .calendarShell .calendarSpanningEvent.calendarSpanningVacation {
@@ -4234,8 +4242,7 @@ button {
     gap: 1.35rem;
   }
 
-  .formModalNotes .formModalBody .field span,
-  .formModalNotes .formModalBody .inlineCategoryLabel {
+  .formModalNotes .formModalBody .field span {
     font-size: 1.55rem;
   }
 
@@ -4244,10 +4251,6 @@ button {
     padding: 1rem 1.2rem;
     border-radius: 1.15rem;
     font-size: 1.7rem;
-  }
-
-  .formModalNotes .inlineCategoryField {
-    gap: 1.25rem;
   }
 
   .formModalNotes .radioRow {
@@ -5011,13 +5014,15 @@ button {
 }
 
 .calendarBirthdayNotes,
-.calendarHolydayNotes {
+.calendarHolydayNotes,
+.calendarProveNotes {
   display: grid;
   gap: 0.3rem;
 }
 
 .calendarBirthdayNotes p,
-.calendarHolydayNotes p {
+.calendarHolydayNotes p,
+.calendarProveNotes p {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -5041,15 +5046,27 @@ button {
   color: #d9272e;
 }
 
-.calendarHolydayIcon {
+.calendarProveNotes p {
+  border: 1px solid rgba(94, 166, 255, 0.42);
+  background: linear-gradient(135deg, rgba(223, 240, 255, 0.95), rgba(248, 252, 255, 0.92));
+  color: var(--ink);
+}
+
+.calendarHolydayIcon,
+.calendarProveIcon {
   flex: 0 0 1.15rem;
   width: 1.15rem;
   height: 1.15rem;
   background: center / contain no-repeat url("/holyday-icon.png");
 }
 
+.calendarProveIcon {
+  background-image: url("/prove-icon.svg");
+}
+
 .calendarBirthdayNotes strong,
-.calendarHolydayNotes strong {
+.calendarHolydayNotes strong,
+.calendarProveNotes strong {
   min-width: 0;
   overflow-wrap: anywhere;
 }
