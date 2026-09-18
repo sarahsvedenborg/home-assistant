@@ -662,6 +662,7 @@ export function FamilyCalendar({
             const holydayNotes = notes.filter(
               (note) => note.category === "holyday",
             );
+            const proveNotes = notes.filter((note) => note.category === "prove");
             const publicHolidays = holidays.filter(
               (holiday) => holiday.date === day.dateKey,
             );
@@ -669,7 +670,8 @@ export function FamilyCalendar({
               (note) =>
                 note.category !== "birthday" &&
                 note.category !== "vacation" &&
-                note.category !== "holyday",
+                note.category !== "holyday" &&
+                note.category !== "prove",
             );
             const weekVacationLanes = vacationWeeks[Math.floor(dayIndex / 7)];
             const vacationHighestLane = vacationNotes.reduce((highest, note) => {
@@ -732,6 +734,7 @@ export function FamilyCalendar({
 
                 {birthdayNotes.length > 0 ||
                 holydayNotes.length > 0 ||
+                proveNotes.length > 0 ||
                 publicHolidays.length > 0 ? (
                   <div className="calendarTopNotes">
                     {publicHolidays.length > 0 ? (
@@ -764,6 +767,20 @@ export function FamilyCalendar({
                           <p key={note.id}>
                             <span
                               className="calendarHolydayIcon"
+                              aria-hidden="true"
+                            />
+                            <strong>{note.text}</strong>
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    {proveNotes.length > 0 ? (
+                      <div className="calendarProveNotes" aria-label="Prøver">
+                        {proveNotes.map((note) => (
+                          <p key={note.id}>
+                            <span
+                              className="calendarProveIcon"
                               aria-hidden="true"
                             />
                             <strong>{note.text}</strong>

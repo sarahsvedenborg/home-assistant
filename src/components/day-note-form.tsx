@@ -67,18 +67,16 @@ export function DayNoteForm({ initialDate, onSuccess }: DayNoteFormProps) {
     <form className="formPanel" onSubmit={handleSubmit}>
       <div className="formIntro">
         <h2>Nytt dagsnotat</h2>
-        <p>Notatet vises nederst på den valgte dagen i kalenderen.</p>
+        <p>Notatet vises på den valgte dagen i kalenderen.</p>
       </div>
 
       <div className="formGrid">
         <div
-          className="field fieldWide inlineCategoryField"
+          className="field fieldWide"
           role="radiogroup"
           aria-labelledby="day-note-category-label"
         >
-          <span className="inlineCategoryLabel" id="day-note-category-label">
-            Kategori:
-          </span>
+          <span id="day-note-category-label">Kategori</span>
           <div className="radioRow">
             {DAY_NOTE_CATEGORIES.map((category) => (
               <label className="radioOption" key={category.value}>
