@@ -2172,11 +2172,14 @@ button {
 
   .moviesShell .movieTableHeader,
   .moviesShell .movieTableRow {
-    grid-template-columns: minmax(0, 1.7fr) minmax(9rem, 0.7fr) minmax(8rem, 0.55fr);
+    grid-template-columns: minmax(0, 1fr) 10.5rem 15rem;
+    column-gap: 2.25rem;
   }
 
   .moviesShell .movieTableHeader {
     flex-shrink: 0;
+    padding-right: 0.4rem;
+    padding-left: 0.4rem;
     font-size: 1.35rem;
   }
 
@@ -2194,11 +2197,16 @@ button {
     font-size: 1.7rem;
   }
 
-  .moviesShell .movieStatusCell,
   .moviesShell .movieTrailerCell,
   .moviesShell .movieTrailerCell .inlineLink,
   .moviesShell .messageArchiveEmpty {
     font-size: 1.45rem;
+  }
+
+  .moviesShell .shoppingToggle {
+    min-height: 3.15rem;
+    padding: 0.65rem 1.1rem;
+    font-size: 1.35rem;
   }
 
   .moviesShell .emptyState h3 {
@@ -3433,8 +3441,9 @@ button {
 .movieTableHeader,
 .movieTableRow {
   display: grid;
-  grid-template-columns: minmax(180px, 1.5fr) minmax(160px, 1.2fr) minmax(100px, 0.8fr) minmax(80px, 0.6fr);
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) 8.25rem 10.75rem;
+  column-gap: 1.75rem;
+  row-gap: 0.35rem;
   align-items: center;
 }
 
@@ -3449,30 +3458,17 @@ button {
   display: grid;
 }
 
-.movieTableButton {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  text-align: left;
-}
-
-.movieTableButton:disabled {
-  cursor: wait;
-}
-
-.movieTableButton:hover .movieTableRow,
-.movieTableButton:focus-visible .movieTableRow {
-  background: rgba(255, 244, 231, 0.45);
-}
-
-.movieTableButtonWatched .movieTableRow {
-  opacity: 0.7;
-}
-
 .movieTableRow {
   padding: 0.95rem 0;
   border-top: 1px solid rgba(75, 98, 124, 0.12);
-  transition: background-color 0.18s ease;
+}
+
+.movieActionCell {
+  justify-self: end;
+}
+
+.movieTrailerCell {
+  min-width: 0;
 }
 
 .movieTableRow strong {
@@ -3888,7 +3884,7 @@ button {
   .movieTableRow {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
-      "title status"
+      "title action"
       "trailer trailer";
     gap: 0.35rem 0.75rem;
     align-items: start;
@@ -3898,10 +3894,8 @@ button {
     grid-area: title;
   }
 
-  .movieStatusCell {
-    grid-area: status;
-    white-space: nowrap;
-    text-align: right;
+  .movieActionCell {
+    grid-area: action;
   }
 
   .movieTrailerCell {
