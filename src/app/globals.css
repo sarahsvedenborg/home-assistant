@@ -468,6 +468,21 @@ button {
   font-weight: 600;
 }
 
+.flagsQuizActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.customQuizPanel p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
 .mealPlanShell {
   width: min(1600px, calc(100% - 2rem));
 }
@@ -2523,7 +2538,8 @@ button {
     font-size: clamp(3rem, 3.4vw, 4rem);
   }
 
-  .flagsShell .buttonPrimary {
+  .flagsShell .buttonPrimary,
+  .flagsShell .buttonSecondary {
     min-height: 4.25rem;
     padding: 0.95rem 1.6rem;
     font-size: 1.55rem;
@@ -4888,6 +4904,38 @@ button {
     width: 5.25rem;
     height: 5.25rem;
     font-size: 2.6rem;
+  }
+
+  .formModalBackdrop:has(.formModalFlagsQuiz) {
+    padding: 4vh 2rem 2rem;
+  }
+
+  .formModal.formModalFlagsQuiz {
+    width: min(56rem, 100%);
+    max-height: 90dvh;
+    border-radius: 2rem;
+  }
+
+  .formModalFlagsQuiz .formModalHeader {
+    padding: 1.5rem 1.85rem;
+  }
+
+  .formModalFlagsQuiz .formModalHeader h2 {
+    font-size: 2.6rem;
+  }
+
+  .formModalFlagsQuiz .formModalClose {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 2.5rem;
+  }
+
+  .formModalFlagsQuiz .formModalBody {
+    padding: 1.75rem 2rem 2.1rem;
+  }
+
+  .formModalFlagsQuiz .customQuizPanel p {
+    font-size: 1.55rem;
   }
 }
 

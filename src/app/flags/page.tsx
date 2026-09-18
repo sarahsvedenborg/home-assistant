@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import { FlagsQuizActions } from "@/components/flags-quiz-actions";
 import { FlagsWorkspace } from "@/components/flags-workspace";
 import { getCountries, getDailyCountry } from "@/lib/countries";
 import { getStudiedFlagCodes } from "@/lib/data";
@@ -18,9 +17,7 @@ export default async function FlagsPage() {
         <div>
           <h1>Flagg</h1>
         </div>
-        <Link href="/flags/quiz" className="buttonPrimary">
-          Start quiz
-        </Link>
+        <FlagsQuizActions />
       </header>
 
       {dailyCountry ? (
@@ -33,3 +30,4 @@ export default async function FlagsPage() {
     </main>
   );
 }
+
