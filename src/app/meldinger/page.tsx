@@ -54,15 +54,12 @@ export default async function MeldingerPage() {
   const readMessages = messages.filter((message) => message.isRead);
 
   return (
-    <main className="shell">
-      <section className="sectionHero accentCoolPanel">
+    <main className="shell messagesShell">
+      <header className="issueBoardToolbar">
         <div>
-          <span className="kicker">Beskjeder</span>
-          <h1 style={{ margin: "0.25em 0" }}>Alle meldinger</h1>
-          <p>Meldinger vises her til de slettes manuelt i Sanity Studio.</p>
+          <h1>Meldinger</h1>
         </div>
-        <div className="sectionBadge">{messages.length} meldinger</div>
-      </section>
+      </header>
 
       <section className="listStack">
         <div className="messageArchiveGroups">
@@ -89,6 +86,7 @@ export default async function MeldingerPage() {
         label="Ny melding"
         anchor="add-message"
         hideTriggerOnMobile
+        modalClassName="formModalMessages"
       >
         <ShortMessageForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>

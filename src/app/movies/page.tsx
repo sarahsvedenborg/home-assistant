@@ -11,13 +11,11 @@ export default async function MoviesPage() {
 
   return (
     <main className="shell moviesShell">
-      <section className="sectionHero accentCoolPanel">
+      <header className="issueBoardToolbar">
         <div>
-          <span className="kicker">Filmkveld</span>
-          <h1>Filmliste</h1>
+          <h1>Filmer</h1>
         </div>
-        <div className="sectionBadge">{movies.filter((movie) => !movie.watched).length} igjen å se</div>
-      </section>
+      </header>
 
       <section className="listStack">
         <MovieBrowser movies={movies} />

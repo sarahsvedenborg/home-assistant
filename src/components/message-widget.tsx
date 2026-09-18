@@ -148,6 +148,7 @@ export function MessageWidget({
         onClose={closeModal}
         title="Ny melding"
         confirmation={confirmation}
+        className="formModalMessages"
       >
         <ShortMessageForm
           familyMembers={familyMembers}
