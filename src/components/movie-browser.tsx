@@ -11,7 +11,7 @@ type MovieBrowserProps = {
 };
 
 export function MovieBrowser({ movies }: MovieBrowserProps) {
-  const [selectedAudience, setSelectedAudience] = useState<string>("alle");
+  const [selectedAudience, setSelectedAudience] = useState<string>("Hele familien");
   const [localMovies, setLocalMovies] = useState(movies);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -87,13 +87,6 @@ export function MovieBrowser({ movies }: MovieBrowserProps) {
       <div className="panelHeading panelHeadingStacked">
         <h2>Filmforslag</h2>
         <div className="filterChipRow" aria-label="Filtrer filmer etter hvem de passer for">
-          <button
-            type="button"
-            className={selectedAudience === "alle" ? "filterChip filterChipActive" : "filterChip"}
-            onClick={() => setSelectedAudience("alle")}
-          >
-            Alle filmer
-          </button>
           {MOVIE_AUDIENCES.map((audience) => (
             <button
               key={audience.value}
@@ -108,6 +101,13 @@ export function MovieBrowser({ movies }: MovieBrowserProps) {
               {audience.label}
             </button>
           ))}
+           <button
+            type="button"
+            className={selectedAudience === "alle" ? "filterChip filterChipActive" : "filterChip"}
+            onClick={() => setSelectedAudience("alle")}
+          >
+            Alle filmer
+          </button>
         </div>
       </div>
 

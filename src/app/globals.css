@@ -4827,6 +4827,74 @@ button {
     height: 5.25rem;
     font-size: 2.6rem;
   }
+
+  .formModalBackdrop:has(.formModalShopping) {
+    padding: 4vh 2rem 2rem;
+  }
+
+  .formModal.formModalShopping {
+    width: min(56rem, 100%);
+    max-height: 90dvh;
+    border-radius: 2rem;
+  }
+
+  .formModalShopping .formModalHeader {
+    padding: 1.5rem 1.85rem;
+  }
+
+  .formModalShopping .formModalHeader h2 {
+    font-size: 2.6rem;
+  }
+
+  .formModalShopping .formModalClose {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 2.5rem;
+  }
+
+  .formModalShopping .formModalBody {
+    padding: 1.75rem 2rem 2.1rem;
+  }
+
+  .formModalShopping .formGrid {
+    gap: 1.35rem;
+  }
+
+  .formModalShopping .formModalBody .field span {
+    font-size: 1.55rem;
+  }
+
+  .formModalShopping .formModalBody .field input:not([type="checkbox"]):not([type="radio"]),
+  .formModalShopping .formModalBody .field textarea {
+    min-height: 4.5rem;
+    padding: 1rem 1.2rem;
+    border-radius: 1.15rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalShopping .formModalBody .field textarea {
+    min-height: 9rem;
+  }
+
+  .formModalShopping .smallNote {
+    font-size: 1.35rem;
+  }
+
+  .formModalShopping .formModalBody .buttonPrimary {
+    min-height: 5rem;
+    padding: 1.05rem 1.9rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalShopping .formModalConfirmation p {
+    font-size: 2.1rem;
+  }
+
+  .formModalShopping .formModalConfirmationIcon {
+    width: 5.25rem;
+    height: 5.25rem;
+    font-size: 2.6rem;
+  }
 }
 
 .formModalBackdropCelebration {

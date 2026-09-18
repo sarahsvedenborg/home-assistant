@@ -35,6 +35,7 @@ export default async function HandlelistePage() {
         label="Legg til vare"
         anchor="add-item"
         hideTriggerOnMobile
+        modalClassName="formModalShopping"
       >
         <ShoppingListForm previousItems={shoppingList.items} />
       </AddButton>

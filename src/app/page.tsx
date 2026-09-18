@@ -79,7 +79,7 @@ export default async function Home() {
                     : `${studiedFlagCodes.length} land lært`
                 }
                 accentClass="accentFuture hubCardLearn"
-                openLabel="Utforsk flagg"
+                openLabel="Dagens flagg"
                 addLabel="Start quiz"
               />
               <HubCard

@@ -85,6 +85,7 @@ export function ShoppingWidget({
         onClose={closeModal}
         title="Ny vare"
         confirmation={confirmation}
+        className="formModalShopping"
       >
         <ShoppingListForm
           previousItems={items}
