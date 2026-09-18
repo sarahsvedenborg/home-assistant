@@ -152,7 +152,12 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
         </div>
       </div>
 
-      <AddButton title={`Legg til ønske for ${activeGroup.member.name}`} label="Legg til ønske" anchor="add-wish">
+      <AddButton
+        title={`Legg til ønske for ${activeGroup.member.name}`}
+        label="Legg til ønske"
+        anchor="add-wish"
+        modalClassName="formModalWish"
+      >
         <WishlistForm
           familyMembers={familyMembers.map((member) => member.name)}
           selectedMemberName={activeGroup.member.name}
