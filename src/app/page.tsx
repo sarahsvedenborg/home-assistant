@@ -3,7 +3,7 @@ import { FamilyDashboard } from "@/components/family-dashboard";
 import { HubCard } from "@/components/hub-card";
 import { SingleEventForm } from "@/components/single-event-form";
 import { getDailyQuote } from "@/lib/daily-quote";
-import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getStudiedFlagCodes, getWeather, getWishListItems } from "@/lib/data";
+import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getStudiedFlagCodes, getTodaysBirthdays, getWeather, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
@@ -31,6 +31,7 @@ export default async function Home() {
     singleEvents,
     shoppingList,
     studiedFlagCodes,
+    todaysBirthdays,
     wishListItems,
     weather,
   ] = await Promise.all([
@@ -43,6 +44,7 @@ export default async function Home() {
     getSingleEvents(),
     getShoppingList(),
     getStudiedFlagCodes(),
+    getTodaysBirthdays(),
     getWishListItems(),
     getWeather(),
   ]);
@@ -58,6 +60,7 @@ export default async function Home() {
             <FamilyDashboard
               dateLabel={formatOsloDateLabel(now)}
               dailyQuote={dailyQuote}
+              todaysBirthdays={todaysBirthdays}
               todayEvents={todayEvents}
               tomorrowEvents={tomorrowEvents}
               activity={activity}

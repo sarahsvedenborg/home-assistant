@@ -1,5 +1,7 @@
 import "server-only";
 
+import { cache } from "react";
+
 import {
   FALLBACK_BIRTHDAYS,
   FALLBACK_BOARD_ISSUES,
@@ -44,6 +46,7 @@ import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
 import { eventParticipantLabel } from "@/lib/event-participants";
 import { singleEventCategoryLabel } from "@/lib/single-event-categories";
 import { osloDateKey } from "@/lib/family-feed";
+import { birthdaysOnDate } from "@/lib/birthdays";
 import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
@@ -585,7 +588,7 @@ export async function getDayNotes(): Promise<DayNote[]> {
   }));
 }
 
-export async function getBirthdays(): Promise<Birthday[]> {
+export const getBirthdays = cache(async function getBirthdays(): Promise<Birthday[]> {
   if (!isSanityConfigured) {
     return FALLBACK_BIRTHDAYS;
   }
@@ -612,7 +615,11 @@ export async function getBirthdays(): Promise<Birthday[]> {
       },
     ];
   });
-}
+});
+
+export const getTodaysBirthdays = cache(async function getTodaysBirthdays() {
+  return birthdaysOnDate(await getBirthdays(), osloDateKey(new Date()));
+});
 
 // Kløfta, Ullensaker. Coordinates truncated to 4 decimals per MET guidance.
 const WEATHER_LOCATION = { lat: 60.0725, lon: 11.1467 };

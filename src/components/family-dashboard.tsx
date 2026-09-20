@@ -1,6 +1,6 @@
 import { MessageWidget } from "@/components/message-widget";
 import { ShoppingWidget } from "@/components/shopping-widget";
-import { ThemeSwapper } from "@/components/theme-swapper";
+import { formatBirthdayNames } from "@/lib/birthdays";
 import type { DashboardEvent, RecentActivity } from "@/lib/family-feed";
 import { describeWeather } from "@/lib/weather";
 import type {
@@ -13,6 +13,7 @@ import type {
 type FamilyDashboardProps = {
   dateLabel: string;
   dailyQuote: DailyQuote;
+  todaysBirthdays: Array<{ name: string }>;
   todayEvents: DashboardEvent[];
   tomorrowEvents: DashboardEvent[];
   activity: RecentActivity[];
@@ -140,6 +141,7 @@ function WeatherWidget({ weather }: { weather: Weather }) {
 export function FamilyDashboard({
   dateLabel,
   dailyQuote,
+  todaysBirthdays,
   todayEvents,
   tomorrowEvents,
   activity,
@@ -148,14 +150,15 @@ export function FamilyDashboard({
   familyMembers,
   weather,
 }: FamilyDashboardProps) {
+  const birthdayNames = formatBirthdayNames(
+    todaysBirthdays.map((birthday) => birthday.name),
+  );
+
   return (
     <section className="dashboard" aria-label="Familieoversikt">
       <article className="widget wGreet accentWarm">
         <div className="dashboardGreeting">
-          <div className="dashboardGreetingTop">
-            <h1 className="dashboardTitle">{dateLabel}</h1>
-            <ThemeSwapper />
-          </div>
+          <h1 className="dashboardTitle">{dateLabel}</h1>
         </div>
 
         <figure className="dailyQuote dailyQuoteQuote">
@@ -165,10 +168,18 @@ export function FamilyDashboard({
         <figure className="dailyQuote dailyQuoteBirthday">
           <p>
             <span aria-hidden="true">🎉</span>
-            <span>Gratulerer med dagen<br/>Colette!</span>
-    
+            <span>
+              Gratulerer med dagen
+              {birthdayNames ? (
+                <>
+                  <br />
+                  {birthdayNames}!
+                </>
+              ) : (
+                "!"
+              )}
+            </span>
           </p>
-           
         </figure>
       </article>
 

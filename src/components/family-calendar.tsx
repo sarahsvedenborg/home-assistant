@@ -3,6 +3,7 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { FormModal } from "@/components/form-modal";
+import { birthdaysOnDate } from "@/lib/birthdays";
 import { eventsForDateRange, type CalendarDay, type DashboardEvent } from "@/lib/family-feed";
 import type {
   Birthday,
@@ -31,22 +32,6 @@ function dateFromKey(dateKey: string): Date {
 
 function dateKey(date: Date): string {
   return date.toISOString().slice(0, 10);
-}
-
-function monthDayKey(value: string): string {
-  return value.slice(5, 10);
-}
-
-function turningAge(birthDate: string, onDateKey: string): number | null {
-  const birthYear = Number(birthDate.slice(0, 4));
-  const onYear = Number(onDateKey.slice(0, 4));
-
-  if (!Number.isInteger(birthYear) || !Number.isInteger(onYear)) {
-    return null;
-  }
-
-  const age = onYear - birthYear;
-  return age >= 0 ? age : null;
 }
 
 function addDays(date: Date, days: number): Date {
@@ -672,18 +657,7 @@ export function FamilyCalendar({
                 day.dateKey >= note.date &&
                 day.dateKey <= (note.endDate || note.date),
             );
-            const birthdayNotes = birthdays.flatMap((birthday) => {
-              if (monthDayKey(birthday.date) !== monthDayKey(day.dateKey)) {
-                return [];
-              }
-
-              const age = turningAge(birthday.date, day.dateKey);
-              if (age == null) {
-                return [];
-              }
-
-              return [{ ...birthday, age }];
-            });
+            const birthdayNotes = birthdaysOnDate(birthdays, day.dateKey);
             const vacationNotes = notes.filter(
               (note) => note.category === "vacation",
             );

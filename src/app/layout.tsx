@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Baloo_2, Nunito } from "next/font/google";
-import Script from "next/script";
 import { Suspense } from "react";
 import "./globals.css";
 
 import { AppChrome } from "@/components/app-chrome";
 import { MobileActionMenu } from "@/components/mobile-action-menu";
+import { getTodaysBirthdays } from "@/lib/data";
 import { SanityLive } from "@/sanity/lib/live";
 
 const displayFont = Baloo_2({
@@ -23,22 +23,21 @@ export const metadata: Metadata = {
   description: "Et lekent felles sted for familiens ønskelister, filmvalg og planer.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const todaysBirthdays = await getTodaysBirthdays();
+
   return (
-    <html lang="no" className={`${displayFont.variable} ${bodyFont.variable}`} suppressHydrationWarning>
+    <html
+      lang="no"
+      className={`${displayFont.variable} ${bodyFont.variable}`}
+      data-theme={todaysBirthdays.length > 0 ? "birthday" : undefined}
+      suppressHydrationWarning
+    >
       <body>
-        <Script
-          id="family-hub-theme"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html:
-              'try{var t=localStorage.getItem("family-hub-theme");if(t==="christmas"||t==="birthday"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}',
-          }}
-        />
         <Suspense fallback={null}>
           <AppChrome />
         </Suspense>
