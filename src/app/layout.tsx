@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Baloo_2, Nunito } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 
 import { AppChrome } from "@/components/app-chrome";
+import { InstallPrompt } from "@/components/install-prompt";
 import { MobileActionMenu } from "@/components/mobile-action-menu";
 import { getTodaysBirthdays } from "@/lib/data";
 import { themeForToday } from "@/lib/theme";
@@ -22,6 +23,22 @@ const bodyFont = Nunito({
 export const metadata: Metadata = {
   title: "Family Hub",
   description: "Et lekent felles sted for familiens ønskelister, filmvalg og planer.",
+  applicationName: "Family Hub",
+  appleWebApp: {
+    capable: true,
+    title: "Family Hub",
+    statusBarStyle: "default",
+  },
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#fffaf1",
 };
 
 export default async function RootLayout({
@@ -78,6 +95,7 @@ export default async function RootLayout({
           <span className="christmasFlake">❆</span>
         </div>
         {children}
+        <InstallPrompt />
         <MobileActionMenu />
         <SanityLive />
       </body>
