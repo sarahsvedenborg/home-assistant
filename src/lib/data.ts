@@ -1,6 +1,7 @@
 import "server-only";
 
 import {
+  FALLBACK_BIRTHDAYS,
   FALLBACK_BOARD_ISSUES,
   FALLBACK_DAY_NOTES,
   FALLBACK_FAMILY_MEMBERS,
@@ -16,6 +17,7 @@ import {
 
 
 import type {
+  Birthday,
   BoardIssue,
   BoardIssueStatus,
   DayNote,
@@ -45,6 +47,7 @@ import { osloDateKey } from "@/lib/family-feed";
 import { isSanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
+  BIRTHDAYS_QUERY,
   BOARD_ISSUES_QUERY,
   DAY_NOTES_QUERY,
   DINNERS_QUERY,
@@ -190,6 +193,12 @@ type SanityDayNote = {
   endDate?: string;
   category?: DayNoteCategory;
   text: string;
+};
+
+type SanityBirthday = {
+  _id: string;
+  date?: string;
+  name?: string;
 };
 
 function blocksToParagraphs(blocks?: SanityBlock[]) {
@@ -574,6 +583,35 @@ export async function getDayNotes(): Promise<DayNote[]> {
     category: note.category || DEFAULT_DAY_NOTE_CATEGORY,
     text: note.text,
   }));
+}
+
+export async function getBirthdays(): Promise<Birthday[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_BIRTHDAYS;
+  }
+
+  const birthdays = await fetchFromSanity<SanityBirthday[]>(BIRTHDAYS_QUERY);
+
+  if (!birthdays) {
+    return FALLBACK_BIRTHDAYS;
+  }
+
+  return birthdays.flatMap((birthday) => {
+    const date = birthday.date?.slice(0, 10);
+    const name = birthday.name?.trim();
+
+    if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !name) {
+      return [];
+    }
+
+    return [
+      {
+        id: birthday._id,
+        date,
+        name,
+      },
+    ];
+  });
 }
 
 // Kløfta, Ullensaker. Coordinates truncated to 4 decimals per MET guidance.

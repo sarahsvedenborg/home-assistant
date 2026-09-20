@@ -5,6 +5,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { FormModal } from "@/components/form-modal";
 import { eventsForDateRange, type CalendarDay, type DashboardEvent } from "@/lib/family-feed";
 import type {
+  Birthday,
   DayNote,
   NorwegianHoliday,
   RecurringEvent,
@@ -16,6 +17,7 @@ type CalendarView = "week" | "month";
 type FamilyCalendarProps = {
   recurringEvents: RecurringEvent[];
   singleEvents: SingleEvent[];
+  birthdays?: Birthday[];
   dayNotes?: DayNote[];
   holidays?: NorwegianHoliday[];
   todayDateKey: string;
@@ -29,6 +31,22 @@ function dateFromKey(dateKey: string): Date {
 
 function dateKey(date: Date): string {
   return date.toISOString().slice(0, 10);
+}
+
+function monthDayKey(value: string): string {
+  return value.slice(5, 10);
+}
+
+function turningAge(birthDate: string, onDateKey: string): number | null {
+  const birthYear = Number(birthDate.slice(0, 4));
+  const onYear = Number(onDateKey.slice(0, 4));
+
+  if (!Number.isInteger(birthYear) || !Number.isInteger(onYear)) {
+    return null;
+  }
+
+  const age = onYear - birthYear;
+  return age >= 0 ? age : null;
 }
 
 function addDays(date: Date, days: number): Date {
@@ -445,6 +463,7 @@ function SpanningVacationNote({
 export function FamilyCalendar({
   recurringEvents,
   singleEvents,
+  birthdays = [],
   dayNotes = [],
   holidays = [],
   todayDateKey,
@@ -653,9 +672,18 @@ export function FamilyCalendar({
                 day.dateKey >= note.date &&
                 day.dateKey <= (note.endDate || note.date),
             );
-            const birthdayNotes = notes.filter(
-              (note) => note.category === "birthday",
-            );
+            const birthdayNotes = birthdays.flatMap((birthday) => {
+              if (monthDayKey(birthday.date) !== monthDayKey(day.dateKey)) {
+                return [];
+              }
+
+              const age = turningAge(birthday.date, day.dateKey);
+              if (age == null) {
+                return [];
+              }
+
+              return [{ ...birthday, age }];
+            });
             const vacationNotes = notes.filter(
               (note) => note.category === "vacation",
             );
@@ -752,10 +780,12 @@ export function FamilyCalendar({
 
                     {birthdayNotes.length > 0 ? (
                       <div className="calendarBirthdayNotes" aria-label="Bursdager">
-                        {birthdayNotes.map((note) => (
-                          <p key={note.id}>
+                        {birthdayNotes.map((birthday) => (
+                          <p key={birthday.id}>
                             <span aria-hidden="true">🎂</span>
-                            <strong>{note.text} bursdag</strong>
+                            <strong>
+                              {birthday.name} {birthday.age} år
+                            </strong>
                           </p>
                         ))}
                       </div>

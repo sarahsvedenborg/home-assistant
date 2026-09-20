@@ -106,6 +106,17 @@ export const DAY_NOTES_QUERY = `*[_type == "dayNote"] | order(date asc, _created
   text
 }`;
 
+export const BIRTHDAYS_QUERY = defineQuery(/* groq */ `
+  *[_type == "birthday" && defined(date)] | order(date asc) {
+    _id,
+    date,
+    "name": select(
+      name.kind == "custom" => name.text,
+      coalesce(name.familyMember->name, name.text)
+    )
+  }
+`);
+
 export const SHOPPING_LIST_ITEMS_QUERY = `*[_type == "shoppingListItem"] | order(_createdAt desc) {
   _id,
   title,
