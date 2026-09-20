@@ -1,5 +1,6 @@
 import { birthdayType } from "./birthdayType";
 import { boardIssueType } from "./boardIssueType";
+import { bookType } from "./bookType";
 import { choreType } from "./choreType";
 import { dayNoteType } from "./dayNoteType";
 import { dinnerType } from "./dinnerType";
@@ -7,6 +8,7 @@ import { familyMemberType } from "./familyMemberType";
 import { featureSuggestionType } from "./featureSuggestionType";
 import { movieRecommendationType } from "./movieRecommendationType";
 import { recipeType } from "./recipeType";
+import { readingType } from "./readingType";
 import { recurringEventType } from "./recurringEventType";
 import { shoppingListItemType } from "./shoppingListItemType";
 import { shoppingListType } from "./shoppingListType";
@@ -18,6 +20,7 @@ import { wishListItemType } from "./wishListItemType";
 export const schemaTypes = [
   birthdayType,
   boardIssueType,
+  bookType,
   choreType,
   dayNoteType,
   dinnerType,
@@ -27,6 +30,7 @@ export const schemaTypes = [
   shoppingListItemType,
   shoppingListType,
   recipeType,
+  readingType,
   featureSuggestionType,
   recurringEventType,
   singleEventType,
