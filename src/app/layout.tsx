@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Baloo_2, Nunito } from "next/font/google";
+import Script from "next/script";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -28,8 +29,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="no" className={`${displayFont.variable} ${bodyFont.variable}`}>
+    <html lang="no" className={`${displayFont.variable} ${bodyFont.variable}`} suppressHydrationWarning>
       <body>
+        <Script
+          id="family-hub-theme"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html:
+              'try{var t=localStorage.getItem("family-hub-theme");if(t==="christmas"||t==="birthday"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}',
+          }}
+        />
         <Suspense fallback={null}>
           <AppChrome />
         </Suspense>

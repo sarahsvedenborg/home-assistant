@@ -1,5 +1,6 @@
 import { MessageWidget } from "@/components/message-widget";
 import { ShoppingWidget } from "@/components/shopping-widget";
+import { ThemeSwapper } from "@/components/theme-swapper";
 import type { DashboardEvent, RecentActivity } from "@/lib/family-feed";
 import { describeWeather } from "@/lib/weather";
 import type {
@@ -151,7 +152,10 @@ export function FamilyDashboard({
     <section className="dashboard" aria-label="Familieoversikt">
       <article className="widget wGreet accentWarm">
         <div className="dashboardGreeting">
-          <h1 className="dashboardTitle">{dateLabel}</h1>
+          <div className="dashboardGreetingTop">
+            <h1 className="dashboardTitle">{dateLabel}</h1>
+            <ThemeSwapper />
+          </div>
         </div>
 
         <figure className="dailyQuote">

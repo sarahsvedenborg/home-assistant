@@ -3,16 +3,154 @@
   --paper: rgba(255, 251, 245, 0.88);
   --paper-strong: #fffdf8;
   --ink: #243447;
+  --ink-strong: #17212c;
   --muted: #5c6b7a;
   --line: rgba(77, 96, 122, 0.16);
+  --line-strong: rgba(75, 98, 124, 0.18);
+  --line-ink: #4b627c;
   --warm: #ff9f6e;
   --warm-soft: #ffe2c7;
+  --warm-hot: #ffbe5c;
   --cool: #5ea6ff;
   --cool-soft: #dff0ff;
+  --cool-wash: #f4f9ff;
   --sun: #ffd25f;
+  --sun-soft: #fff2cf;
   --mint: #82d1ae;
-  --shadow: 0 22px 60px rgba(58, 76, 98, 0.14);
+  --surface: #ffffff;
+  --on-accent: #ffffff;
+  --on-dark: #fffaf1;
+  --page-start: #fffaf1;
+  --page-end: #fff3de;
+  --glow-warm: #ffd16e;
+  --brand-start: #fff0d8;
+  --brand-end: #ffe1b7;
+  --shade: #3a4c62;
+  --quote-line: rgba(123, 91, 68, 0.16);
+  --shadow: 0 22px 60px color-mix(in srgb, var(--shade) 14%, transparent);
+  --success: #20593d;
+  --danger: #9f2f2f;
+  --danger-strong: #7a2632;
+  --holiday: #d9272e;
+  --vacation: #4f8f78;
+  --birthday-ink: #70411f;
+  --accent-warm-start: rgba(255, 232, 214, 0.96);
+  --accent-warm-end: rgba(255, 249, 242, 0.92);
+  --accent-cool-start: rgba(225, 242, 255, 0.96);
+  --accent-cool-end: rgba(249, 253, 255, 0.92);
+  --accent-future-start: rgba(242, 255, 238, 0.96);
+  --accent-future-end: rgba(255, 253, 246, 0.92);
+  --accent-learn-start: rgba(196, 236, 214, 0.98);
+  --accent-learn-end: rgba(255, 249, 232, 0.94);
+  --accent-learn-line: rgba(79, 143, 120, 0.28);
+  --accent-warm-panel-start: rgba(255, 230, 205, 0.95);
+  --accent-warm-panel-end: rgba(255, 248, 240, 0.92);
+  --accent-cool-panel-start: rgba(222, 243, 255, 0.95);
+  --accent-cool-panel-end: rgba(248, 252, 255, 0.92);
 }
+
+html[data-theme="christmas"] {
+  --cream: #fff6f2;
+  --paper: rgba(255, 250, 247, 0.9);
+  --paper-strong: #fffdfb;
+  --ink: #2c1818;
+  --ink-strong: #1c1010;
+  --muted: #6e4a46;
+  --line: rgba(148, 48, 42, 0.18);
+  --line-strong: rgba(148, 48, 42, 0.22);
+  --line-ink: #94302a;
+  --warm: #c43c3c;
+  --warm-soft: #f6d6d0;
+  --warm-hot: #d4a24a;
+  --cool: #3e8aaa;
+  --cool-soft: #dceef4;
+  --cool-wash: #f3f8fb;
+  --sun: #e0b85c;
+  --sun-soft: #f7e7c4;
+  --mint: #2f7a52;
+  --surface: #fffaf7;
+  --on-accent: #ffffff;
+  --on-dark: #fff6f2;
+  --page-start: #fff4ee;
+  --page-end: #f3e2d4;
+  --glow-warm: #e0b85c;
+  --brand-start: #fde6df;
+  --brand-end: #f3d2a8;
+  --shade: #5a3030;
+  --quote-line: rgba(148, 48, 42, 0.2);
+  --shadow: 0 22px 60px rgba(90, 32, 28, 0.16);
+  --success: #215c3d;
+  --danger: #8f2424;
+  --danger-strong: #6e1c1c;
+  --holiday: #c43c3c;
+  --vacation: #2f7a52;
+  --birthday-ink: #7a3b28;
+  --accent-warm-start: rgba(255, 220, 214, 0.96);
+  --accent-warm-end: rgba(255, 246, 242, 0.94);
+  --accent-cool-start: rgba(214, 236, 244, 0.96);
+  --accent-cool-end: rgba(247, 252, 255, 0.94);
+  --accent-future-start: rgba(214, 236, 222, 0.96);
+  --accent-future-end: rgba(246, 252, 246, 0.94);
+  --accent-learn-start: rgba(196, 224, 206, 0.98);
+  --accent-learn-end: rgba(255, 246, 230, 0.94);
+  --accent-learn-line: rgba(47, 122, 82, 0.32);
+  --accent-warm-panel-start: rgba(255, 220, 210, 0.95);
+  --accent-warm-panel-end: rgba(255, 248, 244, 0.92);
+  --accent-cool-panel-start: rgba(214, 236, 244, 0.95);
+  --accent-cool-panel-end: rgba(247, 252, 255, 0.92);
+}
+
+html[data-theme="birthday"] {
+  --cream: #fff7fb;
+  --paper: rgba(255, 250, 252, 0.9);
+  --paper-strong: #fffdfd;
+  --ink: #3a2450;
+  --ink-strong: #241536;
+  --muted: #6d5a7a;
+  --line: rgba(176, 92, 168, 0.18);
+  --line-strong: rgba(176, 92, 168, 0.22);
+  --line-ink: #b05ca8;
+  --warm: #ff6fa3;
+  --warm-soft: #ffd6e8;
+  --warm-hot: #ffc14d;
+  --cool: #7b8cff;
+  --cool-soft: #e4e8ff;
+  --cool-wash: #f4f5ff;
+  --sun: #ffd34d;
+  --sun-soft: #fff0c4;
+  --mint: #6ed9c4;
+  --surface: #ffffff;
+  --on-accent: #ffffff;
+  --on-dark: #fff7fb;
+  --page-start: #fff5fb;
+  --page-end: #f3e9ff;
+  --glow-warm: #ff9ec4;
+  --brand-start: #ffe4f1;
+  --brand-end: #ffe8c4;
+  --shade: #5a3a6e;
+  --quote-line: rgba(176, 92, 168, 0.2);
+  --shadow: 0 22px 60px rgba(90, 48, 110, 0.16);
+  --success: #215c3d;
+  --danger: #c43b6e;
+  --danger-strong: #8a2450;
+  --holiday: #e05a8a;
+  --vacation: #6ed9c4;
+  --birthday-ink: #7a3b62;
+  --accent-warm-start: rgba(255, 220, 234, 0.96);
+  --accent-warm-end: rgba(255, 246, 250, 0.94);
+  --accent-cool-start: rgba(224, 228, 255, 0.96);
+  --accent-cool-end: rgba(248, 249, 255, 0.94);
+  --accent-future-start: rgba(220, 246, 240, 0.96);
+  --accent-future-end: rgba(246, 255, 252, 0.94);
+  --accent-learn-start: rgba(206, 240, 232, 0.98);
+  --accent-learn-end: rgba(255, 246, 230, 0.94);
+  --accent-learn-line: rgba(110, 217, 196, 0.4);
+  --accent-warm-panel-start: rgba(255, 220, 234, 0.95);
+  --accent-warm-panel-end: rgba(255, 248, 252, 0.92);
+  --accent-cool-panel-start: rgba(224, 228, 255, 0.95);
+  --accent-cool-panel-end: rgba(248, 249, 255, 0.92);
+}
+
 
 html {
   min-height: 100%;
@@ -22,9 +160,9 @@ body {
   min-height: 100vh;
   color: var(--ink);
   background:
-    radial-gradient(circle at top left, rgba(255, 209, 110, 0.45), transparent 30%),
-    radial-gradient(circle at top right, rgba(94, 166, 255, 0.28), transparent 25%),
-    linear-gradient(180deg, #fffaf1 0%, #fff3de 100%);
+    radial-gradient(circle at top left, color-mix(in srgb, var(--glow-warm) 45%, transparent), transparent 30%),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--cool) 28%, transparent), transparent 25%),
+    linear-gradient(180deg, var(--page-start) 0%, var(--page-end) 100%);
   font-family: var(--font-body), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -37,7 +175,7 @@ body {
 }
 
 *::selection {
-  background: rgba(255, 159, 110, 0.28);
+  background: color-mix(in srgb, var(--warm) 28%, transparent);
 }
 
 a {
@@ -95,7 +233,7 @@ button {
   width: 3rem;
   height: 3rem;
   border-radius: 1rem;
-  background: linear-gradient(135deg, #fff0d8, #ffe1b7);
+  background: linear-gradient(135deg, var(--brand-start), var(--brand-end));
   box-shadow: var(--shadow);
   font-size: 1.45rem;
 }
@@ -135,9 +273,9 @@ button {
   width: 3rem;
   height: 3rem;
   padding: 0;
-  border: 1px solid rgba(75, 98, 124, 0.18);
+  border: 1px solid var(--line-strong);
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.72);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -168,7 +306,7 @@ button {
   padding: 0.8rem 1rem;
   border: 1px solid transparent;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.55);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
   color: var(--muted);
   transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
 }
@@ -191,7 +329,7 @@ button {
 }
 
 .navLinkStudio {
-  background: rgba(130, 209, 174, 0.18);
+  background: color-mix(in srgb, var(--mint) 18%, transparent);
 }
 
 .heroPanel,
@@ -228,7 +366,7 @@ button {
   width: fit-content;
   padding: 0.4rem 0.8rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
   color: var(--muted);
   font-size: 0.9rem;
   font-weight: 800;
@@ -279,12 +417,12 @@ button {
 }
 
 .buttonPrimary {
-  background: linear-gradient(135deg, var(--warm), #ffbe5c);
-  color: #17212c;
+  background: linear-gradient(135deg, var(--warm), var(--warm-hot));
+  color: var(--ink-strong);
 }
 
 .buttonSecondary {
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
   border: 1px solid var(--line);
 }
 
@@ -335,7 +473,7 @@ button {
   padding: 0.35rem;
   border: 1px solid var(--line);
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.68);
+  background: color-mix(in srgb, var(--surface) 68%, transparent);
 }
 
 .homeQuickLinks {
@@ -360,7 +498,7 @@ button {
   padding: 0.55rem 0.85rem;
   border: 1px solid var(--line);
   border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.28);
+  background: color-mix(in srgb, var(--surface) 28%, transparent);
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 900;
@@ -378,7 +516,7 @@ button {
 .homeGhostButton:hover,
 .homeGhostButton:focus-visible {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.72);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
   color: var(--ink);
 }
 
@@ -387,7 +525,7 @@ button {
 .homeContextButtonActive:focus-visible {
   background: var(--paper-strong);
   color: var(--ink);
-  box-shadow: 0 5px 18px rgba(58, 76, 98, 0.12);
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--shade) 12%, transparent);
 }
 
 .homeContextButtonAction,
@@ -395,8 +533,8 @@ button {
 .homeContextButtonAction:focus-visible {
   margin-left: auto;
   border-color: transparent;
-  background: linear-gradient(135deg, var(--warm), #ffbe5c);
-  color: #17212c;
+  background: linear-gradient(135deg, var(--warm), var(--warm-hot));
+  color: var(--ink-strong);
   font-weight: 900;
 }
 
@@ -422,7 +560,7 @@ button {
 .homeViewTabActive {
   background: var(--paper-strong);
   color: var(--ink);
-  box-shadow: 0 5px 18px rgba(58, 76, 98, 0.1);
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--shade) 10%, transparent);
 }
 
 .homeViews .dashboard {
@@ -525,8 +663,8 @@ button {
   padding: 0.85rem;
   border: 1px solid var(--line);
   border-radius: 1.25rem;
-  background: rgba(255, 255, 255, 0.68);
-  box-shadow: 0 12px 35px rgba(58, 76, 98, 0.08);
+  background: color-mix(in srgb, var(--surface) 68%, transparent);
+  box-shadow: 0 12px 35px color-mix(in srgb, var(--shade) 8%, transparent);
 }
 
 .mealPlanDayHeader {
@@ -611,7 +749,7 @@ button {
   padding: 0.85rem;
   border: 1px solid var(--line);
   border-radius: 1.25rem;
-  background: rgba(255, 255, 255, 0.62);
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
 }
 
 .issueBoardColumn-todo {
@@ -662,7 +800,7 @@ button {
   border: 1px solid rgba(111, 127, 143, 0.18);
   border-radius: 0.95rem;
   background: var(--paper-strong);
-  box-shadow: 0 5px 18px rgba(58, 76, 98, 0.08);
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--shade) 8%, transparent);
 }
 
 .issueBoardCard strong {
@@ -831,7 +969,7 @@ button {
   display: grid;
   gap: 0.45rem;
   color: var(--paper-strong);
-  text-shadow: 0 2px 16px rgba(36, 52, 71, 0.75);
+  text-shadow: 0 2px 16px color-mix(in srgb, var(--ink) 75%, transparent);
   animation: weeklyPayMessagePop 0.45s ease-out both;
 }
 
@@ -846,7 +984,7 @@ button {
 }
 
 .weeklyPayCelebrationMessage p {
-  color: rgba(255, 255, 255, 0.9);
+  color: color-mix(in srgb, var(--surface) 90%, transparent);
   font-weight: 800;
 }
 
@@ -1111,11 +1249,52 @@ button {
   gap: 0.35rem;
 }
 
+.dashboardGreetingTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.themeSwapper {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 0.28rem;
+  padding: 0.28rem;
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--surface) 68%, transparent);
+}
+
+.themeSwapperButton {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.65rem;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.themeSwapperButtonActive,
+.themeSwapperButtonActive:hover,
+.themeSwapperButtonActive:focus-visible {
+  background: var(--paper-strong);
+  color: var(--ink);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--shade) 12%, transparent);
+}
+
+.themeSwapperButton:hover,
+.themeSwapperButton:focus-visible {
+  color: var(--ink);
+}
+
 .dailyQuote {
   display: grid;
   gap: 0.35rem;
   padding-top: 0.8rem;
-  border-top: 1px solid rgba(123, 91, 68, 0.16);
+  border-top: 1px solid var(--quote-line);
 }
 
 .dailyQuote blockquote {
@@ -1145,7 +1324,7 @@ button {
   width: fit-content;
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 800;
@@ -1209,7 +1388,7 @@ button {
   padding: 0.45rem 0.7rem;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.78);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
   color: var(--ink);
   font-size: 0.78rem;
   font-weight: 900;
@@ -1283,7 +1462,7 @@ button {
 
 .messageItemButton:hover,
 .messageItemButton:focus-visible {
-  background: rgba(255, 255, 255, 0.55);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
   transform: translateY(-1px);
 }
 
@@ -1305,9 +1484,9 @@ button {
 .messageReadButton {
   flex: 0 0 auto;
   padding: 0.4rem 0.7rem;
-  border: 1px solid rgba(94, 166, 255, 0.35);
+  border: 1px solid color-mix(in srgb, var(--cool) 35%, transparent);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
   color: var(--ink);
   font-size: 0.75rem;
   font-weight: 900;
@@ -1315,7 +1494,7 @@ button {
 
 .messageReadButton:hover,
 .messageReadButton:focus-visible {
-  background: rgba(223, 240, 255, 0.95);
+  background: color-mix(in srgb, var(--cool-soft) 95%, transparent);
   transform: translateY(-1px);
 }
 
@@ -1354,7 +1533,7 @@ button {
 .messageDetailsText {
   padding: 1rem;
   border-radius: 1rem;
-  background: rgba(223, 240, 255, 0.72);
+  background: color-mix(in srgb, var(--cool-soft) 72%, transparent);
 }
 
 .messageDetailsText h3,
@@ -1445,7 +1624,7 @@ button {
   padding: 0.4rem 0.7rem;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
   color: var(--muted);
   font-size: 0.75rem;
   font-weight: 800;
@@ -1454,7 +1633,7 @@ button {
 .messageUnreadButton:hover,
 .messageUnreadButton:focus-visible {
   color: var(--ink);
-  background: rgba(223, 240, 255, 0.9);
+  background: color-mix(in srgb, var(--cool-soft) 90%, transparent);
 }
 
 .messageUnreadButton:disabled {
@@ -1463,7 +1642,7 @@ button {
 }
 
 .messageUnreadError {
-  color: #9f2f2f;
+  color: var(--danger);
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -1514,7 +1693,7 @@ button {
     padding-top: 0;
     padding-left: 1.25rem;
     border-top: 0;
-    border-left: 1px solid rgba(123, 91, 68, 0.16);
+    border-left: 1px solid var(--quote-line);
   }
 
   .wWeather {
@@ -1677,6 +1856,19 @@ button {
 
   .homeDashboardPanel .dashboardTitle {
     font-size: clamp(3.2rem, 3.4vw, 4.2rem);
+  }
+
+  .homeDashboardPanel .themeSwapper {
+    padding: 0.4rem;
+    border-radius: 1.1rem;
+    gap: 0.4rem;
+  }
+
+  .homeDashboardPanel .themeSwapperButton {
+    min-height: 3.15rem;
+    padding: 0.5rem 1.05rem;
+    border-radius: 0.85rem;
+    font-size: 1.25rem;
   }
 
   .homeDashboardPanel .dailyQuote blockquote {
@@ -2179,7 +2371,7 @@ button {
     padding: 1.25rem 1.35rem;
     border: 1px solid var(--line);
     border-radius: 1.5rem;
-    background: rgba(255, 255, 255, 0.42);
+    background: color-mix(in srgb, var(--surface) 42%, transparent);
     overflow: hidden;
   }
 
@@ -2285,7 +2477,7 @@ button {
     padding: 1.25rem 1.35rem;
     border: 1px solid var(--line);
     border-radius: 1.5rem;
-    background: rgba(255, 255, 255, 0.42);
+    background: color-mix(in srgb, var(--surface) 42%, transparent);
     overflow: hidden;
   }
 
@@ -2780,7 +2972,7 @@ button {
 }
 
 .statusPill {
-  background: rgba(255, 255, 255, 0.75);
+  background: color-mix(in srgb, var(--surface) 75%, transparent);
 }
 
 .statusDot {
@@ -2814,8 +3006,8 @@ button {
 }
 
 .hubCardLearn {
-  border-color: rgba(79, 143, 120, 0.28);
-  background: linear-gradient(180deg, rgba(196, 236, 214, 0.98), rgba(255, 249, 232, 0.94));
+  border-color: var(--accent-learn-line);
+  background: linear-gradient(180deg, var(--accent-learn-start), var(--accent-learn-end));
 }
 
 /* Two CTAs per card (open the list + open the add form), pinned to the
@@ -2866,20 +3058,20 @@ button {
   width: 3rem;
   height: 3rem;
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
   font-size: 1.4rem;
 }
 
 .accentWarm {
-  background: linear-gradient(180deg, rgba(255, 232, 214, 0.96), rgba(255, 249, 242, 0.92));
+  background: linear-gradient(180deg, var(--accent-warm-start), var(--accent-warm-end));
 }
 
 .accentCool {
-  background: linear-gradient(180deg, rgba(225, 242, 255, 0.96), rgba(249, 253, 255, 0.92));
+  background: linear-gradient(180deg, var(--accent-cool-start), var(--accent-cool-end));
 }
 
 .accentFuture {
-  background: linear-gradient(180deg, rgba(242, 255, 238, 0.96), rgba(255, 253, 246, 0.92));
+  background: linear-gradient(180deg, var(--accent-future-start), var(--accent-future-end));
 }
 
 .infoStrip,
@@ -2912,11 +3104,11 @@ button {
 }
 
 .accentWarmPanel {
-  background: linear-gradient(135deg, rgba(255, 230, 205, 0.95), rgba(255, 248, 240, 0.92));
+  background: linear-gradient(135deg, var(--accent-warm-panel-start), var(--accent-warm-panel-end));
 }
 
 .accentCoolPanel {
-  background: linear-gradient(135deg, rgba(222, 243, 255, 0.95), rgba(248, 252, 255, 0.92));
+  background: linear-gradient(135deg, var(--accent-cool-panel-start), var(--accent-cool-panel-end));
 }
 
 .listPanel,
@@ -2938,8 +3130,8 @@ button {
   margin: 1rem 0;
   padding: 1rem 1.1rem;
   border-radius: 1rem;
-  background: rgba(36, 52, 71, 0.92);
-  color: #fffaf1;
+  background: color-mix(in srgb, var(--ink) 92%, transparent);
+  color: var(--on-dark);
   overflow-x: auto;
 }
 
@@ -2996,7 +3188,7 @@ button {
   color: var(--muted);
   font-weight: 800;
   white-space: nowrap;
-  box-shadow: 0 10px 22px rgba(58, 76, 98, 0.06);
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--shade) 6%, transparent);
   transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -3129,20 +3321,20 @@ button {
   gap: 0.6rem;
   padding: 1rem;
   text-align: left;
-  border: 1px solid rgba(75, 98, 124, 0.18);
+  border: 1px solid var(--line-strong);
   border-radius: 1.2rem;
-  background: rgba(255, 255, 255, 0.72);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
   transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
 }
 
 .familyCard:hover,
 .familyCard:focus-visible {
   transform: translateY(-2px);
-  border-color: rgba(94, 166, 255, 0.45);
+  border-color: color-mix(in srgb, var(--cool) 45%, transparent);
 }
 
 .familyCardActive {
-  border-color: rgba(255, 159, 110, 0.5);
+  border-color: color-mix(in srgb, var(--warm) 50%, transparent);
   background: rgba(255, 244, 231, 0.95);
 }
 
@@ -3159,7 +3351,7 @@ button {
   width: 3rem;
   height: 3rem;
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.85);
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
   font-size: 1.35rem;
 }
 
@@ -3169,9 +3361,9 @@ button {
   align-items: center;
   min-height: 3rem;
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(75, 98, 124, 0.18);
+  border: 1px solid var(--line-strong);
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.88);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
   font-weight: 800;
 }
 
@@ -3191,7 +3383,7 @@ button {
   gap: 0.55rem;
   padding: 1rem;
   border-radius: 1.15rem;
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
 }
 
 .inlineLink {
@@ -3250,9 +3442,9 @@ button {
 
 .checkboxAction {
   padding: 0.4rem 0.75rem;
-  border: 1px solid rgba(75, 98, 124, 0.18);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
   color: var(--muted);
   font-weight: 800;
 }
@@ -3316,9 +3508,9 @@ button {
   max-height: 20px;
   padding: 0;
   margin: 0;
-  border: 1.5px solid rgba(255, 159, 110, 0.9);
+  border: 1.5px solid color-mix(in srgb, var(--warm) 90%, transparent);
   border-radius: 4px;
-  background: #fff;
+  background: var(--surface);
   display: grid;
   place-items: center;
   line-height: 20px;
@@ -3330,16 +3522,16 @@ button {
   content: "";
   width: 0.24rem;
   height: 0.44rem;
-  border-right: 1.6px solid #fff;
-  border-bottom: 1.6px solid #fff;
+  border-right: 1.6px solid var(--on-accent);
+  border-bottom: 1.6px solid var(--on-accent);
   transform: rotate(45deg) scale(0);
   transition: transform 0.14s ease;
 }
 
 .checkboxInput:checked {
-  border-color: rgba(255, 159, 110, 0.9);
-  background: linear-gradient(135deg, var(--warm), #ffbe5c);
-  box-shadow: 0 0 0 3px rgba(255, 159, 110, 0.14);
+  border-color: color-mix(in srgb, var(--warm) 90%, transparent);
+  background: linear-gradient(135deg, var(--warm), var(--warm-hot));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--warm) 14%, transparent);
 }
 
 .checkboxInput:checked::after {
@@ -3348,7 +3540,7 @@ button {
 
 .checkboxInput:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(94, 166, 255, 0.16);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cool) 16%, transparent);
 }
 
 .radioInput {
@@ -3363,9 +3555,9 @@ button {
   max-height: 20px;
   padding: 0;
   margin: 0;
-  border: 1.5px solid rgba(255, 159, 110, 0.9);
+  border: 1.5px solid color-mix(in srgb, var(--warm) 90%, transparent);
   border-radius: 50%;
-  background: #fff;
+  background: var(--surface);
   display: grid;
   place-items: center;
   line-height: 20px;
@@ -3378,15 +3570,15 @@ button {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: #fff;
+  background: var(--surface);
   transform: scale(0);
   transition: transform 0.14s ease;
 }
 
 .radioInput:checked {
-  border-color: rgba(255, 159, 110, 0.9);
-  background: linear-gradient(135deg, var(--warm), #ffbe5c);
-  box-shadow: 0 0 0 3px rgba(255, 159, 110, 0.14);
+  border-color: color-mix(in srgb, var(--warm) 90%, transparent);
+  background: linear-gradient(135deg, var(--warm), var(--warm-hot));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--warm) 14%, transparent);
 }
 
 .radioInput:checked::after {
@@ -3395,7 +3587,7 @@ button {
 
 .radioInput:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(94, 166, 255, 0.16);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cool) 16%, transparent);
 }
 
 .checkboxLabel {
@@ -3414,9 +3606,9 @@ button {
   width: 100%;
   min-height: 3rem;
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(75, 98, 124, 0.18);
+  border: 1px solid var(--line-strong);
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.88);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
   color: var(--ink);
 }
 
@@ -3438,12 +3630,12 @@ button {
 
 .feedbackError {
   background: rgba(255, 123, 123, 0.16);
-  color: #7a2632;
+  color: var(--danger-strong);
 }
 
 .feedbackSuccess {
-  background: rgba(130, 209, 174, 0.22);
-  color: #20593d;
+  background: color-mix(in srgb, var(--mint) 22%, transparent);
+  color: var(--success);
 }
 
 .movieGrid {
@@ -3485,7 +3677,7 @@ button {
 
 .movieTableRow {
   padding: 0.95rem 0;
-  border-top: 1px solid rgba(75, 98, 124, 0.12);
+  border-top: 1px solid color-mix(in srgb, var(--line-ink) 12%, transparent);
 }
 
 .movieActionCell {
@@ -3515,7 +3707,7 @@ button {
   overflow: hidden;
   aspect-ratio: 4 / 5;
   border-radius: 1.2rem;
-  background: linear-gradient(180deg, var(--cool-soft), #f4f9ff);
+  background: linear-gradient(180deg, var(--cool-soft), var(--cool-wash));
 }
 
 .moviePoster {
@@ -3536,13 +3728,13 @@ button {
   position: absolute;
   top: 0.8rem;
   left: 0.8rem;
-  background: rgba(255, 255, 255, 0.92);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
   padding: 0.45rem 0.7rem;
   border-radius: 999px;
 }
 
 .watchBadge.watched {
-  background: rgba(130, 209, 174, 0.92);
+  background: color-mix(in srgb, var(--mint) 92%, transparent);
 }
 
 .movieBody {
@@ -3564,9 +3756,9 @@ button {
 
 .filterChip {
   padding: 0.65rem 0.95rem;
-  border: 1px solid rgba(75, 98, 124, 0.18);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
   color: var(--muted);
   font-weight: 800;
   transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
@@ -3575,11 +3767,11 @@ button {
 .filterChip:hover,
 .filterChip:focus-visible {
   transform: translateY(-1px);
-  border-color: rgba(94, 166, 255, 0.35);
+  border-color: color-mix(in srgb, var(--cool) 35%, transparent);
 }
 
 .filterChipActive {
-  border-color: rgba(255, 159, 110, 0.5);
+  border-color: color-mix(in srgb, var(--warm) 50%, transparent);
   background: rgba(255, 244, 231, 0.95);
   color: var(--ink);
 }
@@ -3623,13 +3815,13 @@ button {
 
 .shoppingListColumn > h2 {
   padding: 0 0.2rem 0.65rem;
-  border-bottom: 2px solid rgba(255, 159, 110, 0.42);
+  border-bottom: 2px solid color-mix(in srgb, var(--warm) 42%, transparent);
   font-family: var(--font-display), cursive;
   font-size: 1.45rem;
 }
 
 .shoppingListColumnBought > h2 {
-  border-bottom-color: rgba(130, 209, 174, 0.55);
+  border-bottom-color: color-mix(in srgb, var(--mint) 55%, transparent);
 }
 
 .shoppingColumnEmpty {
@@ -3644,9 +3836,9 @@ button {
 .shoppingToggle {
   flex: 0 0 auto;
   padding: 0.45rem 0.7rem;
-  border: 1px solid rgba(32, 89, 61, 0.2);
+  border: 1px solid color-mix(in srgb, var(--success) 20%, transparent);
   border-radius: 0.7rem;
-  background: rgba(130, 209, 174, 0.22);
+  background: color-mix(in srgb, var(--mint) 22%, transparent);
   color: var(--ink);
   font-size: 0.78rem;
   font-weight: 800;
@@ -3662,11 +3854,11 @@ button {
 .shoppingToggle:hover,
 .shoppingToggle:focus-visible {
   transform: translateY(-1px);
-  border-color: rgba(32, 89, 61, 0.4);
+  border-color: color-mix(in srgb, var(--success) 40%, transparent);
 }
 
 .shoppingToggleChecked {
-  border-color: rgba(255, 159, 110, 0.3);
+  border-color: color-mix(in srgb, var(--warm) 30%, transparent);
   background: rgba(255, 226, 199, 0.62);
 }
 
@@ -3686,7 +3878,7 @@ button {
 .recipeCardLink:hover .recipeCardInteractive,
 .recipeCardLink:focus-visible .recipeCardInteractive {
   transform: translateY(-1px);
-  border-color: rgba(94, 166, 255, 0.3);
+  border-color: color-mix(in srgb, var(--cool) 30%, transparent);
 }
 
 .recipeMetaRow {
@@ -3726,7 +3918,7 @@ button {
   color: var(--muted);
   text-decoration: line-through;
   text-decoration-thickness: 2px;
-  text-decoration-color: rgba(32, 89, 61, 0.7);
+  text-decoration-color: color-mix(in srgb, var(--success) 70%, transparent);
 }
 
 .loginShell {
@@ -3752,7 +3944,7 @@ button {
   width: 4rem;
   height: 4rem;
   border-radius: 1.3rem;
-  background: linear-gradient(135deg, var(--warm-soft), #fff2cf);
+  background: linear-gradient(135deg, var(--warm-soft), var(--sun-soft));
   font-size: 2rem;
 }
 
@@ -3899,7 +4091,7 @@ button {
     display: grid;
     padding: 1rem 1.25rem;
     border-bottom: 1px solid var(--line);
-    background: rgba(255, 255, 255, 0.42);
+    background: color-mix(in srgb, var(--surface) 42%, transparent);
   }
 
   .movieTableHeader {
@@ -4043,7 +4235,7 @@ button {
 
 .mobileActionItem:active,
 .mobileActionItem:focus-visible {
-  background: rgba(223, 240, 255, 0.7);
+  background: color-mix(in srgb, var(--cool-soft) 70%, transparent);
   color: var(--ink);
 }
 
@@ -4106,7 +4298,7 @@ button {
   align-items: flex-end;
   /* Keep the sheet clear of the notch / status bar at the top. */
   padding-top: env(safe-area-inset-top);
-  background: rgba(36, 52, 71, 0.45);
+  background: color-mix(in srgb, var(--ink) 45%, transparent);
   backdrop-filter: blur(4px);
 }
 
@@ -5098,7 +5290,7 @@ button {
   padding: 0.65rem 0.9rem;
   border: 1px solid var(--line);
   border-radius: 0.9rem;
-  background: rgba(255, 255, 255, 0.75);
+  background: color-mix(in srgb, var(--surface) 75%, transparent);
   color: var(--ink);
   font-weight: 800;
   transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
@@ -5117,11 +5309,11 @@ button {
 .calendarViewToggle button:hover,
 .calendarViewToggle button:focus-visible {
   transform: translateY(-1px);
-  border-color: rgba(94, 166, 255, 0.45);
+  border-color: color-mix(in srgb, var(--cool) 45%, transparent);
 }
 
 .calendarViewToggle .calendarToggleActive {
-  border-color: rgba(255, 159, 110, 0.55);
+  border-color: color-mix(in srgb, var(--warm) 55%, transparent);
   background: rgba(255, 231, 207, 0.9);
 }
 
@@ -5129,7 +5321,7 @@ button {
   overflow-x: auto;
   border: 1px solid var(--line);
   border-radius: 1.25rem;
-  background: rgba(255, 255, 255, 0.38);
+  background: color-mix(in srgb, var(--surface) 38%, transparent);
 }
 
 .calendarGrid {
@@ -5172,7 +5364,7 @@ button {
 
 .calendarDayToday {
   background: rgba(255, 244, 225, 0.98);
-  box-shadow: inset 0 0 0 2px rgba(255, 159, 110, 0.42);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--warm) 42%, transparent);
 }
 
 .calendarDayOutside {
@@ -5203,7 +5395,7 @@ button {
   min-width: 1.45rem;
   padding: 0.12rem 0.45rem;
   border-radius: 999px;
-  background: rgba(94, 166, 255, 0.24);
+  background: color-mix(in srgb, var(--cool) 24%, transparent);
   color: var(--ink);
   font-size: 0.78rem;
   font-weight: 900;
@@ -5214,7 +5406,7 @@ button {
   padding: 0.2rem 0.45rem;
   border-radius: 999px;
   background: var(--warm);
-  color: #17212c;
+  color: var(--ink-strong);
   font-size: 0.68rem;
   text-transform: uppercase;
 }
@@ -5284,18 +5476,18 @@ button {
 .calendarBirthdayNotes p {
   border: 1px solid rgba(218, 146, 51, 0.35);
   background: linear-gradient(135deg, rgba(255, 232, 167, 0.9), rgba(255, 215, 229, 0.82));
-  color: #70411f;
+  color: var(--birthday-ink);
 }
 
 .calendarHolydayNotes p {
-  border: 1px solid #d9272e;
-  background: #fff;
-  color: #d9272e;
+  border: 1px solid var(--holiday);
+  background: var(--surface);
+  color: var(--holiday);
 }
 
 .calendarProveNotes p {
-  border: 1px solid rgba(94, 166, 255, 0.42);
-  background: linear-gradient(135deg, rgba(223, 240, 255, 0.95), rgba(248, 252, 255, 0.92));
+  border: 1px solid color-mix(in srgb, var(--cool) 42%, transparent);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cool-soft) 95%, transparent), rgba(248, 252, 255, 0.92));
   color: var(--ink);
 }
 
@@ -5372,8 +5564,8 @@ button {
 .calendarSpanningEvent.calendarSpanningVacation {
   min-height: 0;
   padding: 0.25rem 0.5rem;
-  background: #4f8f78;
-  color: #fff;
+  background: var(--vacation);
+  color: var(--on-accent);
   font: 600 0.78rem/1.25 var(--font-body), sans-serif;
 }
 
@@ -5396,7 +5588,7 @@ button {
 }
 
 .calendarSpanningVacation strong {
-  color: #fff;
+  color: var(--on-accent);
   font-size: 0.78rem;
   font-weight: 600;
   overflow: visible;
@@ -5520,7 +5712,7 @@ button {
   padding: 0.55rem 0.6rem;
   border-left: 4px solid var(--cool);
   border-radius: 0.7rem;
-  background: rgba(223, 240, 255, 0.9);
+  background: color-mix(in srgb, var(--cool-soft) 90%, transparent);
 }
 
 .calendarEventInteractive {
@@ -5535,7 +5727,7 @@ button {
 .calendarEventInteractive:hover,
 .calendarEventInteractive:focus-visible {
   transform: translateY(-1px);
-  box-shadow: 0 5px 14px rgba(58, 76, 98, 0.14);
+  box-shadow: 0 5px 14px color-mix(in srgb, var(--shade) 14%, transparent);
 }
 
 .calendarEventDetailsIndicator {
@@ -5549,7 +5741,7 @@ button {
 
 .calendarEventSchool {
   border-left-color: var(--cool);
-  background: rgba(223, 240, 255, 0.9);
+  background: color-mix(in srgb, var(--cool-soft) 90%, transparent);
 }
 
 .calendarEventLeisure {
@@ -5700,17 +5892,17 @@ button {
 
 .flagStudyButton {
   padding: 0.5rem 0.85rem;
-  border: 1px solid rgba(32, 89, 61, 0.2);
+  border: 1px solid color-mix(in srgb, var(--success) 20%, transparent);
   border-radius: 0.8rem;
-  background: rgba(130, 209, 174, 0.22);
+  background: color-mix(in srgb, var(--mint) 22%, transparent);
   color: var(--ink);
   font-size: 0.82rem;
   font-weight: 800;
 }
 
 .flagStudyButtonActive {
-  border-color: rgba(32, 89, 61, 0.35);
-  background: rgba(130, 209, 174, 0.4);
+  border-color: color-mix(in srgb, var(--success) 35%, transparent);
+  background: color-mix(in srgb, var(--mint) 40%, transparent);
 }
 
 .flagStudyButton:disabled {
@@ -5739,7 +5931,7 @@ button {
 .flagImage {
   border: 1px solid var(--line);
   border-radius: 0.8rem;
-  background: rgba(255, 255, 255, 0.92);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
 }
 
 .flagMediaFeatured .flagImage,
@@ -5784,9 +5976,9 @@ button {
   width: 100%;
   min-height: 2.8rem;
   padding: 0.7rem 0.95rem;
-  border: 1px solid rgba(75, 98, 124, 0.18);
+  border: 1px solid var(--line-strong);
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.88);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
   color: var(--ink);
 }
 
@@ -5807,7 +5999,7 @@ button {
   padding: 0.75rem;
   border: 1px solid var(--line);
   border-radius: 1.15rem;
-  background: rgba(255, 255, 255, 0.68);
+  background: color-mix(in srgb, var(--surface) 68%, transparent);
 }
 
 .flagCardToggle {
@@ -5822,14 +6014,14 @@ button {
 }
 
 .flagCardStudied {
-  border-color: rgba(130, 209, 174, 0.55);
+  border-color: color-mix(in srgb, var(--mint) 55%, transparent);
 }
 
 .flagStudiedBadge {
   width: fit-content;
   padding: 0.15rem 0.45rem;
   border-radius: 999px;
-  background: rgba(130, 209, 174, 0.28);
+  background: color-mix(in srgb, var(--mint) 28%, transparent);
   color: var(--muted);
   font-size: 0.7rem;
   font-weight: 800;
@@ -5837,8 +6029,8 @@ button {
 }
 
 .flagCardSelected {
-  border-color: rgba(94, 166, 255, 0.45);
-  background: rgba(255, 255, 255, 0.92);
+  border-color: color-mix(in srgb, var(--cool) 45%, transparent);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
 }
 
 .flagCard h3 {
@@ -5920,14 +6112,14 @@ button {
   padding: 0.85rem 1rem;
   border: 1px solid var(--line);
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.88);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
   color: var(--ink);
   font-weight: 800;
 }
 
 .flagQuizChoiceCorrect {
-  border-color: rgba(32, 89, 61, 0.35);
-  background: rgba(130, 209, 174, 0.4);
+  border-color: color-mix(in srgb, var(--success) 35%, transparent);
+  background: color-mix(in srgb, var(--mint) 40%, transparent);
 }
 
 .flagQuizChoiceWrong {
@@ -5942,7 +6134,7 @@ button {
 }
 
 .flagQuizFeedbackCorrect {
-  color: #20593d;
+  color: var(--success);
 }
 
 .flagQuizScore {
