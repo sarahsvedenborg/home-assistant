@@ -1123,7 +1123,9 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .weeklyPayConfetti {
+  .weeklyPayConfetti,
+  html[data-theme="birthday"] .birthdayBalloons,
+  .birthdayBalloons {
     display: none;
   }
 
@@ -1343,6 +1345,169 @@ html[data-theme="birthday"] .dailyQuoteQuote {
 
 html[data-theme="birthday"] .dailyQuoteBirthday {
   display: grid;
+}
+
+.birthdayBalloons {
+  display: none;
+}
+
+html[data-theme="birthday"] .birthdayBalloons {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.birthdayBalloon {
+  position: absolute;
+  left: var(--balloon-left);
+  bottom: -8rem;
+  width: var(--balloon-size);
+  height: calc(var(--balloon-size) * 1.28);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--surface) 72%, var(--balloon-color)), transparent 36%),
+    linear-gradient(180deg, var(--balloon-color), color-mix(in srgb, var(--ink) 18%, var(--balloon-color)));
+  animation: birthdayBalloonRise var(--balloon-duration) linear var(--balloon-delay) infinite;
+  will-change: transform;
+}
+
+.birthdayBalloon::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -0.32rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: color-mix(in srgb, var(--ink) 12%, var(--balloon-color));
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.birthdayBalloon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 0.15rem);
+  width: 1.5px;
+  height: 3.1rem;
+  background: color-mix(in srgb, var(--ink) 28%, transparent);
+  transform: translateX(-50%);
+}
+
+.birthdayBalloon:nth-child(1) {
+  --balloon-left: 4%;
+  --balloon-size: 3.1rem;
+  --balloon-color: var(--warm);
+  --balloon-duration: 18s;
+  --balloon-delay: -2s;
+  --balloon-drift: 2.5rem;
+}
+
+.birthdayBalloon:nth-child(2) {
+  --balloon-left: 14%;
+  --balloon-size: 2.4rem;
+  --balloon-color: var(--cool);
+  --balloon-duration: 22s;
+  --balloon-delay: -8s;
+  --balloon-drift: -2rem;
+}
+
+.birthdayBalloon:nth-child(3) {
+  --balloon-left: 26%;
+  --balloon-size: 3.6rem;
+  --balloon-color: var(--sun);
+  --balloon-duration: 16s;
+  --balloon-delay: -4s;
+  --balloon-drift: 1.5rem;
+}
+
+.birthdayBalloon:nth-child(4) {
+  --balloon-left: 38%;
+  --balloon-size: 2.2rem;
+  --balloon-color: var(--mint);
+  --balloon-duration: 20s;
+  --balloon-delay: -12s;
+  --balloon-drift: -1.2rem;
+}
+
+.birthdayBalloon:nth-child(5) {
+  --balloon-left: 49%;
+  --balloon-size: 2.8rem;
+  --balloon-color: var(--warm-hot);
+  --balloon-duration: 19s;
+  --balloon-delay: -6s;
+  --balloon-drift: 2rem;
+}
+
+.birthdayBalloon:nth-child(6) {
+  --balloon-left: 61%;
+  --balloon-size: 3.3rem;
+  --balloon-color: var(--cool);
+  --balloon-duration: 17s;
+  --balloon-delay: -10s;
+  --balloon-drift: -2.4rem;
+}
+
+.birthdayBalloon:nth-child(7) {
+  --balloon-left: 72%;
+  --balloon-size: 2.6rem;
+  --balloon-color: var(--warm);
+  --balloon-duration: 21s;
+  --balloon-delay: -1s;
+  --balloon-drift: 1.8rem;
+}
+
+.birthdayBalloon:nth-child(8) {
+  --balloon-left: 81%;
+  --balloon-size: 3.8rem;
+  --balloon-color: var(--mint);
+  --balloon-duration: 15s;
+  --balloon-delay: -9s;
+  --balloon-drift: -1.6rem;
+}
+
+.birthdayBalloon:nth-child(9) {
+  --balloon-left: 90%;
+  --balloon-size: 2.5rem;
+  --balloon-color: var(--sun);
+  --balloon-duration: 23s;
+  --balloon-delay: -14s;
+  --balloon-drift: 2.2rem;
+}
+
+.birthdayBalloon:nth-child(10) {
+  --balloon-left: 8%;
+  --balloon-size: 1.9rem;
+  --balloon-color: var(--warm-hot);
+  --balloon-duration: 24s;
+  --balloon-delay: -16s;
+  --balloon-drift: -1rem;
+}
+
+@keyframes birthdayBalloonRise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 8vh, 0) rotate(-8deg);
+  }
+
+  8% {
+    opacity: 0.95;
+  }
+
+  50% {
+    transform: translate3d(var(--balloon-drift), -55vh, 0) rotate(6deg);
+  }
+
+  92% {
+    opacity: 0.95;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(var(--balloon-drift) * -0.4), -118vh, 0) rotate(10deg);
+  }
 }
 
 .widgetBadge {
@@ -1904,6 +2069,11 @@ html[data-theme="birthday"] .dailyQuoteBirthday {
 
   .homeDashboardPanel .dailyQuoteBirthday p {
     font-size: clamp(2.2rem, 2.4vw, 2.9rem);
+  }
+
+  html[data-theme="birthday"] .birthdayBalloon {
+    transform-origin: center bottom;
+    scale: 1.35;
   }
 
   .homeDashboardPanel .dailyQuote figcaption {

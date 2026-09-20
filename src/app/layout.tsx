@@ -42,6 +42,18 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <AppChrome />
         </Suspense>
+        <div className="birthdayBalloons" aria-hidden="true">
+          <span className="birthdayBalloon"></span>
+          <span className="birthdayBalloon"></span>
+          <span className="birthdayBalloon"></span>
+          <span className="birthdayBalloon"></span>
+          <span className="birthdayBalloon"></span>
+          <span className="birthdayBalloon"></span>
+          <span className="birthdayBalloon"></span>
+          <span className="birthdayBalloon"></span>
+          <span className="birthdayBalloon"></span>
+          <span className="birthdayBalloon"></span>
+        </div>
         {children}
         <MobileActionMenu />
         <SanityLive />
