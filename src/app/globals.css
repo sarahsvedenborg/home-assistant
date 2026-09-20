@@ -100,58 +100,6 @@ html[data-theme="christmas"] {
   --accent-cool-panel-end: rgba(247, 252, 255, 0.92);
 }
 
-html[data-theme="birthday"] {
-  --cream: #fff7fb;
-  --paper: rgba(255, 250, 252, 0.9);
-  --paper-strong: #fffdfd;
-  --ink: #3a2450;
-  --ink-strong: #241536;
-  --muted: #6d5a7a;
-  --line: rgba(176, 92, 168, 0.18);
-  --line-strong: rgba(176, 92, 168, 0.22);
-  --line-ink: #b05ca8;
-  --warm: #ff6fa3;
-  --warm-soft: #ffd6e8;
-  --warm-hot: #ffc14d;
-  --cool: #7b8cff;
-  --cool-soft: #e4e8ff;
-  --cool-wash: #f4f5ff;
-  --sun: #ffd34d;
-  --sun-soft: #fff0c4;
-  --mint: #6ed9c4;
-  --surface: #ffffff;
-  --on-accent: #ffffff;
-  --on-dark: #fff7fb;
-  --page-start: #fff5fb;
-  --page-end: #f3e9ff;
-  --glow-warm: #ff9ec4;
-  --brand-start: #ffe4f1;
-  --brand-end: #ffe8c4;
-  --shade: #5a3a6e;
-  --quote-line: rgba(176, 92, 168, 0.2);
-  --shadow: 0 22px 60px rgba(90, 48, 110, 0.16);
-  --success: #215c3d;
-  --danger: #c43b6e;
-  --danger-strong: #8a2450;
-  --holiday: #e05a8a;
-  --vacation: #6ed9c4;
-  --birthday-ink: #7a3b62;
-  --accent-warm-start: rgba(255, 220, 234, 0.96);
-  --accent-warm-end: rgba(255, 246, 250, 0.94);
-  --accent-cool-start: rgba(224, 228, 255, 0.96);
-  --accent-cool-end: rgba(248, 249, 255, 0.94);
-  --accent-future-start: rgba(220, 246, 240, 0.96);
-  --accent-future-end: rgba(246, 255, 252, 0.94);
-  --accent-learn-start: rgba(206, 240, 232, 0.98);
-  --accent-learn-end: rgba(255, 246, 230, 0.94);
-  --accent-learn-line: rgba(110, 217, 196, 0.4);
-  --accent-warm-panel-start: rgba(255, 220, 234, 0.95);
-  --accent-warm-panel-end: rgba(255, 248, 252, 0.92);
-  --accent-cool-panel-start: rgba(224, 228, 255, 0.95);
-  --accent-cool-panel-end: rgba(248, 249, 255, 0.92);
-}
-
-
 html {
   min-height: 100%;
 }
