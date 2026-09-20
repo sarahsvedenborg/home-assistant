@@ -2,15 +2,16 @@ import { AddButton } from "@/components/add-button";
 import { DayNoteForm } from "@/components/day-note-form";
 import { FamilyCalendar } from "@/components/family-calendar";
 import { SingleEventForm } from "@/components/single-event-form";
-import { getDayNotes, getFamilyMembers, getRecurringEvents, getSingleEvents } from "@/lib/data";
+import { getBirthdays, getDayNotes, getFamilyMembers, getRecurringEvents, getSingleEvents } from "@/lib/data";
 import { osloDateKey } from "@/lib/family-feed";
 import { getNorwegianPublicHolidays } from "@/lib/norwegian-holidays";
 
 export default async function KalenderPage() {
   const todayDateKey = osloDateKey(new Date());
   const currentYear = Number(todayDateKey.slice(0, 4));
-  const [dayNotes, familyMembers, holidays, recurringEvents, singleEvents] =
+  const [birthdays, dayNotes, familyMembers, holidays, recurringEvents, singleEvents] =
     await Promise.all([
+      getBirthdays(),
       getDayNotes(),
       getFamilyMembers(),
       getNorwegianPublicHolidays([
@@ -29,6 +30,7 @@ export default async function KalenderPage() {
       <FamilyCalendar
         recurringEvents={recurringEvents}
         singleEvents={singleEvents}
+        birthdays={birthdays}
         dayNotes={dayNotes}
         holidays={holidays}
         todayDateKey={todayDateKey}

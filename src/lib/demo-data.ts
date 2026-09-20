@@ -1,4 +1,5 @@
 import type {
+  Birthday,
   BoardIssue,
   DayNote,
   FamilyMember,
@@ -13,6 +14,8 @@ import type {
 } from "@/lib/types";
 
 export const FALLBACK_DAY_NOTES: DayNote[] = [];
+
+export const FALLBACK_BIRTHDAYS: Birthday[] = [];
 
 export const FALLBACK_BOARD_ISSUES: BoardIssue[] = [
   {

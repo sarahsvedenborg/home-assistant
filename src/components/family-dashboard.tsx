@@ -1,5 +1,6 @@
 import { MessageWidget } from "@/components/message-widget";
 import { ShoppingWidget } from "@/components/shopping-widget";
+import { formatBirthdayNames } from "@/lib/birthdays";
 import type { DashboardEvent, RecentActivity } from "@/lib/family-feed";
 import { describeWeather } from "@/lib/weather";
 import type {
@@ -12,6 +13,7 @@ import type {
 type FamilyDashboardProps = {
   dateLabel: string;
   dailyQuote: DailyQuote;
+  todaysBirthdays: Array<{ name: string }>;
   todayEvents: DashboardEvent[];
   tomorrowEvents: DashboardEvent[];
   activity: RecentActivity[];
@@ -139,6 +141,7 @@ function WeatherWidget({ weather }: { weather: Weather }) {
 export function FamilyDashboard({
   dateLabel,
   dailyQuote,
+  todaysBirthdays,
   todayEvents,
   tomorrowEvents,
   activity,
@@ -147,6 +150,10 @@ export function FamilyDashboard({
   familyMembers,
   weather,
 }: FamilyDashboardProps) {
+  const birthdayNames = formatBirthdayNames(
+    todaysBirthdays.map((birthday) => birthday.name),
+  );
+
   return (
     <section className="dashboard" aria-label="Familieoversikt">
       <article className="widget wGreet accentWarm">
@@ -154,18 +161,25 @@ export function FamilyDashboard({
           <h1 className="dashboardTitle">{dateLabel}</h1>
         </div>
 
-        <figure className="dailyQuote">
+        <figure className="dailyQuote dailyQuoteQuote">
           <blockquote>“{dailyQuote.text}”</blockquote>
           <figcaption>— {dailyQuote.author}</figcaption>
-        {/*   {dailyQuote.source === "zenquotes" ? (
-            <a
-              href="https://zenquotes.io/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Inspirational quotes provided by ZenQuotes API
-            </a>
-          ) : null} */}
+        </figure>
+        <figure className="dailyQuote dailyQuoteBirthday">
+          <p>
+            <span aria-hidden="true">🎉</span>
+            <span>
+              Gratulerer med dagen
+              {birthdayNames ? (
+                <>
+                  <br />
+                  {birthdayNames}!
+                </>
+              ) : (
+                "!"
+              )}
+            </span>
+          </p>
         </figure>
       </article>
 

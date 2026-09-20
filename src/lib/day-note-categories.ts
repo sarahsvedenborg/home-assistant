@@ -5,7 +5,6 @@ export const DAY_NOTE_CATEGORIES: {
   label: string;
 }[] = [
   { value: "note", label: "Notat" },
-  { value: "birthday", label: "Bursdag" },
   { value: "vacation", label: "Ferie" },
   { value: "holyday", label: "Holyday" },
   { value: "prove", label: "Prøve" },

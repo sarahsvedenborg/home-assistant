@@ -3,8 +3,10 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { FormModal } from "@/components/form-modal";
+import { birthdaysOnDate } from "@/lib/birthdays";
 import { eventsForDateRange, type CalendarDay, type DashboardEvent } from "@/lib/family-feed";
 import type {
+  Birthday,
   DayNote,
   NorwegianHoliday,
   RecurringEvent,
@@ -16,6 +18,7 @@ type CalendarView = "week" | "month";
 type FamilyCalendarProps = {
   recurringEvents: RecurringEvent[];
   singleEvents: SingleEvent[];
+  birthdays?: Birthday[];
   dayNotes?: DayNote[];
   holidays?: NorwegianHoliday[];
   todayDateKey: string;
@@ -445,6 +448,7 @@ function SpanningVacationNote({
 export function FamilyCalendar({
   recurringEvents,
   singleEvents,
+  birthdays = [],
   dayNotes = [],
   holidays = [],
   todayDateKey,
@@ -653,9 +657,7 @@ export function FamilyCalendar({
                 day.dateKey >= note.date &&
                 day.dateKey <= (note.endDate || note.date),
             );
-            const birthdayNotes = notes.filter(
-              (note) => note.category === "birthday",
-            );
+            const birthdayNotes = birthdaysOnDate(birthdays, day.dateKey);
             const vacationNotes = notes.filter(
               (note) => note.category === "vacation",
             );
@@ -752,10 +754,12 @@ export function FamilyCalendar({
 
                     {birthdayNotes.length > 0 ? (
                       <div className="calendarBirthdayNotes" aria-label="Bursdager">
-                        {birthdayNotes.map((note) => (
-                          <p key={note.id}>
+                        {birthdayNotes.map((birthday) => (
+                          <p key={birthday.id}>
                             <span aria-hidden="true">🎂</span>
-                            <strong>{note.text} bursdag</strong>
+                            <strong>
+                              {birthday.name} {birthday.age} år
+                            </strong>
                           </p>
                         ))}
                       </div>
