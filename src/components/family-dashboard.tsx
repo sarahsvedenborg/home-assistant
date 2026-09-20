@@ -158,18 +158,17 @@ export function FamilyDashboard({
           </div>
         </div>
 
-        <figure className="dailyQuote">
+        <figure className="dailyQuote dailyQuoteQuote">
           <blockquote>“{dailyQuote.text}”</blockquote>
           <figcaption>— {dailyQuote.author}</figcaption>
-        {/*   {dailyQuote.source === "zenquotes" ? (
-            <a
-              href="https://zenquotes.io/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Inspirational quotes provided by ZenQuotes API
-            </a>
-          ) : null} */}
+        </figure>
+        <figure className="dailyQuote dailyQuoteBirthday">
+          <p>
+            <span aria-hidden="true">🎉</span>
+            <span>Gratulerer med dagen<br/>Colette!</span>
+    
+          </p>
+           
         </figure>
       </article>
 
