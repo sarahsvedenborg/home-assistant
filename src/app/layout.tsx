@@ -62,6 +62,21 @@ export default async function RootLayout({
           <span className="autumnLeaf">🍁</span>
           <span className="autumnLeaf">🍂</span>
         </div>
+        <div className="christmasLights" aria-hidden="true">
+          {Array.from({ length: 16 }, (_, index) => (
+            <span className="christmasLight" key={index}></span>
+          ))}
+        </div>
+        <div className="christmasSnow" aria-hidden="true">
+          <span className="christmasFlake">❄</span>
+          <span className="christmasFlake">❅</span>
+          <span className="christmasFlake">❄</span>
+          <span className="christmasFlake">❆</span>
+          <span className="christmasFlake">❄</span>
+          <span className="christmasFlake">❅</span>
+          <span className="christmasFlake">❄</span>
+          <span className="christmasFlake">❆</span>
+        </div>
         {children}
         <MobileActionMenu />
         <SanityLive />
