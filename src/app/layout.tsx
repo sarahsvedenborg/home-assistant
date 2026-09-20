@@ -6,6 +6,7 @@ import "./globals.css";
 import { AppChrome } from "@/components/app-chrome";
 import { MobileActionMenu } from "@/components/mobile-action-menu";
 import { getTodaysBirthdays } from "@/lib/data";
+import { themeForToday } from "@/lib/theme";
 import { SanityLive } from "@/sanity/lib/live";
 
 const displayFont = Baloo_2({
@@ -29,12 +30,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const todaysBirthdays = await getTodaysBirthdays();
+  const theme = themeForToday({ isBirthday: todaysBirthdays.length > 0 });
 
   return (
     <html
       lang="no"
       className={`${displayFont.variable} ${bodyFont.variable}`}
-      data-theme={todaysBirthdays.length > 0 ? "birthday" : undefined}
+      data-theme={theme}
       suppressHydrationWarning
     >
       <body>
@@ -52,6 +54,13 @@ export default async function RootLayout({
           <span className="birthdayBalloon"></span>
           <span className="birthdayBalloon"></span>
           <span className="birthdayBalloon"></span>
+        </div>
+        <div className="autumnLeaves" aria-hidden="true">
+          <span className="autumnLeaf">🍂</span>
+          <span className="autumnLeaf">🍁</span>
+          <span className="autumnLeaf">🍂</span>
+          <span className="autumnLeaf">🍁</span>
+          <span className="autumnLeaf">🍂</span>
         </div>
         {children}
         <MobileActionMenu />

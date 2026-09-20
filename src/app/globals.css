@@ -100,6 +100,57 @@ html[data-theme="christmas"] {
   --accent-cool-panel-end: rgba(247, 252, 255, 0.92);
 }
 
+html[data-theme="autumn"] {
+  --cream: #fbf3e4;
+  --paper: rgba(255, 248, 236, 0.9);
+  --paper-strong: #fffaf0;
+  --ink: #2c2118;
+  --ink-strong: #1c140e;
+  --muted: #7a5c45;
+  --line: rgba(140, 82, 42, 0.18);
+  --line-strong: rgba(140, 82, 42, 0.24);
+  --line-ink: #8c522a;
+  --warm: #d4652f;
+  --warm-soft: #f6d3b3;
+  --warm-hot: #e39a3c;
+  --cool: #6f8b6a;
+  --cool-soft: #e4eee0;
+  --cool-wash: #f4f6ee;
+  --sun: #e8a54b;
+  --sun-soft: #f8e4c0;
+  --mint: #7d9a55;
+  --surface: #fffaf2;
+  --on-accent: #ffffff;
+  --on-dark: #fff6ea;
+  --page-start: #fff4e4;
+  --page-end: #f0d3b0;
+  --glow-warm: #e39a3c;
+  --brand-start: #fde6c8;
+  --brand-end: #f3c48a;
+  --shade: #5a3a24;
+  --quote-line: rgba(140, 82, 42, 0.2);
+  --shadow: 0 22px 60px rgba(90, 48, 22, 0.16);
+  --success: #3d5c21;
+  --danger: #9f3a2f;
+  --danger-strong: #7a2632;
+  --holiday: #c45c2c;
+  --vacation: #4f7a3d;
+  --birthday-ink: #7a3b1f;
+  --accent-warm-start: rgba(255, 228, 198, 0.96);
+  --accent-warm-end: rgba(255, 246, 232, 0.94);
+  --accent-cool-start: rgba(226, 236, 214, 0.96);
+  --accent-cool-end: rgba(247, 250, 238, 0.94);
+  --accent-future-start: rgba(236, 242, 214, 0.96);
+  --accent-future-end: rgba(255, 248, 232, 0.94);
+  --accent-learn-start: rgba(214, 228, 186, 0.98);
+  --accent-learn-end: rgba(255, 244, 220, 0.94);
+  --accent-learn-line: rgba(79, 122, 61, 0.32);
+  --accent-warm-panel-start: rgba(255, 224, 190, 0.95);
+  --accent-warm-panel-end: rgba(255, 246, 236, 0.92);
+  --accent-cool-panel-start: rgba(226, 236, 214, 0.95);
+  --accent-cool-panel-end: rgba(247, 250, 238, 0.92);
+}
+
 html {
   min-height: 100%;
 }
@@ -1073,7 +1124,9 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .weeklyPayConfetti,
   html[data-theme="birthday"] .birthdayBalloons,
-  .birthdayBalloons {
+  .birthdayBalloons,
+  html[data-theme="autumn"] .autumnLeaves,
+  .autumnLeaves {
     display: none;
   }
 
@@ -1414,6 +1467,95 @@ html[data-theme="birthday"] .birthdayBalloons {
   100% {
     opacity: 0;
     transform: translate3d(calc(var(--balloon-drift) * -0.4), -118vh, 0) rotate(10deg);
+  }
+}
+
+.autumnLeaves {
+  display: none;
+}
+
+html[data-theme="autumn"] .autumnLeaves {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.autumnLeaf {
+  position: absolute;
+  top: -6.5rem;
+  left: var(--leaf-left);
+  font-size: var(--leaf-size);
+  line-height: 1;
+  opacity: 0;
+  animation: autumnLeafFall 60s linear var(--leaf-delay) infinite both;
+  will-change: transform;
+}
+
+.autumnLeaf:nth-child(1) {
+  --leaf-left: 12%;
+  --leaf-size: 4.2rem;
+  --leaf-delay: 0s;
+  --leaf-drift: 5.5rem;
+}
+
+.autumnLeaf:nth-child(2) {
+  --leaf-left: 32%;
+  --leaf-size: 3.4rem;
+  --leaf-delay: 5s;
+  --leaf-drift: -4.8rem;
+}
+
+.autumnLeaf:nth-child(3) {
+  --leaf-left: 52%;
+  --leaf-size: 5rem;
+  --leaf-delay: 10s;
+  --leaf-drift: 4.2rem;
+}
+
+.autumnLeaf:nth-child(4) {
+  --leaf-left: 71%;
+  --leaf-size: 3.8rem;
+  --leaf-delay: 15s;
+  --leaf-drift: -5.2rem;
+}
+
+.autumnLeaf:nth-child(5) {
+  --leaf-left: 88%;
+  --leaf-size: 4.6rem;
+  --leaf-delay: 20s;
+  --leaf-drift: 3.6rem;
+}
+
+@keyframes autumnLeafFall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -8vh, 0) rotate(-16deg);
+  }
+
+  2% {
+    opacity: 0.95;
+  }
+
+  10% {
+    transform: translate3d(var(--leaf-drift), 22vh, 0) rotate(18deg);
+  }
+
+  20% {
+    transform: translate3d(calc(var(--leaf-drift) * -0.65), 52vh, 0) rotate(-14deg);
+  }
+
+  32% {
+    opacity: 0.9;
+    transform: translate3d(calc(var(--leaf-drift) * 0.4), 88vh, 0) rotate(22deg);
+  }
+
+  38%,
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(var(--leaf-drift) * 0.15), 120vh, 0) rotate(-6deg);
   }
 }
 
@@ -1968,6 +2110,10 @@ html[data-theme="birthday"] .birthdayBalloons {
   html[data-theme="birthday"] .birthdayBalloon {
     transform-origin: center bottom;
     scale: 1.35;
+  }
+
+  html[data-theme="autumn"] .autumnLeaf {
+    scale: 1.28;
   }
 
   .homeDashboardPanel .dailyQuote figcaption {
