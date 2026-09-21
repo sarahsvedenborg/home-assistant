@@ -1,18 +1,38 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
-
-import { MemberBookshelf } from "@/components/member-bookshelf";
+import { AddButton } from "@/components/add-button";
+import { BookForm } from "@/components/book-form";
+import { MemberLibrary } from "@/components/member-library";
 import { getFamilyMembers, getReadings } from "@/lib/data";
-import { bookshelfTitle } from "@/lib/readings";
+import { notFound } from "next/navigation";
 
 type BookshelfPageProps = {
   params: Promise<{
     memberId: string;
   }>;
+  searchParams: Promise<{
+    year?: string | string[];
+    now?: string | string[];
+    shelf?: string | string[];
+  }>;
 };
 
-export default async function MemberBookshelfPage({ params }: BookshelfPageProps) {
+function firstSearchParam(value?: string | string[]) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function parseYearParam(value?: string) {
+  if (!value || !/^\d{4}$/.test(value)) {
+    return undefined;
+  }
+
+  return Number(value);
+}
+
+export default async function MemberBookshelfPage({
+  params,
+  searchParams,
+}: BookshelfPageProps) {
   const { memberId } = await params;
+  const query = await searchParams;
   const [familyMembers, readings] = await Promise.all([
     getFamilyMembers(),
     getReadings(),
@@ -26,23 +46,29 @@ export default async function MemberBookshelfPage({ params }: BookshelfPageProps
   }
 
   return (
-    <main className="shell booksShell">
-      <header className="issueBoardToolbar">
-        <div>
-          <Link href="/boker" className="recipeBackLink">
-            <span aria-hidden="true">←</span>
-            Tilbake til bøker
-          </Link>
-          <h1>
-            {member.emoji ? `${member.emoji} ` : null}
-            {bookshelfTitle(member.name)}
-          </h1>
-        </div>
-      </header>
+    <main className="shell booksShell libraryShell">
+      <MemberLibrary
+        members={familyMembers}
+        member={member}
+        readings={readings}
+        year={parseYearParam(firstSearchParam(query.year))}
+        showAllCurrent={firstSearchParam(query.now) === "all"}
+        showAllShelf={firstSearchParam(query.shelf) === "all"}
+      />
 
-      <section className="listStack">
-        <MemberBookshelf member={member} readings={readings} />
-      </section>
+      <AddButton
+        title="Legg til bok"
+        label="Legg til bok"
+        anchor="add-book"
+        hideTrigger
+        wide
+        modalClassName="formModalBooks"
+      >
+        <BookForm
+          familyMembers={familyMembers.map((item) => item.name)}
+          defaultReaders={[member.name]}
+        />
+      </AddButton>
     </main>
   );
 }
