@@ -201,6 +201,7 @@ button {
 .infoStrip h2,
 .formIntro h2,
 .panelHeading h2,
+.librarySectionHead h2,
 .groupHeader h3,
 .movieBody h3,
 .emptyState h3 {
@@ -2913,20 +2914,29 @@ html[data-theme="christmas"] .christmasSnow {
   .libraryShell .libraryNowCopy p,
   .libraryShell .libraryShelfBook p,
   .libraryShell .libraryAddCard p,
-  .libraryShell .libraryShelfEmpty {
+  .libraryShell .libraryShelfEmpty,
+  .libraryShell .libraryEmpty,
+  .libraryShell .libraryWishCard p {
     font-size: 1.4rem;
   }
 
   .libraryShell .libraryStat,
   .libraryShell .librarySectionHead h2,
-  .libraryShell .libraryYear select {
-    font-size: 1.7rem;
+  .libraryShell .libraryYear select,
+  .libraryShell .libraryTogetherCount {
+    font-size: 2.15rem;
   }
 
   .libraryShell .libraryNowCopy strong,
   .libraryShell .libraryShelfBook strong,
-  .libraryShell .libraryAddCard strong {
+  .libraryShell .libraryAddCard strong,
+  .libraryShell .libraryWishCard strong,
+  .libraryShell .libraryInsight p {
     font-size: 1.55rem;
+  }
+
+  .libraryShell .libraryTogetherCover {
+    width: 3.6rem;
   }
 
   .libraryShell .librarySection {
@@ -4169,7 +4179,7 @@ html[data-theme="christmas"] .christmasSnow {
 }
 
 .shell.libraryShell {
-  width: min(1220px, calc(100% - 2rem));
+  width: min(1360px, calc(100% - 2rem));
 }
 
 .libraryLayout {
@@ -4225,6 +4235,21 @@ html[data-theme="christmas"] .christmasSnow {
   gap: 1rem 1.5rem;
 }
 
+.libraryHeroStats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.55rem;
+}
+
+.addFab.libraryAddFab {
+  position: static;
+  right: auto;
+  bottom: auto;
+  text-decoration: none;
+}
+
 .libraryHero h1 {
   display: flex;
   align-items: center;
@@ -4272,9 +4297,12 @@ html[data-theme="christmas"] .christmasSnow {
 .librarySectionHead h2 {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
   margin: 0;
-  font-size: 1.35rem;
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .libraryMore {
@@ -4340,7 +4368,9 @@ html[data-theme="christmas"] .christmasSnow {
 .libraryNowCopy p,
 .libraryShelfBook p,
 .libraryAddCard p,
-.libraryShelfEmpty {
+.libraryShelfEmpty,
+.libraryEmpty,
+.libraryWishCard p {
   margin: 0;
   color: var(--muted);
   font-size: 0.92rem;
@@ -4425,6 +4455,77 @@ html[data-theme="christmas"] .christmasSnow {
   border-bottom: 12px solid color-mix(in srgb, #c9a27a 78%, #8b623c);
 }
 
+.libraryBody,
+.librarySideNotes {
+  display: grid;
+  gap: 1.6rem;
+}
+
+.libraryWishGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 0.7rem;
+}
+
+.libraryWishCard {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  text-align: center;
+}
+
+.libraryWishCover,
+.libraryTogetherCover {
+  display: block;
+  width: 100%;
+  max-width: 6.5rem;
+  margin-inline: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  background: linear-gradient(180deg, var(--warm-soft), var(--page-end));
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--shade) 14%, transparent);
+}
+
+.libraryWishCard strong {
+  font-size: 0.92rem;
+  line-height: 1.2;
+}
+
+.libraryInsight p {
+  margin: 0;
+  max-width: 28rem;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
+.libraryTogether {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem 1rem;
+}
+
+.libraryTogetherCovers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.libraryTogetherCover {
+  width: 2.7rem;
+  max-width: none;
+  margin: 0;
+  border-radius: 0.35rem;
+}
+
+.libraryTogetherCount {
+  margin: 0;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
 @media (min-width: 900px) {
   .libraryLayout {
     grid-template-columns: 13.75rem minmax(0, 1fr);
@@ -4456,6 +4557,36 @@ html[data-theme="christmas"] .christmasSnow {
 
   .libraryShelf {
     grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .libraryWishGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .libraryBody {
+    grid-template-columns: minmax(0, 1.4fr) minmax(20rem, 0.82fr);
+    grid-template-areas:
+      "now wish"
+      "shelf notes";
+    align-items: start;
+  }
+
+  .libraryNow {
+    grid-area: now;
+  }
+
+  .libraryWish {
+    grid-area: wish;
+  }
+
+  .libraryShelfSection {
+    grid-area: shelf;
+  }
+
+  .librarySideNotes {
+    grid-area: notes;
   }
 }
 
@@ -5282,6 +5413,12 @@ html[data-theme="christmas"] .christmasSnow {
     padding: 0 2.1rem;
     gap: 0.85rem;
     font-size: 1.85rem;
+  }
+
+  .libraryShell .addFab.libraryAddFab {
+    position: static;
+    right: auto;
+    bottom: auto;
   }
 
   .calendarShell .addFabIcon,

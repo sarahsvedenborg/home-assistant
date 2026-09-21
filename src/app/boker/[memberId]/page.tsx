@@ -12,6 +12,8 @@ type BookshelfPageProps = {
     year?: string | string[];
     now?: string | string[];
     shelf?: string | string[];
+    wish?: string | string[];
+    together?: string | string[];
   }>;
 };
 
@@ -54,6 +56,8 @@ export default async function MemberBookshelfPage({
         year={parseYearParam(firstSearchParam(query.year))}
         showAllCurrent={firstSearchParam(query.now) === "all"}
         showAllShelf={firstSearchParam(query.shelf) === "all"}
+        showAllWish={firstSearchParam(query.wish) === "all"}
+        showAllTogether={firstSearchParam(query.together) === "all"}
       />
 
       <AddButton
