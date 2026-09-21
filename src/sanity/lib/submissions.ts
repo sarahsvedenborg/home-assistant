@@ -5,7 +5,7 @@ import {
   EVENT_PARTICIPANT_ALL,
 } from "@/lib/event-participants";
 import type { DayNoteCategory } from "@/lib/day-note-categories";
-import type { BoardIssueStatus, BookSource } from "@/lib/types";
+import type { BoardIssueStatus, BookSource, ReadingKind, ReadingStatus } from "@/lib/types";
 import { isAllowedCoverUrl, lookupBook } from "@/lib/book-lookup";
 import { requireApproval } from "@/sanity/env";
 import { getReadClient, getWriteClient } from "@/sanity/lib/client";
@@ -714,7 +714,52 @@ async function uploadCoverFromUrl(
   }
 }
 
-export async function submitBook(input: { source: BookSource; id: string }) {
+function readingStatusFromDates(startedAt?: string, finishedAt?: string): ReadingStatus {
+  if (finishedAt) {
+    return "finished";
+  }
+
+  if (startedAt) {
+    return "reading";
+  }
+
+  return "wantToRead";
+}
+
+async function resolveFamilyMemberReferences(names: string[]) {
+  const client = getReadClient();
+
+  if (!client) {
+    throw new Error("Sanity reads are not configured yet.");
+  }
+
+  const familyMembers = await client.fetch<FamilyMemberLookup[]>(FAMILY_MEMBERS_QUERY);
+
+  return names.map((name) => {
+    const match = familyMembers.find(
+      (member) => member.name.toLowerCase() === name.toLowerCase(),
+    );
+
+    if (!match) {
+      throw new Error(`Fant ikke familiemedlemmet ${name}.`);
+    }
+
+    return {
+      _key: match._id,
+      _type: "reference" as const,
+      _ref: match._id,
+    };
+  });
+}
+
+export async function submitBook(input: {
+  source: BookSource;
+  id: string;
+  readerNames: string[];
+  startedAt?: string;
+  finishedAt?: string;
+  readingType: ReadingKind;
+}) {
   const client = getWriteClient();
 
   if (!client) {
@@ -727,71 +772,104 @@ export async function submitBook(input: { source: BookSource; id: string }) {
     throw new Error("Fant ikke boken. Søk på nytt og prøv igjen.");
   }
 
+  const readers = await resolveFamilyMemberReferences(input.readerNames);
+  let bookId: string | undefined;
+
   if (book.isbn) {
     const existing = await client.fetch<{ _id: string } | null>(
       `*[_type == "book" && isbn == $isbn][0]{_id}`,
       { isbn: book.isbn },
     );
 
-    if (existing?._id) {
-      return "Boken er allerede i biblioteket.";
-    }
+    bookId = existing?._id;
   }
 
-  const cover = book.coverUrl
-    ? await uploadCoverFromUrl(
-        client,
-        book.coverUrl,
-        `${book.isbn || book.id}.jpg`,
-        `Omslag for ${book.title}`,
-      )
-    : undefined;
+  if (!bookId) {
+    const cover = book.coverUrl
+      ? await uploadCoverFromUrl(
+          client,
+          book.coverUrl,
+          `${book.isbn || book.id}.jpg`,
+          `Omslag for ${book.title}`,
+        )
+      : undefined;
 
-  const document: {
-    _type: "book";
-    title: string;
-    author: string;
-    isbn?: string;
-    pageCount?: number;
-    publicationYear?: number;
-    originalLanguage?: string;
-    authorCountry?: string;
-    cover?: {
-      _type: "image";
-      asset: { _type: "reference"; _ref: string };
-      alt: string;
+    const document: {
+      _type: "book";
+      title: string;
+      author: string;
+      isbn?: string;
+      pageCount?: number;
+      publicationYear?: number;
+      originalLanguage?: string;
+      authorCountry?: string;
+      cover?: {
+        _type: "image";
+        asset: { _type: "reference"; _ref: string };
+        alt: string;
+      };
+    } = {
+      _type: "book",
+      title: book.title,
+      author: book.author,
     };
+
+    if (book.isbn) {
+      document.isbn = book.isbn;
+    }
+
+    if (typeof book.pageCount === "number" && book.pageCount >= 1) {
+      document.pageCount = Math.trunc(book.pageCount);
+    }
+
+    if (typeof book.publicationYear === "number") {
+      document.publicationYear = book.publicationYear;
+    }
+
+    if (book.originalLanguage) {
+      document.originalLanguage = book.originalLanguage;
+    }
+
+    if (book.authorCountry) {
+      document.authorCountry = book.authorCountry;
+    }
+
+    if (cover) {
+      document.cover = cover;
+    }
+
+    const created = await client.create(document);
+    bookId = created._id;
+  }
+
+  const reading: {
+    _type: "reading";
+    book: { _type: "reference"; _ref: string };
+    readers: Array<{ _key: string; _type: "reference"; _ref: string }>;
+    readingType: ReadingKind;
+    startedAt?: string;
+    finishedAt?: string;
+    status: ReadingStatus;
   } = {
-    _type: "book",
-    title: book.title,
-    author: book.author,
+    _type: "reading",
+    book: {
+      _type: "reference",
+      _ref: bookId,
+    },
+    readers,
+    readingType: input.readingType,
+    status: readingStatusFromDates(input.startedAt, input.finishedAt),
   };
 
-  if (book.isbn) {
-    document.isbn = book.isbn;
+  if (input.startedAt) {
+    reading.startedAt = input.startedAt;
   }
 
-  if (typeof book.pageCount === "number" && book.pageCount >= 1) {
-    document.pageCount = Math.trunc(book.pageCount);
+  if (input.finishedAt) {
+    reading.finishedAt = input.finishedAt;
   }
 
-  if (typeof book.publicationYear === "number") {
-    document.publicationYear = book.publicationYear;
-  }
-
-  if (book.originalLanguage) {
-    document.originalLanguage = book.originalLanguage;
-  }
-
-  if (book.authorCountry) {
-    document.authorCountry = book.authorCountry;
-  }
-
-  if (cover) {
-    document.cover = cover;
-  }
-
-  await client.create(document);
+  await client.create(reading);
 
   return `${book.title} er lagt til!`;
 }

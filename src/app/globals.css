@@ -5434,15 +5434,64 @@ html[data-theme="christmas"] .christmasSnow {
     padding: 1.75rem 2rem 2.1rem;
   }
 
-  .formModalBooks .formModalBody .field span {
+  .formModalBooks .formGrid {
+    gap: 1.35rem;
+  }
+
+  .formModalBooks .formModalBody .field span,
+  .formModalBooks .formModalBody legend {
     font-size: 1.55rem;
   }
 
-  .formModalBooks .formModalBody .field input {
+  .formModalBooks .formModalBody .field input:not([type="checkbox"]):not([type="radio"]) {
     min-height: 4.5rem;
     padding: 1rem 1.2rem;
     border-radius: 1.15rem;
     font-size: 1.7rem;
+  }
+
+  .formModalBooks .eventParticipantGrid {
+    gap: 0.75rem 1rem;
+  }
+
+  .formModalBooks .eventParticipantGrid .checkboxOption {
+    min-height: 4.25rem;
+    padding: 0.7rem 0.95rem;
+    border-radius: 1rem;
+  }
+
+  .formModalBooks .eventParticipantGrid .checkboxLabel {
+    font-size: 1.55rem;
+  }
+
+  .formModalBooks .checkboxInput {
+    width: 1.75rem !important;
+    min-width: 1.75rem;
+    max-width: 1.75rem;
+    height: 1.75rem !important;
+    min-height: 1.75rem;
+    max-height: 1.75rem;
+    line-height: 1.75rem;
+  }
+
+  .formModalBooks .checkboxInput::after {
+    width: 0.34rem;
+    height: 0.62rem;
+  }
+
+  .formModalBooks .radioInput {
+    width: 1.75rem !important;
+    min-width: 1.75rem;
+    max-width: 1.75rem;
+    height: 1.75rem !important;
+    min-height: 1.75rem;
+    max-height: 1.75rem;
+    line-height: 1.75rem;
+  }
+
+  .formModalBooks .radioInput::after {
+    width: 0.7rem;
+    height: 0.7rem;
   }
 
   .formModalBooks .bookSearchRow .buttonSecondary {

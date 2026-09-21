@@ -9,8 +9,9 @@ import {
 } from "@/lib/event-participants";
 import { EVENT_CATEGORY_VALUES } from "@/lib/event-categories";
 import { isMovieAudience, type MovieAudience } from "@/lib/movie-audiences";
+import { isReadingKind } from "@/lib/readings";
 import { SINGLE_EVENT_CATEGORY_VALUES } from "@/lib/single-event-categories";
-import type { BoardIssueStatus, BookSource } from "@/lib/types";
+import type { BoardIssueStatus, BookSource, ReadingKind } from "@/lib/types";
 import { WEEKDAY_VALUES } from "@/lib/weekdays";
 
 type ValidationSuccess<T> = {
@@ -40,6 +41,15 @@ function isValidOptionalUrl(value: string) {
   } catch {
     return false;
   }
+}
+
+function isIsoDate(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false;
+  }
+
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
 }
 
 // Converts a date-picker value (e.g. "2026-08-21") or an ISO string into a full
@@ -778,6 +788,10 @@ export function validateBookSubmission(
 ): ValidationResult<{
   source: BookSource;
   id: string;
+  readerNames: string[];
+  startedAt?: string;
+  finishedAt?: string;
+  readingType: ReadingKind;
 }> {
   const common = validateCommonFields(payload);
 
@@ -787,6 +801,20 @@ export function validateBookSubmission(
 
   const source = normalizeText(common.record.source);
   const id = normalizeText(common.record.id);
+  const startedAt = normalizeText(common.record.startedAt);
+  const finishedAt = normalizeText(common.record.finishedAt);
+  const readingType = normalizeText(common.record.readingType);
+  const readerNames = Array.from(
+    new Set(
+      (Array.isArray(common.record.readerNames) ? common.record.readerNames : [])
+        .map((name) => normalizeText(name))
+        .filter(Boolean),
+    ),
+  );
+
+  if (readerNames.length === 0) {
+    return { success: false, error: "Velg hvem boken gjelder." };
+  }
 
   if (source !== "boktyven" && source !== "openlibrary") {
     return { success: false, error: "Velg en bok fra søket." };
@@ -796,11 +824,35 @@ export function validateBookSubmission(
     return { success: false, error: "Velg en bok fra søket." };
   }
 
+  if (startedAt && !isIsoDate(startedAt)) {
+    return { success: false, error: "Velg en gyldig startdato." };
+  }
+
+  if (finishedAt && !isIsoDate(finishedAt)) {
+    return { success: false, error: "Velg en gyldig sluttdato." };
+  }
+
+  if (startedAt && finishedAt && finishedAt < startedAt) {
+    return { success: false, error: "Sluttdato kan ikke være før startdato." };
+  }
+
+  if (!isReadingKind(readingType)) {
+    return { success: false, error: "Velg hvordan boken leses." };
+  }
+
+  if (readingType === "together" && readerNames.length < 2) {
+    return { success: false, error: "Sammen-lesing trenger minst to lesere." };
+  }
+
   return {
     success: true,
     data: {
       source,
       id,
+      readerNames,
+      startedAt: startedAt || undefined,
+      finishedAt: finishedAt || undefined,
+      readingType,
     },
   };
 }
