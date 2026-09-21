@@ -9,6 +9,7 @@ import {
   FALLBACK_FAMILY_MEMBERS,
   FALLBACK_FEATURE_SUGGESTIONS,
   FALLBACK_MOVIES,
+  FALLBACK_READINGS,
   FALLBACK_RECIPES,
   FALLBACK_RECURRING_EVENTS,
   FALLBACK_SHORT_MESSAGES,
@@ -28,6 +29,7 @@ import type {
   FamilyMember,
   FeatureSuggestion,
   MovieRecommendation,
+  Reading,
   Recipe,
   RecurringEvent,
   ShortMessage,
@@ -44,6 +46,7 @@ import {
 } from "@/lib/day-note-categories";
 import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
 import { eventParticipantLabel } from "@/lib/event-participants";
+import { isReadingKind, isReadingStatus } from "@/lib/readings";
 import { singleEventCategoryLabel } from "@/lib/single-event-categories";
 import { isFlagCode } from "@/lib/flag-codes";
 import { osloDateKey } from "@/lib/family-feed";
@@ -64,8 +67,8 @@ import {
   SHOPPING_LIST_ITEMS_QUERY,
   SINGLE_EVENTS_QUERY,
   STUDIED_FLAGS_QUERY,
+  READINGS_QUERY,
   WISHLIST_ITEMS_QUERY,
-
 } from "@/sanity/lib/queries";
 
 type SanityFamilyMember = {
@@ -103,6 +106,29 @@ type SanityMovieRecommendation = {
   suggestedBy?: string;
   suitableFor?: string | string[];
   watched?: boolean;
+};
+
+type SanityReading = {
+  _id: string;
+  status?: string;
+  readingType?: string;
+  startedAt?: string;
+  finishedAt?: string;
+  currentPage?: number;
+  rating?: number;
+  note?: string;
+  book?: {
+    _id?: string;
+    title?: string;
+    author?: string;
+    coverUrl?: string;
+    coverAlt?: string;
+    pageCount?: number;
+  };
+  readers?: Array<{
+    _id?: string;
+    name?: string;
+  } | null>;
 };
 
 type SanityShoppingListItem = {
@@ -325,6 +351,68 @@ export async function getMovieRecommendations(): Promise<MovieRecommendation[]> 
     suitableFor: normalizeMovieAudience(movie.suitableFor),
     watched: Boolean(movie.watched),
   }));
+}
+
+export async function getReadings(): Promise<Reading[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_READINGS;
+  }
+
+  const readings = await fetchFromSanity<SanityReading[]>(READINGS_QUERY);
+
+  if (!readings) {
+    return FALLBACK_READINGS;
+  }
+
+  return readings.flatMap((reading) => {
+    const status = reading.status;
+    const readingType = reading.readingType;
+    const book = reading.book;
+
+    if (
+      !book?._id ||
+      !book.title ||
+      !book.author ||
+      !status ||
+      !isReadingStatus(status) ||
+      !readingType ||
+      !isReadingKind(readingType)
+    ) {
+      return [];
+    }
+
+    const readers = (reading.readers || []).flatMap((reader) =>
+      reader?._id && reader.name ? [{ id: reader._id, name: reader.name }] : [],
+    );
+
+    if (readers.length === 0) {
+      return [];
+    }
+
+    return [
+      {
+        id: reading._id,
+        status,
+        readingType,
+        startedAt: reading.startedAt,
+        finishedAt: reading.finishedAt,
+        currentPage:
+          typeof reading.currentPage === "number" ? reading.currentPage : undefined,
+        rating: typeof reading.rating === "number" ? reading.rating : undefined,
+        note: reading.note,
+        book: {
+          id: book._id,
+          title: book.title,
+          author: book.author,
+          coverUrl: book.coverUrl,
+          coverAlt: book.coverAlt,
+          pageCount:
+            typeof book.pageCount === "number" ? book.pageCount : undefined,
+        },
+        readers,
+      },
+    ];
+  });
 }
 
 export async function getShoppingList(): Promise<ShoppingList> {
