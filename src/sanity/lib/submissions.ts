@@ -5,7 +5,8 @@ import {
   EVENT_PARTICIPANT_ALL,
 } from "@/lib/event-participants";
 import type { DayNoteCategory } from "@/lib/day-note-categories";
-import type { BoardIssueStatus } from "@/lib/types";
+import type { BoardIssueStatus, BookSource } from "@/lib/types";
+import { isAllowedCoverUrl, lookupBook } from "@/lib/book-lookup";
 import { requireApproval } from "@/sanity/env";
 import { getReadClient, getWriteClient } from "@/sanity/lib/client";
 import { FAMILY_MEMBERS_QUERY } from "@/sanity/lib/queries";
@@ -660,4 +661,137 @@ export async function submitRecurringEvent(input: {
   return requireApproval
     ? "Aktiviteten er sendt! En voksen kan godkjenne den i studioet."
     : "Aktiviteten er lagt til!";
+}
+
+const COVER_MAX_BYTES = 5_000_000;
+
+async function uploadCoverFromUrl(
+  client: NonNullable<ReturnType<typeof getWriteClient>>,
+  coverUrl: string,
+  filename: string,
+  alt: string,
+) {
+  if (!isAllowedCoverUrl(coverUrl)) {
+    return undefined;
+  }
+
+  try {
+    const response = await fetch(coverUrl, {
+      headers: { Accept: "image/*", "User-Agent": "FamilyHub/1.0 (book cover)" },
+      signal: AbortSignal.timeout(8000),
+      redirect: "follow",
+    });
+
+    if (!response.ok || !isAllowedCoverUrl(response.url)) {
+      return undefined;
+    }
+
+    const contentType = (response.headers.get("content-type") || "").split(";")[0];
+    if (!contentType.startsWith("image/")) {
+      return undefined;
+    }
+
+    const buffer = Buffer.from(await response.arrayBuffer());
+    if (buffer.byteLength === 0 || buffer.byteLength > COVER_MAX_BYTES) {
+      return undefined;
+    }
+
+    const asset = await client.assets.upload("image", buffer, {
+      filename,
+      contentType,
+    });
+
+    return {
+      _type: "image" as const,
+      asset: {
+        _type: "reference" as const,
+        _ref: asset._id,
+      },
+      alt,
+    };
+  } catch {
+    return undefined;
+  }
+}
+
+export async function submitBook(input: { source: BookSource; id: string }) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const book = await lookupBook(input.source, input.id);
+
+  if (!book) {
+    throw new Error("Fant ikke boken. Søk på nytt og prøv igjen.");
+  }
+
+  if (book.isbn) {
+    const existing = await client.fetch<{ _id: string } | null>(
+      `*[_type == "book" && isbn == $isbn][0]{_id}`,
+      { isbn: book.isbn },
+    );
+
+    if (existing?._id) {
+      return "Boken er allerede i biblioteket.";
+    }
+  }
+
+  const cover = book.coverUrl
+    ? await uploadCoverFromUrl(
+        client,
+        book.coverUrl,
+        `${book.isbn || book.id}.jpg`,
+        `Omslag for ${book.title}`,
+      )
+    : undefined;
+
+  const document: {
+    _type: "book";
+    title: string;
+    author: string;
+    isbn?: string;
+    pageCount?: number;
+    publicationYear?: number;
+    originalLanguage?: string;
+    authorCountry?: string;
+    cover?: {
+      _type: "image";
+      asset: { _type: "reference"; _ref: string };
+      alt: string;
+    };
+  } = {
+    _type: "book",
+    title: book.title,
+    author: book.author,
+  };
+
+  if (book.isbn) {
+    document.isbn = book.isbn;
+  }
+
+  if (typeof book.pageCount === "number" && book.pageCount >= 1) {
+    document.pageCount = Math.trunc(book.pageCount);
+  }
+
+  if (typeof book.publicationYear === "number") {
+    document.publicationYear = book.publicationYear;
+  }
+
+  if (book.originalLanguage) {
+    document.originalLanguage = book.originalLanguage;
+  }
+
+  if (book.authorCountry) {
+    document.authorCountry = book.authorCountry;
+  }
+
+  if (cover) {
+    document.cover = cover;
+  }
+
+  await client.create(document);
+
+  return `${book.title} er lagt til!`;
 }

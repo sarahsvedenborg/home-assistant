@@ -5170,6 +5170,81 @@ html[data-theme="christmas"] .christmasSnow {
   font-size: 1.15rem;
 }
 
+.bookSearchRow {
+  display: flex;
+  gap: 0.65rem;
+  align-items: stretch;
+}
+
+.bookSearchRow input {
+  flex: 1;
+  min-width: 0;
+}
+
+.bookSearchEmpty {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+}
+
+.bookSearchResults {
+  display: grid;
+  gap: 0.65rem;
+  max-height: 22rem;
+  margin-top: 0.9rem;
+  overflow-y: auto;
+}
+
+.bookSearchHit {
+  display: grid;
+  grid-template-columns: 3.4rem minmax(0, 1fr);
+  gap: 0.8rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.65rem;
+  text-align: left;
+  color: inherit;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  cursor: pointer;
+}
+
+.bookSearchHitSelected,
+.bookSearchHit:hover,
+.bookSearchHit:focus-visible {
+  border-color: color-mix(in srgb, var(--warm) 50%, transparent);
+}
+
+.bookSearchHitSelected {
+  background: color-mix(in srgb, var(--warm-soft) 70%, var(--surface));
+}
+
+.bookSearchCover {
+  width: 3.4rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 0.55rem;
+  background: linear-gradient(180deg, var(--warm-soft), var(--page-end));
+}
+
+.bookSearchCopy {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.bookSearchCopy strong,
+.bookSearchCopy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bookSearchCopy span {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 @media (min-width: 700px) {
   /* Centered dialog, anchored toward the top so the touchscreen keyboard
      (which covers the lower half) does not hide the fields or submit button */
@@ -5278,6 +5353,86 @@ html[data-theme="christmas"] .christmasSnow {
     width: 5.25rem;
     height: 5.25rem;
     font-size: 2.6rem;
+  }
+
+  .formModalBackdrop:has(.formModalBooks) {
+    padding: 4vh 2rem 2rem;
+  }
+
+  .formModal.formModalBooks {
+    width: min(52rem, 100%);
+    max-height: 90dvh;
+    border-radius: 2rem;
+  }
+
+  .formModalBooks .formModalHeader {
+    padding: 1.5rem 1.85rem;
+  }
+
+  .formModalBooks .formModalHeader h2 {
+    font-size: 2.6rem;
+  }
+
+  .formModalBooks .formModalClose {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 2.5rem;
+  }
+
+  .formModalBooks .formModalBody {
+    padding: 1.75rem 2rem 2.1rem;
+  }
+
+  .formModalBooks .formModalBody .field span {
+    font-size: 1.55rem;
+  }
+
+  .formModalBooks .formModalBody .field input {
+    min-height: 4.5rem;
+    padding: 1rem 1.2rem;
+    border-radius: 1.15rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalBooks .bookSearchRow .buttonSecondary {
+    min-height: 4.5rem;
+    padding: 0 1.4rem;
+    font-size: 1.55rem;
+  }
+
+  .formModalBooks .bookSearchResults {
+    max-height: 28rem;
+    gap: 0.85rem;
+  }
+
+  .formModalBooks .bookSearchHit {
+    grid-template-columns: 4.4rem minmax(0, 1fr);
+    padding: 0.85rem;
+    border-radius: 1.2rem;
+  }
+
+  .formModalBooks .bookSearchCover {
+    width: 4.4rem;
+    height: 6.4rem;
+  }
+
+  .formModalBooks .bookSearchCopy strong {
+    font-size: 1.55rem;
+  }
+
+  .formModalBooks .bookSearchCopy span,
+  .formModalBooks .bookSearchEmpty {
+    font-size: 1.3rem;
+  }
+
+  .formModalBooks .formModalBody .buttonPrimary {
+    min-height: 5rem;
+    padding: 1.05rem 1.9rem;
+    font-size: 1.7rem;
+  }
+
+  .formModalBooks .formModalConfirmation p {
+    font-size: 2.1rem;
   }
 
   .formModalBackdrop:has(.formModalNotes) {
