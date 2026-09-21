@@ -65,6 +65,7 @@ export type BookSearchHit = {
   author: string;
   coverUrl?: string;
   publicationYear?: number;
+  publisher?: string;
 };
 
 export type ReadingReader = {

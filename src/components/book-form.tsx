@@ -192,14 +192,14 @@ export function BookForm({ familyMembers, onSuccess }: BookFormProps) {
         </fieldset>
 
         <label className="field fieldWide">
-          <span>Søk etter tittel</span>
+          <span>Søk etter tittel, ISBN eller forlag</span>
           <div className="bookSearchRow">
             <input
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               onKeyDown={handleSearchKeyDown}
-              placeholder="Sofies verden"
+              placeholder="Anna Karenina, Oxford…"
               maxLength={120}
               autoComplete="off"
             />
@@ -244,7 +244,15 @@ export function BookForm({ familyMembers, onSuccess }: BookFormProps) {
                     <strong>{book.title}</strong>
                     <span>{book.author}</span>
                     <span>
-                      {[book.publicationYear, book.source === "boktyven" ? "Norge" : "Internasjonalt"]
+                      {[
+                        book.publicationYear,
+                        book.publisher,
+                        book.publisher
+                          ? null
+                          : book.source === "boktyven"
+                            ? "Norge"
+                            : "Internasjonalt",
+                      ]
                         .filter(Boolean)
                         .join(" · ")}
                     </span>

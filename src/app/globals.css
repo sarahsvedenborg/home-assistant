@@ -5189,7 +5189,7 @@ html[data-theme="christmas"] .christmasSnow {
 .bookSearchResults {
   display: grid;
   gap: 0.65rem;
-  max-height: 22rem;
+  max-height: 28rem;
   margin-top: 0.9rem;
   overflow-y: auto;
 }
