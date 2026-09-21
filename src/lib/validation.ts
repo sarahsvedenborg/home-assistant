@@ -10,7 +10,7 @@ import {
 import { EVENT_CATEGORY_VALUES } from "@/lib/event-categories";
 import { isMovieAudience, type MovieAudience } from "@/lib/movie-audiences";
 import { SINGLE_EVENT_CATEGORY_VALUES } from "@/lib/single-event-categories";
-import type { BoardIssueStatus } from "@/lib/types";
+import type { BoardIssueStatus, BookSource } from "@/lib/types";
 import { WEEKDAY_VALUES } from "@/lib/weekdays";
 
 type ValidationSuccess<T> = {
@@ -753,6 +753,54 @@ export function validateRecurringEventSubmission(
       whatToBring: whatToBring || undefined,
       startDate: startDate || undefined,
       endDate: endDate || undefined,
+    },
+  };
+}
+
+export function validateBookSearchQuery(
+  query: string,
+): ValidationResult<{ query: string }> {
+  const trimmed = query.trim();
+
+  if (trimmed.length < 2) {
+    return { success: false, error: "Skriv minst to bokstaver for å søke." };
+  }
+
+  if (trimmed.length > 120) {
+    return { success: false, error: "Søket må være under 120 tegn." };
+  }
+
+  return { success: true, data: { query: trimmed } };
+}
+
+export function validateBookSubmission(
+  payload: unknown,
+): ValidationResult<{
+  source: BookSource;
+  id: string;
+}> {
+  const common = validateCommonFields(payload);
+
+  if (!common.success) {
+    return common;
+  }
+
+  const source = normalizeText(common.record.source);
+  const id = normalizeText(common.record.id);
+
+  if (source !== "boktyven" && source !== "openlibrary") {
+    return { success: false, error: "Velg en bok fra søket." };
+  }
+
+  if (!id || id.length > 80 || !/^[A-Za-z0-9._:-]+$/.test(id)) {
+    return { success: false, error: "Velg en bok fra søket." };
+  }
+
+  return {
+    success: true,
+    data: {
+      source,
+      id,
     },
   };
 }

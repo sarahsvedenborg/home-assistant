@@ -56,6 +56,17 @@ export type Book = {
   pageCount?: number;
 };
 
+export type BookSource = "boktyven" | "openlibrary";
+
+export type BookSearchHit = {
+  source: BookSource;
+  id: string;
+  title: string;
+  author: string;
+  coverUrl?: string;
+  publicationYear?: number;
+};
+
 export type ReadingReader = {
   id: string;
   name: string;

@@ -29,7 +29,13 @@ export default async function BokerPage() {
         )}
       </section>
 
-      <AddButton title="Legg til bok" label="Legg til bok" anchor="add-book">
+      <AddButton
+        title="Legg til bok"
+        label="Legg til bok"
+        anchor="add-book"
+        wide
+        modalClassName="formModalBooks"
+      >
         <BookForm />
       </AddButton>
     </main>
