@@ -49,6 +49,76 @@ export function currentReadingsForMember(readings: Reading[], memberId: string) 
   return readingsForMember(readings, memberId).filter(isCurrentlyReading);
 }
 
+export function isWantToRead(reading: Reading) {
+  return !isCurrentlyReading(reading) && !isFinishedReading(reading) && reading.status !== "abandoned";
+}
+
+export function wantToReadForMember(readings: Reading[], memberId: string) {
+  return readingsForMember(readings, memberId).filter(isWantToRead);
+}
+
+export function togetherFinishedReadings(readings: Reading[]) {
+  const seen = new Set<string>();
+
+  return readings
+    .filter((reading) => reading.readingType === "together" && isFinishedReading(reading))
+    .sort(compareFinishedAt)
+    .filter((reading) => {
+      if (seen.has(reading.book.id)) {
+        return false;
+      }
+
+      seen.add(reading.book.id);
+      return true;
+    });
+}
+
+const NORWEGIAN_COUNTS: Record<number, string> = {
+  2: "to",
+  3: "tre",
+  4: "fire",
+  5: "fem",
+  6: "seks",
+  7: "sju",
+  8: "åtte",
+  9: "ni",
+  10: "ti",
+};
+
+export function libraryAuthorInsight(readings: Reading[], memberId: string) {
+  const authors = new Map<string, { author: string; count: number; latest: string }>();
+
+  for (const reading of finishedReadingsForMember(readings, memberId)) {
+    const author = reading.book.author.trim();
+    if (!author) {
+      continue;
+    }
+
+    const key = author.toLowerCase();
+    const previous = authors.get(key);
+    authors.set(key, {
+      author,
+      count: (previous?.count || 0) + 1,
+      latest: reading.finishedAt || previous?.latest || "",
+    });
+  }
+
+  const top = [...authors.values()].sort((left, right) => {
+    if (right.count !== left.count) {
+      return right.count - left.count;
+    }
+
+    return right.latest.localeCompare(left.latest);
+  })[0];
+
+  if (!top || top.count < 2) {
+    return null;
+  }
+
+  const countLabel = NORWEGIAN_COUNTS[top.count] || String(top.count);
+  return `Du har lest ${countLabel} ${top.author}-bøker. Hvilken blir den neste?`;
+}
+
 export function bookshelfTitle(name: string) {
   return `${name} sin bokhylle`;
 }
