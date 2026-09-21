@@ -14,6 +14,10 @@ export const READING_TYPE_LABELS: Record<ReadingKind, string> = {
   audioAndText: "Lydbok og tekst",
 };
 
+export const READING_TYPE_OPTIONS = (
+  Object.entries(READING_TYPE_LABELS) as Array<[ReadingKind, string]>
+).map(([value, title]) => ({ value, title }));
+
 export function isReadingStatus(value: string): value is ReadingStatus {
   return value in READING_STATUS_LABELS;
 }

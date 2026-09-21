@@ -36,7 +36,7 @@ export default async function BokerPage() {
         wide
         modalClassName="formModalBooks"
       >
-        <BookForm />
+        <BookForm familyMembers={familyMembers.map((member) => member.name)} />
       </AddButton>
     </main>
   );
