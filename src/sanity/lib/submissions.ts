@@ -664,13 +664,33 @@ export async function submitRecurringEvent(input: {
 }
 
 const COVER_MAX_BYTES = 5_000_000;
+const COVER_MIN_BYTES = 1024;
+
+type BookCoverImage = {
+  _type: "image";
+  asset: { _type: "reference"; _ref: string };
+  alt: string;
+};
+
+function coverFilename(base: string, contentType: string) {
+  const extension =
+    contentType === "image/png"
+      ? "png"
+      : contentType === "image/webp"
+        ? "webp"
+        : contentType === "image/gif"
+          ? "gif"
+          : "jpg";
+
+  return `${base.replace(/[^A-Za-z0-9._-]+/g, "-")}.${extension}`;
+}
 
 async function uploadCoverFromUrl(
   client: NonNullable<ReturnType<typeof getWriteClient>>,
   coverUrl: string,
   filename: string,
   alt: string,
-) {
+): Promise<BookCoverImage | undefined> {
   if (!isAllowedCoverUrl(coverUrl)) {
     return undefined;
   }
@@ -678,38 +698,47 @@ async function uploadCoverFromUrl(
   try {
     const response = await fetch(coverUrl, {
       headers: { Accept: "image/*", "User-Agent": "FamilyHub/1.0 (book cover)" },
-      signal: AbortSignal.timeout(8000),
+      signal: AbortSignal.timeout(12000),
       redirect: "follow",
+      cache: "no-store",
     });
 
-    if (!response.ok || !isAllowedCoverUrl(response.url)) {
+    if (!response.ok) {
       return undefined;
     }
 
-    const contentType = (response.headers.get("content-type") || "").split(";")[0];
-    if (!contentType.startsWith("image/")) {
+    // Open Library large covers often 302 to archive.org. The original URL is
+    // allowlisted; only keep following if the final hop stays on HTTPS.
+    const finalUrl = new URL(response.url);
+    if (finalUrl.protocol !== "https:") {
+      return undefined;
+    }
+
+    const contentType = (response.headers.get("content-type") || "").split(";")[0].trim();
+    if (!contentType.startsWith("image/") || contentType === "image/svg+xml") {
       return undefined;
     }
 
     const buffer = Buffer.from(await response.arrayBuffer());
-    if (buffer.byteLength === 0 || buffer.byteLength > COVER_MAX_BYTES) {
+    if (buffer.byteLength < COVER_MIN_BYTES || buffer.byteLength > COVER_MAX_BYTES) {
       return undefined;
     }
 
     const asset = await client.assets.upload("image", buffer, {
-      filename,
+      filename: coverFilename(filename, contentType),
       contentType,
     });
 
     return {
-      _type: "image" as const,
+      _type: "image",
       asset: {
-        _type: "reference" as const,
+        _type: "reference",
         _ref: asset._id,
       },
       alt,
     };
-  } catch {
+  } catch (error) {
+    console.error("Book cover upload failed", error);
     return undefined;
   }
 }
@@ -773,27 +802,38 @@ export async function submitBook(input: {
   }
 
   const readers = await resolveFamilyMemberReferences(input.readerNames);
+  let existing:
+    | {
+        _id: string;
+        hasCover: boolean;
+      }
+    | null
+    | undefined;
   let bookId: string | undefined;
 
   if (book.isbn) {
-    const existing = await client.fetch<{ _id: string } | null>(
-      `*[_type == "book" && isbn == $isbn][0]{_id}`,
+    existing = await client.fetch<{ _id: string; hasCover: boolean } | null>(
+      `*[_type == "book" && isbn == $isbn][0]{_id, "hasCover": defined(cover.asset)}`,
       { isbn: book.isbn },
     );
-
     bookId = existing?._id;
   }
 
-  if (!bookId) {
-    const cover = book.coverUrl
+  const cover =
+    book.coverUrl && (!existing || !existing.hasCover)
       ? await uploadCoverFromUrl(
           client,
           book.coverUrl,
-          `${book.isbn || book.id}.jpg`,
+          book.isbn || book.id,
           `Omslag for ${book.title}`,
         )
       : undefined;
 
+  if (existing?._id && !existing.hasCover && cover) {
+    await client.patch(existing._id).set({ cover }).commit();
+  }
+
+  if (!bookId) {
     const document: {
       _type: "book";
       title: string;
@@ -803,11 +843,7 @@ export async function submitBook(input: {
       publicationYear?: number;
       originalLanguage?: string;
       authorCountry?: string;
-      cover?: {
-        _type: "image";
-        asset: { _type: "reference"; _ref: string };
-        alt: string;
-      };
+      cover?: BookCoverImage;
     } = {
       _type: "book",
       title: book.title,

@@ -127,12 +127,35 @@ function yearFromValue(value: unknown) {
   return match ? Number(match[1]) : undefined;
 }
 
+function firstCoverId(value: unknown) {
+  for (const item of asList(value)) {
+    const id = asNumber(item);
+    if (typeof id === "number" && id > 0) {
+      return Math.trunc(id);
+    }
+  }
+
+  return undefined;
+}
+
 function openLibraryCoverUrl(coverId?: number, size: "M" | "L" = "M") {
-  if (typeof coverId !== "number" || !Number.isFinite(coverId)) {
+  if (typeof coverId !== "number" || !Number.isFinite(coverId) || coverId <= 0) {
     return undefined;
   }
 
-  return `https://covers.openlibrary.org/b/id/${Math.trunc(coverId)}-${size}.jpg`;
+  return `https://covers.openlibrary.org/b/id/${Math.trunc(coverId)}-${size}.jpg?default=false`;
+}
+
+function openLibraryCoverFallback(olid?: string, isbn?: string) {
+  if (olid && /^OL[A-Za-z0-9]+$/.test(olid)) {
+    return `https://covers.openlibrary.org/b/olid/${olid}-L.jpg?default=false`;
+  }
+
+  if (isbn) {
+    return `https://covers.openlibrary.org/b/isbn/${encodeURIComponent(isbn)}-L.jpg?default=false`;
+  }
+
+  return undefined;
 }
 
 function olidFromKey(key?: string) {
@@ -227,7 +250,7 @@ function mapOpenLibrarySearchDoc(value: unknown): BookCandidate | null {
   ]);
   const editionId = olidFromKey(asString(edition?.key));
   const workId = olidFromKey(asString(record.key));
-  const coverId = asNumber(edition?.cover_i) ?? asNumber(record.cover_i);
+  const coverId = firstCoverId([edition?.cover_i, record.cover_i]);
   const language = asString(asList(edition?.language)[0]) || asString(asList(record.language)[0]);
 
   if (!title || !author || !(editionId || workId || isbn)) {
@@ -389,18 +412,34 @@ async function lookupOpenLibrary(id: string): Promise<BookCandidate | null> {
       ...asList(payload.isbn_10).map(asString),
     ]);
     const languageKey = asString(asRecord(asList(payload.languages)[0])?.key);
-    const coverId = asNumber(asList(payload.covers)[0]);
+    let coverId = firstCoverId(payload.covers);
+
+    if (!coverId) {
+      const workKey = asString(asRecord(asList(payload.works)[0])?.key);
+      if (workKey) {
+        try {
+          const path = workKey.startsWith("/") ? workKey : `/works/${workKey}`;
+          const work = asRecord(await fetchJson(`https://openlibrary.org${path}.json`));
+          coverId = firstCoverId(work?.covers);
+        } catch {
+          coverId = undefined;
+        }
+      }
+    }
 
     if (!title || !author) {
       return null;
     }
 
+    const resolvedId = olidFromKey(asString(payload.key)) || olid || isbnValue || title;
+
     return {
       source: "openlibrary",
-      id: olidFromKey(asString(payload.key)) || olid || isbnValue || title,
+      id: resolvedId,
       title: title.slice(0, 200),
       author: author.slice(0, 160),
-      coverUrl: openLibraryCoverUrl(coverId, "L"),
+      coverUrl:
+        openLibraryCoverUrl(coverId, "L") || openLibraryCoverFallback(resolvedId, isbnValue),
       isbn: isbnValue,
       pageCount: asNumber(payload.number_of_pages),
       publicationYear: yearFromValue(payload.publish_date),
