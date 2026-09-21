@@ -4,8 +4,52 @@ import { boktyvenAccessToken } from "@/sanity/env";
 import type { BookSearchHit, BookSource } from "@/lib/types";
 
 const USER_AGENT = "FamilyHub/1.0 (book lookup)";
-const SEARCH_LIMIT = 8;
+const WORK_LIMIT = 6;
+const EDITION_LIMIT = 20;
+const PUBLISHER_EXPAND_LIMIT = 6;
 const FETCH_TIMEOUT_MS = 8000;
+const JUNK_PUBLISHER =
+  /createspace|independently published|indypublish|lulu|kindle direct|print on demand/i;
+const EDITION_HOUSES = [
+  { match: /oxford/, name: "Oxford" },
+  { match: /penguin/, name: "Penguin" },
+  { match: /vintage/, name: "Vintage" },
+  { match: /norton/, name: "Norton" },
+  { match: /everyman/, name: "Everyman" },
+  { match: /folio/, name: "Folio Society" },
+  { match: /modern library/, name: "Modern Library" },
+  { match: /wordsworth/, name: "Wordsworth" },
+  { match: /gyldendal/, name: "Gyldendal" },
+  { match: /aschehoug/, name: "Aschehoug" },
+  { match: /cappelen/, name: "Cappelen" },
+  { match: /oktober/, name: "Oktober" },
+  { match: /samlaget/, name: "Samlaget" },
+  { match: /knopf/, name: "Knopf" },
+  { match: /signet/, name: "Signet" },
+  { match: /bantam/, name: "Bantam" },
+  { match: /harper/, name: "Harper" },
+] as const;
+const OPEN_LIBRARY_FIELDS = [
+  "key",
+  "title",
+  "author_name",
+  "first_publish_year",
+  "isbn",
+  "cover_i",
+  "language",
+  "publisher",
+  "edition_count",
+  "number_of_pages_median",
+  "editions",
+  "editions.key",
+  "editions.title",
+  "editions.isbn",
+  "editions.cover_i",
+  "editions.number_of_pages",
+  "editions.language",
+  "editions.publish_year",
+  "editions.publisher",
+].join(",");
 
 export type BookCandidate = BookSearchHit & {
   isbn?: string;
@@ -207,6 +251,7 @@ function mapBoktyvenBook(value: unknown): BookCandidate | null {
     publicationYear: yearFromValue(record.publicationYear ?? record.year),
     originalLanguage: languageLabel(asString(record.language) || asString(record.originalLanguage)),
     authorCountry: asString(record.authorCountry) || asString(record.country) || undefined,
+    publisher: asString(record.publisher) || undefined,
   };
 }
 
@@ -225,33 +270,66 @@ async function searchBoktyven(query: string): Promise<BookCandidate[]> {
     return asList(payload)
       .map(mapBoktyvenBook)
       .filter((book): book is BookCandidate => Boolean(book))
-      .slice(0, SEARCH_LIMIT);
+      .slice(0, EDITION_LIMIT);
   } catch {
     return [];
   }
 }
 
-function mapOpenLibrarySearchDoc(value: unknown): BookCandidate | null {
-  const record = asRecord(value);
-  if (!record) {
-    return null;
+function editionPublisher(edition?: Record<string, unknown> | null) {
+  return asString(asList(edition?.publisher)[0]) || asString(edition?.publisher) || undefined;
+}
+
+function pickPublishers(work: Record<string, unknown>, query: string) {
+  const queryText = query.toLowerCase();
+  const names = asList(work.publisher)
+    .map((value) => asString(value))
+    .filter((name) => name && !JUNK_PUBLISHER.test(name));
+  const unique: string[] = [];
+
+  function addPublisher(name: string) {
+    const exists = unique.some((item) => item.toLowerCase() === name.toLowerCase());
+    if (!exists) {
+      unique.push(name);
+    }
   }
 
-  const editions = asRecord(record.editions);
-  const edition = asRecord(asList(editions?.docs)[0]);
-  const title = asString(edition?.title) || asString(record.title);
-  const authors = Array.isArray(record.author_name)
-    ? record.author_name.map(asString).filter(Boolean)
+  if ((asNumber(work.edition_count) ?? 0) >= 10) {
+    for (const house of EDITION_HOUSES.slice(0, 6)) {
+      addPublisher(house.name);
+    }
+  }
+
+  for (const house of EDITION_HOUSES) {
+    if (
+      queryText.includes(house.name.toLowerCase()) ||
+      names.some((name) => house.match.test(name))
+    ) {
+      addPublisher(house.name);
+    }
+  }
+
+  return unique.slice(0, PUBLISHER_EXPAND_LIMIT);
+}
+
+function mapOpenLibraryEdition(
+  work: Record<string, unknown>,
+  edition?: Record<string, unknown> | null,
+): BookCandidate | null {
+  const title = asString(edition?.title) || asString(work.title);
+  const authors = Array.isArray(work.author_name)
+    ? work.author_name.map(asString).filter(Boolean)
     : [];
   const author = authors.join(", ");
   const isbn = preferIsbn([
     ...asList(edition?.isbn).map(asString),
-    ...asList(record.isbn).map(asString),
+    ...(!edition ? asList(work.isbn).map(asString) : []),
   ]);
   const editionId = olidFromKey(asString(edition?.key));
-  const workId = olidFromKey(asString(record.key));
-  const coverId = firstCoverId([edition?.cover_i, record.cover_i]);
-  const language = asString(asList(edition?.language)[0]) || asString(asList(record.language)[0]);
+  const workId = olidFromKey(asString(work.key));
+  const coverId = firstCoverId([edition?.cover_i, work.cover_i]);
+  const language = asString(asList(edition?.language)[0]) || asString(asList(work.language)[0]);
+  const publisher = editionPublisher(edition);
 
   if (!title || !author || !(editionId || workId || isbn)) {
     return null;
@@ -264,46 +342,90 @@ function mapOpenLibrarySearchDoc(value: unknown): BookCandidate | null {
     author: author.slice(0, 160),
     coverUrl: openLibraryCoverUrl(coverId),
     isbn,
-    pageCount: asNumber(edition?.number_of_pages) ?? asNumber(record.number_of_pages_median),
+    pageCount: asNumber(edition?.number_of_pages) ?? asNumber(work.number_of_pages_median),
     publicationYear:
-      yearFromValue(asList(edition?.publish_year)[0]) ?? yearFromValue(record.first_publish_year),
+      yearFromValue(asList(edition?.publish_year)[0]) ?? yearFromValue(work.first_publish_year),
     originalLanguage: languageLabel(language),
+    publisher,
   };
 }
 
-async function searchOpenLibrary(query: string): Promise<BookCandidate[]> {
-  const url = new URL("https://openlibrary.org/search.json");
-  url.searchParams.set("title", query);
-  url.searchParams.set("limit", String(SEARCH_LIMIT));
-  url.searchParams.set(
-    "fields",
-    [
-      "key",
-      "title",
-      "author_name",
-      "first_publish_year",
-      "isbn",
-      "cover_i",
-      "language",
-      "number_of_pages_median",
-      "editions",
-      "editions.key",
-      "editions.title",
-      "editions.isbn",
-      "editions.cover_i",
-      "editions.number_of_pages",
-      "editions.language",
-      "editions.publish_year",
-    ].join(","),
-  );
+function firstMappedEdition(value: unknown) {
+  const work = asRecord(value);
+  if (!work) {
+    return null;
+  }
 
+  return mapOpenLibraryEdition(work, asRecord(asList(asRecord(work.editions)?.docs)[0]));
+}
+
+function addUniqueEdition(hits: BookCandidate[], seen: Set<string>, hit: BookCandidate | null) {
+  if (!hit) {
+    return;
+  }
+
+  const key = hit.isbn || `${hit.source}:${hit.id}`;
+  if (seen.has(key) || seen.has(`${hit.source}:${hit.id}`)) {
+    return;
+  }
+
+  seen.add(key);
+  seen.add(`${hit.source}:${hit.id}`);
+  hits.push(hit);
+}
+
+async function searchOpenLibraryDocs(params: Record<string, string>) {
+  const url = new URL("https://openlibrary.org/search.json");
+  for (const [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, value);
+  }
+  url.searchParams.set("fields", OPEN_LIBRARY_FIELDS);
+
+  const payload = asRecord(await fetchJson(url.toString()));
+  return asList(payload?.docs);
+}
+
+async function searchOpenLibrary(query: string): Promise<BookCandidate[]> {
   try {
-    const payload = await fetchJson(url.toString());
-    const record = asRecord(payload);
-    return asList(record?.docs)
-      .map(mapOpenLibrarySearchDoc)
-      .filter((book): book is BookCandidate => Boolean(book))
-      .slice(0, SEARCH_LIMIT);
+    const isbnQuery = preferIsbn([query]);
+    const docs = isbnQuery
+      ? await searchOpenLibraryDocs({ isbn: isbnQuery, limit: "3" })
+      : await searchOpenLibraryDocs({ q: query, limit: String(WORK_LIMIT) });
+
+    const hits: BookCandidate[] = [];
+    const seen = new Set<string>();
+    const [primary, ...others] = docs
+      .map((value) => asRecord(value))
+      .filter((work): work is Record<string, unknown> => Boolean(work));
+
+    addUniqueEdition(hits, seen, primary ? firstMappedEdition(primary) : null);
+
+    if (primary && !isbnQuery && (asNumber(primary.edition_count) ?? 0) > 1) {
+      const extras = await Promise.all(
+        pickPublishers(primary, query).map(async (publisher) => {
+          try {
+            const publisherDocs = await searchOpenLibraryDocs({
+              q: query,
+              publisher,
+              limit: "1",
+            });
+            return firstMappedEdition(publisherDocs[0]);
+          } catch {
+            return null;
+          }
+        }),
+      );
+
+      for (const extra of extras) {
+        addUniqueEdition(hits, seen, extra);
+      }
+    }
+
+    for (const work of others) {
+      addUniqueEdition(hits, seen, firstMappedEdition(work));
+    }
+
+    return hits.slice(0, EDITION_LIMIT);
   } catch {
     return [];
   }
@@ -320,6 +442,7 @@ export async function searchBooks(query: string): Promise<BookSearchHit[]> {
     author: hit.author,
     coverUrl: hit.coverUrl,
     publicationYear: hit.publicationYear,
+    publisher: hit.publisher,
   }));
 }
 
