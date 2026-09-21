@@ -1,3 +1,4 @@
+import { osloDateKey } from "@/lib/family-feed";
 import type { FamilyMember, Reading, ReadingKind, ReadingStatus } from "@/lib/types";
 
 export const READING_STATUS_LABELS: Record<ReadingStatus, string> = {
@@ -50,6 +51,59 @@ export function currentReadingsForMember(readings: Reading[], memberId: string) 
 
 export function bookshelfTitle(name: string) {
   return `${name} sin bokhylle`;
+}
+
+export function libraryTitle(name: string) {
+  const trimmed = name.trim();
+  return /[sxz]$/i.test(trimmed) ? `${trimmed}' bibliotek` : `${trimmed}s bibliotek`;
+}
+
+export const LIBRARY_QUOTE = "En ny bok er et nytt eventyr som venter.";
+
+export function osloYear(date = new Date()) {
+  return Number(osloDateKey(date).slice(0, 4));
+}
+
+export function readingYear(value?: string) {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return undefined;
+  }
+
+  return Number(value.slice(0, 4));
+}
+
+export function finishedReadingsForMember(readings: Reading[], memberId: string) {
+  return readingsForMember(readings, memberId)
+    .filter(isFinishedReading)
+    .sort(compareFinishedAt);
+}
+
+export function finishedReadingsInYear(
+  readings: Reading[],
+  memberId: string,
+  year: number,
+) {
+  return finishedReadingsForMember(readings, memberId).filter(
+    (reading) => readingYear(reading.finishedAt) === year,
+  );
+}
+
+export function finishedReadingYears(readings: Reading[], memberId: string) {
+  const years = new Set<number>([osloYear()]);
+
+  for (const reading of finishedReadingsForMember(readings, memberId)) {
+    const year = readingYear(reading.finishedAt);
+    if (year) {
+      years.add(year);
+    }
+  }
+
+  return [...years].sort((left, right) => right - left);
+}
+
+export function defaultFinishedYear(readings: Reading[], memberId: string) {
+  const latest = finishedReadingsForMember(readings, memberId)[0];
+  return readingYear(latest?.finishedAt) ?? osloYear();
 }
 
 export function otherReaderNames(reading: Reading, memberId: string) {

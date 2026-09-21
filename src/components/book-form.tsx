@@ -8,6 +8,7 @@ import type { BookSearchHit, ReadingKind } from "@/lib/types";
 
 type BookFormProps = {
   familyMembers: string[];
+  defaultReaders?: string[];
   onSuccess?: (message: string) => void;
 };
 
@@ -16,11 +17,15 @@ const messageClassNames = {
   success: "feedback feedbackSuccess",
 };
 
-export function BookForm({ familyMembers, onSuccess }: BookFormProps) {
+export function BookForm({
+  familyMembers,
+  defaultReaders = [],
+  onSuccess,
+}: BookFormProps) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [website, setWebsite] = useState("");
-  const [readerNames, setReaderNames] = useState<string[]>([]);
+  const [readerNames, setReaderNames] = useState<string[]>(defaultReaders);
   const [startedAt, setStartedAt] = useState("");
   const [finishedAt, setFinishedAt] = useState("");
   const [readingType, setReadingType] = useState<ReadingKind>("self");
@@ -41,7 +46,7 @@ export function BookForm({ familyMembers, onSuccess }: BookFormProps) {
 
   function resetForm() {
     setQuery("");
-    setReaderNames([]);
+    setReaderNames(defaultReaders);
     setStartedAt("");
     setFinishedAt("");
     setReadingType("self");
