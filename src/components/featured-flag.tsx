@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { FlagFacts } from "@/components/flag-facts";
 import { FlagMedia } from "@/components/flag-media";
 import type { Country } from "@/lib/types";
 
@@ -72,22 +73,7 @@ export function FeaturedFlag({
         ) : null}
       </div>
 
-      {country.capital || country.continent ? (
-        <dl className="flagCardFacts flagHeroFacts">
-          {country.capital ? (
-            <div>
-              <dt>Hovedstad</dt>
-              <dd>{country.capital}</dd>
-            </div>
-          ) : null}
-          {country.continent ? (
-            <div>
-              <dt>Kontinent</dt>
-              <dd>{country.continent}</dd>
-            </div>
-          ) : null}
-        </dl>
-      ) : null}
+      <FlagFacts country={country} className="flagHeroFacts" />
 
       <FlagMedia country={country} featured key={country.code} />
 

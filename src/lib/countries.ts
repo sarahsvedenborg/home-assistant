@@ -20,12 +20,29 @@ const CONTINENT_LABELS: Record<string, string> = {
 type CountryFacts = {
   capital?: string;
   continent?: string;
+  independent?: boolean;
+  partOf?: string;
 };
 
 const EXTRA_FLAG_FACTS: Record<string, CountryFacts> = {
-  "gb-eng": { capital: "London", continent: "Europa" },
-  "gb-sct": { capital: "Edinburgh", continent: "Europa" },
-  "gb-wls": { capital: "Cardiff", continent: "Europa" },
+  "gb-eng": {
+    capital: "London",
+    continent: "Europa",
+    independent: false,
+    partOf: "Storbritannia",
+  },
+  "gb-sct": {
+    capital: "Edinburgh",
+    continent: "Europa",
+    independent: false,
+    partOf: "Storbritannia",
+  },
+  "gb-wls": {
+    capital: "Cardiff",
+    continent: "Europa",
+    independent: false,
+    partOf: "Storbritannia",
+  },
 };
 
 type SourceCountry = {
@@ -66,6 +83,8 @@ function countryFromCode(
     mapUrl: `https://borderly.dev/country/${normalized}.svg`,
     capital: facts.capital,
     continent: facts.continent,
+    independent: facts.independent ?? true,
+    partOf: facts.partOf,
   };
 }
 
@@ -181,7 +200,13 @@ export async function getCountries(): Promise<Country[]> {
           ),
         ];
       })
-      .sort((left, right) => left.name.localeCompare(right.name, "nb"));
+      .sort((left, right) => {
+        if (left.independent !== right.independent) {
+          return left.independent ? -1 : 1;
+        }
+
+        return left.name.localeCompare(right.name, "nb");
+      });
 
     return countries.length > 0 ? countries : FALLBACK_COUNTRIES;
   } catch {
@@ -189,15 +214,21 @@ export async function getCountries(): Promise<Country[]> {
   }
 }
 
+export function getIndependentCountries(countries: Country[]): Country[] {
+  return countries.filter((country) => country.independent);
+}
+
 export function getDailyCountry(countries: Country[], dateKey: string): Country | null {
-  if (countries.length === 0) {
+  const pool = getIndependentCountries(countries);
+
+  if (pool.length === 0) {
     return null;
   }
 
   const dateNumber = Number(dateKey.replaceAll("-", ""));
   const index = Number.isFinite(dateNumber)
-    ? dateNumber % countries.length
+    ? dateNumber % pool.length
     : 0;
 
-  return countries[index];
+  return pool[index];
 }

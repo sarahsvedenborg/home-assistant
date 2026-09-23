@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { FlagQuiz } from "@/components/flag-quiz";
-import { getCountries } from "@/lib/countries";
+import { getCountries, getIndependentCountries } from "@/lib/countries";
 import { getStudiedFlagCodes } from "@/lib/data";
 import { parseFlagQuizCount, parseFlagQuizSource } from "@/lib/flag-quiz";
 
@@ -25,10 +25,11 @@ export default async function FlagQuizPage({ searchParams }: FlagQuizPageProps) 
     getStudiedFlagCodes(),
   ]);
   const studiedCodeSet = new Set(studiedCodes);
+  const independentCountries = getIndependentCountries(countries);
   const studiedCountries = countries.filter((country) =>
     studiedCodeSet.has(country.code),
   );
-  const pool = source === "all" ? countries : studiedCountries;
+  const pool = source === "all" ? independentCountries : studiedCountries;
 
   return (
     <main className="shell flagsQuizShell">
@@ -52,7 +53,7 @@ export default async function FlagQuizPage({ searchParams }: FlagQuizPageProps) 
         <FlagQuiz
           key={`${source}-${questionCount}`}
           studiedCountries={studiedCountries}
-          countries={countries}
+          countries={independentCountries}
           questionCount={questionCount}
           source={source}
         />

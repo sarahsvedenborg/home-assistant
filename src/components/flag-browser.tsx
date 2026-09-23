@@ -2,8 +2,75 @@
 
 import { useMemo, useState } from "react";
 
+import { FlagFacts } from "@/components/flag-facts";
 import { FlagMedia } from "@/components/flag-media";
 import type { Country } from "@/lib/types";
+
+function FlagCard({
+  country,
+  isSelected,
+  isStudied,
+  isPending,
+  onSelect,
+  onToggleStudied,
+}: {
+  country: Country;
+  isSelected: boolean;
+  isStudied: boolean;
+  isPending: boolean;
+  onSelect: () => void;
+  onToggleStudied: (country: Country, studied: boolean) => void;
+}) {
+  return (
+    <article
+      className={
+        [
+          "flagCard",
+          isSelected ? "flagCardSelected" : "",
+          isStudied ? "flagCardStudied" : "",
+          country.independent ? "" : "flagCardBonus",
+        ]
+          .filter(Boolean)
+          .join(" ")
+      }
+    >
+      <button
+        type="button"
+        className="flagCardToggle"
+        aria-pressed={isSelected}
+        onClick={onSelect}
+      >
+        <FlagMedia country={country} showMap={isSelected} />
+        <h3>{country.name}</h3>
+        {country.independent ? null : (
+          <span className="flagBonusBadge">Del av {country.partOf}</span>
+        )}
+        {isStudied ? (
+          <span className="flagStudiedBadge">Studert</span>
+        ) : null}
+        {isSelected ? <FlagFacts country={country} /> : null}
+      </button>
+      {isSelected ? (
+        <button
+          type="button"
+          className={
+            isStudied
+              ? "flagStudyButton flagStudyButtonActive"
+              : "flagStudyButton"
+          }
+          disabled={isPending}
+          onClick={() => onToggleStudied(country, !isStudied)}
+        >
+          {isPending
+            ? "Lagrer…"
+            : isStudied
+              ? "Studert"
+              : "Marker som studert"}
+        </button>
+      ) : null}
+    </article>
+  );
+}
 
 export function FlagBrowser({
   countries,
@@ -33,10 +100,37 @@ export function FlagBrowser({
     );
   }, [countries, query]);
 
+  const independentCountries = visibleCountries.filter(
+    (country) => country.independent,
+  );
+  const bonusCountries = visibleCountries.filter(
+    (country) => !country.independent,
+  );
+
+  function renderCards(list: Country[]) {
+    return list.map((country) => {
+      const isSelected = selectedCode === country.code;
+      const isStudied = studiedCodes.has(country.code);
+      const isPending = pendingCode === country.code;
+
+      return (
+        <FlagCard
+          country={country}
+          isSelected={isSelected}
+          isStudied={isStudied}
+          isPending={isPending}
+          onSelect={() => setSelectedCode(isSelected ? null : country.code)}
+          onToggleStudied={onToggleStudied}
+          key={country.code}
+        />
+      );
+    });
+  }
+
   return (
     <section className="flagBrowser" aria-labelledby="flag-browser-title">
       <div className="flagBrowserHeader">
-        <h2 id="flag-browser-title">Alle flagg</h2>
+        <h2 id="flag-browser-title">Alle land</h2>
         <label className="flagSearch">
           <span className="srOnly">Søk etter land</span>
           <input
@@ -51,77 +145,26 @@ export function FlagBrowser({
       {visibleCountries.length === 0 ? (
         <p className="flagBrowserEmpty">Ingen land matcher søket.</p>
       ) : (
-        <div className="flagGrid">
-          {visibleCountries.map((country) => {
-            const isSelected = selectedCode === country.code;
-            const isStudied = studiedCodes.has(country.code);
-            const isPending = pendingCode === country.code;
+        <>
+          {independentCountries.length > 0 ? (
+            <div className="flagGrid">{renderCards(independentCountries)}</div>
+          ) : null}
 
-            return (
-              <article
-                className={
-                  [
-                    "flagCard",
-                    isSelected ? "flagCardSelected" : "",
-                    isStudied ? "flagCardStudied" : "",
-                  ]
-                    .filter(Boolean)
-                    .join(" ")
-                }
-                key={country.code}
-              >
-                <button
-                  type="button"
-                  className="flagCardToggle"
-                  aria-pressed={isSelected}
-                  onClick={() =>
-                    setSelectedCode(isSelected ? null : country.code)
-                  }
-                >
-                  <FlagMedia country={country} showMap={isSelected} />
-                  <h3>{country.name}</h3>
-                  {isStudied ? (
-                    <span className="flagStudiedBadge">Studert</span>
-                  ) : null}
-                  {isSelected && (country.capital || country.continent) ? (
-                    <dl className="flagCardFacts">
-                      {country.capital ? (
-                        <div>
-                          <dt>Hovedstad</dt>
-                          <dd>{country.capital}</dd>
-                        </div>
-                      ) : null}
-                      {country.continent ? (
-                        <div>
-                          <dt>Kontinent</dt>
-                          <dd>{country.continent}</dd>
-                        </div>
-                      ) : null}
-                    </dl>
-                  ) : null}
-                </button>
-                {isSelected ? (
-                  <button
-                    type="button"
-                    className={
-                      isStudied
-                        ? "flagStudyButton flagStudyButtonActive"
-                        : "flagStudyButton"
-                    }
-                    disabled={isPending}
-                    onClick={() => onToggleStudied(country, !isStudied)}
-                  >
-                    {isPending
-                      ? "Lagrer…"
-                      : isStudied
-                        ? "Studert"
-                        : "Marker som studert"}
-                  </button>
-                ) : null}
-              </article>
-            );
-          })}
-        </div>
+          {bonusCountries.length > 0 ? (
+            <section
+              className="flagBonusSection"
+              aria-labelledby="flag-bonus-title"
+            >
+              <div className="flagBonusIntro">
+                <h3 id="flag-bonus-title">Del av Storbritannia</h3>
+                <p>
+                  Disse har egne flagg, men er ikke selvstendige stater.
+                </p>
+              </div>
+              <div className="flagGrid">{renderCards(bonusCountries)}</div>
+            </section>
+          ) : null}
+        </>
       )}
     </section>
   );

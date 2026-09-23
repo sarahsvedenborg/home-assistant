@@ -146,6 +146,8 @@ export type Country = {
   mapUrl: string;
   capital?: string;
   continent?: string;
+  independent: boolean;
+  partOf?: string;
 };
 
 export type SingleEvent = {
