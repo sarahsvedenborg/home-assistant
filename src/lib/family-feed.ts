@@ -85,7 +85,7 @@ function toDashboardEvent(event: RecurringEvent): DashboardEvent {
   };
 }
 
-function singleToDashboardEvent(event: SingleEvent): DashboardEvent {
+export function singleToDashboardEvent(event: SingleEvent): DashboardEvent {
   return {
     id: event.id,
     source: "single",
