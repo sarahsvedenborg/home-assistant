@@ -132,7 +132,7 @@ export function MemberLibrary({
             </h1>
             <p className="libraryQuote">«{LIBRARY_QUOTE}»</p>
           </div>
-          <div className="libraryHeroStats">
+      {/*     <div className="libraryHeroStats">
             <p className="libraryStat">
               <span aria-hidden="true">📗</span>
               {bookCountLabel(finishedThisYear.length, "lest i år")}
@@ -151,7 +151,7 @@ export function MemberLibrary({
               </span>
               <span className="addFabLabel">Legg til bok</span>
             </a>
-          </div>
+          </div> */}
         </header>
 
         <div className="libraryBody">
@@ -238,43 +238,44 @@ export function MemberLibrary({
               </div>
             )}
           </section>
+        </div>
 
-          <section className="librarySection libraryShelfSection accentCool">
-            <div className="librarySectionHead">
-              <h2>
-                <span aria-hidden="true">📚</span>
-                Bokhyllen min
-              </h2>
-              <LibraryYearSelect years={years} selectedYear={selectedYear} />
-              {shelf.length > SHELF_PREVIEW ? (
-                <Link
-                  href={libraryHref(member.id, { ...hrefState, shelf: !showAllShelf })}
-                  className="libraryMore"
-                >
-                  {showAllShelf ? "Vis færre" : `Se alle ${shelf.length}`}
-                  <span aria-hidden="true"> →</span>
-                </Link>
-              ) : null}
+        <section className="librarySection libraryShelfSection accentCool">
+          <div className="librarySectionHead">
+            <h2>
+              <span aria-hidden="true">📚</span>
+              Bokhyllen min
+            </h2>
+            <LibraryYearSelect years={years} selectedYear={selectedYear} />
+            {shelf.length > SHELF_PREVIEW ? (
+              <Link
+                href={libraryHref(member.id, { ...hrefState, shelf: !showAllShelf })}
+                className="libraryMore"
+              >
+                {showAllShelf ? "Vis færre" : `Se alle ${shelf.length}`}
+                <span aria-hidden="true"> →</span>
+              </Link>
+            ) : null}
+          </div>
+
+          {visibleShelf.length === 0 ? (
+            <p className="libraryShelfEmpty">
+              Ingen ferdige bøker i {selectedYear}.
+            </p>
+          ) : (
+            <div className="libraryShelf">
+              {visibleShelf.map((reading) => (
+                <article key={reading.id} className="libraryShelfBook">
+                  <BookCover book={reading.book} className="libraryShelfCover" />
+                  <strong>{reading.book.title}</strong>
+                  <p>{reading.book.author}</p>
+                </article>
+              ))}
             </div>
+          )}
+        </section>
 
-            {visibleShelf.length === 0 ? (
-              <p className="libraryShelfEmpty">
-                Ingen ferdige bøker i {selectedYear}.
-              </p>
-            ) : (
-              <div className="libraryShelf">
-                {visibleShelf.map((reading) => (
-                  <article key={reading.id} className="libraryShelfBook">
-                    <BookCover book={reading.book} className="libraryShelfCover" />
-                    <strong>{reading.book.title}</strong>
-                    <p>{reading.book.author}</p>
-                  </article>
-                ))}
-              </div>
-            )}
-          </section>
-
-          <div className="librarySideNotes">
+        <div className="librarySideNotes">
             <section className="librarySection libraryInsight accentFuture hubCardLearn">
               <div className="librarySectionHead">
                 <h2>
@@ -327,7 +328,6 @@ export function MemberLibrary({
                 </div>
               )}
             </section>
-          </div>
         </div>
       </div>
     </div>
