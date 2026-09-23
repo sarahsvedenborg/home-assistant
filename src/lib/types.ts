@@ -138,6 +138,8 @@ export type DailyQuote = {
   source: "zenquotes" | "fallback";
 };
 
+export type CountryKind = "independent" | "constituent" | "territory";
+
 export type Country = {
   code: string;
   name: string;
@@ -147,6 +149,7 @@ export type Country = {
   capital?: string;
   continent?: string;
   independent: boolean;
+  kind: CountryKind;
   partOf?: string;
 };
 

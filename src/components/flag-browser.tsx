@@ -28,7 +28,7 @@ function FlagCard({
           "flagCard",
           isSelected ? "flagCardSelected" : "",
           isStudied ? "flagCardStudied" : "",
-          country.independent ? "" : "flagCardBonus",
+          country.kind === "independent" ? "" : "flagCardBonus",
         ]
           .filter(Boolean)
           .join(" ")
@@ -42,9 +42,12 @@ function FlagCard({
       >
         <FlagMedia country={country} showMap={isSelected} />
         <h3>{country.name}</h3>
-        {country.independent ? null : (
+        {country.kind === "constituent" ? (
           <span className="flagBonusBadge">Del av {country.partOf}</span>
-        )}
+        ) : null}
+        {country.kind === "territory" ? (
+          <span className="flagBonusBadge">Territorium</span>
+        ) : null}
         {isStudied ? (
           <span className="flagStudiedBadge">Studert</span>
         ) : null}
@@ -101,10 +104,13 @@ export function FlagBrowser({
   }, [countries, query]);
 
   const independentCountries = visibleCountries.filter(
-    (country) => country.independent,
+    (country) => country.kind === "independent",
   );
-  const bonusCountries = visibleCountries.filter(
-    (country) => !country.independent,
+  const constituentCountries = visibleCountries.filter(
+    (country) => country.kind === "constituent",
+  );
+  const territoryCountries = visibleCountries.filter(
+    (country) => country.kind === "territory",
   );
 
   function renderCards(list: Country[]) {
@@ -150,7 +156,7 @@ export function FlagBrowser({
             <div className="flagGrid">{renderCards(independentCountries)}</div>
           ) : null}
 
-          {bonusCountries.length > 0 ? (
+          {constituentCountries.length > 0 ? (
             <section
               className="flagBonusSection"
               aria-labelledby="flag-bonus-title"
@@ -161,7 +167,23 @@ export function FlagBrowser({
                   Disse har egne flagg, men er ikke selvstendige stater.
                 </p>
               </div>
-              <div className="flagGrid">{renderCards(bonusCountries)}</div>
+              <div className="flagGrid">{renderCards(constituentCountries)}</div>
+            </section>
+          ) : null}
+
+          {territoryCountries.length > 0 ? (
+            <section
+              className="flagBonusSection"
+              aria-labelledby="flag-territory-title"
+            >
+              <div className="flagBonusIntro">
+                <h3 id="flag-territory-title">Territorier</h3>
+                <p>
+                  Disse har egne flagg, men er territorier og ikke selvstendige
+                  stater.
+                </p>
+              </div>
+              <div className="flagGrid">{renderCards(territoryCountries)}</div>
             </section>
           ) : null}
         </>

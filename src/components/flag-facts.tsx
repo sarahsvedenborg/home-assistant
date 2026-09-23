@@ -31,9 +31,11 @@ export function FlagFacts({
           ) : null}
         </dl>
       ) : null}
-      {country.independent ? null : (
+      {country.kind === "independent" ? null : (
         <p className="flagStatusNote">
-          Ikke en selvstendig stat
+          {country.kind === "territory"
+            ? "Territorium. Ikke en selvstendig stat"
+            : "Ikke en selvstendig stat"}
           {country.partOf ? `. Del av ${country.partOf}.` : "."}
         </p>
       )}

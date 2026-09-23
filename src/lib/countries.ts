@@ -1,12 +1,62 @@
 import "server-only";
 
 import { isFlagCode } from "@/lib/flag-codes";
-import type { Country } from "@/lib/types";
+import type { Country, CountryKind } from "@/lib/types";
 
 const FLAGCDN_CODES_URL = "https://flagcdn.com/no/codes.json";
 const COUNTRY_FACTS_URL =
   "https://raw.githubusercontent.com/mledoze/countries/master/dist/countries.json";
 const EXTRA_FLAG_CODES = ["gb-eng", "gb-sct", "gb-wls"] as const;
+const SHARED_FLAG_TERRITORIES = new Set(["bv", "mf", "sj", "um"]);
+const TERRITORY_PARENTS: Record<string, string> = {
+  ai: "Storbritannia",
+  as: "USA",
+  aw: "Nederland",
+  ax: "Finland",
+  bl: "Frankrike",
+  bm: "Storbritannia",
+  bq: "Nederland",
+  cc: "Australia",
+  ck: "New Zealand",
+  cw: "Nederland",
+  cx: "Australia",
+  fk: "Storbritannia",
+  fo: "Danmark",
+  gf: "Frankrike",
+  gg: "Storbritannia",
+  gi: "Storbritannia",
+  gl: "Danmark",
+  gp: "Frankrike",
+  gs: "Storbritannia",
+  gu: "USA",
+  hk: "Kina",
+  hm: "Australia",
+  im: "Storbritannia",
+  io: "Storbritannia",
+  je: "Storbritannia",
+  ky: "Storbritannia",
+  mo: "Kina",
+  mp: "USA",
+  mq: "Frankrike",
+  ms: "Storbritannia",
+  nc: "Frankrike",
+  nf: "Australia",
+  nu: "New Zealand",
+  pf: "Frankrike",
+  pm: "Frankrike",
+  pn: "Storbritannia",
+  pr: "USA",
+  re: "Frankrike",
+  sh: "Storbritannia",
+  sx: "Nederland",
+  tc: "Storbritannia",
+  tf: "Frankrike",
+  tk: "New Zealand",
+  vg: "Storbritannia",
+  vi: "USA",
+  wf: "Frankrike",
+  yt: "Frankrike",
+};
 
 const CONTINENT_LABELS: Record<string, string> = {
   Africa: "Afrika",
@@ -21,6 +71,7 @@ type CountryFacts = {
   capital?: string;
   continent?: string;
   independent?: boolean;
+  kind?: CountryKind;
   partOf?: string;
 };
 
@@ -29,18 +80,21 @@ const EXTRA_FLAG_FACTS: Record<string, CountryFacts> = {
     capital: "London",
     continent: "Europa",
     independent: false,
+    kind: "constituent",
     partOf: "Storbritannia",
   },
   "gb-sct": {
     capital: "Edinburgh",
     continent: "Europa",
     independent: false,
+    kind: "constituent",
     partOf: "Storbritannia",
   },
   "gb-wls": {
     capital: "Cardiff",
     continent: "Europa",
     independent: false,
+    kind: "constituent",
     partOf: "Storbritannia",
   },
 };
@@ -84,6 +138,7 @@ function countryFromCode(
     capital: facts.capital,
     continent: facts.continent,
     independent: facts.independent ?? true,
+    kind: facts.kind ?? "independent",
     partOf: facts.partOf,
   };
 }
@@ -122,14 +177,16 @@ async function fetchJson(url: string, timeoutMs = 4000): Promise<unknown> {
 async function getCountrySource(): Promise<{
   facts: Map<string, CountryFacts>;
   independentCodes: Set<string>;
+  territoryCodes: Set<string>;
 }> {
   const facts = new Map<string, CountryFacts>();
   const independentCodes = new Set<string>();
+  const territoryCodes = new Set<string>();
 
   try {
     const data = await fetchJson(COUNTRY_FACTS_URL, 8000);
     if (!Array.isArray(data)) {
-      return { facts, independentCodes };
+      return { facts, independentCodes, territoryCodes };
     }
 
     for (const entry of data as SourceCountry[]) {
@@ -142,22 +199,34 @@ async function getCountrySource(): Promise<{
         continue;
       }
 
-      if (entry.independent === true) {
-        independentCodes.add(code);
-      }
-
       const capital = firstString(entry.capital);
       const continent = firstString(entry.region);
-      facts.set(code, {
+      const baseFacts: CountryFacts = {
         capital,
         continent: continent ? CONTINENT_LABELS[continent] || continent : undefined,
-      });
+      };
+
+      if (entry.independent === true) {
+        independentCodes.add(code);
+        facts.set(code, { ...baseFacts, independent: true, kind: "independent" });
+        continue;
+      }
+
+      if (!SHARED_FLAG_TERRITORIES.has(code)) {
+        territoryCodes.add(code);
+        facts.set(code, {
+          ...baseFacts,
+          independent: false,
+          kind: "territory",
+          partOf: TERRITORY_PARENTS[code],
+        });
+      }
     }
   } catch {
-    return { facts, independentCodes };
+    return { facts, independentCodes, territoryCodes };
   }
 
-  return { facts, independentCodes };
+  return { facts, independentCodes, territoryCodes };
 }
 
 export async function getCountries(): Promise<Country[]> {
@@ -177,6 +246,7 @@ export async function getCountries(): Promise<Country[]> {
 
     const allowedCodes = new Set<string>([
       ...source.independentCodes,
+      ...source.territoryCodes,
       ...EXTRA_FLAG_CODES,
     ]);
 
@@ -201,8 +271,9 @@ export async function getCountries(): Promise<Country[]> {
         ];
       })
       .sort((left, right) => {
-        if (left.independent !== right.independent) {
-          return left.independent ? -1 : 1;
+        const kindOrder = { independent: 0, constituent: 1, territory: 2 };
+        if (kindOrder[left.kind] !== kindOrder[right.kind]) {
+          return kindOrder[left.kind] - kindOrder[right.kind];
         }
 
         return left.name.localeCompare(right.name, "nb");
