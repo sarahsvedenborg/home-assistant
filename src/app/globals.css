@@ -1534,6 +1534,13 @@ html[data-theme="autumn"] .autumnLeaves {
   }
 }
 
+@media (max-width: 699px) {
+  html[data-theme="autumn"] .autumnLeaves,
+  .autumnLeaves {
+    display: none;
+  }
+}
+
 .christmasLights,
 .christmasSnow {
   display: none;
