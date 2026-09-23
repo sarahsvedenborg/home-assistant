@@ -4,7 +4,7 @@ export const FLAG_QUIZ_COUNTS = [5, 10, 15, 20] as const;
 export const FLAG_QUIZ_DEFAULT_COUNT = FLAG_QUIZ_COUNTS[0];
 export const FLAG_QUIZ_MAX_QUESTIONS = FLAG_QUIZ_DEFAULT_COUNT;
 export const FLAG_QUIZ_CHOICE_COUNT = 4;
-export const FLAG_QUIZ_SOURCES = ["studied", "all"] as const;
+export const FLAG_QUIZ_SOURCES = ["studied", "independent", "all"] as const;
 export const FLAG_QUIZ_DEFAULT_SOURCE = FLAG_QUIZ_SOURCES[0];
 
 export type FlagQuizCount = (typeof FLAG_QUIZ_COUNTS)[number];
@@ -53,6 +53,25 @@ export function parseFlagQuizSource(value?: string): FlagQuizSource {
     : FLAG_QUIZ_DEFAULT_SOURCE;
 }
 
+export function getFlagQuizPool(
+  source: FlagQuizSource,
+  studiedCountries: Country[],
+  countries: Country[],
+): Country[] {
+  if (source === "studied") {
+    return studiedCountries;
+  }
+
+  if (source === "independent") {
+    return countries.filter(
+      (country) =>
+        country.kind === "independent" || country.kind === "constituent",
+    );
+  }
+
+  return countries;
+}
+
 export function buildFlagQuiz(
   studiedCountries: Country[],
   allCountries: Country[],
@@ -60,13 +79,13 @@ export function buildFlagQuiz(
 ): FlagQuizQuestion[] {
   const count = options.count ?? FLAG_QUIZ_DEFAULT_COUNT;
   const source = options.source ?? FLAG_QUIZ_DEFAULT_SOURCE;
-  const pool = source === "all" ? allCountries : studiedCountries;
+  const pool = getFlagQuizPool(source, studiedCountries, allCountries);
   const uniquePool = [...new Map(pool.map((country) => [country.code, country])).values()];
   const questionCountries = shuffled(uniquePool).slice(0, count);
 
   return questionCountries.map((country) => {
     const distractors = shuffled(
-      allCountries.filter((candidate) => candidate.code !== country.code),
+      uniquePool.filter((candidate) => candidate.code !== country.code),
     ).slice(0, FLAG_QUIZ_CHOICE_COUNT - 1);
 
     return {
