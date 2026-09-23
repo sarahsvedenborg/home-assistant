@@ -63,10 +63,12 @@ export function FlagsWorkspace({
     }
   }
 
+  const independentCountries = countries.filter((country) => country.independent);
+
   return (
     <div className="flagsWorkspace">
       <FeaturedFlag
-        countries={countries}
+        countries={independentCountries}
         initialCode={initialCode}
         studiedCodes={studied}
         pendingCode={pendingCode}

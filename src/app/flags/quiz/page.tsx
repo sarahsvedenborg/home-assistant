@@ -3,7 +3,11 @@ import Link from "next/link";
 import { FlagQuiz } from "@/components/flag-quiz";
 import { getCountries } from "@/lib/countries";
 import { getStudiedFlagCodes } from "@/lib/data";
-import { parseFlagQuizCount, parseFlagQuizSource } from "@/lib/flag-quiz";
+import {
+  getFlagQuizPool,
+  parseFlagQuizCount,
+  parseFlagQuizSource,
+} from "@/lib/flag-quiz";
 
 type FlagQuizPageProps = {
   searchParams: Promise<{
@@ -28,7 +32,7 @@ export default async function FlagQuizPage({ searchParams }: FlagQuizPageProps) 
   const studiedCountries = countries.filter((country) =>
     studiedCodeSet.has(country.code),
   );
-  const pool = source === "all" ? countries : studiedCountries;
+  const pool = getFlagQuizPool(source, studiedCountries, countries);
 
   return (
     <main className="shell flagsQuizShell">
@@ -44,9 +48,9 @@ export default async function FlagQuizPage({ searchParams }: FlagQuizPageProps) 
 
       {pool.length === 0 ? (
         <p className="flagBrowserEmpty">
-          {source === "all"
-            ? "Ingen flagg er tilgjengelige for quizen."
-            : "Marker minst ett flagg som studert for å starte quizen."}
+          {source === "studied"
+            ? "Marker minst ett flagg som studert for å starte quizen."
+            : "Ingen flagg er tilgjengelige for quizen."}
         </p>
       ) : (
         <FlagQuiz

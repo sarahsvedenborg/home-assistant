@@ -13,8 +13,9 @@ import {
 } from "@/lib/flag-quiz";
 
 const QUIZ_SOURCES: Array<{ value: FlagQuizSource; label: string }> = [
-  { value: "studied", label: "Tilfeldig fra studerte flagg" },
-  { value: "all", label: "Alle tilgjengelige flagg" },
+  { value: "studied", label: "Studerte flagg" },
+  { value: "independent", label: "Alle uavhengige land (med England++)" },
+  { value: "all", label: "Alle land + territorier" },
 ];
 
 export function FlagsQuizActions() {
@@ -64,7 +65,7 @@ export function FlagsQuizActions() {
 
           <fieldset className="field fieldWide checkboxFieldset">
             <legend>Hvilke flagg</legend>
-            <div className="radioRow">
+            <div className="radioRow radioRowStacked">
               {QUIZ_SOURCES.map((option) => (
                 <label className="radioOption" key={option.value}>
                   <input

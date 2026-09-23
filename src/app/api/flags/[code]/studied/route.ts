@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { AUTH_COOKIE_NAME, isAuthEnabled, isValidAuthCookie } from "@/lib/auth";
+import { isFlagCode } from "@/lib/flag-codes";
 import { setStudiedFlag } from "@/sanity/lib/submissions";
 
 type RouteContext = {
@@ -37,7 +38,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   const { code } = await context.params;
   const normalizedCode = code.toLowerCase();
 
-  if (!/^[a-z]{2}$/.test(normalizedCode)) {
+  if (!isFlagCode(normalizedCode)) {
     return NextResponse.json({ error: "Ugyldig landkode." }, { status: 400 });
   }
 

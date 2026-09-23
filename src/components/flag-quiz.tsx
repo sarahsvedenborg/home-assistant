@@ -88,9 +88,9 @@ export function FlagQuiz({
   if (!question) {
     return (
       <p className="flagBrowserEmpty">
-        {source === "all"
-          ? "Ingen flagg er tilgjengelige for quizen."
-          : "Marker minst ett flagg som studert for å starte quizen."}
+        {source === "studied"
+          ? "Marker minst ett flagg som studert for å starte quizen."
+          : "Ingen flagg er tilgjengelige for quizen."}
       </p>
     );
   }
