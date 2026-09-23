@@ -6,7 +6,18 @@ import { getBirthdays, getDayNotes, getFamilyMembers, getRecurringEvents, getSin
 import { osloDateKey } from "@/lib/family-feed";
 import { getNorwegianPublicHolidays } from "@/lib/norwegian-holidays";
 
-export default async function KalenderPage() {
+type KalenderPageProps = {
+  searchParams: Promise<{
+    event?: string | string[];
+  }>;
+};
+
+function firstSearchParam(value?: string | string[]) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function KalenderPage({ searchParams }: KalenderPageProps) {
+  const query = await searchParams;
   const todayDateKey = osloDateKey(new Date());
   const currentYear = Number(todayDateKey.slice(0, 4));
   const [birthdays, dayNotes, familyMembers, holidays, recurringEvents, singleEvents] =
@@ -34,6 +45,7 @@ export default async function KalenderPage() {
         dayNotes={dayNotes}
         holidays={holidays}
         todayDateKey={todayDateKey}
+        initialEventId={firstSearchParam(query.event)}
       />
 
       <AddButton

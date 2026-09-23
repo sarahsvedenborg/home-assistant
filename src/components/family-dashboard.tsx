@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { MessageWidget } from "@/components/message-widget";
 import { ShoppingWidget } from "@/components/shopping-widget";
 import { formatBirthdayNames } from "@/lib/birthdays";
@@ -48,6 +50,83 @@ const EVENT_GROUPS = [
   },
 ] as const;
 
+function singleEventToneClass(event: DashboardEvent) {
+  const classes = ["calendarEvent", "calendarEventSingle"];
+
+  if (event.category === "filmkveld") {
+    classes.push("calendarEventMovieNight");
+  } else if (event.category === "spillkveld") {
+    classes.push("calendarEventGameNight");
+  } else if (event.category === "ak") {
+    classes.push("calendarEventAkTime");
+  }
+
+  return classes.join(" ");
+}
+
+function singleEventIcon(event: DashboardEvent) {
+  if (event.category === "ak") {
+    return "✨";
+  }
+
+  if (event.category === "filmkveld") {
+    return "🎬";
+  }
+
+  if (event.category === "spillkveld") {
+    return "🎲";
+  }
+
+  return null;
+}
+
+function SingleEventCard({ event }: { event: DashboardEvent }) {
+  const timeRange = event.allDay
+    ? "Hele dagen"
+    : [event.time, event.endTime].filter(Boolean).join("–") || null;
+  const icon = singleEventIcon(event);
+  const isAkTime = event.category === "ak";
+  const className = event.note
+    ? `${singleEventToneClass(event)} calendarEventInteractive`
+    : singleEventToneClass(event);
+  const content = (
+    <>
+      {timeRange ? <span className="calendarEventTime">{timeRange}</span> : null}
+      <strong className={icon ? "calendarSpecialEventTitle" : undefined}>
+        {icon ? <span aria-hidden="true">{icon}</span> : null}
+        {event.title}
+      </strong>
+      {isAkTime ? (
+        <span className="calendarSpecialEventDescription">
+          Storesøstertid med foreldrene
+        </span>
+      ) : null}
+      {event.familyMember ? (
+        <span className="calendarEventMeta">{event.familyMember}</span>
+      ) : null}
+      {event.note ? (
+        <span className="calendarEventDetailsIndicator" aria-hidden="true">
+          ⓘ
+        </span>
+      ) : null}
+    </>
+  );
+
+  if (event.note) {
+    return (
+      <Link
+        href={`/kalender?event=${encodeURIComponent(event.id)}`}
+        className={className}
+        aria-label={`Vis all informasjon om ${event.title}`}
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return <article className={className}>{content}</article>;
+}
+
 function EventList({ events }: { events: DashboardEvent[] }) {
   const groups = EVENT_GROUPS.map((group) => ({
     ...group,
@@ -63,23 +142,31 @@ function EventList({ events }: { events: DashboardEvent[] }) {
       {groups.map((group) => (
         <section className="eventWidgetGroup" key={group.id} aria-label={group.title}>
           <h3 className="eventWidgetGroupTitle">{group.title}</h3>
-          <ul className="widgetList eventWidgetList">
-            {group.events.map((event) => {
-              const timeRange = event.allDay
-                ? "Hele dagen"
-                : [event.time, event.endTime].filter(Boolean).join("–");
-              const meta = [event.familyMember, timeRange].filter(Boolean).join(" · ");
+          {group.id === "annet" ? (
+            <div className="eventWidgetCards">
+              {group.events.map((event) => (
+                <SingleEventCard key={event.id} event={event} />
+              ))}
+            </div>
+          ) : (
+            <ul className="widgetList eventWidgetList">
+              {group.events.map((event) => {
+                const timeRange = event.allDay
+                  ? "Hele dagen"
+                  : [event.time, event.endTime].filter(Boolean).join("–");
+                const meta = [event.familyMember, timeRange].filter(Boolean).join(" · ");
 
-              return (
-                <li key={event.id} className="widgetItem">
-                  <strong>{event.title}</strong>
-                  {meta ? (
-                    <span className="itemMeta eventWidgetMeta">{meta}</span>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
+                return (
+                  <li key={event.id} className="widgetItem">
+                    <strong>{event.title}</strong>
+                    {meta ? (
+                      <span className="itemMeta eventWidgetMeta">{meta}</span>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </section>
       ))}
     </div>

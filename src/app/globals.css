@@ -1791,6 +1791,11 @@ html[data-theme="christmas"] .christmasSnow {
   border-top: 1px solid var(--line);
 }
 
+.eventWidgetCards {
+  display: grid;
+  gap: 0.5rem;
+}
+
 .eventWidgetMeta {
   color: var(--muted);
   font-size: 0.78rem;
@@ -2329,6 +2334,26 @@ html[data-theme="christmas"] .christmasSnow {
   .homeDashboardPanel .wToday .widgetItem strong,
   .homeDashboardPanel .wTomorrow .widgetItem strong {
     font-size: 1.95rem;
+  }
+
+  .homeDashboardPanel .wToday .calendarEvent,
+  .homeDashboardPanel .wTomorrow .calendarEvent {
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.9rem;
+  }
+
+  .homeDashboardPanel .wToday .calendarEvent strong,
+  .homeDashboardPanel .wTomorrow .calendarEvent strong {
+    font-size: 1.7rem;
+  }
+
+  .homeDashboardPanel .wToday .calendarEventTime,
+  .homeDashboardPanel .wTomorrow .calendarEventTime,
+  .homeDashboardPanel .wToday .calendarEventMeta,
+  .homeDashboardPanel .wTomorrow .calendarEventMeta,
+  .homeDashboardPanel .wToday .calendarSpecialEventDescription,
+  .homeDashboardPanel .wTomorrow .calendarSpecialEventDescription {
+    font-size: 1.2rem;
   }
 
   .homeDashboardPanel .itemMeta,
@@ -6215,6 +6240,7 @@ html[data-theme="christmas"] .christmasSnow {
   color: inherit;
   font: inherit;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }

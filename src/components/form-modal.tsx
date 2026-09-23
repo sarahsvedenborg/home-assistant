@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 type FormModalProps = {
@@ -36,8 +36,13 @@ export function FormModal({
 }: FormModalProps) {
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
   // Remember what was focused before opening so we can restore it on close.
   const previouslyFocused = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) {
@@ -96,8 +101,8 @@ export function FormModal({
     };
   }, [isOpen, onClose]);
 
-  // Portals need the DOM, so bail out until the browser is available.
-  if (!isOpen || typeof document === "undefined") {
+  // Portals need the DOM, so wait until after hydration before rendering.
+  if (!isOpen || !mounted) {
     return null;
   }
 

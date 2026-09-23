@@ -4,7 +4,12 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { FormModal } from "@/components/form-modal";
 import { birthdaysOnDate } from "@/lib/birthdays";
-import { eventsForDateRange, type CalendarDay, type DashboardEvent } from "@/lib/family-feed";
+import {
+  eventsForDateRange,
+  singleToDashboardEvent,
+  type CalendarDay,
+  type DashboardEvent,
+} from "@/lib/family-feed";
 import type {
   Birthday,
   DayNote,
@@ -22,6 +27,7 @@ type FamilyCalendarProps = {
   dayNotes?: DayNote[];
   holidays?: NorwegianHoliday[];
   todayDateKey: string;
+  initialEventId?: string;
 };
 
 const WEEKDAY_LABELS = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"];
@@ -255,6 +261,24 @@ function eventSpecialIcon(event: DashboardEvent): string | null {
   return null;
 }
 
+function selectionForEventId(singleEvents: SingleEvent[], eventId?: string) {
+  if (!eventId) {
+    return null;
+  }
+
+  const match = singleEvents.find((event) => event.id === eventId && event.note);
+
+  if (!match) {
+    return null;
+  }
+
+  const event = singleToDashboardEvent(match);
+  return {
+    event,
+    dateKey: event.startDateKey || match.date.slice(0, 10),
+  };
+}
+
 function EventDetails({ event }: { event: DashboardEvent }) {
   const time = eventTimeLabel(event);
   const specialEventIcon = eventSpecialIcon(event);
@@ -452,13 +476,17 @@ export function FamilyCalendar({
   dayNotes = [],
   holidays = [],
   todayDateKey,
+  initialEventId,
 }: FamilyCalendarProps) {
+  const initialSelection = selectionForEventId(singleEvents, initialEventId);
   const [view, setView] = useState<CalendarView>("week");
-  const [anchorDateKey, setAnchorDateKey] = useState(todayDateKey);
+  const [anchorDateKey, setAnchorDateKey] = useState(
+    initialSelection?.dateKey || todayDateKey,
+  );
   const [selectedEvent, setSelectedEvent] = useState<{
     event: DashboardEvent;
     dateKey: string;
-  } | null>(null);
+  } | null>(initialSelection);
   const gridRef = useRef<HTMLDivElement>(null);
   const anchor = useMemo(() => dateFromKey(anchorDateKey), [anchorDateKey]);
 
@@ -872,7 +900,19 @@ export function FamilyCalendar({
 
       <FormModal
         isOpen={Boolean(selectedEvent)}
-        onClose={() => setSelectedEvent(null)}
+        onClose={() => {
+          setSelectedEvent(null);
+
+          if (typeof window !== "undefined" && window.location.search.includes("event=")) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete("event");
+            window.history.replaceState(
+              null,
+              "",
+              url.pathname + url.search + url.hash,
+            );
+          }
+        }}
         title={selectedEvent?.event.title || "Hendelse"}
         className="formModalEventDetails"
       >
