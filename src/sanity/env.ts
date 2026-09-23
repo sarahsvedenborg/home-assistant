@@ -19,3 +19,4 @@ export const canWriteToSanity = Boolean(isSanityConfigured && submissionToken);
 export const requireApproval = process.env.SANITY_REQUIRE_APPROVAL === "true";
 export const submissionPassword =
   process.env.FAMILY_HUB_SUBMISSION_PASSWORD || "";
+export const boktyvenAccessToken = process.env.BOKTYVEN_ACCESS_TOKEN || "";

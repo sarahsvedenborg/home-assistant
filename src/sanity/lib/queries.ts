@@ -144,6 +144,29 @@ export const RECIPES_QUERY = `*[_type == "recipe"] | order(_createdAt desc) {
   }
 }`;
 
+export const READINGS_QUERY = `*[_type == "reading" && defined(book)] | order(coalesce(finishedAt, startedAt, _createdAt) desc) {
+  _id,
+  status,
+  readingType,
+  startedAt,
+  finishedAt,
+  currentPage,
+  rating,
+  note,
+  "book": book->{
+    _id,
+    title,
+    author,
+    "coverUrl": cover.asset->url,
+    "coverAlt": cover.alt,
+    pageCount
+  },
+  "readers": readers[]->{
+    _id,
+    name
+  }
+}`;
+
 export const STUDIED_FLAGS_QUERY = defineQuery(/* groq */ `
   *[_id == "studiedFlags"][0]{
     "codes": flags[].code

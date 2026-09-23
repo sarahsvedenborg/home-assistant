@@ -43,6 +43,49 @@ export type MovieRecommendation = {
   watched: boolean;
 };
 
+export type ReadingStatus = "wantToRead" | "reading" | "finished" | "abandoned";
+
+export type ReadingKind = "self" | "together" | "audiobook" | "audioAndText";
+
+export type Book = {
+  id: string;
+  title: string;
+  author: string;
+  coverUrl?: string;
+  coverAlt?: string;
+  pageCount?: number;
+};
+
+export type BookSource = "boktyven" | "openlibrary";
+
+export type BookSearchHit = {
+  source: BookSource;
+  id: string;
+  title: string;
+  author: string;
+  coverUrl?: string;
+  publicationYear?: number;
+  publisher?: string;
+};
+
+export type ReadingReader = {
+  id: string;
+  name: string;
+};
+
+export type Reading = {
+  id: string;
+  status: ReadingStatus;
+  readingType: ReadingKind;
+  startedAt?: string;
+  finishedAt?: string;
+  currentPage?: number;
+  rating?: number;
+  note?: string;
+  book: Book;
+  readers: ReadingReader[];
+};
+
 export type WishListGroup = {
   person: string;
   items: WishListItem[];

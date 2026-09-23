@@ -5,7 +5,8 @@ import {
   EVENT_PARTICIPANT_ALL,
 } from "@/lib/event-participants";
 import type { DayNoteCategory } from "@/lib/day-note-categories";
-import type { BoardIssueStatus } from "@/lib/types";
+import type { BoardIssueStatus, BookSource, ReadingKind, ReadingStatus } from "@/lib/types";
+import { isAllowedCoverUrl, lookupBook } from "@/lib/book-lookup";
 import { requireApproval } from "@/sanity/env";
 import { getReadClient, getWriteClient } from "@/sanity/lib/client";
 import { FAMILY_MEMBERS_QUERY } from "@/sanity/lib/queries";
@@ -660,4 +661,251 @@ export async function submitRecurringEvent(input: {
   return requireApproval
     ? "Aktiviteten er sendt! En voksen kan godkjenne den i studioet."
     : "Aktiviteten er lagt til!";
+}
+
+const COVER_MAX_BYTES = 5_000_000;
+const COVER_MIN_BYTES = 1024;
+
+type BookCoverImage = {
+  _type: "image";
+  asset: { _type: "reference"; _ref: string };
+  alt: string;
+};
+
+function coverFilename(base: string, contentType: string) {
+  const extension =
+    contentType === "image/png"
+      ? "png"
+      : contentType === "image/webp"
+        ? "webp"
+        : contentType === "image/gif"
+          ? "gif"
+          : "jpg";
+
+  return `${base.replace(/[^A-Za-z0-9._-]+/g, "-")}.${extension}`;
+}
+
+async function uploadCoverFromUrl(
+  client: NonNullable<ReturnType<typeof getWriteClient>>,
+  coverUrl: string,
+  filename: string,
+  alt: string,
+): Promise<BookCoverImage | undefined> {
+  if (!isAllowedCoverUrl(coverUrl)) {
+    return undefined;
+  }
+
+  try {
+    const response = await fetch(coverUrl, {
+      headers: { Accept: "image/*", "User-Agent": "FamilyHub/1.0 (book cover)" },
+      signal: AbortSignal.timeout(12000),
+      redirect: "follow",
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return undefined;
+    }
+
+    // Open Library large covers often 302 to archive.org. The original URL is
+    // allowlisted; only keep following if the final hop stays on HTTPS.
+    const finalUrl = new URL(response.url);
+    if (finalUrl.protocol !== "https:") {
+      return undefined;
+    }
+
+    const contentType = (response.headers.get("content-type") || "").split(";")[0].trim();
+    if (!contentType.startsWith("image/") || contentType === "image/svg+xml") {
+      return undefined;
+    }
+
+    const buffer = Buffer.from(await response.arrayBuffer());
+    if (buffer.byteLength < COVER_MIN_BYTES || buffer.byteLength > COVER_MAX_BYTES) {
+      return undefined;
+    }
+
+    const asset = await client.assets.upload("image", buffer, {
+      filename: coverFilename(filename, contentType),
+      contentType,
+    });
+
+    return {
+      _type: "image",
+      asset: {
+        _type: "reference",
+        _ref: asset._id,
+      },
+      alt,
+    };
+  } catch (error) {
+    console.error("Book cover upload failed", error);
+    return undefined;
+  }
+}
+
+function readingStatusFromDates(startedAt?: string, finishedAt?: string): ReadingStatus {
+  if (finishedAt) {
+    return "finished";
+  }
+
+  if (startedAt) {
+    return "reading";
+  }
+
+  return "wantToRead";
+}
+
+async function resolveFamilyMemberReferences(names: string[]) {
+  const client = getReadClient();
+
+  if (!client) {
+    throw new Error("Sanity reads are not configured yet.");
+  }
+
+  const familyMembers = await client.fetch<FamilyMemberLookup[]>(FAMILY_MEMBERS_QUERY);
+
+  return names.map((name) => {
+    const match = familyMembers.find(
+      (member) => member.name.toLowerCase() === name.toLowerCase(),
+    );
+
+    if (!match) {
+      throw new Error(`Fant ikke familiemedlemmet ${name}.`);
+    }
+
+    return {
+      _key: match._id,
+      _type: "reference" as const,
+      _ref: match._id,
+    };
+  });
+}
+
+export async function submitBook(input: {
+  source: BookSource;
+  id: string;
+  readerNames: string[];
+  startedAt?: string;
+  finishedAt?: string;
+  readingType: ReadingKind;
+}) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const book = await lookupBook(input.source, input.id);
+
+  if (!book) {
+    throw new Error("Fant ikke boken. Søk på nytt og prøv igjen.");
+  }
+
+  const readers = await resolveFamilyMemberReferences(input.readerNames);
+  let existing:
+    | {
+        _id: string;
+        hasCover: boolean;
+      }
+    | null
+    | undefined;
+  let bookId: string | undefined;
+
+  if (book.isbn) {
+    existing = await client.fetch<{ _id: string; hasCover: boolean } | null>(
+      `*[_type == "book" && isbn == $isbn][0]{_id, "hasCover": defined(cover.asset)}`,
+      { isbn: book.isbn },
+    );
+    bookId = existing?._id;
+  }
+
+  const cover =
+    book.coverUrl && (!existing || !existing.hasCover)
+      ? await uploadCoverFromUrl(
+          client,
+          book.coverUrl,
+          book.isbn || book.id,
+          `Omslag for ${book.title}`,
+        )
+      : undefined;
+
+  if (existing?._id && !existing.hasCover && cover) {
+    await client.patch(existing._id).set({ cover }).commit();
+  }
+
+  if (!bookId) {
+    const document: {
+      _type: "book";
+      title: string;
+      author: string;
+      isbn?: string;
+      pageCount?: number;
+      publicationYear?: number;
+      originalLanguage?: string;
+      authorCountry?: string;
+      cover?: BookCoverImage;
+    } = {
+      _type: "book",
+      title: book.title,
+      author: book.author,
+    };
+
+    if (book.isbn) {
+      document.isbn = book.isbn;
+    }
+
+    if (typeof book.pageCount === "number" && book.pageCount >= 1) {
+      document.pageCount = Math.trunc(book.pageCount);
+    }
+
+    if (typeof book.publicationYear === "number") {
+      document.publicationYear = book.publicationYear;
+    }
+
+    if (book.originalLanguage) {
+      document.originalLanguage = book.originalLanguage;
+    }
+
+    if (book.authorCountry) {
+      document.authorCountry = book.authorCountry;
+    }
+
+    if (cover) {
+      document.cover = cover;
+    }
+
+    const created = await client.create(document);
+    bookId = created._id;
+  }
+
+  const reading: {
+    _type: "reading";
+    book: { _type: "reference"; _ref: string };
+    readers: Array<{ _key: string; _type: "reference"; _ref: string }>;
+    readingType: ReadingKind;
+    startedAt?: string;
+    finishedAt?: string;
+    status: ReadingStatus;
+  } = {
+    _type: "reading",
+    book: {
+      _type: "reference",
+      _ref: bookId,
+    },
+    readers,
+    readingType: input.readingType,
+    status: readingStatusFromDates(input.startedAt, input.finishedAt),
+  };
+
+  if (input.startedAt) {
+    reading.startedAt = input.startedAt;
+  }
+
+  if (input.finishedAt) {
+    reading.finishedAt = input.finishedAt;
+  }
+
+  await client.create(reading);
+
+  return `${book.title} er lagt til!`;
 }
