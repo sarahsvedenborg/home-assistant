@@ -158,7 +158,7 @@ export function MemberLibrary({
           <section className="librarySection libraryNow accentWarm">
             <div className="librarySectionHead">
               <h2>
-                <span aria-hidden="true">❤</span>
+                <span aria-hidden="true">❤️</span>
                 Leser nå
               </h2>
               {current.length > CURRENT_PREVIEW ? (
@@ -259,18 +259,24 @@ export function MemberLibrary({
           </div>
 
           {visibleShelf.length === 0 ? (
-            <p className="libraryShelfEmpty">
-              Ingen ferdige bøker i {selectedYear}.
-            </p>
+            <div className="libraryShelfEmpty">
+              <p>Ingen ferdige bøker i {selectedYear}.</p>
+              <span className="libraryShelfBoard" aria-hidden="true" />
+            </div>
           ) : (
             <div className="libraryShelf">
               {visibleShelf.map((reading) => (
                 <article key={reading.id} className="libraryShelfBook">
-                  <BookCover book={reading.book} className="libraryShelfCover" />
-                  <strong>{reading.book.title}</strong>
-                  <p>{reading.book.author}</p>
+                  <div className="libraryShelfCoverWrap">
+                    <BookCover book={reading.book} className="libraryShelfCover" />
+                  </div>
+                  <div className="libraryShelfCaption">
+                    <strong>{reading.book.title}</strong>
+                    <p>{reading.book.author}</p>
+                  </div>
                 </article>
               ))}
+              <span className="libraryShelfBoard" aria-hidden="true" />
             </div>
           )}
         </section>
