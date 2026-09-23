@@ -4654,21 +4654,23 @@ html[data-theme="christmas"] .christmasSnow {
 
 .mobileActionMenu {
   position: fixed;
-  left: 50%;
+  left: 0.5rem;
+  right: 0.5rem;
   bottom: max(0.5rem, env(safe-area-inset-bottom));
   z-index: 45;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   align-items: center;
-  width: min(32rem, calc(100% - 1rem));
+  width: auto;
+  max-width: 32rem;
   min-height: 4.6rem;
+  margin-inline: auto;
   padding: 0.35rem;
   border: 1px solid var(--line);
   border-radius: 1.25rem;
   background: rgba(255, 253, 248, 0.96);
   box-shadow: 0 14px 36px rgba(39, 54, 70, 0.22);
   backdrop-filter: blur(14px);
-  transform: translateX(-50%);
 }
 
 .mobileActionItem {
@@ -6739,17 +6741,56 @@ html[data-theme="christmas"] .christmasSnow {
     min-height: 12rem;
   }
 
-  .calendarShell {
-    width: min(100% - 1rem, 1600px);
+  html:has(.calendarShell),
+  html:has(.calendarShell) body {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  html:has(.calendarShell) body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-bottom: calc(5.6rem + env(safe-area-inset-bottom));
+  }
+
+  html:has(.calendarShell) .appChrome {
+    flex-shrink: 0;
+    width: calc(100% - 1rem);
+  }
+
+  html:has(.calendarShell) .homeContextButtonAction {
+    display: none;
+  }
+
+  .shell.calendarShell {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: calc(100% - 1rem);
+    min-width: 0;
+    min-height: 0;
+    margin-inline: auto;
+    padding: 0.5rem 0 0;
+    overflow: hidden;
   }
 
   .calendarPanel {
-    margin-top: 1rem;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    margin-top: 0.5rem;
     padding: 0.6rem;
     border-radius: 1.25rem;
+    overflow: hidden;
   }
 
   .calendarToolbar {
+    flex-shrink: 0;
     grid-template-columns: 1fr auto;
     gap: 0.75rem;
   }
@@ -6770,16 +6811,31 @@ html[data-theme="christmas"] .christmasSnow {
     grid-row: 2;
   }
 
+  .calendarScroll {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .calendarGrid {
     min-width: 840px;
   }
 
   .calendarGridWeek {
+    flex: 1 1 auto;
     min-width: 980px;
+    min-height: 100%;
+    grid-template-rows: auto minmax(0, 1fr);
   }
 
   .calendarGridWeek .calendarDay {
-    min-height: 420px;
+    min-height: 0;
+    overflow: auto;
   }
 }
 
