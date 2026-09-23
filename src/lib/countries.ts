@@ -1,11 +1,12 @@
 import "server-only";
 
+import { isFlagCode } from "@/lib/flag-codes";
 import type { Country } from "@/lib/types";
 
 const FLAGCDN_CODES_URL = "https://flagcdn.com/no/codes.json";
 const COUNTRY_FACTS_URL =
   "https://raw.githubusercontent.com/mledoze/countries/master/dist/countries.json";
-const SKIPPED_CODES = new Set(["eu", "un"]);
+const EXTRA_FLAG_CODES = ["gb-eng", "gb-sct", "gb-wls"] as const;
 
 const CONTINENT_LABELS: Record<string, string> = {
   Africa: "Afrika",
@@ -21,10 +22,17 @@ type CountryFacts = {
   continent?: string;
 };
 
+const EXTRA_FLAG_FACTS: Record<string, CountryFacts> = {
+  "gb-eng": { capital: "London", continent: "Europa" },
+  "gb-sct": { capital: "Edinburgh", continent: "Europa" },
+  "gb-wls": { capital: "Cardiff", continent: "Europa" },
+};
+
 type SourceCountry = {
   cca2?: unknown;
   capital?: unknown;
   region?: unknown;
+  independent?: unknown;
 };
 
 const FALLBACK_COUNTRIES: Country[] = [
@@ -53,7 +61,7 @@ function countryFromCode(
   return {
     code: normalized,
     name,
-    flagUrl: `https://flags.restcountries.com/v5/w640/${normalized}.png`,
+    flagUrl: `https://flagcdn.com/w640/${normalized}.png`,
     flagSvgUrl: `https://flagcdn.com/${normalized}.svg`,
     mapUrl: `https://borderly.dev/country/${normalized}.svg`,
     capital: facts.capital,
@@ -62,7 +70,7 @@ function countryFromCode(
 }
 
 function isIsoCountryCode(code: string): boolean {
-  return /^[a-z]{2}$/.test(code) && !SKIPPED_CODES.has(code);
+  return /^[a-z]{2}$/.test(code);
 }
 
 function firstString(value: unknown): string | undefined {
@@ -92,13 +100,17 @@ async function fetchJson(url: string, timeoutMs = 4000): Promise<unknown> {
   return response.json();
 }
 
-async function getCountryFacts(): Promise<Map<string, CountryFacts>> {
+async function getCountrySource(): Promise<{
+  facts: Map<string, CountryFacts>;
+  independentCodes: Set<string>;
+}> {
   const facts = new Map<string, CountryFacts>();
+  const independentCodes = new Set<string>();
 
   try {
     const data = await fetchJson(COUNTRY_FACTS_URL, 8000);
     if (!Array.isArray(data)) {
-      return facts;
+      return { facts, independentCodes };
     }
 
     for (const entry of data as SourceCountry[]) {
@@ -111,6 +123,10 @@ async function getCountryFacts(): Promise<Map<string, CountryFacts>> {
         continue;
       }
 
+      if (entry.independent === true) {
+        independentCodes.add(code);
+      }
+
       const capital = firstString(entry.capital);
       const continent = firstString(entry.region);
       facts.set(code, {
@@ -119,26 +135,36 @@ async function getCountryFacts(): Promise<Map<string, CountryFacts>> {
       });
     }
   } catch {
-    return facts;
+    return { facts, independentCodes };
   }
 
-  return facts;
+  return { facts, independentCodes };
 }
 
 export async function getCountries(): Promise<Country[]> {
   try {
-    const [namesData, facts] = await Promise.all([
+    const [namesData, source] = await Promise.all([
       fetchJson(FLAGCDN_CODES_URL),
-      getCountryFacts(),
+      getCountrySource(),
     ]);
 
     if (!namesData || typeof namesData !== "object" || Array.isArray(namesData)) {
       return FALLBACK_COUNTRIES;
     }
 
+    if (source.independentCodes.size === 0) {
+      return FALLBACK_COUNTRIES;
+    }
+
+    const allowedCodes = new Set<string>([
+      ...source.independentCodes,
+      ...EXTRA_FLAG_CODES,
+    ]);
+
     const countries = Object.entries(namesData as Record<string, unknown>)
       .flatMap(([code, name]) => {
-        if (typeof name !== "string" || !isIsoCountryCode(code)) {
+        const normalized = code.toLowerCase();
+        if (typeof name !== "string" || !allowedCodes.has(normalized) || !isFlagCode(normalized)) {
           return [];
         }
 
@@ -147,7 +173,13 @@ export async function getCountries(): Promise<Country[]> {
           return [];
         }
 
-        return [countryFromCode(code, trimmedName, facts.get(code))];
+        return [
+          countryFromCode(
+            normalized,
+            trimmedName,
+            EXTRA_FLAG_FACTS[normalized] || source.facts.get(normalized),
+          ),
+        ];
       })
       .sort((left, right) => left.name.localeCompare(right.name, "nb"));
 

@@ -1,5 +1,7 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 
+import { isFlagCode } from "@/lib/flag-codes";
+
 export const studiedFlagType = defineType({
   name: "studiedFlags",
   title: "Studerte flagg",
@@ -19,9 +21,9 @@ export const studiedFlagType = defineType({
               type: "string",
               validation: (rule) =>
                 rule.required().custom((code) =>
-                  typeof code === "string" && /^[a-z]{2}$/.test(code)
+                  typeof code === "string" && isFlagCode(code)
                     ? true
-                    : "Bruk en to-bokstavers landkode.",
+                    : "Bruk en gyldig landkode.",
                 ),
             }),
             defineField({

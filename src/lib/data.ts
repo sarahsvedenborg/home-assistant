@@ -45,6 +45,7 @@ import {
 import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
 import { eventParticipantLabel } from "@/lib/event-participants";
 import { singleEventCategoryLabel } from "@/lib/single-event-categories";
+import { isFlagCode } from "@/lib/flag-codes";
 import { osloDateKey } from "@/lib/family-feed";
 import { birthdaysOnDate } from "@/lib/birthdays";
 import { isSanityConfigured } from "@/sanity/env";
@@ -427,7 +428,7 @@ export async function getStudiedFlagCodes(): Promise<string[]> {
   );
 
   return (document?.codes || []).filter(
-    (code): code is string => typeof code === "string" && /^[a-z]{2}$/.test(code),
+    (code): code is string => typeof code === "string" && isFlagCode(code),
   );
 }
 
