@@ -1,9 +1,9 @@
 import "server-only";
 
-import { boktyvenAccessToken } from "@/sanity/env";
 import type { BookSearchHit, BookSource } from "@/lib/types";
 
 const USER_AGENT = "FamilyHub/1.0 (book lookup)";
+const NB_CATALOG_URL = "https://api.nb.no/catalog/v1/items";
 const WORK_LIMIT = 6;
 const EDITION_LIMIT = 20;
 const PUBLISHER_EXPAND_LIMIT = 6;
@@ -29,6 +29,7 @@ const EDITION_HOUSES = [
   { match: /bantam/, name: "Bantam" },
   { match: /harper/, name: "Harper" },
 ] as const;
+const OPEN_LIBRARY_SEARCH_LANGUAGE = "eng";
 const OPEN_LIBRARY_FIELDS = [
   "key",
   "title",
@@ -76,7 +77,7 @@ const LANGUAGE_LABELS: Record<string, string> = {
 };
 
 export function isBookSource(value: string): value is BookSource {
-  return value === "boktyven" || value === "openlibrary";
+  return value === "nasjonalbiblioteket" || value === "openlibrary";
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -226,50 +227,200 @@ async function fetchJson(url: string, headers?: HeadersInit) {
   return response.json() as Promise<unknown>;
 }
 
-function mapBoktyvenBook(value: unknown): BookCandidate | null {
+const INSTITUTION_CREATOR =
+  /museum|universitet|bibliotek|corporation|forlag|institutt|kommune|departement|multimedia|norsk folkemuseum/i;
+const SECONDARY_TITLE =
+  /utstilling|katalog|analyse|rapport|exodus|kunnskapsspill|i\.e\./i;
+
+function formatCreatorName(value: string) {
+  const [last, ...rest] = value.split(",").map((part) => part.trim()).filter(Boolean);
+  if (last && rest.length === 1 && last.length < 40 && !/\d/.test(last)) {
+    return `${rest[0]} ${last}`;
+  }
+
+  return value;
+}
+
+function cleanNbTitle(value: string) {
+  const trimmed = value.trim();
+  const wrapped = trimmed.match(/^[\[(](.+)[\])]$/);
+  return (wrapped?.[1] || trimmed).replace(/\s+/g, " ").trim();
+}
+
+function nbLinkHref(links: Record<string, unknown> | null, key: string) {
+  return asString(asRecord(links?.[key])?.href);
+}
+
+function nbCoverUrl(links: Record<string, unknown> | null) {
+  const large = nbLinkHref(links, "thumbnail_large");
+  if (large) {
+    return large;
+  }
+
+  const medium = nbLinkHref(links, "thumbnail_medium");
+  if (medium) {
+    return medium;
+  }
+
+  const custom = nbLinkHref(links, "thumbnail_custom");
+  return custom ? custom.replace("{width},{height}", "0,200") : undefined;
+}
+
+function nbCreators(metadata: Record<string, unknown>) {
+  const fromList = asList(metadata.creators).map(asString).filter(Boolean);
+  if (fromList.length > 0) {
+    return fromList;
+  }
+
+  const people = asList(metadata.people)
+    .map((value) => asRecord(value))
+    .filter((person): person is Record<string, unknown> => Boolean(person))
+    .sort((left, right) => {
+      const leftPrimary = asString(left.usage) === "primary" ? 0 : 1;
+      const rightPrimary = asString(right.usage) === "primary" ? 0 : 1;
+      return leftPrimary - rightPrimary;
+    })
+    .map((person) => asString(person.name))
+    .filter(Boolean);
+  if (people.length > 0) {
+    return people;
+  }
+
+  const statement = asString(metadata.statementOfResponsibility);
+  return statement ? [statement] : [];
+}
+
+function nbAuthor(metadata: Record<string, unknown>) {
+  const creators = nbCreators(metadata);
+  const people = creators
+    .filter((name) => !INSTITUTION_CREATOR.test(name))
+    .map(formatCreatorName);
+  const names = (people.length > 0 ? people : creators.map(formatCreatorName)).slice(0, 2);
+  return names.join(", ");
+}
+
+function mapNasjonalbiblioteketBook(value: unknown): BookCandidate | null {
   const record = asRecord(value);
-  if (!record) {
+  const metadata = asRecord(record?.metadata);
+  if (!record || !metadata) {
     return null;
   }
 
-  const title = asString(record.title) || asString(record.name);
-  const author = asString(record.author) || asString(record.authors);
-  const isbn = preferIsbn([asString(record.isbn), asString(record.isbn13), asString(record.isbn10)].filter(Boolean));
+  const identifiers = asRecord(metadata.identifiers);
+  const originInfo = asRecord(metadata.originInfo);
+  const language = asRecord(asList(metadata.languages)[0]);
+  const id = asString(record.id) || asString(identifiers?.sesamId);
+  const title = cleanNbTitle(asString(metadata.title));
+  const author = nbAuthor(metadata);
+  const isbn = preferIsbn([
+    ...asList(identifiers?.isbn13).map(asString),
+    ...asList(identifiers?.isbn10).map(asString),
+    asString(identifiers?.isbn13),
+    asString(identifiers?.isbn10),
+  ]);
+  const pageCount = asNumber(metadata.pageCount);
 
-  if (!title || !author) {
+  if (!id || !title || !author) {
     return null;
   }
 
   return {
-    source: "boktyven",
-    id: isbn || asString(record.url) || title,
+    source: "nasjonalbiblioteket",
+    id: id.slice(0, 80),
     title: title.slice(0, 200),
     author: author.slice(0, 160),
-    coverUrl: asString(record.coverUrl) || asString(record.cover) || undefined,
+    coverUrl: nbCoverUrl(asRecord(record._links)),
     isbn,
-    pageCount: asNumber(record.pageCount) || asNumber(record.pages) || asNumber(record.numberOfPages),
-    publicationYear: yearFromValue(record.publicationYear ?? record.year),
-    originalLanguage: languageLabel(asString(record.language) || asString(record.originalLanguage)),
-    authorCountry: asString(record.authorCountry) || asString(record.country) || undefined,
-    publisher: asString(record.publisher) || undefined,
+    pageCount: pageCount && pageCount >= 1 ? Math.trunc(pageCount) : undefined,
+    publicationYear: yearFromValue(originInfo?.issued),
+    originalLanguage: languageLabel(asString(language?.code)),
+    publisher: asString(originInfo?.publisher) || undefined,
   };
 }
 
-async function searchBoktyven(query: string): Promise<BookCandidate[]> {
-  if (!boktyvenAccessToken) {
-    return [];
+function nbEmbeddedItems(payload: unknown) {
+  const record = asRecord(payload);
+  const embedded = asRecord(record?._embedded);
+  const items = asList(embedded?.items);
+  if (items.length > 0) {
+    return items;
   }
 
-  const url = new URL("https://boktyven.no/api/v1/books/search");
+  return record?.id && record.metadata ? [record] : [];
+}
+
+function scoreNbHit(book: BookCandidate, query: string) {
+  const title = book.title.toLowerCase();
+  const needle = query.toLowerCase();
+  let score = 0;
+
+  if (title === needle) {
+    score += 8;
+  } else if (title.startsWith(needle)) {
+    score += 5;
+  } else if (title.includes(needle)) {
+    score += 3;
+  }
+
+  if (book.isbn) {
+    score += 4;
+  }
+
+  if (book.coverUrl) {
+    score += 3;
+  }
+
+  if (book.pageCount && book.pageCount > 0) {
+    score += 2;
+  }
+
+  if (book.originalLanguage === "Norsk" || book.originalLanguage === "Nynorsk") {
+    score += 2;
+  }
+
+  if (SECONDARY_TITLE.test(book.title) && !SECONDARY_TITLE.test(query)) {
+    score -= 6;
+  }
+
+  if (INSTITUTION_CREATOR.test(book.author)) {
+    score -= 3;
+  }
+
+  return score;
+}
+
+async function fetchNbItems(query: string) {
+  const url = new URL(NB_CATALOG_URL);
   url.searchParams.set("q", query);
+  url.searchParams.append("filter", "mediatype:bøker");
+  url.searchParams.set("size", String(EDITION_LIMIT));
+  return nbEmbeddedItems(await fetchJson(url.toString()));
+}
+
+async function searchNasjonalbiblioteket(query: string): Promise<BookCandidate[]> {
+  const isbnQuery = preferIsbn([query]);
+  const titleQuery = query.replace(/"/g, "").trim();
+  const searches = isbnQuery
+    ? [isbnQuery]
+    : [`title:"${titleQuery}"`, titleQuery];
 
   try {
-    const payload = await fetchJson(url.toString(), {
-      "X-Access-Token": boktyvenAccessToken,
-    });
-    return asList(payload)
-      .map(mapBoktyvenBook)
-      .filter((book): book is BookCandidate => Boolean(book))
+    const hits: BookCandidate[] = [];
+    const seen = new Set<string>();
+
+    for (const search of searches) {
+      const items = await fetchNbItems(search);
+      for (const item of items) {
+        addUniqueEdition(hits, seen, mapNasjonalbiblioteketBook(item));
+      }
+
+      if (isbnQuery || hits.length > 0) {
+        break;
+      }
+    }
+
+    return hits
+      .sort((left, right) => scoreNbHit(right, titleQuery) - scoreNbHit(left, titleQuery))
       .slice(0, EDITION_LIMIT);
   } catch {
     return [];
@@ -376,7 +527,15 @@ function addUniqueEdition(hits: BookCandidate[], seen: Set<string>, hit: BookCan
 
 async function searchOpenLibraryDocs(params: Record<string, string>) {
   const url = new URL("https://openlibrary.org/search.json");
-  for (const [key, value] of Object.entries(params)) {
+  const query = params.q
+    ? {
+        ...params,
+        q: `${params.q} language:${OPEN_LIBRARY_SEARCH_LANGUAGE}`,
+        lang: "en",
+      }
+    : params;
+
+  for (const [key, value] of Object.entries(query)) {
     url.searchParams.set(key, value);
   }
   url.searchParams.set("fields", OPEN_LIBRARY_FIELDS);
@@ -432,7 +591,7 @@ async function searchOpenLibrary(query: string): Promise<BookCandidate[]> {
 }
 
 export async function searchBooks(query: string): Promise<BookSearchHit[]> {
-  const norwegianHits = await searchBoktyven(query);
+  const norwegianHits = await searchNasjonalbiblioteket(query);
   const hits = norwegianHits.length > 0 ? norwegianHits : await searchOpenLibrary(query);
 
   return hits.map((hit) => ({
@@ -446,12 +605,22 @@ export async function searchBooks(query: string): Promise<BookSearchHit[]> {
   }));
 }
 
-async function lookupBoktyven(id: string): Promise<BookCandidate | null> {
-  const matches = await searchBoktyven(id);
+async function lookupNasjonalbiblioteket(id: string): Promise<BookCandidate | null> {
+  try {
+    const payload = await fetchJson(`${NB_CATALOG_URL}/${encodeURIComponent(id)}`);
+    const mapped = mapNasjonalbiblioteketBook(payload);
+    if (mapped) {
+      return mapped;
+    }
+  } catch {
+    // Fall through to catalog search for ISBN-style ids.
+  }
+
+  const matches = await searchNasjonalbiblioteket(id);
   const needle = digitsOnly(id);
   return (
-    matches.find((book) => book.isbn && digitsOnly(book.isbn) === needle) ||
     matches.find((book) => book.id === id) ||
+    matches.find((book) => book.isbn && digitsOnly(book.isbn) === needle) ||
     matches[0] ||
     null
   );
@@ -575,8 +744,8 @@ async function lookupOpenLibrary(id: string): Promise<BookCandidate | null> {
 }
 
 export async function lookupBook(source: BookSource, id: string) {
-  if (source === "boktyven") {
-    return lookupBoktyven(id);
+  if (source === "nasjonalbiblioteket") {
+    return lookupNasjonalbiblioteket(id);
   }
 
   return lookupOpenLibrary(id);
@@ -592,8 +761,8 @@ export function isAllowedCoverUrl(value: string) {
     const host = url.hostname.toLowerCase();
     return (
       host === "covers.openlibrary.org" ||
-      host === "boktyven.no" ||
-      host.endsWith(".boktyven.no")
+      host === "nb.no" ||
+      host.endsWith(".nb.no")
     );
   } catch {
     return false;

@@ -254,7 +254,7 @@ export function BookForm({
                         book.publisher,
                         book.publisher
                           ? null
-                          : book.source === "boktyven"
+                          : book.source === "nasjonalbiblioteket"
                             ? "Norge"
                             : "Internasjonalt",
                       ]

@@ -56,7 +56,7 @@ export type Book = {
   pageCount?: number;
 };
 
-export type BookSource = "boktyven" | "openlibrary";
+export type BookSource = "nasjonalbiblioteket" | "openlibrary";
 
 export type BookSearchHit = {
   source: BookSource;

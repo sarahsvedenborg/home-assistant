@@ -816,7 +816,7 @@ export function validateBookSubmission(
     return { success: false, error: "Velg hvem boken gjelder." };
   }
 
-  if (source !== "boktyven" && source !== "openlibrary") {
+  if (source !== "nasjonalbiblioteket" && source !== "openlibrary") {
     return { success: false, error: "Velg en bok fra søket." };
   }
 
