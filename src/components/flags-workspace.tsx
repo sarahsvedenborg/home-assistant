@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { FeaturedFlag } from "@/components/featured-flag";
 import { FlagBrowser } from "@/components/flag-browser";
+import { FlagStudyProgress } from "@/components/flag-study-progress";
 import type { Country } from "@/lib/types";
 
 export function FlagsWorkspace({
@@ -74,6 +75,7 @@ export function FlagsWorkspace({
         pendingCode={pendingCode}
         onToggleStudied={setStudiedFlag}
       />
+      <FlagStudyProgress countries={countries} studiedCodes={studied} />
       <FlagBrowser
         countries={countries}
         studiedCodes={studied}
