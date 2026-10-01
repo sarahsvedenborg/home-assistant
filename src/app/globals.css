@@ -3270,12 +3270,17 @@ html[data-theme="christmas"] .christmasSnow {
   .flagsShell .flagMediaFeatured {
     flex: 1;
     min-height: 22rem;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.05fr);
     align-items: center;
   }
 
+  .flagsShell .flagMediaFeatured:has(.flagMap) {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.85fr) minmax(0, 1.05fr);
+  }
+
   .flagsShell .flagMediaFeatured .flagImage,
-  .flagsShell .flagMediaFeatured .flagMap {
+  .flagsShell .flagMediaFeatured .flagMap,
+  .flagsShell .flagMediaFeatured .countryWorldLocation {
     width: 100%;
     height: auto;
     max-height: min(40rem, 56vh);
@@ -6551,13 +6556,33 @@ html[data-theme="christmas"] .christmasSnow {
 }
 
 .flagMediaFeatured {
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr);
   align-items: center;
   margin-top: 0.5rem;
 }
 
+.flagMediaFeatured:has(.flagMap) {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.flagGeoVisuals {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.flagGeoVisuals:has(.flagMap) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+}
+
+.flagMediaFeatured .flagGeoVisuals {
+  display: contents;
+}
+
 .flagImage,
-.flagMap {
+.flagMap,
+.countryWorldLocation {
   width: 100%;
   height: auto;
   object-fit: contain;
@@ -6576,12 +6601,57 @@ html[data-theme="christmas"] .christmasSnow {
   background: transparent;
 }
 
-.flagMap {
+.flagMap,
+.countryWorldLocation {
   max-height: 12rem;
 }
 
-.flagMediaFeatured .flagMap {
+.flagMediaFeatured .flagMap,
+.flagMediaFeatured .countryWorldLocation {
   max-height: 18rem;
+}
+
+.countryWorldLocation {
+  position: relative;
+  display: block;
+  overflow: visible;
+}
+
+.countryWorldLocation svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: inherit;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.countryWorldLocationOcean {
+  fill: color-mix(in srgb, var(--cool-wash) 86%, var(--surface));
+}
+
+.countryWorldLocationLand {
+  fill: color-mix(in srgb, var(--ink) 16%, var(--surface));
+  stroke: color-mix(in srgb, var(--ink) 12%, transparent);
+  stroke-width: 0.45;
+}
+
+.countryWorldLocationSelected {
+  fill: var(--cool);
+  stroke: color-mix(in srgb, var(--ink-strong) 40%, var(--cool));
+  stroke-width: 0.9;
+}
+
+.countryWorldLocationMarker {
+  position: absolute;
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 2px solid var(--cool);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--cool) 42%, var(--surface));
+  box-shadow: 0 0 0 0.26rem color-mix(in srgb, var(--cool) 22%, transparent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .flagBrowser {
@@ -6748,8 +6818,16 @@ html[data-theme="christmas"] .christmasSnow {
   font-weight: 700;
 }
 
-.flagCard .flagMap {
+.flagCard .flagMap,
+.flagCard .countryWorldLocation {
   max-height: 5.5rem;
+}
+
+.flagCard .countryWorldLocationMarker {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-width: 1.5px;
+  box-shadow: 0 0 0 0.18rem color-mix(in srgb, var(--cool) 22%, transparent);
 }
 
 .flagQuiz {

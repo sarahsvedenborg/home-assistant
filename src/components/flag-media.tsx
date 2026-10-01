@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { CountryWorldLocation } from "@/components/country-world-location";
 import type { Country } from "@/lib/types";
 
 export function FlagMedia({
@@ -30,13 +31,21 @@ export function FlagMedia({
           }
         }}
       />
-      {showMap && !mapFailed ? (
-        <img
-          src={country.mapUrl}
-          alt={`Kart over ${country.name}`}
-          className="flagMap"
-          onError={() => setMapFailed(true)}
-        />
+      {showMap ? (
+        <div className="flagGeoVisuals">
+          {mapFailed ? null : (
+            <img
+              src={country.mapUrl}
+              alt={`Kart over ${country.name}`}
+              className="flagMap"
+              onError={() => setMapFailed(true)}
+            />
+          )}
+          <CountryWorldLocation
+            countryCode={country.code}
+            name={country.name}
+          />
+        </div>
       ) : null}
     </div>
   );
