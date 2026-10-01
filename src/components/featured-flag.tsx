@@ -59,7 +59,25 @@ export function FeaturedFlag({
           <span className="kicker">
             {country.code === initialCode ? "Dagens flagg" : "Flagg"}
           </span>
-          <h2 id="daily-flag-title">{country.name}</h2>
+          <div className="flagHeroTitleRow">
+            <h2 id="daily-flag-title">{country.name}</h2>
+            <button
+              type="button"
+              className={
+                isStudied
+                  ? "flagStudyButton flagStudyButtonActive"
+                  : "flagStudyButton"
+              }
+              disabled={isPending}
+              onClick={() => onToggleStudied(country, !isStudied)}
+            >
+              {isPending
+                ? "Lagrer…"
+                : isStudied
+                  ? "Studert"
+                  : "Marker som studert"}
+            </button>
+          </div>
         </div>
         {canNavigate ? (
           <button
@@ -76,25 +94,6 @@ export function FeaturedFlag({
       <FlagFacts country={country} className="flagHeroFacts" />
 
       <FlagMedia country={country} featured key={country.code} />
-
-      <div className="flagHeroActions">
-        <button
-          type="button"
-          className={
-            isStudied
-              ? "flagStudyButton flagStudyButtonActive"
-              : "flagStudyButton"
-          }
-          disabled={isPending}
-          onClick={() => onToggleStudied(country, !isStudied)}
-        >
-          {isPending
-            ? "Lagrer…"
-            : isStudied
-              ? "Studert"
-              : "Marker som studert"}
-        </button>
-      </div>
     </section>
   );
 }
