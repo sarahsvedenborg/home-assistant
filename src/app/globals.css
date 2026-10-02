@@ -1170,12 +1170,17 @@ button {
   margin: 0;
 }
 
+.weeklyPayChoreCopy strong {
+  font-size: 1.2rem;
+}
+
 .weeklyPayChoreCopy p {
+  font-size: 1.05rem;
   line-height: 1.4;
 }
 
 .weeklyPayChoreCopy span {
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 
@@ -2494,12 +2499,12 @@ html[data-theme="christmas"] .christmasSnow {
 
   .weeklyPayShell .weeklyPayChoreCopy p,
   .weeklyPayShell .weeklyPayChoreCopy strong {
-    font-size: 1.22rem;
+    font-size: 1.7rem;
   }
 
   .weeklyPayShell .weeklyPayChoreCopy span,
   .weeklyPayShell .weeklyPayEmpty {
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
 
   .weeklyPayShell .weeklyPayCounter button {
@@ -2509,7 +2514,7 @@ html[data-theme="christmas"] .christmasSnow {
   }
 
   .weeklyPayShell .weeklyPayCounter strong {
-    font-size: 1.35rem;
+    font-size: 1.65rem;
   }
 
   .shell.boardShell {
