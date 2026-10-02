@@ -477,6 +477,15 @@ export async function changeMemberChoreAmount(
 
   await patch.inc({ [amountPath]: delta }).commit();
 
+  const storedAmount = await client.fetch<number | null>(
+    `*[_type == "familyMember" && _id == $memberId][0].chores[_key == $assignmentKey][0].amount`,
+    { memberId, assignmentKey },
+  );
+
+  if (typeof storedAmount === "number") {
+    return Math.max(0, Math.floor(storedAmount));
+  }
+
   return currentAmount + delta;
 }
 

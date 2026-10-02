@@ -1,8 +1,10 @@
 import { WeeklyPayList } from "@/components/weekly-pay-list";
 import { getFamilyMembers } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export default async function UkelonnPage() {
-  const familyMembers = (await getFamilyMembers()).filter((member) => {
+  const familyMembers = (await getFamilyMembers({ fresh: true })).filter((member) => {
     const name = member.name.trim().toLowerCase();
     return name !== "mamma" && name !== "pappa";
   });
