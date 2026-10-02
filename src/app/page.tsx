@@ -115,6 +115,15 @@ export default async function Home() {
                 openLabel="Se filmer"
                 addLabel="Legg til film"
               />
+              <HubCard
+                href="/boker"
+                formHref="/boker#add-book"
+                icon="📚"
+                title="Bøker"
+                accentClass="accentWarm"
+                openLabel="Se bøker"
+                addLabel="Legg til bok"
+              />
             {/*   <HubCard
                 href="/kalender"
                 formHref="/#add-event"

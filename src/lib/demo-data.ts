@@ -5,6 +5,7 @@ import type {
   FamilyMember,
   FeatureSuggestion,
   MovieRecommendation,
+  Reading,
   Recipe,
   RecurringEvent,
   ShortMessage,
@@ -139,6 +140,55 @@ export const FALLBACK_WISHLIST_ITEMS: WishListItem[] = [
     description: "En hyggelig morgen ute sammen.",
     submittedBy: "Pappa",
     createdAt: "2026-08-21T07:45:00.000Z",
+  },
+];
+
+export const FALLBACK_READINGS: Reading[] = [
+  {
+    id: "reading-1",
+    status: "reading",
+    readingType: "self",
+    startedAt: "2026-09-01",
+    currentPage: 84,
+    book: {
+      id: "book-1",
+      title: "Sofies verden",
+      author: "Jostein Gaarder",
+      pageCount: 511,
+    },
+    readers: [{ id: "2012", name: "Amélie" }],
+  },
+  {
+    id: "reading-2",
+    status: "reading",
+    readingType: "together",
+    startedAt: "2026-09-10",
+    currentPage: 42,
+    book: {
+      id: "book-2",
+      title: "Kaptein Sabeltann og jakten på den magiske diamant",
+      author: "Terje Formoe",
+      pageCount: 160,
+    },
+    readers: [
+      { id: "mom", name: "Mamma" },
+      { id: "2018", name: "Linnea" },
+    ],
+  },
+  {
+    id: "reading-3",
+    status: "finished",
+    readingType: "self",
+    startedAt: "2026-06-01",
+    finishedAt: "2026-08-12",
+    rating: 5,
+    book: {
+      id: "book-3",
+      title: "Harry Potter og de vises stein",
+      author: "J.K. Rowling",
+      pageCount: 352,
+    },
+    readers: [{ id: "2012", name: "Amélie" }],
   },
 ];
 

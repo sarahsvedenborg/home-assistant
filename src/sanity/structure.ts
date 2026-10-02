@@ -17,6 +17,8 @@ export const structure: StructureResolver = (S) =>
         ),
       S.divider(),
       S.documentTypeListItem("movieRecommendation").title("Filmer"),
+      S.documentTypeListItem("book").title("Bøker"),
+      S.documentTypeListItem("reading").title("Lesing"),
       S.documentTypeListItem("wishListItem").title("Ønskeliste"),
       S.documentTypeListItem("chore").title("Ukelønn-oppgaver"),
       S.documentTypeListItem("shortMessage").title("Melding"),
