@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { AUTH_COOKIE_NAME, isAuthEnabled, isValidAuthCookie } from "@/lib/auth";
@@ -35,6 +36,8 @@ export async function POST(request: Request, context: RouteContext) {
   try {
     const { memberId } = await context.params;
     await resetMemberChoreAmounts(memberId);
+    revalidatePath("/ukelonn");
+    revalidatePath("/");
     return NextResponse.json({ success: true });
   } catch (error) {
     const errorMessage =

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { FormModal } from "@/components/form-modal";
@@ -13,6 +14,7 @@ const currencyFormatter = new Intl.NumberFormat("nb-NO", {
 });
 
 export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember[] }) {
+  const router = useRouter();
   const [members, setMembers] = useState(initialMembers);
   const [collapsedMembers, setCollapsedMembers] = useState<Set<string>>(
     () => new Set(initialMembers.map((member) => member.id)),
@@ -29,10 +31,6 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
   const [celebrationName, setCelebrationName] = useState<string | null>(null);
 
   useEffect(() => {
-    setMembers(initialMembers);
-  }, [initialMembers]);
-
-  useEffect(() => {
     if (!celebrationName) {
       return;
     }
@@ -41,10 +39,7 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
     return () => clearTimeout(timer);
   }, [celebrationName]);
 
-  async function changeAmount(memberId: string, assignmentKey: string, delta: -1 | 1) {
-    const pendingKey = `${memberId}:${assignmentKey}`;
-    const previousMembers = members;
-
+  function applyAmountDelta(memberId: string, assignmentKey: string, delta: number) {
     setMembers((current) =>
       current.map((member) =>
         member.id === memberId
@@ -62,6 +57,12 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
           : member,
       ),
     );
+  }
+
+  async function changeAmount(memberId: string, assignmentKey: string, delta: -1 | 1) {
+    const pendingKey = `${memberId}:${assignmentKey}`;
+
+    applyAmountDelta(memberId, assignmentKey, delta);
     setPendingAssignment(pendingKey);
     setFeedback(null);
 
@@ -72,12 +73,13 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ delta }),
+          keepalive: true,
         },
       );
       const result = (await response.json()) as { amount?: number; error?: string };
 
       if (!response.ok || typeof result.amount !== "number") {
-        setMembers(previousMembers);
+        applyAmountDelta(memberId, assignmentKey, -delta);
         setFeedback(result.error || "Kunne ikke oppdatere oppgaven.");
         return;
       }
@@ -96,8 +98,9 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
             : member,
         ),
       );
+      router.refresh();
     } catch {
-      setMembers(previousMembers);
+      applyAmountDelta(memberId, assignmentKey, -delta);
       setFeedback("Kunne ikke oppdatere oppgaven. Prøv igjen.");
     } finally {
       setPendingAssignment(null);
@@ -169,6 +172,7 @@ export function WeeklyPayList({ initialMembers }: { initialMembers: FamilyMember
       );
       setPayment(null);
       setCelebrationName(paidMemberName);
+      router.refresh();
     } catch {
       setPaymentError("Kunne ikke registrere betalingen. Prøv igjen.");
     } finally {

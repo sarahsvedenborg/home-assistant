@@ -49,6 +49,7 @@ import { isFlagCode } from "@/lib/flag-codes";
 import { osloDateKey } from "@/lib/family-feed";
 import { birthdaysOnDate } from "@/lib/birthdays";
 import { isSanityConfigured } from "@/sanity/env";
+import { getFreshReadClient } from "@/sanity/lib/client";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
   BIRTHDAYS_QUERY,
@@ -238,17 +239,7 @@ export function getSiteMode() {
   return isSanityConfigured ? "live" : "demo";
 }
 
-export async function getFamilyMembers(): Promise<FamilyMember[]> {
-  if (!isSanityConfigured) {
-    return FALLBACK_FAMILY_MEMBERS;
-  }
-
-  const members = await fetchFromSanity<SanityFamilyMember[]>(FAMILY_MEMBERS_QUERY);
-
-  if (!members || members.length === 0) {
-    return FALLBACK_FAMILY_MEMBERS;
-  }
-
+function mapFamilyMembers(members: SanityFamilyMember[]): FamilyMember[] {
   return members.map((member) => ({
     id: member._id,
     name: member.name,
@@ -268,6 +259,33 @@ export async function getFamilyMembers(): Promise<FamilyMember[]> {
         },
       })),
   }));
+}
+
+export async function getFamilyMembers(options?: { fresh?: boolean }): Promise<FamilyMember[]> {
+  if (!isSanityConfigured) {
+    return FALLBACK_FAMILY_MEMBERS;
+  }
+
+  if (options?.fresh) {
+    const client = getFreshReadClient();
+    const members = client
+      ? await client.fetch<SanityFamilyMember[]>(FAMILY_MEMBERS_QUERY)
+      : null;
+
+    if (!members || members.length === 0) {
+      return FALLBACK_FAMILY_MEMBERS;
+    }
+
+    return mapFamilyMembers(members);
+  }
+
+  const members = await fetchFromSanity<SanityFamilyMember[]>(FAMILY_MEMBERS_QUERY);
+
+  if (!members || members.length === 0) {
+    return FALLBACK_FAMILY_MEMBERS;
+  }
+
+  return mapFamilyMembers(members);
 }
 
 export async function getWishListItems(): Promise<WishListItem[]> {

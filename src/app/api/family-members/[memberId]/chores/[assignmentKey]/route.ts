@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { AUTH_COOKIE_NAME, isAuthEnabled, isValidAuthCookie } from "@/lib/auth";
@@ -37,6 +38,9 @@ export async function PATCH(request: Request, context: RouteContext) {
       assignmentKey,
       result.data.delta,
     );
+
+    revalidatePath("/ukelonn");
+    revalidatePath("/");
 
     return NextResponse.json({ amount });
   } catch (error) {
