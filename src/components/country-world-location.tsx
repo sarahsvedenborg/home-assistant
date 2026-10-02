@@ -10,7 +10,7 @@ export function CountryWorldLocation({
   className?: string;
 }) {
   const location = getWorldLocation(countryCode);
-  const [, , width, height] = location.viewBox.split(" ").map(Number);
+  const { view } = location;
   const label = name ? `${name} i verden` : "Landets plassering i verden";
 
   return (
@@ -23,7 +23,13 @@ export function CountryWorldLocation({
         aria-label={label}
         focusable="false"
       >
-        <path className="countryWorldLocationOcean" d={location.sphere} />
+        <rect
+          className="countryWorldLocationOcean"
+          x={view.x}
+          y={view.y}
+          width={view.width}
+          height={view.height}
+        />
         <path className="countryWorldLocationLand" d={location.land} />
         {location.selected?.d ? (
           <path
@@ -32,13 +38,13 @@ export function CountryWorldLocation({
           />
         ) : null}
       </svg>
-      {location.selected?.marker && width && height ? (
+      {location.selected?.marker ? (
         <span
           className="countryWorldLocationMarker"
           aria-hidden="true"
           style={{
-            left: `${(location.selected.x / width) * 100}%`,
-            top: `${(location.selected.y / height) * 100}%`,
+            left: `${((location.selected.x - view.x) / view.width) * 100}%`,
+            top: `${((location.selected.y - view.y) / view.height) * 100}%`,
           }}
         />
       ) : null}

@@ -6614,7 +6614,7 @@ html[data-theme="christmas"] .christmasSnow {
 .countryWorldLocation {
   position: relative;
   display: block;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .countryWorldLocation svg {
@@ -6631,15 +6631,17 @@ html[data-theme="christmas"] .christmasSnow {
 }
 
 .countryWorldLocationLand {
-  fill: color-mix(in srgb, var(--ink) 16%, var(--surface));
-  stroke: color-mix(in srgb, var(--ink) 12%, transparent);
-  stroke-width: 0.45;
+  fill: color-mix(in srgb, var(--ink) 22%, var(--surface));
+  stroke: color-mix(in srgb, var(--ink) 16%, transparent);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
 }
 
 .countryWorldLocationSelected {
   fill: var(--cool);
   stroke: color-mix(in srgb, var(--ink-strong) 40%, var(--cool));
-  stroke-width: 0.9;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
 }
 
 .countryWorldLocationMarker {

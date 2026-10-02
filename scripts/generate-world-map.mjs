@@ -175,6 +175,12 @@ function addCountry(countries, code, feature, path, projection, simplify = false
   const entry = {
     x: round(centroid[0]),
     y: round(centroid[1]),
+    b: [
+      round(bounds[0][0]),
+      round(bounds[0][1]),
+      round(bounds[1][0]),
+      round(bounds[1][1]),
+    ],
   };
 
   if (d && d !== "M0,0") {
@@ -249,7 +255,9 @@ for (const [code, coordinates] of Object.entries(FALLBACK_COORDINATES)) {
     continue;
   }
 
-  countries[code] = { x: round(point[0]), y: round(point[1]), m: 1 };
+  const x = round(point[0]);
+  const y = round(point[1]);
+  countries[code] = { x, y, m: 1, b: [x - 6, y - 6, x + 6, y + 6] };
 }
 
 const output = {

@@ -33,14 +33,14 @@ export function FlagMedia({
       />
       {showMap ? (
         <div className="flagGeoVisuals">
-          {mapFailed ? null : (
+        {/*   {mapFailed ? null : (
             <img
               src={country.mapUrl}
               alt={`Kart over ${country.name}`}
               className="flagMap"
               onError={() => setMapFailed(true)}
             />
-          )}
+          )} */}
           <CountryWorldLocation
             countryCode={country.code}
             name={country.name}
