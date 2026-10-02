@@ -47,6 +47,9 @@
   --accent-warm-panel-end: rgba(255, 248, 240, 0.92);
   --accent-cool-panel-start: rgba(222, 243, 255, 0.95);
   --accent-cool-panel-end: rgba(248, 252, 255, 0.92);
+  --backdrop-blur: blur(10px);
+  --backdrop-blur-strong: blur(14px);
+  --backdrop-blur-modal: blur(4px);
 }
 
 html[data-theme="christmas"] {
@@ -299,8 +302,22 @@ button {
 .emptyState {
   border: 1px solid var(--line);
   background: var(--paper);
-  backdrop-filter: blur(10px);
   box-shadow: var(--shadow);
+}
+
+.heroPanel,
+.sectionHero,
+.infoStrip,
+.listPanel,
+.formPanel,
+.groupCard,
+.movieCard,
+.emptyState {
+  backdrop-filter: var(--backdrop-blur);
+}
+
+.hubCard {
+  backdrop-filter: none;
 }
 
 .heroPanel {
@@ -474,6 +491,14 @@ button {
   transform: translateY(-1px);
   background: color-mix(in srgb, var(--surface) 72%, transparent);
   color: var(--ink);
+}
+
+.homeGhostButtonActive,
+.homeGhostButtonActive:hover,
+.homeGhostButtonActive:focus-visible {
+  background: var(--paper-strong);
+  color: var(--ink);
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--shade) 12%, transparent);
 }
 
 .homeContextButtonActive,
@@ -4314,7 +4339,7 @@ html[data-theme="christmas"] .christmasSnow {
   border-radius: 1.75rem;
   background: var(--paper);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
+  backdrop-filter: var(--backdrop-blur);
 }
 
 .shoppingListColumn > h2 {
@@ -4660,9 +4685,27 @@ html[data-theme="christmas"] .christmasSnow {
   cursor: pointer;
 }
 
+.homeShell .addFab {
+  right: auto;
+  left: max(1.1rem, env(safe-area-inset-left));
+  min-height: 5.5rem;
+  padding: 0 2.1rem;
+  gap: 0.85rem;
+  font-size: 1.85rem;
+}
+
+.homeShell .addFabIcon {
+  font-size: 2.7rem;
+}
+
 @media (min-width: 2000px) and (min-height: 1200px) {
   .addFab {
     right: calc(32rem + 4.5rem);
+  }
+
+  .homeShell .addFab {
+    right: auto;
+    left: max(1.5rem, env(safe-area-inset-left));
   }
 
   .calendarShell .addFab,
@@ -4718,9 +4761,8 @@ html[data-theme="christmas"] .christmasSnow {
   padding: 0.35rem;
   border: 1px solid var(--line);
   border-radius: 1.25rem;
-  background: rgba(255, 253, 248, 0.96);
+  background: var(--paper-strong);
   box-shadow: 0 14px 36px rgba(39, 54, 70, 0.22);
-  backdrop-filter: blur(14px);
 }
 
 .mobileActionItem {
@@ -4810,7 +4852,7 @@ html[data-theme="christmas"] .christmasSnow {
     border-radius: 1.1rem;
     background: color-mix(in srgb, var(--paper-strong) 94%, transparent);
     box-shadow: var(--shadow);
-    backdrop-filter: blur(14px);
+    backdrop-filter: var(--backdrop-blur-strong);
   }
 
   .installPrompt p {
@@ -4871,7 +4913,7 @@ html[data-theme="christmas"] .christmasSnow {
   /* Keep the sheet clear of the notch / status bar at the top. */
   padding-top: env(safe-area-inset-top);
   background: color-mix(in srgb, var(--ink) 45%, transparent);
-  backdrop-filter: blur(4px);
+  backdrop-filter: var(--backdrop-blur-modal);
 }
 
 /* Bottom sheet on phones (mobile-first default) */
@@ -5845,7 +5887,7 @@ html[data-theme="christmas"] .christmasSnow {
   border-radius: 1.75rem;
   background: var(--paper);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
+  backdrop-filter: var(--backdrop-blur);
 }
 
 .calendarToolbar {
@@ -7101,5 +7143,54 @@ html[data-theme="christmas"] .christmasSnow {
 @media (min-width: 700px) and (max-width: 1199px) {
   .mealPlanGrid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* App-owned kiosk / performance mode. Driven by html[data-performance="lite"],
+   set from localStorage — not by an extension CSS class. */
+html[data-performance="lite"] {
+  --paper: var(--paper-strong);
+  --backdrop-blur: none;
+  --backdrop-blur-strong: none;
+  --backdrop-blur-modal: none;
+}
+
+html[data-performance="lite"] .heroPanel,
+html[data-performance="lite"] .sectionHero,
+html[data-performance="lite"] .infoStrip,
+html[data-performance="lite"] .listPanel,
+html[data-performance="lite"] .formPanel,
+html[data-performance="lite"] .hubCard,
+html[data-performance="lite"] .groupCard,
+html[data-performance="lite"] .movieCard,
+html[data-performance="lite"] .emptyState,
+html[data-performance="lite"] .shoppingListColumn,
+html[data-performance="lite"] .calendarPanel,
+html[data-performance="lite"] .mobileActionMenu,
+html[data-performance="lite"] .installPrompt,
+html[data-performance="lite"] .widget {
+  background-color: var(--paper-strong);
+  backdrop-filter: none;
+}
+
+html[data-performance="lite"] .mobileActionMenu,
+html[data-performance="lite"] .installPrompt {
+  background: var(--paper-strong);
+}
+
+html[data-performance="lite"] .autumnLeaves,
+html[data-performance="lite"] .christmasLights,
+html[data-performance="lite"] .christmasSnow,
+html[data-performance="lite"] .birthdayBalloons {
+  display: none;
+}
+
+/* Wall / kiosk viewports: remaining live blurs still cover large areas even
+   after hub cards and the action menu are flattened. */
+@media (min-width: 2000px) and (min-height: 1200px) {
+  html {
+    --backdrop-blur: none;
+    --backdrop-blur-strong: none;
+    --backdrop-blur-modal: none;
   }
 }

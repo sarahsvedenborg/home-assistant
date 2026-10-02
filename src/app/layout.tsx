@@ -7,6 +7,7 @@ import { AppChrome } from "@/components/app-chrome";
 import { InstallPrompt } from "@/components/install-prompt";
 import { MobileActionMenu } from "@/components/mobile-action-menu";
 import { getTodaysBirthdays } from "@/lib/data";
+import { PERFORMANCE_BOOT_SCRIPT } from "@/lib/performance-mode";
 import { themeForToday } from "@/lib/theme";
 import { SanityLive } from "@/sanity/lib/live";
 
@@ -56,6 +57,9 @@ export default async function RootLayout({
       data-theme={theme}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: PERFORMANCE_BOOT_SCRIPT }} />
+      </head>
       <body>
         <Suspense fallback={null}>
           <AppChrome />

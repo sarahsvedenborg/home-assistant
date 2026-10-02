@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { PerformanceModeToggle } from "@/components/performance-mode-toggle";
+
 export function AppChrome() {
   const pathname = usePathname();
 
@@ -47,6 +49,7 @@ export function AppChrome() {
         </nav>
 
         <nav className="homeQuickLinks" aria-label="Hurtiglenker">
+          <PerformanceModeToggle />
           <Link href="/forslag" className="homeGhostButton">
             Forslag
           </Link>
