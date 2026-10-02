@@ -6626,6 +6626,18 @@ html[data-theme="christmas"] .christmasSnow {
   pointer-events: none;
 }
 
+.countryWorldLocationZoomable {
+  touch-action: none;
+  overscroll-behavior: none;
+  cursor: zoom-in;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.countryWorldLocationZoomable svg {
+  pointer-events: auto;
+}
+
 .countryWorldLocationOcean {
   fill: color-mix(in srgb, var(--cool-wash) 86%, var(--surface));
 }

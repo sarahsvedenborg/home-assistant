@@ -44,6 +44,7 @@ export function FlagMedia({
           <CountryWorldLocation
             countryCode={country.code}
             name={country.name}
+            zoomable={featured}
           />
         </div>
       ) : null}
