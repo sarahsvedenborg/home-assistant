@@ -60,7 +60,6 @@ export function FeaturedFlag({
             {country.code === initialCode ? "Dagens flagg" : "Flagg"}
           </span>
           <div className="flagHeroTitleRow">
-            <h2 id="daily-flag-title">{country.name}</h2>
             <button
               type="button"
               className={
@@ -77,6 +76,12 @@ export function FeaturedFlag({
                   ? "Studert"
                   : "Marker som studert"}
             </button>
+            <h2 id="daily-flag-title">{country.name}</h2>
+            <FlagFacts
+              country={country}
+              className="flagHeroFacts"
+              includeStatus={false}
+            />
           </div>
         </div>
         {canNavigate ? (
@@ -91,7 +96,11 @@ export function FeaturedFlag({
         ) : null}
       </div>
 
-      <FlagFacts country={country} className="flagHeroFacts" />
+      <FlagFacts
+        country={country}
+        className="flagHeroStatus"
+        includeFacts={false}
+      />
 
       <FlagMedia country={country} featured key={country.code} />
     </section>
