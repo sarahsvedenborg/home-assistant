@@ -3,13 +3,18 @@ import type { Country } from "@/lib/types";
 export function FlagFacts({
   country,
   className,
+  includeFacts = true,
+  includeStatus = true,
 }: {
   country: Country;
   className?: string;
+  includeFacts?: boolean;
+  includeStatus?: boolean;
 }) {
-  const hasFacts = Boolean(country.capital || country.continent);
+  const hasFacts = includeFacts && Boolean(country.capital || country.continent);
+  const showStatus = includeStatus && country.kind !== "independent";
 
-  if (!hasFacts && country.independent) {
+  if (!hasFacts && !showStatus) {
     return null;
   }
 
@@ -31,14 +36,14 @@ export function FlagFacts({
           ) : null}
         </dl>
       ) : null}
-      {country.kind === "independent" ? null : (
+      {showStatus ? (
         <p className="flagStatusNote">
           {country.kind === "territory"
             ? "Territorium. Ikke en selvstendig stat"
             : "Ikke en selvstendig stat"}
           {country.partOf ? `. Del av ${country.partOf}.` : "."}
         </p>
-      )}
+      ) : null}
     </div>
   );
 }
