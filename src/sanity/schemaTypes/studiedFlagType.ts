@@ -1,6 +1,6 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 
-import { isFlagCode } from "@/lib/flag-codes";
+import { isFlagCode } from "../../lib/flag-codes";
 
 export const studiedFlagType = defineType({
   name: "studiedFlags",
