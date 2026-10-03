@@ -1,6 +1,7 @@
 :root {
   --cream: #fff8eb;
   --paper: rgba(255, 251, 245, 0.88);
+  --paper-soft: rgba(255, 251, 245, 0.88);
   --paper-strong: #fffdf8;
   --ink: #243447;
   --ink-strong: #17212c;
@@ -55,6 +56,7 @@
 html[data-theme="christmas"] {
   --cream: #fff7ef;
   --paper: rgba(255, 251, 246, 0.9);
+  --paper-soft: rgba(255, 251, 246, 0.9);
   --paper-strong: #fffdf9;
   --ink: #1c2a22;
   --ink-strong: #101a14;
@@ -6903,7 +6905,7 @@ html[data-theme="christmas"] .christmasSnow {
   padding: 1.25rem;
   border: 1px solid var(--line);
   border-radius: 1.75rem;
-  background: var(--paper);
+  background: var(--paper-soft);
   box-shadow: var(--shadow);
 }
 
@@ -7183,7 +7185,6 @@ html[data-performance="lite"] .installPrompt {
   background: var(--paper-strong);
 }
 
-html[data-performance="lite"] .autumnLeaves,
 html[data-performance="lite"] .christmasLights,
 html[data-performance="lite"] .christmasSnow,
 html[data-performance="lite"] .birthdayBalloons {
