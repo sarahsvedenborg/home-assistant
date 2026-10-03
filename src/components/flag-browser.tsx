@@ -4,22 +4,19 @@ import { useMemo, useState } from "react";
 
 import { FlagFacts } from "@/components/flag-facts";
 import { FlagMedia } from "@/components/flag-media";
+import { FormModal } from "@/components/form-modal";
 import type { Country } from "@/lib/types";
 
 function FlagCard({
   country,
   isSelected,
   isStudied,
-  isPending,
   onSelect,
-  onToggleStudied,
 }: {
   country: Country;
   isSelected: boolean;
   isStudied: boolean;
-  isPending: boolean;
   onSelect: () => void;
-  onToggleStudied: (country: Country, studied: boolean) => void;
 }) {
   return (
     <article
@@ -37,10 +34,11 @@ function FlagCard({
       <button
         type="button"
         className="flagCardToggle"
-        aria-pressed={isSelected}
+        aria-haspopup="dialog"
+        aria-expanded={isSelected}
         onClick={onSelect}
       >
-        <FlagMedia country={country} showMap={isSelected} />
+        <FlagMedia country={country} showMap={false} />
         <h3>{country.name}</h3>
         {country.kind === "constituent" ? (
           <span className="flagBonusBadge">Del av {country.partOf}</span>
@@ -51,26 +49,7 @@ function FlagCard({
         {isStudied ? (
           <span className="flagStudiedBadge">Studert</span>
         ) : null}
-        {isSelected ? <FlagFacts country={country} /> : null}
       </button>
-      {isSelected ? (
-        <button
-          type="button"
-          className={
-            isStudied
-              ? "flagStudyButton flagStudyButtonActive"
-              : "flagStudyButton"
-          }
-          disabled={isPending}
-          onClick={() => onToggleStudied(country, !isStudied)}
-        >
-          {isPending
-            ? "Lagrer…"
-            : isStudied
-              ? "Studert"
-              : "Marker som studert"}
-        </button>
-      ) : null}
     </article>
   );
 }
@@ -103,6 +82,11 @@ export function FlagBrowser({
     );
   }, [countries, query]);
 
+  const selectedCountry = useMemo(
+    () => countries.find((country) => country.code === selectedCode) || null,
+    [countries, selectedCode],
+  );
+
   const independentCountries = visibleCountries.filter(
     (country) => country.kind === "independent",
   );
@@ -117,21 +101,25 @@ export function FlagBrowser({
     return list.map((country) => {
       const isSelected = selectedCode === country.code;
       const isStudied = studiedCodes.has(country.code);
-      const isPending = pendingCode === country.code;
 
       return (
         <FlagCard
           country={country}
           isSelected={isSelected}
           isStudied={isStudied}
-          isPending={isPending}
-          onSelect={() => setSelectedCode(isSelected ? null : country.code)}
-          onToggleStudied={onToggleStudied}
+          onSelect={() => setSelectedCode(country.code)}
           key={country.code}
         />
       );
     });
   }
+
+  const isStudied = selectedCountry
+    ? studiedCodes.has(selectedCountry.code)
+    : false;
+  const isPending = selectedCountry
+    ? pendingCode === selectedCountry.code
+    : false;
 
   return (
     <section className="flagBrowser" aria-labelledby="flag-browser-title">
@@ -188,6 +176,52 @@ export function FlagBrowser({
           ) : null}
         </>
       )}
+
+      <FormModal
+        isOpen={Boolean(selectedCountry)}
+        onClose={() => setSelectedCode(null)}
+        title={selectedCountry?.name || "Flagg"}
+        size="wide"
+        className="formModalFlag"
+      >
+        {selectedCountry ? (
+          <div className="flagModalDetail">
+            <div className="flagHeroTitleRow">
+              <button
+                type="button"
+                className={
+                  isStudied
+                    ? "flagStudyButton flagStudyButtonActive"
+                    : "flagStudyButton"
+                }
+                disabled={isPending}
+                onClick={() => onToggleStudied(selectedCountry, !isStudied)}
+              >
+                {isPending
+                  ? "Lagrer…"
+                  : isStudied
+                    ? "Studert"
+                    : "Marker som studert"}
+              </button>
+              <FlagFacts
+                country={selectedCountry}
+                className="flagHeroFacts"
+                includeStatus={false}
+              />
+            </div>
+            <FlagFacts
+              country={selectedCountry}
+              className="flagHeroStatus"
+              includeFacts={false}
+            />
+            <FlagMedia
+              country={selectedCountry}
+              featured
+              key={selectedCountry.code}
+            />
+          </div>
+        ) : null}
+      </FormModal>
     </section>
   );
 }

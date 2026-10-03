@@ -5052,9 +5052,79 @@ html[data-theme="christmas"] .christmasSnow {
   .formModal.formModalWide {
     width: min(720px, 100%);
   }
+
+  .formModal.formModalFlag {
+    width: min(72rem, 96%);
+  }
+
+  .formModalFlag .flagMediaFeatured .flagImage,
+  .formModalFlag .flagMediaFeatured .flagMap,
+  .formModalFlag .flagMediaFeatured .countryWorldLocation {
+    max-height: min(28rem, 48vh);
+  }
 }
 
 @media (min-width: 2000px) and (min-height: 1200px) {
+  .formModalBackdrop:has(.formModalFlag) {
+    align-items: center;
+    padding: 3vh 2rem;
+  }
+
+  .formModal.formModalFlag {
+    width: min(96rem, 92vw);
+    max-height: 90dvh;
+    border-radius: 2rem;
+  }
+
+  .formModalFlag .formModalHeader {
+    padding: 1.5rem 1.85rem;
+  }
+
+  .formModalFlag .formModalHeader h2 {
+    font-size: clamp(2.6rem, 2.8vw, 3.4rem);
+    font-family: var(--font-display), cursive;
+  }
+
+  .formModalFlag .formModalClose {
+    width: 4rem;
+    height: 4rem;
+    font-size: 2.2rem;
+  }
+
+  .formModalFlag .formModalBody {
+    padding: 1.5rem 1.85rem 1.85rem;
+  }
+
+  .formModalFlag .flagStudyButton {
+    min-height: 3.75rem;
+    padding: 0.8rem 1.35rem;
+    font-size: 1.5rem;
+  }
+
+  .formModalFlag .flagHeroFacts dt {
+    font-size: 1.25rem;
+  }
+
+  .formModalFlag .flagHeroFacts dd,
+  .formModalFlag .flagStatusNote {
+    font-size: 1.7rem;
+  }
+
+  .formModalFlag .flagMediaFeatured {
+    min-height: 22rem;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.05fr);
+    align-items: center;
+  }
+
+  .formModalFlag .flagMediaFeatured .flagImage,
+  .formModalFlag .flagMediaFeatured .flagMap,
+  .formModalFlag .flagMediaFeatured .countryWorldLocation {
+    width: 100%;
+    height: auto;
+    max-height: min(40rem, 52vh);
+    object-fit: contain;
+  }
+
   .formModalBackdrop:has(.formModalMovies) {
     padding: 4vh 2rem 2rem;
   }
@@ -6850,10 +6920,13 @@ html[data-theme="christmas"] .christmasSnow {
   background: color-mix(in srgb, var(--surface) 92%, transparent);
 }
 
-@media (min-width: 640px) {
-  .flagCardSelected {
-    grid-column: span 2;
-  }
+.flagModalDetail {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.flagModalDetail .flagHeroTitleRow {
+  width: 100%;
 }
 
 .flagCard h3 {
