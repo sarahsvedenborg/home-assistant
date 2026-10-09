@@ -63,7 +63,30 @@ function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function eventCountLabel(count: number): string {
+function monthEventCounts(events: DashboardEvent[]) {
+  return {
+    school: events.filter(
+      (event) => event.source === "recurring" && event.category === "skole",
+    ).length,
+    single: events.filter((event) => event.source === "single").length,
+    leisure: events.filter(
+      (event) => event.source === "recurring" && event.category === "fritid",
+    ).length,
+  };
+}
+
+function eventCountLabel(
+  kind: "school" | "single" | "leisure",
+  count: number,
+): string {
+  if (kind === "school") {
+    return count === 1 ? "1 skoleaktivitet" : `${count} skoleaktiviteter`;
+  }
+
+  if (kind === "leisure") {
+    return count === 1 ? "1 fritidsaktivitet" : `${count} fritidsaktiviteter`;
+  }
+
   return count === 1 ? "1 hendelse" : `${count} hendelser`;
 }
 
@@ -600,7 +623,7 @@ export function FamilyCalendar({
             className="calendarTodayButton"
             onClick={() => setAnchorDateKey(todayDateKey)}
           >
-            I dag
+            {view === "week" ? "Denne uken" : "Denne måneden"}
           </button>
           <button
             type="button"
@@ -720,7 +743,9 @@ export function FamilyCalendar({
               }
             }
 
-            const eventCount = day.events.length;
+            const counts = monthEventCounts(day.events);
+            const hasMonthCounts =
+              counts.school > 0 || counts.single > 0 || counts.leisure > 0;
 
             return (
               <section className={className} key={day.dateKey}>
@@ -731,12 +756,32 @@ export function FamilyCalendar({
                         ? capitalize(formatDate(date, { day: "numeric", month: "short" }))
                         : date.getUTCDate()}
                     </time>
-                    {view === "month" && eventCount > 0 ? (
-                      <span
-                        className="calendarDayEventCount"
-                        aria-label={eventCountLabel(eventCount)}
-                      >
-                        {eventCount}
+                    {view === "month" && hasMonthCounts ? (
+                      <span className="calendarDayEventCounts">
+                        {counts.school > 0 ? (
+                          <span
+                            className="calendarDayEventCount calendarDayEventCountSchool"
+                            aria-label={eventCountLabel("school", counts.school)}
+                          >
+                            {counts.school}
+                          </span>
+                        ) : null}
+                        {counts.single > 0 ? (
+                          <span
+                            className="calendarDayEventCount calendarDayEventCountSingle"
+                            aria-label={eventCountLabel("single", counts.single)}
+                          >
+                            {counts.single}
+                          </span>
+                        ) : null}
+                        {counts.leisure > 0 ? (
+                          <span
+                            className="calendarDayEventCount calendarDayEventCountLeisure"
+                            aria-label={eventCountLabel("leisure", counts.leisure)}
+                          >
+                            {counts.leisure}
+                          </span>
+                        ) : null}
                       </span>
                     ) : null}
                   </div>
