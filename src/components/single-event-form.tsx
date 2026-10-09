@@ -97,7 +97,8 @@ export function SingleEventForm({ familyMembers, onSuccess }: SingleEventFormPro
         <h2>Legg til hendelse</h2>
       </div>
 
-      <div className="formGrid">
+      <div className="eventFormLayout">
+        <div className="formGrid">
         <div
           className="field fieldWide inlineCategoryField"
           role="radiogroup"
@@ -251,17 +252,6 @@ export function SingleEventForm({ familyMembers, onSuccess }: SingleEventFormPro
           />
         </label>
 
-        <label className="field fieldWide">
-          <span>Notat (valgfritt)</span>
-          <textarea
-            value={form.note}
-            onChange={(event) => setForm((current) => ({ ...current, note: event.target.value }))}
-            placeholder="Adresse, hva som må tas med, annet..."
-            rows={4}
-            maxLength={500}
-          />
-        </label>
-
         <label className="srOnly" aria-hidden="true">
           La dette feltet stå tomt
           <input
@@ -272,12 +262,24 @@ export function SingleEventForm({ familyMembers, onSuccess }: SingleEventFormPro
             onChange={(event) => setForm((current) => ({ ...current, website: event.target.value }))}
           />
         </label>
-      </div>
+        </div>
 
-      <div className="formActions">
-        <button className="buttonPrimary" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Sender..." : "Legg til hendelse"}
-        </button>
+        <label className="field eventNoteField">
+          <span>Notat (valgfritt)</span>
+          <textarea
+            value={form.note}
+            onChange={(event) => setForm((current) => ({ ...current, note: event.target.value }))}
+            placeholder="Adresse, hva som må tas med, annet..."
+            rows={4}
+            maxLength={500}
+          />
+        </label>
+
+        <div className="formActions">
+          <button className="buttonPrimary" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Sender..." : "Legg til hendelse"}
+          </button>
+        </div>
       </div>
 
       {message ? (

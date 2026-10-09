@@ -3666,6 +3666,7 @@ html[data-theme="christmas"] .christmasSnow {
 .movieGrid,
 .itemList,
 .formGrid,
+.eventFormLayout,
 .noteStack {
   display: grid;
   gap: 1rem;
@@ -5070,6 +5071,41 @@ html[data-theme="christmas"] .christmasSnow {
     width: min(40rem, 96%);
   }
 
+  .formModal.formModalEvents {
+    width: min(72rem, 96%);
+  }
+
+  .formModalEvents .eventFormLayout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.8fr);
+    grid-template-areas:
+      "main note"
+      "actions note";
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+
+  .formModalEvents .eventFormLayout .formGrid {
+    grid-area: main;
+  }
+
+  .formModalEvents .eventNoteField {
+    grid-area: note;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .formModalEvents .eventNoteField textarea {
+    flex: 1;
+    min-height: 0;
+    resize: vertical;
+  }
+
+  .formModalEvents .eventFormLayout .formActions {
+    grid-area: actions;
+    margin-top: 0;
+  }
+
   .formModalFlag .flagMediaFeatured .flagImage,
   .formModalFlag .flagMediaFeatured .flagMap,
   .formModalFlag .flagMediaFeatured .countryWorldLocation {
@@ -5310,7 +5346,7 @@ html[data-theme="christmas"] .christmasSnow {
   }
 
   .formModal.formModalEvents {
-    width: min(56rem, 100%);
+    width: min(88rem, 96%);
     max-height: 90dvh;
     border-radius: 2rem;
   }
@@ -5335,6 +5371,18 @@ html[data-theme="christmas"] .christmasSnow {
 
   .formModalEvents .formGrid {
     gap: 1.35rem;
+  }
+
+  .formModalEvents .eventFormLayout {
+    grid-template-columns: minmax(0, 1.2fr) minmax(24rem, 0.85fr);
+    gap: 1.5rem;
+  }
+
+  .formModalEvents .formModalBody .eventNoteField textarea {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    resize: none;
   }
 
   .formModalEvents .formModalBody .field span,
