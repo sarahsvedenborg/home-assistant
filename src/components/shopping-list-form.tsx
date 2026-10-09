@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState, type FormEvent } from "react";
+import { useId, useMemo, useState, type FormEvent } from "react";
 
 import type { ShoppingListEntry } from "@/lib/types";
 
@@ -21,6 +21,8 @@ type FormState = {
 
 export function ShoppingListForm({ previousItems, onSuccess }: ShoppingListFormProps) {
   const router = useRouter();
+  const titleId = useId();
+  const suggestionListId = useId();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
     kind: "error" | "success";
@@ -43,6 +45,20 @@ export function ShoppingListForm({ previousItems, onSuccess }: ShoppingListFormP
       ).values(),
     );
   }, [previousItems]);
+
+  const titleQuery = form.title.trim().toLowerCase();
+  const matchingSuggestions = useMemo(() => {
+    if (!titleQuery) {
+      return [];
+    }
+
+    return suggestedItems
+      .filter((item) => {
+        const title = item.title.trim().toLowerCase();
+        return title.includes(titleQuery) && title !== titleQuery;
+      })
+      .slice(0, 6);
+  }, [suggestedItems, titleQuery]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -95,26 +111,44 @@ export function ShoppingListForm({ previousItems, onSuccess }: ShoppingListFormP
       </div>
 
       <div className="formGrid">
-        <label className="field fieldWide">
-          <span>Vare</span>
+        <div className="field fieldWide">
+          <label htmlFor={titleId}>
+            <span>Vare</span>
+          </label>
           <input
+            id={titleId}
             type="text"
-            list="shopping-item-suggestions"
             value={form.title}
             onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
             placeholder="Brød, melk, pasta..."
             maxLength={100}
             required
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+            aria-autocomplete="list"
+            aria-expanded={matchingSuggestions.length > 0}
+            aria-controls={matchingSuggestions.length > 0 ? suggestionListId : undefined}
           />
-          <datalist id="shopping-item-suggestions">
-            {suggestedItems.map((item) => (
-              <option key={item.id} value={item.title} />
-            ))}
-          </datalist>
-          {suggestedItems.length > 0 ? (
-            <p className="smallNote">Begynn aa skrive for aa velge blant varer dere har lagt til tidligere.</p>
+          {matchingSuggestions.length > 0 ? (
+            <ul id={suggestionListId} className="shoppingSuggestions" role="listbox">
+              {matchingSuggestions.map((item) => (
+                <li key={item.id} role="option">
+                  <button
+                    type="button"
+                    className="shoppingSuggestion"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() =>
+                      setForm((current) => ({ ...current, title: item.title }))
+                    }
+                  >
+                    {item.title}
+                  </button>
+                </li>
+              ))}
+            </ul>
           ) : null}
-        </label>
+        </div>
 
         <label className="field">
           <span>Mengde (valgfritt)</span>
