@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { FormModal } from "@/components/form-modal";
 import { birthdaysOnDate } from "@/lib/birthdays";
@@ -231,6 +231,17 @@ function spanningWeeksFromVacationNotes(
   return weeks;
 }
 
+function isoWeekNumber(date: Date): number {
+  const utc = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+  );
+  const isoDay = utc.getUTCDay() || 7;
+  utc.setUTCDate(utc.getUTCDate() + 4 - isoDay);
+  const yearStart = new Date(Date.UTC(utc.getUTCFullYear(), 0, 1));
+
+  return Math.ceil(((utc.getTime() - yearStart.getTime()) / 86_400_000 + 1) / 7);
+}
+
 function periodTitle(view: CalendarView, anchor: Date, days: CalendarDay[]): string {
   if (view === "month") {
     return capitalize(formatDate(anchor, { month: "long", year: "numeric" }));
@@ -240,16 +251,17 @@ function periodTitle(view: CalendarView, anchor: Date, days: CalendarDay[]): str
   const end = dateFromKey(days.at(-1)?.dateKey ?? dateKey(anchor));
   const sameMonth = start.getUTCMonth() === end.getUTCMonth();
   const sameYear = start.getUTCFullYear() === end.getUTCFullYear();
+  const weekLabel = `Uke ${isoWeekNumber(start)}`;
 
   if (sameMonth) {
     return `${start.getUTCDate()}.–${formatDate(end, {
       day: "numeric",
       month: "long",
       year: "numeric",
-    })}`;
+    })} · ${weekLabel}`;
   }
 
-  return `${formatDate(start, {
+  return `${weekLabel} · ${formatDate(start, {
     day: "numeric",
     month: "short",
     year: sameYear ? undefined : "numeric",
@@ -664,6 +676,9 @@ export function FamilyCalendar({
           className={`calendarGrid calendarGrid${view === "week" ? "Week" : "Month"}`}
           ref={gridRef}
         >
+          {view === "month" ? (
+            <div className="calendarWeekNumberHeader" aria-hidden="true" />
+          ) : null}
           {WEEKDAY_LABELS.map((label) => (
             <div className="calendarWeekday" key={label}>
               {label}
@@ -746,9 +761,19 @@ export function FamilyCalendar({
             const counts = monthEventCounts(day.events);
             const hasMonthCounts =
               counts.school > 0 || counts.single > 0 || counts.leisure > 0;
+            const weekNumber = isoWeekNumber(date);
 
             return (
-              <section className={className} key={day.dateKey}>
+              <Fragment key={day.dateKey}>
+              {view === "month" && dayIndex % 7 === 0 ? (
+                <div
+                  className="calendarWeekNumber"
+                  aria-label={`Uke ${weekNumber}`}
+                >
+                  {weekNumber}
+                </div>
+              ) : null}
+              <section className={className}>
                 <div className="calendarDayHeading">
                   <div className="calendarDayHeadingStart">
                     <time dateTime={day.dateKey}>
@@ -868,45 +893,47 @@ export function FamilyCalendar({
                   </div>
                 ) : null}
 
-                <div className="calendarEvents">
-                  {dayEvents.length > 0 ? (
-                    <>
-                      <div className="calendarEventsTop">
-                        {schoolEvents.map((event) => (
-                          <EventCard
-                            event={event}
-                            key={`${day.dateKey}-${event.id}`}
-                            onOpen={(selected) =>
-                              setSelectedEvent({ event: selected, dateKey: day.dateKey })
-                            }
-                          />
-                        ))}
-                      </div>
-                      <div className="calendarEventsBottom">
-                        {otherEvents.map((event) => (
-                          <EventCard
-                            event={event}
-                            key={`${day.dateKey}-${event.id}`}
-                            onOpen={(selected) =>
-                              setSelectedEvent({ event: selected, dateKey: day.dateKey })
-                            }
-                          />
-                        ))}
-                        {leisureEvents.map((event) => (
-                          <EventCard
-                            event={event}
-                            key={`${day.dateKey}-${event.id}`}
-                            onOpen={(selected) =>
-                              setSelectedEvent({ event: selected, dateKey: day.dateKey })
-                            }
-                          />
-                        ))}
-                      </div>
-                    </>
-                  ) : spanningEvents.length === 0 && view !== "month" ? (
-                    <span className="calendarNoEvents">Ingen avtaler</span>
-                  ) : null}
-                </div>
+                {view === "week" ? (
+                  <div className="calendarEvents">
+                    {dayEvents.length > 0 ? (
+                      <>
+                        <div className="calendarEventsTop">
+                          {schoolEvents.map((event) => (
+                            <EventCard
+                              event={event}
+                              key={`${day.dateKey}-${event.id}`}
+                              onOpen={(selected) =>
+                                setSelectedEvent({ event: selected, dateKey: day.dateKey })
+                              }
+                            />
+                          ))}
+                        </div>
+                        <div className="calendarEventsBottom">
+                          {otherEvents.map((event) => (
+                            <EventCard
+                              event={event}
+                              key={`${day.dateKey}-${event.id}`}
+                              onOpen={(selected) =>
+                                setSelectedEvent({ event: selected, dateKey: day.dateKey })
+                              }
+                            />
+                          ))}
+                          {leisureEvents.map((event) => (
+                            <EventCard
+                              event={event}
+                              key={`${day.dateKey}-${event.id}`}
+                              onOpen={(selected) =>
+                                setSelectedEvent({ event: selected, dateKey: day.dateKey })
+                              }
+                            />
+                          ))}
+                        </div>
+                      </>
+                    ) : spanningEvents.length === 0 ? (
+                      <span className="calendarNoEvents">Ingen avtaler</span>
+                    ) : null}
+                  </div>
+                ) : null}
 
                 {regularNotes.length > 0 ? (
                   <div className="calendarDayNotes" aria-label="Dagsnotater">
@@ -916,7 +943,7 @@ export function FamilyCalendar({
                   </div>
                 ) : null}
 
-                {spanningSlots.length > 0 ? (
+                {view === "week" && spanningSlots.length > 0 ? (
                   <div className="calendarSpanningEvents" aria-label="Flerdagers hendelser">
                     {spanningSlots.map((event, slotIndex) =>
                       event ? (
@@ -938,6 +965,7 @@ export function FamilyCalendar({
                   </div>
                 ) : null}
               </section>
+              </Fragment>
             );
           })}
         </div>

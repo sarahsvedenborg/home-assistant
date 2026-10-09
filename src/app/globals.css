@@ -2648,6 +2648,15 @@ html[data-theme="christmas"] .christmasSnow {
     font-size: 1.55rem;
   }
 
+  .calendarShell .calendarGridMonth {
+    grid-template-columns: 3.4rem repeat(7, minmax(0, 1fr));
+  }
+
+  .calendarShell .calendarWeekNumberHeader,
+  .calendarShell .calendarWeekNumber {
+    font-size: 1.35rem;
+  }
+
   .calendarShell .calendarDayHeading {
     font-size: 2rem;
   }
@@ -6039,6 +6048,26 @@ html[data-theme="christmas"] .christmasSnow {
 
 .calendarGridWeek {
   min-width: 1120px;
+}
+
+.calendarGridMonth {
+  grid-template-columns: 2.35rem repeat(7, minmax(0, 1fr));
+}
+
+.calendarWeekNumberHeader,
+.calendarWeekNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  background-color: rgba(255, 253, 248, 0.9);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.calendarWeekNumberHeader {
+  background: rgba(255, 253, 248, 0.96);
 }
 
 .calendarWeekday {
