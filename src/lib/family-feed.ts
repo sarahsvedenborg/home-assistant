@@ -2,7 +2,6 @@ import { eventCategoryLabel } from "@/lib/event-categories";
 import { singleEventCategoryLabel } from "@/lib/single-event-categories";
 import type {
   RecurringEvent,
-  ShoppingListEntry,
   SingleEvent,
   WishListItem,
 } from "@/lib/types";
@@ -184,7 +183,7 @@ export function eventsForDate(
   return eventsForDateKey(recurring, single, osloDateKey(date));
 }
 
-export type RecentActivityType = "wish" | "shopping";
+export type RecentActivityType = "wish";
 
 export type RecentActivity = {
   id: string;
@@ -200,41 +199,28 @@ type BuildRecentActivityOptions = {
   limit?: number;
 };
 
-// Merge recently added wishlist and shopping-list items into a single feed,
-// newest first. Items without a createdAt (e.g. legacy data) are skipped.
+// Recently added wishlist items, newest first. Items without a createdAt
+// (e.g. legacy data) are skipped.
 export function buildRecentActivity(
   wishlist: WishListItem[],
-  shopping: ShoppingListEntry[],
   { now, days = 7, limit = 5 }: BuildRecentActivityOptions,
 ): RecentActivity[] {
   const cutoff = now.getTime() - days * 24 * 60 * 60 * 1000;
 
-  const entries: RecentActivity[] = [];
-
-  for (const wish of wishlist) {
-    if (wish.createdAt) {
-      entries.push({
-        id: wish.id,
-        type: "wish",
-        title: wish.title,
-        person: wish.submittedBy,
-        createdAt: wish.createdAt,
-      });
-    }
-  }
-
-  for (const item of shopping) {
-    if (item.createdAt) {
-      entries.push({
-        id: item.id,
-        type: "shopping",
-        title: item.title,
-        createdAt: item.createdAt,
-      });
-    }
-  }
-
-  return entries
+  return wishlist
+    .flatMap((wish) =>
+      wish.createdAt
+        ? [
+            {
+              id: wish.id,
+              type: "wish" as const,
+              title: wish.title,
+              person: wish.submittedBy,
+              createdAt: wish.createdAt,
+            },
+          ]
+        : [],
+    )
     .filter((entry) => new Date(entry.createdAt).getTime() >= cutoff)
     .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
     .slice(0, limit);
