@@ -4166,6 +4166,36 @@ html[data-theme="christmas"] .christmasSnow {
   grid-column: 1 / -1;
 }
 
+/* In-flow chips so previous-item suggestions cannot cover the mobile keyboard. */
+.shoppingSuggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shoppingSuggestion {
+  width: auto;
+  max-width: 100%;
+  min-height: 2.2rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.shoppingSuggestion:hover,
+.shoppingSuggestion:focus-visible {
+  background: rgba(255, 244, 231, 0.7);
+}
+
 .feedback {
   margin-top: 1rem;
   padding: 0.9rem 1rem;
@@ -5840,6 +5870,16 @@ html[data-theme="christmas"] .christmasSnow {
 
   .formModalShopping .smallNote {
     font-size: 1.35rem;
+  }
+
+  .formModalShopping .shoppingSuggestions {
+    gap: 0.55rem;
+  }
+
+  .formModalShopping .shoppingSuggestion {
+    min-height: 3rem;
+    padding: 0.55rem 1rem;
+    font-size: 1.45rem;
   }
 
   .formModalShopping .formModalBody .buttonPrimary {
