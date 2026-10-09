@@ -1,7 +1,7 @@
 import type { Country } from "@/lib/types";
 
 export const FLAG_QUIZ_COUNTS = [5, 10, 15, 20] as const;
-export const FLAG_QUIZ_DEFAULT_COUNT = FLAG_QUIZ_COUNTS[0];
+export const FLAG_QUIZ_DEFAULT_COUNT = FLAG_QUIZ_COUNTS[3];
 export const FLAG_QUIZ_MAX_QUESTIONS = FLAG_QUIZ_DEFAULT_COUNT;
 export const FLAG_QUIZ_CHOICE_COUNT = 4;
 export const FLAG_QUIZ_SOURCES = ["studied", "independent", "all"] as const;

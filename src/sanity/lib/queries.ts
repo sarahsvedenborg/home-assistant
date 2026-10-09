@@ -79,8 +79,6 @@ export const RECURRING_EVENTS_QUERY = `*[_type == "recurringEvent" && (!defined(
   "familyMember": coalesce(familyMember->name, familyMemberName)
 }`;
 
-// Shopping items are now standalone documents (one per item) so each carries
-// its own _createdAt, which powers the "Nytt i familien" feed on the homepage.
 // Dated events. Kept separate from recurringEvent so each schema stays
 // clean; the dashboard feed merges the two. Fetched in full and filtered to
 // today/tomorrow in app code (see family-feed.ts).

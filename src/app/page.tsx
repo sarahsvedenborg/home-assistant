@@ -52,7 +52,7 @@ export default async function Home() {
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
   const todayEvents = eventsForDate(recurringEvents, singleEvents, now);
   const tomorrowEvents = eventsForDate(recurringEvents, singleEvents, tomorrow);
-  const activity = buildRecentActivity(wishListItems, shoppingList.items, { now });
+  const activity = buildRecentActivity(wishListItems, { now });
   return (
     <main className="shell homeShell">
       <section className="homeViews" aria-label="Dashboard">
