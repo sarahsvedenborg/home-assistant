@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { FormModal } from "@/components/form-modal";
 import { birthdaysOnDate } from "@/lib/birthdays";
@@ -63,7 +63,30 @@ function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function eventCountLabel(count: number): string {
+function monthEventCounts(events: DashboardEvent[]) {
+  return {
+    school: events.filter(
+      (event) => event.source === "recurring" && event.category === "skole",
+    ).length,
+    single: events.filter((event) => event.source === "single").length,
+    leisure: events.filter(
+      (event) => event.source === "recurring" && event.category === "fritid",
+    ).length,
+  };
+}
+
+function eventCountLabel(
+  kind: "school" | "single" | "leisure",
+  count: number,
+): string {
+  if (kind === "school") {
+    return count === 1 ? "1 skoleaktivitet" : `${count} skoleaktiviteter`;
+  }
+
+  if (kind === "leisure") {
+    return count === 1 ? "1 fritidsaktivitet" : `${count} fritidsaktiviteter`;
+  }
+
   return count === 1 ? "1 hendelse" : `${count} hendelser`;
 }
 
@@ -208,6 +231,17 @@ function spanningWeeksFromVacationNotes(
   return weeks;
 }
 
+function isoWeekNumber(date: Date): number {
+  const utc = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+  );
+  const isoDay = utc.getUTCDay() || 7;
+  utc.setUTCDate(utc.getUTCDate() + 4 - isoDay);
+  const yearStart = new Date(Date.UTC(utc.getUTCFullYear(), 0, 1));
+
+  return Math.ceil(((utc.getTime() - yearStart.getTime()) / 86_400_000 + 1) / 7);
+}
+
 function periodTitle(view: CalendarView, anchor: Date, days: CalendarDay[]): string {
   if (view === "month") {
     return capitalize(formatDate(anchor, { month: "long", year: "numeric" }));
@@ -217,16 +251,17 @@ function periodTitle(view: CalendarView, anchor: Date, days: CalendarDay[]): str
   const end = dateFromKey(days.at(-1)?.dateKey ?? dateKey(anchor));
   const sameMonth = start.getUTCMonth() === end.getUTCMonth();
   const sameYear = start.getUTCFullYear() === end.getUTCFullYear();
+  const weekLabel = `Uke ${isoWeekNumber(start)}`;
 
   if (sameMonth) {
     return `${start.getUTCDate()}.–${formatDate(end, {
       day: "numeric",
       month: "long",
       year: "numeric",
-    })}`;
+    })} · ${weekLabel}`;
   }
 
-  return `${formatDate(start, {
+  return `${weekLabel} · ${formatDate(start, {
     day: "numeric",
     month: "short",
     year: sameYear ? undefined : "numeric",
@@ -355,6 +390,172 @@ function EventCard({
     >
       <EventDetails event={event} />
     </article>
+  );
+}
+
+function CalendarDayDetail({
+  day,
+  dayNotes,
+  birthdays,
+  holidays,
+  onOpenEvent,
+}: {
+  day: CalendarDay;
+  dayNotes: DayNote[];
+  birthdays: Birthday[];
+  holidays: NorwegianHoliday[];
+  onOpenEvent: (event: DashboardEvent) => void;
+}) {
+  const dayEvents = day.events.filter((event) => !isMultiDayEvent(event));
+  const spanningEvents = day.events.filter(isMultiDayEvent);
+  const schoolEvents = dayEvents.filter((event) => event.category === "skole");
+  const leisureEvents = dayEvents.filter((event) => event.category === "fritid");
+  const otherEvents = dayEvents.filter(
+    (event) => event.category !== "skole" && event.category !== "fritid",
+  );
+  const notes = dayNotes.filter(
+    (note) =>
+      day.dateKey >= note.date && day.dateKey <= (note.endDate || note.date),
+  );
+  const birthdayNotes = birthdaysOnDate(birthdays, day.dateKey);
+  const vacationNotes = notes.filter((note) => note.category === "vacation");
+  const holydayNotes = notes.filter((note) => note.category === "holyday");
+  const proveNotes = notes.filter((note) => note.category === "prove");
+  const publicHolidays = holidays.filter((holiday) => holiday.date === day.dateKey);
+  const regularNotes = notes.filter(
+    (note) =>
+      note.category !== "birthday" &&
+      note.category !== "vacation" &&
+      note.category !== "holyday" &&
+      note.category !== "prove",
+  );
+  const hasEvents =
+    schoolEvents.length +
+      otherEvents.length +
+      leisureEvents.length +
+      spanningEvents.length >
+    0;
+
+  return (
+    <div className="calendarDayDetail">
+      {vacationNotes.length > 0 ? (
+        <div className="calendarSpanningVacations" aria-label="Ferie">
+          {vacationNotes.map((note) => (
+            <article
+              className="calendarSpanningEvent calendarSpanningVacation calendarSpanningRoundLeft calendarSpanningRoundRight"
+              key={note.id}
+            >
+              <strong>{note.text}</strong>
+            </article>
+          ))}
+        </div>
+      ) : null}
+
+      {birthdayNotes.length > 0 ||
+      holydayNotes.length > 0 ||
+      proveNotes.length > 0 ||
+      publicHolidays.length > 0 ? (
+        <div className="calendarTopNotes">
+          {publicHolidays.length > 0 ? (
+            <div className="calendarPublicHolidays" aria-label="Norske helligdager">
+              {publicHolidays.map((holiday) => (
+                <p key={`${holiday.date}-${holiday.name}`}>{holiday.name}</p>
+              ))}
+            </div>
+          ) : null}
+
+          {birthdayNotes.length > 0 ? (
+            <div className="calendarBirthdayNotes" aria-label="Bursdager">
+              {birthdayNotes.map((birthday) => (
+                <p key={birthday.id}>
+                  <span aria-hidden="true">🎂</span>
+                  <strong>
+                    {birthday.name} {birthday.age} år
+                  </strong>
+                </p>
+              ))}
+            </div>
+          ) : null}
+
+          {holydayNotes.length > 0 ? (
+            <div className="calendarHolydayNotes" aria-label="Holyday">
+              {holydayNotes.map((note) => (
+                <p key={note.id}>
+                  <span className="calendarHolydayIcon" aria-hidden="true" />
+                  <strong>{note.text}</strong>
+                </p>
+              ))}
+            </div>
+          ) : null}
+
+          {proveNotes.length > 0 ? (
+            <div className="calendarProveNotes" aria-label="Prøver">
+              {proveNotes.map((note) => (
+                <p key={note.id}>
+                  <span className="calendarProveIcon" aria-hidden="true" />
+                  <strong>{note.text}</strong>
+                </p>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
+      <div className="calendarEvents">
+        {hasEvents ? (
+          <>
+            {schoolEvents.length > 0 ? (
+              <div className="calendarEventsTop">
+                {schoolEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    key={`${day.dateKey}-${event.id}`}
+                    onOpen={onOpenEvent}
+                  />
+                ))}
+              </div>
+            ) : null}
+            {otherEvents.length > 0 ||
+            leisureEvents.length > 0 ||
+            spanningEvents.length > 0 ? (
+              <div className="calendarEventsBottom">
+                {otherEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    key={`${day.dateKey}-${event.id}`}
+                    onOpen={onOpenEvent}
+                  />
+                ))}
+                {leisureEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    key={`${day.dateKey}-${event.id}`}
+                    onOpen={onOpenEvent}
+                  />
+                ))}
+                {spanningEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    key={`${day.dateKey}-${event.id}`}
+                    onOpen={onOpenEvent}
+                  />
+                ))}
+              </div>
+            ) : null}
+          </>
+        ) : (
+          <span className="calendarNoEvents">Ingen avtaler</span>
+        )}
+      </div>
+
+      {regularNotes.length > 0 ? (
+        <div className="calendarDayNotes" aria-label="Dagsnotater">
+          {regularNotes.map((note) => (
+            <p key={note.id}>{note.text}</p>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -487,6 +688,7 @@ export function FamilyCalendar({
     event: DashboardEvent;
     dateKey: string;
   } | null>(initialSelection);
+  const [selectedDayKey, setSelectedDayKey] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const anchor = useMemo(() => dateFromKey(anchorDateKey), [anchorDateKey]);
 
@@ -508,6 +710,11 @@ export function FamilyCalendar({
       visibleMonth: anchor.getUTCMonth(),
     };
   }, [anchor, dayNotes, recurringEvents, singleEvents, view]);
+
+  const selectedDay = useMemo(
+    () => days.find((day) => day.dateKey === selectedDayKey) || null,
+    [days, selectedDayKey],
+  );
 
   useLayoutEffect(() => {
     const calendarGrid = gridRef.current;
@@ -576,10 +783,12 @@ export function FamilyCalendar({
       next.setUTCMonth(next.getUTCMonth() + direction);
     }
 
+    setSelectedDayKey(null);
     setAnchorDateKey(dateKey(next));
   }
 
   function changeView(nextView: CalendarView) {
+    setSelectedDayKey(null);
     setView(nextView);
   }
 
@@ -600,7 +809,7 @@ export function FamilyCalendar({
             className="calendarTodayButton"
             onClick={() => setAnchorDateKey(todayDateKey)}
           >
-            I dag
+            {view === "week" ? "Denne uken" : "Denne måneden"}
           </button>
           <button
             type="button"
@@ -641,6 +850,9 @@ export function FamilyCalendar({
           className={`calendarGrid calendarGrid${view === "week" ? "Week" : "Month"}`}
           ref={gridRef}
         >
+          {view === "month" ? (
+            <div className="calendarWeekNumberHeader" aria-hidden="true" />
+          ) : null}
           {WEEKDAY_LABELS.map((label) => (
             <div className="calendarWeekday" key={label}>
               {label}
@@ -720,10 +932,30 @@ export function FamilyCalendar({
               }
             }
 
-            const eventCount = day.events.length;
+            const counts = monthEventCounts(day.events);
+            const hasMonthCounts =
+              counts.school > 0 || counts.single > 0 || counts.leisure > 0;
+            const weekNumber = isoWeekNumber(date);
 
             return (
-              <section className={className} key={day.dateKey}>
+              <Fragment key={day.dateKey}>
+              {view === "month" && dayIndex % 7 === 0 ? (
+                <div
+                  className="calendarWeekNumber"
+                  aria-label={`Uke ${weekNumber}`}
+                >
+                  {weekNumber}
+                </div>
+              ) : null}
+              <section className={className}>
+                {view === "month" ? (
+                  <button
+                    type="button"
+                    className="calendarDayHit"
+                    aria-label={`Vis ${formatLongDateKey(day.dateKey)}`}
+                    onClick={() => setSelectedDayKey(day.dateKey)}
+                  />
+                ) : null}
                 <div className="calendarDayHeading">
                   <div className="calendarDayHeadingStart">
                     <time dateTime={day.dateKey}>
@@ -731,12 +963,32 @@ export function FamilyCalendar({
                         ? capitalize(formatDate(date, { day: "numeric", month: "short" }))
                         : date.getUTCDate()}
                     </time>
-                    {view === "month" && eventCount > 0 ? (
-                      <span
-                        className="calendarDayEventCount"
-                        aria-label={eventCountLabel(eventCount)}
-                      >
-                        {eventCount}
+                    {view === "month" && hasMonthCounts ? (
+                      <span className="calendarDayEventCounts">
+                        {counts.school > 0 ? (
+                          <span
+                            className="calendarDayEventCount calendarDayEventCountSchool"
+                            aria-label={eventCountLabel("school", counts.school)}
+                          >
+                            {counts.school}
+                          </span>
+                        ) : null}
+                        {counts.single > 0 ? (
+                          <span
+                            className="calendarDayEventCount calendarDayEventCountSingle"
+                            aria-label={eventCountLabel("single", counts.single)}
+                          >
+                            {counts.single}
+                          </span>
+                        ) : null}
+                        {counts.leisure > 0 ? (
+                          <span
+                            className="calendarDayEventCount calendarDayEventCountLeisure"
+                            aria-label={eventCountLabel("leisure", counts.leisure)}
+                          >
+                            {counts.leisure}
+                          </span>
+                        ) : null}
                       </span>
                     ) : null}
                   </div>
@@ -823,45 +1075,47 @@ export function FamilyCalendar({
                   </div>
                 ) : null}
 
-                <div className="calendarEvents">
-                  {dayEvents.length > 0 ? (
-                    <>
-                      <div className="calendarEventsTop">
-                        {schoolEvents.map((event) => (
-                          <EventCard
-                            event={event}
-                            key={`${day.dateKey}-${event.id}`}
-                            onOpen={(selected) =>
-                              setSelectedEvent({ event: selected, dateKey: day.dateKey })
-                            }
-                          />
-                        ))}
-                      </div>
-                      <div className="calendarEventsBottom">
-                        {otherEvents.map((event) => (
-                          <EventCard
-                            event={event}
-                            key={`${day.dateKey}-${event.id}`}
-                            onOpen={(selected) =>
-                              setSelectedEvent({ event: selected, dateKey: day.dateKey })
-                            }
-                          />
-                        ))}
-                        {leisureEvents.map((event) => (
-                          <EventCard
-                            event={event}
-                            key={`${day.dateKey}-${event.id}`}
-                            onOpen={(selected) =>
-                              setSelectedEvent({ event: selected, dateKey: day.dateKey })
-                            }
-                          />
-                        ))}
-                      </div>
-                    </>
-                  ) : spanningEvents.length === 0 && view !== "month" ? (
-                    <span className="calendarNoEvents">Ingen avtaler</span>
-                  ) : null}
-                </div>
+                {view === "week" ? (
+                  <div className="calendarEvents">
+                    {dayEvents.length > 0 ? (
+                      <>
+                        <div className="calendarEventsTop">
+                          {schoolEvents.map((event) => (
+                            <EventCard
+                              event={event}
+                              key={`${day.dateKey}-${event.id}`}
+                              onOpen={(selected) =>
+                                setSelectedEvent({ event: selected, dateKey: day.dateKey })
+                              }
+                            />
+                          ))}
+                        </div>
+                        <div className="calendarEventsBottom">
+                          {otherEvents.map((event) => (
+                            <EventCard
+                              event={event}
+                              key={`${day.dateKey}-${event.id}`}
+                              onOpen={(selected) =>
+                                setSelectedEvent({ event: selected, dateKey: day.dateKey })
+                              }
+                            />
+                          ))}
+                          {leisureEvents.map((event) => (
+                            <EventCard
+                              event={event}
+                              key={`${day.dateKey}-${event.id}`}
+                              onOpen={(selected) =>
+                                setSelectedEvent({ event: selected, dateKey: day.dateKey })
+                              }
+                            />
+                          ))}
+                        </div>
+                      </>
+                    ) : spanningEvents.length === 0 ? (
+                      <span className="calendarNoEvents">Ingen avtaler</span>
+                    ) : null}
+                  </div>
+                ) : null}
 
                 {regularNotes.length > 0 ? (
                   <div className="calendarDayNotes" aria-label="Dagsnotater">
@@ -871,7 +1125,7 @@ export function FamilyCalendar({
                   </div>
                 ) : null}
 
-                {spanningSlots.length > 0 ? (
+                {view === "week" && spanningSlots.length > 0 ? (
                   <div className="calendarSpanningEvents" aria-label="Flerdagers hendelser">
                     {spanningSlots.map((event, slotIndex) =>
                       event ? (
@@ -893,10 +1147,32 @@ export function FamilyCalendar({
                   </div>
                 ) : null}
               </section>
+              </Fragment>
             );
           })}
         </div>
       </div>
+
+      <FormModal
+        isOpen={Boolean(selectedDay)}
+        onClose={() => setSelectedDayKey(null)}
+        title={selectedDay ? formatLongDateKey(selectedDay.dateKey) : "Dag"}
+        size="wide"
+        className="formModalCalendarDay"
+      >
+        {selectedDay ? (
+          <CalendarDayDetail
+            day={selectedDay}
+            dayNotes={dayNotes}
+            birthdays={birthdays}
+            holidays={holidays}
+            onOpenEvent={(event) => {
+              setSelectedDayKey(null);
+              setSelectedEvent({ event, dateKey: selectedDay.dateKey });
+            }}
+          />
+        ) : null}
+      </FormModal>
 
       <FormModal
         isOpen={Boolean(selectedEvent)}
