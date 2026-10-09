@@ -393,6 +393,172 @@ function EventCard({
   );
 }
 
+function CalendarDayDetail({
+  day,
+  dayNotes,
+  birthdays,
+  holidays,
+  onOpenEvent,
+}: {
+  day: CalendarDay;
+  dayNotes: DayNote[];
+  birthdays: Birthday[];
+  holidays: NorwegianHoliday[];
+  onOpenEvent: (event: DashboardEvent) => void;
+}) {
+  const dayEvents = day.events.filter((event) => !isMultiDayEvent(event));
+  const spanningEvents = day.events.filter(isMultiDayEvent);
+  const schoolEvents = dayEvents.filter((event) => event.category === "skole");
+  const leisureEvents = dayEvents.filter((event) => event.category === "fritid");
+  const otherEvents = dayEvents.filter(
+    (event) => event.category !== "skole" && event.category !== "fritid",
+  );
+  const notes = dayNotes.filter(
+    (note) =>
+      day.dateKey >= note.date && day.dateKey <= (note.endDate || note.date),
+  );
+  const birthdayNotes = birthdaysOnDate(birthdays, day.dateKey);
+  const vacationNotes = notes.filter((note) => note.category === "vacation");
+  const holydayNotes = notes.filter((note) => note.category === "holyday");
+  const proveNotes = notes.filter((note) => note.category === "prove");
+  const publicHolidays = holidays.filter((holiday) => holiday.date === day.dateKey);
+  const regularNotes = notes.filter(
+    (note) =>
+      note.category !== "birthday" &&
+      note.category !== "vacation" &&
+      note.category !== "holyday" &&
+      note.category !== "prove",
+  );
+  const hasEvents =
+    schoolEvents.length +
+      otherEvents.length +
+      leisureEvents.length +
+      spanningEvents.length >
+    0;
+
+  return (
+    <div className="calendarDayDetail">
+      {vacationNotes.length > 0 ? (
+        <div className="calendarSpanningVacations" aria-label="Ferie">
+          {vacationNotes.map((note) => (
+            <article
+              className="calendarSpanningEvent calendarSpanningVacation calendarSpanningRoundLeft calendarSpanningRoundRight"
+              key={note.id}
+            >
+              <strong>{note.text}</strong>
+            </article>
+          ))}
+        </div>
+      ) : null}
+
+      {birthdayNotes.length > 0 ||
+      holydayNotes.length > 0 ||
+      proveNotes.length > 0 ||
+      publicHolidays.length > 0 ? (
+        <div className="calendarTopNotes">
+          {publicHolidays.length > 0 ? (
+            <div className="calendarPublicHolidays" aria-label="Norske helligdager">
+              {publicHolidays.map((holiday) => (
+                <p key={`${holiday.date}-${holiday.name}`}>{holiday.name}</p>
+              ))}
+            </div>
+          ) : null}
+
+          {birthdayNotes.length > 0 ? (
+            <div className="calendarBirthdayNotes" aria-label="Bursdager">
+              {birthdayNotes.map((birthday) => (
+                <p key={birthday.id}>
+                  <span aria-hidden="true">🎂</span>
+                  <strong>
+                    {birthday.name} {birthday.age} år
+                  </strong>
+                </p>
+              ))}
+            </div>
+          ) : null}
+
+          {holydayNotes.length > 0 ? (
+            <div className="calendarHolydayNotes" aria-label="Holyday">
+              {holydayNotes.map((note) => (
+                <p key={note.id}>
+                  <span className="calendarHolydayIcon" aria-hidden="true" />
+                  <strong>{note.text}</strong>
+                </p>
+              ))}
+            </div>
+          ) : null}
+
+          {proveNotes.length > 0 ? (
+            <div className="calendarProveNotes" aria-label="Prøver">
+              {proveNotes.map((note) => (
+                <p key={note.id}>
+                  <span className="calendarProveIcon" aria-hidden="true" />
+                  <strong>{note.text}</strong>
+                </p>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
+      <div className="calendarEvents">
+        {hasEvents ? (
+          <>
+            {schoolEvents.length > 0 ? (
+              <div className="calendarEventsTop">
+                {schoolEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    key={`${day.dateKey}-${event.id}`}
+                    onOpen={onOpenEvent}
+                  />
+                ))}
+              </div>
+            ) : null}
+            {otherEvents.length > 0 ||
+            leisureEvents.length > 0 ||
+            spanningEvents.length > 0 ? (
+              <div className="calendarEventsBottom">
+                {otherEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    key={`${day.dateKey}-${event.id}`}
+                    onOpen={onOpenEvent}
+                  />
+                ))}
+                {leisureEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    key={`${day.dateKey}-${event.id}`}
+                    onOpen={onOpenEvent}
+                  />
+                ))}
+                {spanningEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    key={`${day.dateKey}-${event.id}`}
+                    onOpen={onOpenEvent}
+                  />
+                ))}
+              </div>
+            ) : null}
+          </>
+        ) : (
+          <span className="calendarNoEvents">Ingen avtaler</span>
+        )}
+      </div>
+
+      {regularNotes.length > 0 ? (
+        <div className="calendarDayNotes" aria-label="Dagsnotater">
+          {regularNotes.map((note) => (
+            <p key={note.id}>{note.text}</p>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function eventToneClass(event: DashboardEvent): string {
   const categoryClass =
     event.category === "skole"
@@ -522,6 +688,7 @@ export function FamilyCalendar({
     event: DashboardEvent;
     dateKey: string;
   } | null>(initialSelection);
+  const [selectedDayKey, setSelectedDayKey] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const anchor = useMemo(() => dateFromKey(anchorDateKey), [anchorDateKey]);
 
@@ -543,6 +710,11 @@ export function FamilyCalendar({
       visibleMonth: anchor.getUTCMonth(),
     };
   }, [anchor, dayNotes, recurringEvents, singleEvents, view]);
+
+  const selectedDay = useMemo(
+    () => days.find((day) => day.dateKey === selectedDayKey) || null,
+    [days, selectedDayKey],
+  );
 
   useLayoutEffect(() => {
     const calendarGrid = gridRef.current;
@@ -611,10 +783,12 @@ export function FamilyCalendar({
       next.setUTCMonth(next.getUTCMonth() + direction);
     }
 
+    setSelectedDayKey(null);
     setAnchorDateKey(dateKey(next));
   }
 
   function changeView(nextView: CalendarView) {
+    setSelectedDayKey(null);
     setView(nextView);
   }
 
@@ -774,6 +948,14 @@ export function FamilyCalendar({
                 </div>
               ) : null}
               <section className={className}>
+                {view === "month" ? (
+                  <button
+                    type="button"
+                    className="calendarDayHit"
+                    aria-label={`Vis ${formatLongDateKey(day.dateKey)}`}
+                    onClick={() => setSelectedDayKey(day.dateKey)}
+                  />
+                ) : null}
                 <div className="calendarDayHeading">
                   <div className="calendarDayHeadingStart">
                     <time dateTime={day.dateKey}>
@@ -970,6 +1152,27 @@ export function FamilyCalendar({
           })}
         </div>
       </div>
+
+      <FormModal
+        isOpen={Boolean(selectedDay)}
+        onClose={() => setSelectedDayKey(null)}
+        title={selectedDay ? formatLongDateKey(selectedDay.dateKey) : "Dag"}
+        size="wide"
+        className="formModalCalendarDay"
+      >
+        {selectedDay ? (
+          <CalendarDayDetail
+            day={selectedDay}
+            dayNotes={dayNotes}
+            birthdays={birthdays}
+            holidays={holidays}
+            onOpenEvent={(event) => {
+              setSelectedDayKey(null);
+              setSelectedEvent({ event, dateKey: selectedDay.dateKey });
+            }}
+          />
+        ) : null}
+      </FormModal>
 
       <FormModal
         isOpen={Boolean(selectedEvent)}

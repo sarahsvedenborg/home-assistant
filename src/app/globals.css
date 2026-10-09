@@ -5066,6 +5066,10 @@ html[data-theme="christmas"] .christmasSnow {
     width: min(72rem, 96%);
   }
 
+  .formModal.formModalCalendarDay {
+    width: min(40rem, 96%);
+  }
+
   .formModalFlag .flagMediaFeatured .flagImage,
   .formModalFlag .flagMediaFeatured .flagMap,
   .formModalFlag .flagMediaFeatured .countryWorldLocation {
@@ -5418,6 +5422,53 @@ html[data-theme="christmas"] .christmasSnow {
     width: 5.25rem;
     height: 5.25rem;
     font-size: 2.6rem;
+  }
+
+  .formModalBackdrop:has(.formModalCalendarDay) {
+    padding: 4vh 2rem 2rem;
+  }
+
+  .formModal.formModalCalendarDay {
+    width: min(52rem, 100%);
+    max-height: 90dvh;
+    border-radius: 2rem;
+  }
+
+  .formModalCalendarDay .formModalHeader {
+    padding: 1.5rem 1.85rem;
+  }
+
+  .formModalCalendarDay .formModalHeader h2 {
+    font-size: 2.6rem;
+    font-family: var(--font-display), cursive;
+  }
+
+  .formModalCalendarDay .formModalClose {
+    width: 4.25rem;
+    height: 4.25rem;
+    font-size: 2.5rem;
+  }
+
+  .formModalCalendarDay .formModalBody {
+    padding: 1.75rem 2rem 2.1rem;
+  }
+
+  .formModalCalendarDay .calendarEvent {
+    gap: 0.28rem;
+    padding: 0.85rem 0.9rem;
+  }
+
+  .formModalCalendarDay .calendarEvent strong,
+  .formModalCalendarDay .calendarSpanningVacation strong,
+  .formModalCalendarDay .calendarDayNotes p,
+  .formModalCalendarDay .calendarNoEvents {
+    font-size: 1.65rem;
+  }
+
+  .formModalCalendarDay .calendarEventTime,
+  .formModalCalendarDay .calendarEventMeta,
+  .formModalCalendarDay .calendarTopNotes p {
+    font-size: 1.3rem;
   }
 
   .formModalBackdrop:has(.formModalEventDetails) {
@@ -6163,7 +6214,41 @@ html[data-theme="christmas"] .christmasSnow {
 }
 
 .calendarGridMonth .calendarDay {
+  position: relative;
   overflow: auto;
+}
+
+.calendarDayHit {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.calendarGridMonth .calendarDay:has(.calendarDayHit:hover),
+.calendarGridMonth .calendarDay:has(.calendarDayHit:focus-visible) {
+  background: color-mix(in srgb, var(--cool) 10%, rgba(255, 253, 248, 0.9));
+}
+
+.calendarGridMonth .calendarDayToday:has(.calendarDayHit:hover),
+.calendarGridMonth .calendarDayToday:has(.calendarDayHit:focus-visible) {
+  background: rgba(255, 244, 225, 0.98);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--warm) 58%, transparent);
+}
+
+.calendarDayDetail {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.calendarDayDetail .calendarEvents {
+  flex: none;
 }
 
 .calendarGridMonth .calendarDayHeading {
