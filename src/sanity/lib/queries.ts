@@ -6,6 +6,8 @@ export const FAMILY_MEMBERS_QUERY = `*[_type == "familyMember"] | order(sortOrde
   role,
   emoji,
   accentColor,
+  clothingSize,
+  shoeSize,
   chores[] {
     _key,
     amount,

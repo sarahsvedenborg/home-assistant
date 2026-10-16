@@ -75,6 +75,8 @@ type SanityFamilyMember = {
   role: "adult" | "child";
   emoji?: string;
   accentColor?: string;
+  clothingSize?: string;
+  shoeSize?: string;
   chores?: Array<{
     _key: string;
     amount?: number;
@@ -246,6 +248,8 @@ function mapFamilyMembers(members: SanityFamilyMember[]): FamilyMember[] {
     role: member.role,
     emoji: member.emoji,
     accentColor: member.accentColor,
+    clothingSize: member.clothingSize,
+    shoeSize: member.shoeSize,
     chores: (member.chores || [])
       .filter((assignment) => assignment._key && assignment.chore?._id)
       .map((assignment) => ({

@@ -13,12 +13,16 @@ type OnskelisteTabsProps = {
   // When false, the "Legg til ønske" button is hidden (read-only view, e.g.
   // the public page shared with the extended family).
   allowAdd?: boolean;
+  // When true, show the active member's clothing/shoe sizes — useful for the
+  // extended family buying gifts from the shared wishlist.
+  showSizes?: boolean;
 };
 
 export function OnskelisteTabs({
   familyMembers,
   wishListItems,
   allowAdd = true,
+  showSizes = false,
 }: OnskelisteTabsProps) {
   const groups = useMemo(
     () => buildWishListGroupsForFamily(familyMembers, wishListItems),
@@ -122,6 +126,26 @@ export function OnskelisteTabs({
         >
           <div className="wishTabsContent">
             <div>
+              {showSizes && (activeGroup.member.clothingSize || activeGroup.member.shoeSize) ? (
+                <aside className="wishSizes">
+                  <span className="wishSizesLabel">
+                    Størrelser for {activeGroup.member.name}
+                  </span>
+                  <div className="wishSizeList">
+                    {activeGroup.member.clothingSize ? (
+                      <span className="wishSize">
+                        <span aria-hidden="true">👕</span> Klær: {activeGroup.member.clothingSize}
+                      </span>
+                    ) : null}
+                    {activeGroup.member.shoeSize ? (
+                      <span className="wishSize">
+                        <span aria-hidden="true">👟</span> Sko: {activeGroup.member.shoeSize}
+                      </span>
+                    ) : null}
+                  </div>
+                </aside>
+              ) : null}
+
               <div className="wishTableHeader">
                 <span>Ønske</span>
                 <span>Lenke</span>

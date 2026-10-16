@@ -21,6 +21,8 @@ export type FamilyMember = {
   role: FamilyRole;
   emoji?: string;
   accentColor?: string;
+  clothingSize?: string;
+  shoeSize?: string;
   chores: MemberChore[];
 };
 
