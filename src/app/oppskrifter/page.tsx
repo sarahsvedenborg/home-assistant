@@ -10,21 +10,15 @@ export default async function OppskrifterPage() {
 
 
   return (
-    <main className="shell">
-      <section className="sectionHero accentCoolPanel">
+    <main className="shell recipesShell">
+      <header className="issueBoardToolbar">
         <div>
-          <span className="kicker">Oppskrifter</span>
-          <h1 style={{margin: "0.25em 0"}}>Oppskrifter</h1>
+          <h1>Oppskrifter</h1>
         </div>
-        <div className="sectionBadge">{recipes.length} oppskrifter</div>
-      </section>
+      </header>
 
       <section className="listStack">
         <div className="listPanel">
-          <div className="panelHeading">
-            <h2>Lagrede oppskrifter</h2>
-          </div>
-
           {recipes.length === 0 ? (
             <div className="emptyState">
               <span className="emptyIcon" aria-hidden="true">

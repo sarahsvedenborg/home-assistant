@@ -24,34 +24,24 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
   }
 
   return (
-    <main className="shell">
-      <section className="sectionHeroCompact">
+    <main className="shell recipesShell">
+      <header className="issueBoardToolbar">
         <div>
           <Link href="/oppskrifter" className="recipeBackLink">
             <span aria-hidden="true">←</span>
             Tilbake til oppskrifter
           </Link>
-          <div>
-          <span className="kicker">Oppskrift</span>
-          </div>
-          <h1 className="recipeDetailTitle">{recipe.title}</h1>
+          <h1>{recipe.title}</h1>
         </div>
-      </section>
+        {recipe.url ? (
+          <a href={recipe.url} target="_blank" rel="noreferrer" className="inlineLink">
+            Åpne ekstern oppskrift
+          </a>
+        ) : null}
+      </header>
 
-      <section className="contentGrid recipeDetailGrid">
+      <section className="listStack">
         <article className="listPanel">
-          {recipe.url ? (
-            <a
-              href={recipe.url}
-              target="_blank"
-              rel="noreferrer"
-              className="inlineLink"
-              style={{ float: "right" }}
-            >
-              Aapne ekstern oppskrift
-            </a>
-          ) : null}
-
           <div className="recipeContentStack">
             {recipe.ingredients.length > 0 ? (
               <div>

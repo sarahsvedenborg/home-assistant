@@ -15,14 +15,14 @@ export async function POST(request: Request) {
   const loginUrl = new URL(`/login?error=1&next=${encodeURIComponent(nextPath)}`, request.url);
 
   if (!isAuthEnabled()) {
-    return NextResponse.redirect(new URL(nextPath, request.url));
+    return NextResponse.redirect(new URL(nextPath, request.url), 303);
   }
 
   if (password !== process.env.FAMILY_HUB_SUBMISSION_PASSWORD) {
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(loginUrl, 303);
   }
 
-  const response = NextResponse.redirect(new URL(nextPath, request.url));
+  const response = NextResponse.redirect(new URL(nextPath, request.url), 303);
 
   response.cookies.set({
     name: AUTH_COOKIE_NAME,
