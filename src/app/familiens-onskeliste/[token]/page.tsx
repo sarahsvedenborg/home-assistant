@@ -43,6 +43,7 @@ export default async function PublicWishlistPage({ params }: PublicWishlistPageP
         familyMembers={familyMembers}
         wishListItems={wishListItems}
         allowAdd={false}
+        showSizes
       />
     </main>
   );

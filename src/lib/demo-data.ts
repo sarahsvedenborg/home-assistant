@@ -45,6 +45,8 @@ export const FALLBACK_FAMILY_MEMBERS: FamilyMember[] = [
     role: "adult",
     emoji: "🌻",
     accentColor: "#ff9f6e",
+    clothingSize: "M",
+    shoeSize: "39",
     chores: [],
   },
   {
@@ -61,6 +63,8 @@ export const FALLBACK_FAMILY_MEMBERS: FamilyMember[] = [
     role: "child",
     emoji: "🎨",
     accentColor: "#ffcc66",
+    clothingSize: "134/140",
+    shoeSize: "33",
     chores: [
       {
         key: "amelie-room",

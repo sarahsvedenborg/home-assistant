@@ -4769,6 +4769,49 @@ html[data-theme="christmas"] .christmasSnow {
   font-size: clamp(1.4rem, 3vw, 2rem);
 }
 
+/* Clothing / shoe sizes shown above a member's wishes on the shared list.
+   Rendered as a clearly-labelled info box (dashed border + tint) so the size
+   tags are never mistaken for wishes, especially on mobile where the wish
+   table header is hidden. */
+.wishSizes {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0 0 1.1rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px dashed var(--line);
+  border-radius: 1rem;
+  background: rgba(94, 166, 255, 0.1);
+}
+
+.wishSizesLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.wishSizeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.wishSize {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--line);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
 /* Small "Delelenke" copy button in the ønskeliste toolbar. */
 .shareLinkButton {
   flex-shrink: 0;

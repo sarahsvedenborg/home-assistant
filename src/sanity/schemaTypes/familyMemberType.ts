@@ -36,6 +36,18 @@ export const familyMemberType = defineType({
       description: "Optional hex color like #ff9f6e",
     }),
     defineField({
+      name: "clothingSize",
+      title: "Klesstørrelse",
+      type: "string",
+      description: "F.eks. 134/140, M. Vises på den delte ønskelisten.",
+    }),
+    defineField({
+      name: "shoeSize",
+      title: "Skostørrelse",
+      type: "string",
+      description: "F.eks. 32, 42. Vises på den delte ønskelisten.",
+    }),
+    defineField({
       name: "sortOrder",
       title: "Sort order",
       type: "number",
