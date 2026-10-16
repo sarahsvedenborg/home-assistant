@@ -4676,11 +4676,38 @@ html[data-theme="christmas"] .christmasSnow {
     display: none;
   }
 
+  .wishTableBody {
+    gap: 0.75rem;
+  }
+
+  .wishTableBody > .wishTableRow + .wishTableRow {
+    padding-top: 0.95rem;
+    border-top: 1px solid color-mix(in srgb, var(--line-ink) 28%, transparent);
+  }
+
+  .wishShell .tabPanel {
+    background: color-mix(in srgb, var(--warm-soft) 46%, var(--paper-strong));
+  }
+
   .wishTableRow,
   .wishTableRowCompact {
     grid-template-columns: 1fr;
     align-items: start;
+    gap: 0.35rem;
     min-height: 0;
+    padding: 0.95rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--line-ink) 28%, transparent);
+    border-radius: 1.15rem;
+    background: var(--surface);
+  }
+
+  .wishTitleCell {
+    order: 1;
+  }
+
+  .wishComment {
+    order: 2;
+    line-height: 1.4;
   }
 
   .wishCommentEmpty,
@@ -4689,8 +4716,10 @@ html[data-theme="christmas"] .christmasSnow {
   }
 
   .wishLinkButton {
-    justify-self: stretch;
-    width: 100%;
+    order: 3;
+    justify-self: start;
+    width: auto;
+    margin-top: 0.15rem;
   }
 
   .tabList {
