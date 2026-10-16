@@ -3229,6 +3229,16 @@ html[data-theme="christmas"] .christmasSnow {
     padding-top: 2.05rem;
   }
 
+  .wishShell .wishTableHeader,
+  .wishShell .wishTableRow,
+  .wishShell .wishTableRowCompact {
+    grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 0.8fr) minmax(0, 1.2fr);
+  }
+
+  .wishShell .wishTableRow {
+    min-height: 5.5rem;
+  }
+
   .wishShell .wishTableRow strong {
     font-size: 2.2rem;
   }
@@ -3802,9 +3812,9 @@ html[data-theme="christmas"] .christmasSnow {
 .wishTableHeader,
 .wishTableRow {
   display: grid;
-  grid-template-columns: minmax(220px, 1.2fr) minmax(180px, 1fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(11rem, 0.9fr) minmax(0, 1.2fr);
   gap: 1rem;
-  align-items: start;
+  align-items: center;
 }
 
 .wishTableHeader {
@@ -3823,6 +3833,7 @@ html[data-theme="christmas"] .christmasSnow {
 }
 
 .wishTableRow {
+  min-height: 3.5rem;
   padding: 0;
   border: 0;
   background: transparent;
@@ -3834,22 +3845,23 @@ html[data-theme="christmas"] .christmasSnow {
 }
 
 .wishTableRowCompact {
-  grid-template-columns: minmax(220px, 1.2fr) minmax(180px, 1fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(11rem, 0.9fr) minmax(0, 1.2fr);
 }
 
-.wishTitleCell {
-  display: grid;
-  gap: 0.45rem;
-  justify-items: start;
+.wishTitleCell,
+.wishComment,
+.wishLinkEmpty {
+  min-width: 0;
 }
 
 .wishLinkButton {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  justify-self: start;
   max-width: 100%;
   min-height: 2.5rem;
-  padding: 0.4rem 0.9rem 0.4rem 0;
+  padding: 0.4rem 0;
  /*  border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--paper-strong); */
@@ -4664,15 +4676,15 @@ html[data-theme="christmas"] .christmasSnow {
     display: none;
   }
 
-  .wishTableRow {
-    grid-template-columns: 1fr;
-  }
-
+  .wishTableRow,
   .wishTableRowCompact {
     grid-template-columns: 1fr;
+    align-items: start;
+    min-height: 0;
   }
 
-  .wishCommentEmpty {
+  .wishCommentEmpty,
+  .wishLinkEmpty {
     display: none;
   }
 

@@ -124,6 +124,7 @@ export function OnskelisteTabs({
             <div>
               <div className="wishTableHeader">
                 <span>Ønske</span>
+                <span>Lenke</span>
                 <span>Kommentar</span>
               </div>
 
@@ -139,20 +140,20 @@ export function OnskelisteTabs({
 
                     return (
                       <li key={item.id} className="wishTableRow wishTableRowCompact">
-                        <div className="wishTitleCell">
-                          <strong>{item.title}</strong>
-                          {item.link ? (
-                            <a
-                              href={item.link}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="wishLinkButton"
-                              title={item.link}
-                            >
-                              {host ? `Åpne hos ${host}` : "Åpne lenke"}
-                            </a>
-                          ) : null}
-                        </div>
+                        <strong className="wishTitleCell">{item.title}</strong>
+                        {item.link ? (
+                          <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="wishLinkButton"
+                            title={item.link}
+                          >
+                            {host ? `Åpne hos ${host}` : "Åpne lenke"}
+                          </a>
+                        ) : (
+                          <span className="wishLinkEmpty">-</span>
+                        )}
                         <span className={comment ? "wishComment" : "wishComment wishCommentEmpty"}>
                           {comment || "-"}
                         </span>
