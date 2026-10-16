@@ -7,6 +7,7 @@ import { FlagMedia } from "@/components/flag-media";
 import {
   buildFlagQuiz,
   FLAG_QUIZ_AUTO_ADVANCE_MS,
+  FLAG_QUIZ_AUTO_REVEAL_MS,
   FLAG_QUIZ_DEFAULT_COUNT,
   FLAG_QUIZ_DEFAULT_MODE,
   FLAG_QUIZ_DEFAULT_SOURCE,
@@ -35,6 +36,7 @@ export function FlagQuiz({
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+  const [isNameVisible, setIsNameVisible] = useState(false);
   const question = questions?.[index];
   const isAuto = mode === "auto";
   const isLastQuestion = questions ? index === questions.length - 1 : false;
@@ -50,21 +52,35 @@ export function FlagQuiz({
   }, [studiedCountries, countries, questionCount, source]);
 
   useEffect(() => {
-    if (!isAuto || !questions || questions.length === 0 || isComplete) {
+    if (!isAuto || !questions || questions.length === 0 || isComplete || isNameVisible) {
       return;
     }
 
     const timeout = window.setTimeout(() => {
-      if (index >= questions.length - 1) {
+      setIsNameVisible(true);
+    }, FLAG_QUIZ_AUTO_ADVANCE_MS);
+
+    return () => window.clearTimeout(timeout);
+  }, [isAuto, questions, index, isComplete, isNameVisible]);
+
+  useEffect(() => {
+    if (!isAuto || !isNameVisible || isComplete) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setIsNameVisible(false);
+
+      if (!questions || index >= questions.length - 1) {
         setIsComplete(true);
         return;
       }
 
       setIndex((current) => current + 1);
-    }, FLAG_QUIZ_AUTO_ADVANCE_MS);
+    }, FLAG_QUIZ_AUTO_REVEAL_MS);
 
     return () => window.clearTimeout(timeout);
-  }, [isAuto, questions, index, isComplete]);
+  }, [isAuto, isNameVisible, isComplete, questions, index]);
 
   function selectChoice(code: string) {
     if (selectedCode || !question) {
@@ -102,6 +118,7 @@ export function FlagQuiz({
     setSelectedCode(null);
     setScore(0);
     setIsComplete(false);
+    setIsNameVisible(false);
   }
 
   if (!questions) {
@@ -145,14 +162,20 @@ export function FlagQuiz({
         <span className="kicker">
           Spørsmål {index + 1} av {questions.length}
         </span>
-        <h2 id="flag-quiz-title">Hvilket land er dette?</h2>
+        <h2 id="flag-quiz-title" aria-live={isAuto ? "polite" : undefined}>
+          {isAuto && isNameVisible ? question.country.name : "Hvilket land er dette?"}
+        </h2>
       </div>
 
       <div className="flagQuizFlag">
         <FlagMedia
           country={question.country}
           showMap={false}
-          alt="Hvilket land er dette flagget fra?"
+          alt={
+            isAuto && isNameVisible
+              ? `Flagget til ${question.country.name}`
+              : "Hvilket land er dette flagget fra?"
+          }
           key={`${index}-${question.country.code}`}
         />
       </div>

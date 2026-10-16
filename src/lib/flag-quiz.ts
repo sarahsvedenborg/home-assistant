@@ -9,6 +9,7 @@ export const FLAG_QUIZ_DEFAULT_SOURCE = FLAG_QUIZ_SOURCES[0];
 export const FLAG_QUIZ_MODES = ["manual", "auto"] as const;
 export const FLAG_QUIZ_DEFAULT_MODE = FLAG_QUIZ_MODES[0];
 export const FLAG_QUIZ_AUTO_ADVANCE_MS = 10_000;
+export const FLAG_QUIZ_AUTO_REVEAL_MS = 1_000;
 
 export type FlagQuizCount = (typeof FLAG_QUIZ_COUNTS)[number];
 export type FlagQuizSource = (typeof FLAG_QUIZ_SOURCES)[number];
