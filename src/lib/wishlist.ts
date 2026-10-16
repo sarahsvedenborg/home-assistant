@@ -1,13 +1,17 @@
 import type { FamilyMember, FamilyMemberWishListGroup, WishListItem } from "@/lib/types";
 
-const WISH_LINK_DISPLAY_MAX = 80;
+export function formatWishLinkHost(link: string): string | null {
+  try {
+    const url = new URL(link);
 
-export function formatWishLinkLabel(link: string): string {
-  if (link.length <= WISH_LINK_DISPLAY_MAX) {
-    return link;
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+      return null;
+    }
+
+    return url.hostname.replace(/^www\./, "");
+  } catch {
+    return null;
   }
-
-  return `${link.slice(0, WISH_LINK_DISPLAY_MAX)}…`;
 }
 
 export function buildWishListGroupsForFamily(

@@ -4,7 +4,7 @@ import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 
 import { AddButton } from "@/components/add-button";
 import { WishlistForm } from "@/components/wishlist-form";
-import { buildWishListGroupsForFamily, formatWishLinkLabel } from "@/lib/wishlist";
+import { buildWishListGroupsForFamily, formatWishLinkHost } from "@/lib/wishlist";
 import type { FamilyMember, WishListItem } from "@/lib/types";
 
 type OnskelisteTabsProps = {
@@ -135,6 +135,7 @@ export function OnskelisteTabs({
                 <ul className="wishTableBody">
                   {activeGroup.items.map((item) => {
                     const comment = item.description?.trim() ?? "";
+                    const host = item.link ? formatWishLinkHost(item.link) : null;
 
                     return (
                       <li key={item.id} className="wishTableRow wishTableRowCompact">
@@ -145,10 +146,10 @@ export function OnskelisteTabs({
                               href={item.link}
                               target="_blank"
                               rel="noreferrer"
-                              className="wishInlineLink"
+                              className="wishLinkButton"
                               title={item.link}
                             >
-                              {formatWishLinkLabel(item.link)}
+                              {host ? `Åpne hos ${host}` : "Åpne lenke"}
                             </a>
                           ) : null}
                         </div>
