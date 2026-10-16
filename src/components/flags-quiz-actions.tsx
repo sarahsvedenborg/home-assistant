@@ -7,10 +7,17 @@ import { FormModal } from "@/components/form-modal";
 import {
   FLAG_QUIZ_COUNTS,
   FLAG_QUIZ_DEFAULT_COUNT,
+  FLAG_QUIZ_DEFAULT_MODE,
   FLAG_QUIZ_DEFAULT_SOURCE,
   type FlagQuizCount,
+  type FlagQuizMode,
   type FlagQuizSource,
 } from "@/lib/flag-quiz";
+
+const QUIZ_MODES: Array<{ value: FlagQuizMode; label: string }> = [
+  { value: "manual", label: "Trykk selv" },
+  { value: "auto", label: "Automatisk flaggbytte" },
+];
 
 const QUIZ_SOURCES: Array<{ value: FlagQuizSource; label: string }> = [
   { value: "studied", label: "Studerte flagg" },
@@ -22,6 +29,7 @@ export function FlagsQuizActions() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [count, setCount] = useState<FlagQuizCount>(FLAG_QUIZ_DEFAULT_COUNT);
   const [source, setSource] = useState<FlagQuizSource>(FLAG_QUIZ_DEFAULT_SOURCE);
+  const [mode, setMode] = useState<FlagQuizMode>(FLAG_QUIZ_DEFAULT_MODE);
 
   return (
     <div className="flagsQuizActions">
@@ -43,7 +51,23 @@ export function FlagsQuizActions() {
         className="formModalFlagsQuiz"
       >
         <form className="customQuizPanel" action="/flags/quiz">
-          <p>Velg antall flagg og hvilke flagg quizen skal trekke fra.</p>
+          <fieldset className="field fieldWide checkboxFieldset">
+            <legend>Quiz type</legend>
+            <div className="radioRow">
+              {QUIZ_MODES.map((option) => (
+                <label className="radioOption" key={option.value}>
+                  <input
+                    type="radio"
+                    name="mode"
+                    value={option.value}
+                    checked={mode === option.value}
+                    onChange={() => setMode(option.value)}
+                  />
+                  <span>{option.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
 
           <fieldset className="field fieldWide checkboxFieldset">
             <legend>Antall flagg</legend>

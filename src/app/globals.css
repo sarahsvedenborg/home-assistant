@@ -3431,7 +3431,8 @@ html[data-theme="christmas"] .christmasSnow {
   .flagsQuizShell .flagQuizHeader,
   .flagsQuizShell .flagQuizOptions,
   .flagsQuizShell .flagQuizFeedback,
-  .flagsQuizShell .flagQuizActions {
+  .flagsQuizShell .flagQuizActions,
+  .flagsQuizShell .flagQuizAutoProgress {
     flex-shrink: 0;
   }
 
@@ -4699,6 +4700,11 @@ html[data-theme="christmas"] .christmasSnow {
 /* Full-width list layout (replaces the two-column list/form grid) */
 .listStack {
   margin-top: 1.5rem;
+}
+
+/* Public shared wishlist: smaller title than the internal ønskeliste page. */
+.publicWishToolbar h1 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
 }
 
 .activitiesShell .sectionHero h1 {
@@ -7272,6 +7278,36 @@ html[data-theme="christmas"] .christmasSnow {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.75rem;
+}
+
+.flagQuizAutoProgress {
+  width: min(28rem, 100%);
+  height: 0.45rem;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--line) 80%, transparent);
+}
+
+.flagQuizAutoProgressBar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  background: var(--cool);
+  animation-name: flagQuizAutoCountdown;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes flagQuizAutoCountdown {
+  from {
+    transform: scaleX(1);
+  }
+
+  to {
+    transform: scaleX(0);
+  }
 }
 
 @media (max-width: 699px) {

@@ -6,9 +6,12 @@ import { useEffect, useState } from "react";
 import { FlagMedia } from "@/components/flag-media";
 import {
   buildFlagQuiz,
+  FLAG_QUIZ_AUTO_ADVANCE_MS,
   FLAG_QUIZ_DEFAULT_COUNT,
+  FLAG_QUIZ_DEFAULT_MODE,
   FLAG_QUIZ_DEFAULT_SOURCE,
   type FlagQuizCount,
+  type FlagQuizMode,
   type FlagQuizQuestion,
   type FlagQuizSource,
 } from "@/lib/flag-quiz";
@@ -19,11 +22,13 @@ export function FlagQuiz({
   countries,
   questionCount = FLAG_QUIZ_DEFAULT_COUNT,
   source = FLAG_QUIZ_DEFAULT_SOURCE,
+  mode = FLAG_QUIZ_DEFAULT_MODE,
 }: {
   studiedCountries: Country[];
   countries: Country[];
   questionCount?: FlagQuizCount;
   source?: FlagQuizSource;
+  mode?: FlagQuizMode;
 }) {
   const [questions, setQuestions] = useState<FlagQuizQuestion[] | null>(null);
   const [index, setIndex] = useState(0);
@@ -31,6 +36,7 @@ export function FlagQuiz({
   const [score, setScore] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const question = questions?.[index];
+  const isAuto = mode === "auto";
   const isLastQuestion = questions ? index === questions.length - 1 : false;
   const isCorrect = selectedCode === question?.country.code;
 
@@ -42,6 +48,23 @@ export function FlagQuiz({
       }),
     );
   }, [studiedCountries, countries, questionCount, source]);
+
+  useEffect(() => {
+    if (!isAuto || !questions || questions.length === 0 || isComplete) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      if (index >= questions.length - 1) {
+        setIsComplete(true);
+        return;
+      }
+
+      setIndex((current) => current + 1);
+    }, FLAG_QUIZ_AUTO_ADVANCE_MS);
+
+    return () => window.clearTimeout(timeout);
+  }, [isAuto, questions, index, isComplete]);
 
   function selectChoice(code: string) {
     if (selectedCode || !question) {
@@ -98,10 +121,12 @@ export function FlagQuiz({
   if (isComplete) {
     return (
       <section className="flagQuiz flagQuizResult" aria-labelledby="flag-quiz-result-title">
-        <h2 id="flag-quiz-result-title">Ferdig!</h2>
-        <p className="flagQuizScore">
-          Du fikk {score} av {questions.length} riktige.
-        </p>
+        <h2 id="flag-quiz-result-title">{isAuto ? "Ferdig" : "Ferdig!"}</h2>
+        {isAuto ? null : (
+          <p className="flagQuizScore">
+            Du fikk {score} av {questions.length} riktige.
+          </p>
+        )}
         <div className="flagQuizActions">
           <button className="buttonPrimary" type="button" onClick={restart}>
             Ny quiz
@@ -132,50 +157,62 @@ export function FlagQuiz({
         />
       </div>
 
-      <div className="flagQuizOptions" role="group" aria-label="Svaralternativer">
-        {question.choices.map((choice) => {
-          const isSelected = selectedCode === choice.code;
-          const isAnswer = choice.code === question.country.code;
-          const className = [
-            "flagQuizChoice",
-            selectedCode && isAnswer ? "flagQuizChoiceCorrect" : "",
-            selectedCode && isSelected && !isAnswer ? "flagQuizChoiceWrong" : "",
-          ]
-            .filter(Boolean)
-            .join(" ");
-
-          return (
-            <button
-              type="button"
-              className={className}
-              key={choice.code}
-              aria-pressed={isSelected}
-              onClick={() => selectChoice(choice.code)}
-            >
-              {choice.name}
-            </button>
-          );
-        })}
-      </div>
-
-      {selectedCode ? (
-        <p
-          className={isCorrect ? "flagQuizFeedback flagQuizFeedbackCorrect" : "flagQuizFeedback"}
-          aria-live="polite"
-        >
-          {isCorrect
-            ? "Riktig!"
-            : `Feil. Riktig svar er ${question.country.name}.`}
-        </p>
-      ) : null}
-
-      {selectedCode ? (
-        <div className="flagQuizActions">
-          <button className="buttonPrimary" type="button" onClick={goToNext}>
-            {isLastQuestion ? "Se resultat" : "Neste"}
-          </button>
+      {isAuto ? (
+        <div className="flagQuizAutoProgress" aria-hidden="true">
+          <span
+            key={`${index}-${question.country.code}`}
+            className="flagQuizAutoProgressBar"
+            style={{ animationDuration: `${FLAG_QUIZ_AUTO_ADVANCE_MS}ms` }}
+          />
         </div>
-      ) : null}
+      ) : (
+        <>
+          <div className="flagQuizOptions" role="group" aria-label="Svaralternativer">
+            {question.choices.map((choice) => {
+              const isSelected = selectedCode === choice.code;
+              const isAnswer = choice.code === question.country.code;
+              const className = [
+                "flagQuizChoice",
+                selectedCode && isAnswer ? "flagQuizChoiceCorrect" : "",
+                selectedCode && isSelected && !isAnswer ? "flagQuizChoiceWrong" : "",
+              ]
+                .filter(Boolean)
+                .join(" ");
+
+              return (
+                <button
+                  type="button"
+                  className={className}
+                  key={choice.code}
+                  aria-pressed={isSelected}
+                  onClick={() => selectChoice(choice.code)}
+                >
+                  {choice.name}
+                </button>
+              );
+            })}
+          </div>
+
+          {selectedCode ? (
+            <p
+              className={isCorrect ? "flagQuizFeedback flagQuizFeedbackCorrect" : "flagQuizFeedback"}
+              aria-live="polite"
+            >
+              {isCorrect
+                ? "Riktig!"
+                : `Feil. Riktig svar er ${question.country.name}.`}
+            </p>
+          ) : null}
+
+          {selectedCode ? (
+            <div className="flagQuizActions">
+              <button className="buttonPrimary" type="button" onClick={goToNext}>
+                {isLastQuestion ? "Se resultat" : "Neste"}
+              </button>
+            </div>
+          ) : null}
+        </>
+      )}
     </section>
   );
 }

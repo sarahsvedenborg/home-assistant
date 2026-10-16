@@ -6,9 +6,13 @@ export const FLAG_QUIZ_MAX_QUESTIONS = FLAG_QUIZ_DEFAULT_COUNT;
 export const FLAG_QUIZ_CHOICE_COUNT = 4;
 export const FLAG_QUIZ_SOURCES = ["studied", "independent", "all"] as const;
 export const FLAG_QUIZ_DEFAULT_SOURCE = FLAG_QUIZ_SOURCES[0];
+export const FLAG_QUIZ_MODES = ["manual", "auto"] as const;
+export const FLAG_QUIZ_DEFAULT_MODE = FLAG_QUIZ_MODES[0];
+export const FLAG_QUIZ_AUTO_ADVANCE_MS = 10_000;
 
 export type FlagQuizCount = (typeof FLAG_QUIZ_COUNTS)[number];
 export type FlagQuizSource = (typeof FLAG_QUIZ_SOURCES)[number];
+export type FlagQuizMode = (typeof FLAG_QUIZ_MODES)[number];
 
 export type FlagQuizQuestion = {
   country: Country;
@@ -51,6 +55,12 @@ export function parseFlagQuizSource(value?: string): FlagQuizSource {
   return FLAG_QUIZ_SOURCES.includes(value as FlagQuizSource)
     ? (value as FlagQuizSource)
     : FLAG_QUIZ_DEFAULT_SOURCE;
+}
+
+export function parseFlagQuizMode(value?: string): FlagQuizMode {
+  return FLAG_QUIZ_MODES.includes(value as FlagQuizMode)
+    ? (value as FlagQuizMode)
+    : FLAG_QUIZ_DEFAULT_MODE;
 }
 
 export function getFlagQuizPool(

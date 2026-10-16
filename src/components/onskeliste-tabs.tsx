@@ -10,9 +10,16 @@ import type { FamilyMember, WishListItem } from "@/lib/types";
 type OnskelisteTabsProps = {
   familyMembers: FamilyMember[];
   wishListItems: WishListItem[];
+  // When false, the "Legg til ønske" button is hidden (read-only view, e.g.
+  // the public page shared with the extended family).
+  allowAdd?: boolean;
 };
 
-export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsProps) {
+export function OnskelisteTabs({
+  familyMembers,
+  wishListItems,
+  allowAdd = true,
+}: OnskelisteTabsProps) {
   const groups = useMemo(
     () => buildWishListGroupsForFamily(familyMembers, wishListItems),
     [familyMembers, wishListItems],
@@ -158,18 +165,20 @@ export function OnskelisteTabs({ familyMembers, wishListItems }: OnskelisteTabsP
         </div>
       </div>
 
-      <AddButton
-        title={`Legg til ønske for ${activeGroup.member.name}`}
-        label="Legg til ønske"
-        anchor="add-wish"
-        modalClassName="formModalWish"
-      >
-        <WishlistForm
-          familyMembers={familyMembers.map((member) => member.name)}
-          selectedMemberName={activeGroup.member.name}
-          submitPath="/api/submissions/onskeliste"
-        />
-      </AddButton>
+      {allowAdd ? (
+        <AddButton
+          title={`Legg til ønske for ${activeGroup.member.name}`}
+          label="Legg til ønske"
+          anchor="add-wish"
+          modalClassName="formModalWish"
+        >
+          <WishlistForm
+            familyMembers={familyMembers.map((member) => member.name)}
+            selectedMemberName={activeGroup.member.name}
+            submitPath="/api/submissions/onskeliste"
+          />
+        </AddButton>
+      ) : null}
     </section>
   );
 }
