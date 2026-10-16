@@ -4707,6 +4707,26 @@ html[data-theme="christmas"] .christmasSnow {
   font-size: clamp(1.4rem, 3vw, 2rem);
 }
 
+/* Small "Delelenke" copy button in the ønskeliste toolbar. */
+.shareLinkButton {
+  flex-shrink: 0;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.shareLinkButton:hover,
+.shareLinkButton:focus-visible {
+  transform: translateY(-1px);
+  background: var(--paper-strong);
+}
+
 .activitiesShell .sectionHero h1 {
   margin: 0.25em 0;
 }

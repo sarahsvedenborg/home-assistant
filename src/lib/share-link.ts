@@ -10,6 +10,14 @@ function digest(value: string): Buffer {
   return createHash("sha256").update(value).digest();
 }
 
+// The relative path of the public share link, or null when no token is
+// configured (so callers can hide the "Delelenke" button). The token is
+// URL-safe by construction, but encode defensively in case of a custom value.
+export function getShareLinkPath(): string | null {
+  const token = process.env.WISHLIST_SHARE_TOKEN;
+  return token ? `/familiens-onskeliste/${encodeURIComponent(token)}` : null;
+}
+
 // Validates a token from the URL against the configured secret using a
 // constant-time comparison. Default-DENY: if no secret is configured, every
 // candidate is rejected so the page 404s rather than being left wide open.
