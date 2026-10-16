@@ -52,7 +52,7 @@ export function MobileActionMenu() {
   if (
     pathname === "/login" ||
     pathname === "/test-route" ||
-    pathname === "/familiens-onskeliste" ||
+    pathname.startsWith("/familiens-onskeliste") ||
     pathname.startsWith("/studio")
   ) {
     return null;

@@ -11,7 +11,7 @@ export function AppChrome() {
   if (
     pathname === "/login" ||
     pathname === "/test-route" ||
-    pathname === "/familiens-onskeliste"
+    pathname.startsWith("/familiens-onskeliste")
   ) {
     return null;
   }
