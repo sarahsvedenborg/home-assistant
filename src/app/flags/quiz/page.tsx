@@ -6,12 +6,14 @@ import { getStudiedFlagCodes } from "@/lib/data";
 import {
   getFlagQuizPool,
   parseFlagQuizCount,
+  parseFlagQuizMode,
   parseFlagQuizSource,
 } from "@/lib/flag-quiz";
 
 type FlagQuizPageProps = {
   searchParams: Promise<{
     count?: string | string[];
+    mode?: string | string[];
     source?: string | string[];
   }>;
 };
@@ -24,6 +26,7 @@ export default async function FlagQuizPage({ searchParams }: FlagQuizPageProps) 
   const params = await searchParams;
   const questionCount = parseFlagQuizCount(firstSearchParam(params.count));
   const source = parseFlagQuizSource(firstSearchParam(params.source));
+  const mode = parseFlagQuizMode(firstSearchParam(params.mode));
   const [countries, studiedCodes] = await Promise.all([
     getCountries(),
     getStudiedFlagCodes(),
@@ -54,11 +57,12 @@ export default async function FlagQuizPage({ searchParams }: FlagQuizPageProps) 
         </p>
       ) : (
         <FlagQuiz
-          key={`${source}-${questionCount}`}
+          key={`${source}-${questionCount}-${mode}`}
           studiedCountries={studiedCountries}
           countries={countries}
           questionCount={questionCount}
           source={source}
+          mode={mode}
         />
       )}
     </main>

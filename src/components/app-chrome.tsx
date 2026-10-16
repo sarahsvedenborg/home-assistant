@@ -8,7 +8,11 @@ import { PerformanceModeToggle } from "@/components/performance-mode-toggle";
 export function AppChrome() {
   const pathname = usePathname();
 
-  if (pathname === "/login" || pathname === "/test-route") {
+  if (
+    pathname === "/login" ||
+    pathname === "/test-route" ||
+    pathname.startsWith("/familiens-onskeliste")
+  ) {
     return null;
   }
 

@@ -40,7 +40,10 @@ export function InstallPrompt() {
 
     function refresh() {
       const dismissed = window.localStorage.getItem(STORAGE_KEY) === "1";
-      const hideOnRoute = pathname === "/login" || pathname.startsWith("/studio");
+      const hideOnRoute =
+        pathname === "/login" ||
+        pathname.startsWith("/familiens-onskeliste") ||
+        pathname.startsWith("/studio");
       setVisible(phone.matches && !isStandaloneDisplay() && !dismissed && !hideOnRoute);
     }
 
