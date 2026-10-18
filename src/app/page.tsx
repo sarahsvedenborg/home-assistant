@@ -3,7 +3,7 @@ import { FamilyDashboard } from "@/components/family-dashboard";
 import { HubCard } from "@/components/hub-card";
 import { SingleEventForm } from "@/components/single-event-form";
 import { getDailyQuote } from "@/lib/daily-quote";
-import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getStudiedFlagCodes, getTodaysBirthdays, getWeather, getWishListItems } from "@/lib/data";
+import { getBoardIssues, getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getStudiedFlagCodes, getTodaysBirthdays, getWeather, getWishListItems } from "@/lib/data";
 import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
@@ -22,6 +22,7 @@ export default async function Home() {
   const now = new Date();
   const todayDateKey = osloDateKey(now);
   const [
+    boardIssues,
     dailyQuote,
     familyMembers,
     messages,
@@ -35,6 +36,7 @@ export default async function Home() {
     wishListItems,
     weather,
   ] = await Promise.all([
+    getBoardIssues(),
     getDailyQuote(todayDateKey),
     getFamilyMembers(),
     getShortMessages(),
@@ -52,7 +54,10 @@ export default async function Home() {
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
   const todayEvents = eventsForDate(recurringEvents, singleEvents, now);
   const tomorrowEvents = eventsForDate(recurringEvents, singleEvents, tomorrow);
-  const activity = buildRecentActivity(wishListItems, { now });
+  const activity = buildRecentActivity(
+    { wishlist: wishListItems, movies, recipes, issues: boardIssues },
+    { now },
+  );
   return (
     <main className="shell homeShell">
       <section className="homeViews" aria-label="Dashboard">

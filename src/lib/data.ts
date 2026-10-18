@@ -106,6 +106,7 @@ type SanityMovieRecommendation = {
   suggestedBy?: string;
   suitableFor?: string | string[];
   watched?: boolean;
+  _createdAt?: string;
 };
 
 type SanityShoppingListItem = {
@@ -133,6 +134,7 @@ type SanityRecipe = {
   ingredients?: SanityBlock[];
   steps?: SanityBlock[];
   comments?: SanityBlock[];
+  _createdAt?: string;
 };
 
 type SanityDinner = {
@@ -164,6 +166,7 @@ type SanityBoardIssue = {
   text?: string;
   assigned?: string;
   status?: string;
+  statusChangedAt?: string;
   _createdAt?: string;
 };
 
@@ -346,6 +349,7 @@ export async function getMovieRecommendations(): Promise<MovieRecommendation[]> 
     suggestedBy: movie.suggestedBy || "Someone",
     suitableFor: normalizeMovieAudience(movie.suitableFor),
     watched: Boolean(movie.watched),
+    createdAt: movie._createdAt,
   }));
 }
 
@@ -396,6 +400,7 @@ export async function getRecipes(): Promise<Recipe[]> {
     ingredients: blocksToParagraphs(recipe.ingredients),
     steps: blocksToParagraphs(recipe.steps),
     comments: blocksToParagraphs(recipe.comments),
+    createdAt: recipe._createdAt,
   }));
 }
 
@@ -517,6 +522,7 @@ export async function getBoardIssues(): Promise<BoardIssue[]> {
       ? (issue.status as BoardIssueStatus)
       : "todo",
     createdAt: issue._createdAt,
+    statusChangedAt: issue.statusChangedAt,
   }));
 }
 

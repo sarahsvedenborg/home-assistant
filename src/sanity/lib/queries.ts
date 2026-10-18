@@ -35,6 +35,7 @@ export const MOVIE_RECOMMENDATIONS_QUERY = `*[_type == "movieRecommendation" && 
   link,
   watched,
   suitableFor,
+  _createdAt,
   "posterUrl": coalesce(poster.asset->url, posterUrl),
   "suggestedBy": familyMember->name
 }`;
@@ -64,6 +65,7 @@ export const BOARD_ISSUES_QUERY = defineQuery(/* groq */ `
     text,
     assigned,
     status,
+    statusChangedAt,
     _createdAt
   }
 `);
@@ -130,6 +132,7 @@ export const RECIPES_QUERY = `*[_type == "recipe"] | order(_createdAt desc) {
   _id,
   title,
   url,
+  _createdAt,
   ingredients[]{
     ...
   },

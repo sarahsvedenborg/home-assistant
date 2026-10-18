@@ -1,6 +1,10 @@
+import { BOARD_COLUMNS } from "@/lib/board";
 import { eventCategoryLabel } from "@/lib/event-categories";
 import { singleEventCategoryLabel } from "@/lib/single-event-categories";
 import type {
+  BoardIssue,
+  MovieRecommendation,
+  Recipe,
   RecurringEvent,
   SingleEvent,
   WishListItem,
@@ -183,14 +187,21 @@ export function eventsForDate(
   return eventsForDateKey(recurring, single, osloDateKey(date));
 }
 
-export type RecentActivityType = "wish";
+export type RecentActivityType = "wish" | "movie" | "recipe" | "issue";
 
 export type RecentActivity = {
   id: string;
   type: RecentActivityType;
   title: string;
-  person?: string;
+  detail?: string;
   createdAt: string;
+};
+
+type BuildRecentActivityInput = {
+  wishlist: WishListItem[];
+  movies: MovieRecommendation[];
+  recipes: Recipe[];
+  issues: BoardIssue[];
 };
 
 type BuildRecentActivityOptions = {
@@ -199,29 +210,109 @@ type BuildRecentActivityOptions = {
   limit?: number;
 };
 
-// Recently added wishlist items, newest first. Items without a createdAt
-// (e.g. legacy data) are skipped.
+function isRecent(timestamp: string | undefined, cutoff: number) {
+  if (!timestamp) {
+    return false;
+  }
+
+  const time = new Date(timestamp).getTime();
+  return Number.isFinite(time) && time >= cutoff;
+}
+
+function namedPerson(person?: string) {
+  const name = person?.trim();
+  if (!name || name === "Someone" || name === "Ukjent") {
+    return undefined;
+  }
+
+  return name;
+}
+
+function activityTitle(value: string | undefined, fallback: string) {
+  const title = value?.trim().replace(/\s+/g, " ") || "";
+  if (!title) {
+    return fallback;
+  }
+
+  if (title.length <= 90) {
+    return title;
+  }
+
+  return `${title.slice(0, 87)}…`;
+}
+
+function issueStatusLabel(status: BoardIssue["status"]) {
+  return BOARD_COLUMNS.find((column) => column.value === status)?.label || status;
+}
+
+// Newest family additions and board status changes. Entries without a
+// timestamp are skipped.
 export function buildRecentActivity(
-  wishlist: WishListItem[],
+  { wishlist, movies, recipes, issues }: BuildRecentActivityInput,
   { now, days = 7, limit = 5 }: BuildRecentActivityOptions,
 ): RecentActivity[] {
   const cutoff = now.getTime() - days * 24 * 60 * 60 * 1000;
+  const activity: RecentActivity[] = [];
 
-  return wishlist
-    .flatMap((wish) =>
-      wish.createdAt
-        ? [
-            {
-              id: wish.id,
-              type: "wish" as const,
-              title: wish.title,
-              person: wish.submittedBy,
-              createdAt: wish.createdAt,
-            },
-          ]
-        : [],
-    )
-    .filter((entry) => new Date(entry.createdAt).getTime() >= cutoff)
+  for (const wish of wishlist) {
+    if (!isRecent(wish.createdAt, cutoff) || !wish.createdAt) {
+      continue;
+    }
+
+    const person = namedPerson(wish.submittedBy);
+    activity.push({
+      id: wish.id,
+      type: "wish",
+      title: activityTitle(wish.title, "Ønske"),
+      detail: person ? `${person} ønsket seg` : "Nytt ønske",
+      createdAt: wish.createdAt,
+    });
+  }
+
+  for (const movie of movies) {
+    if (!isRecent(movie.createdAt, cutoff) || !movie.createdAt) {
+      continue;
+    }
+
+    const person = namedPerson(movie.suggestedBy);
+    activity.push({
+      id: movie.id,
+      type: "movie",
+      title: activityTitle(movie.title, "Film"),
+      detail: person ? `${person} la til en film` : "Ny film",
+      createdAt: movie.createdAt,
+    });
+  }
+
+  for (const recipe of recipes) {
+    if (!isRecent(recipe.createdAt, cutoff) || !recipe.createdAt) {
+      continue;
+    }
+
+    activity.push({
+      id: recipe.id,
+      type: "recipe",
+      title: activityTitle(recipe.title, "Oppskrift"),
+      detail: "Ny oppskrift",
+      createdAt: recipe.createdAt,
+    });
+  }
+
+  for (const issue of issues) {
+    if (!isRecent(issue.statusChangedAt, cutoff) || !issue.statusChangedAt) {
+      continue;
+    }
+
+    activity.push({
+      id: issue.id,
+      type: "issue",
+      title: activityTitle(issue.title || issue.text, "Oppgave"),
+      detail: `Endret til ${issueStatusLabel(issue.status)}`,
+      createdAt: issue.statusChangedAt,
+    });
+  }
+
+  return activity
     .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
     .slice(0, limit);
 }

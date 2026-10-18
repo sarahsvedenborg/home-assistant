@@ -27,6 +27,9 @@ type FamilyDashboardProps = {
 
 const ACTIVITY_ICON: Record<RecentActivity["type"], string> = {
   wish: "🎁",
+  movie: "🎬",
+  recipe: "🍲",
+  issue: "📋",
 };
 
 const EVENT_GROUPS = [
@@ -296,8 +299,8 @@ export function FamilyDashboard({
                 <strong>
                   <span aria-hidden="true">{ACTIVITY_ICON[item.type]}</span> {item.title}
                 </strong>
-                {item.person ? (
-                  <span className="itemMeta">{item.person} ønsket seg</span>
+                {item.detail ? (
+                  <span className="itemMeta">{item.detail}</span>
                 ) : null}
               </li>
             ))}

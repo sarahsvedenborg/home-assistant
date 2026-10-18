@@ -420,8 +420,8 @@ export async function updateBoardIssueStatus(
     throw new Error("Sanity writes are not configured yet.");
   }
 
-  const issue = await client.fetch<{ _id: string } | null>(
-    `*[_type == "boardIssue" && _id == $issueId][0]{_id}`,
+  const issue = await client.fetch<{ _id: string; status?: string } | null>(
+    `*[_type == "boardIssue" && _id == $issueId][0]{_id, status}`,
     { issueId },
   );
 
@@ -429,7 +429,14 @@ export async function updateBoardIssueStatus(
     throw new Error("Fant ikke oppgaven du ville oppdatere.");
   }
 
-  await client.patch(issue._id).set({ status }).commit();
+  if (issue.status === status) {
+    return;
+  }
+
+  await client
+    .patch(issue._id)
+    .set({ status, statusChangedAt: new Date().toISOString() })
+    .commit();
 }
 
 export async function changeMemberChoreAmount(

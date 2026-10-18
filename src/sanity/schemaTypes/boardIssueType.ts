@@ -39,6 +39,12 @@ export const boardIssueType = defineType({
         layout: "radio",
       },
     }),
+    defineField({
+      name: "statusChangedAt",
+      title: "Status endret",
+      type: "datetime",
+      readOnly: true,
+    }),
   ],
   preview: {
     select: {

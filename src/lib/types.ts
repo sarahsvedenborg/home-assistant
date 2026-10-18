@@ -43,6 +43,7 @@ export type MovieRecommendation = {
   suggestedBy: string;
   suitableFor: string;
   watched: boolean;
+  createdAt?: string;
 };
 
 export type WishListGroup = {
@@ -77,6 +78,7 @@ export type Recipe = {
   ingredients: string[];
   steps: string[];
   comments: string[];
+  createdAt?: string;
 };
 
 export type DinnerCategory = "regular" | "cozy" | "simple" | "trip";
@@ -113,6 +115,7 @@ export type BoardIssue = {
   assigned?: string;
   status: BoardIssueStatus;
   createdAt?: string;
+  statusChangedAt?: string;
 };
 
 export type DayNote = {
