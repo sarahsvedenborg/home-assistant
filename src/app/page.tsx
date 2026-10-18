@@ -3,7 +3,8 @@ import { FamilyDashboard } from "@/components/family-dashboard";
 import { HubCard } from "@/components/hub-card";
 import { SingleEventForm } from "@/components/single-event-form";
 import { getDailyQuote } from "@/lib/daily-quote";
-import { getFamilyMembers, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getStudiedFlagCodes, getTodaysBirthdays, getWeather, getWishListItems } from "@/lib/data";
+import { getFamilyMembers, getFavouriteQuotes, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getStudiedFlagCodes, getTodaysBirthdays, getWeather, getWishListItems } from "@/lib/data";
+import { quotesMatch } from "@/lib/quotes";
 import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
@@ -23,6 +24,7 @@ export default async function Home() {
   const todayDateKey = osloDateKey(now);
   const [
     dailyQuote,
+    favouriteQuotes,
     familyMembers,
     messages,
     movies,
@@ -36,6 +38,7 @@ export default async function Home() {
     weather,
   ] = await Promise.all([
     getDailyQuote(todayDateKey),
+    getFavouriteQuotes(),
     getFamilyMembers(),
     getShortMessages(),
     getMovieRecommendations(),
@@ -60,6 +63,9 @@ export default async function Home() {
             <FamilyDashboard
               dateLabel={formatOsloDateLabel(now)}
               dailyQuote={dailyQuote}
+              quoteIsFavourite={favouriteQuotes.some((quote) =>
+                quotesMatch(quote, dailyQuote),
+              )}
               todaysBirthdays={todaysBirthdays}
               todayEvents={todayEvents}
               tomorrowEvents={tomorrowEvents}

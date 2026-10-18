@@ -153,6 +153,16 @@ export const STUDIED_FLAGS_QUERY = defineQuery(/* groq */ `
   }
 `);
 
+export const FAVOURITE_QUOTES_QUERY = defineQuery(/* groq */ `
+  *[_id == "favouriteQuotes"][0]{
+    quotes[]{
+      _key,
+      text,
+      author
+    }
+  }
+`);
+
 export const DINNERS_QUERY = defineQuery(/* groq */ `
   *[_type == "dinner" && defined(day) && day >= 1 && day <= 14]
   | order(day asc) {
