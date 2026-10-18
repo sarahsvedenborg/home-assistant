@@ -20,7 +20,11 @@ export default async function OnskelistePage() {
         {sharePath ? <ShareLinkButton path={sharePath} /> : null}
       </header>
 
-      <OnskelisteTabs familyMembers={familyMembers} wishListItems={wishListItems} />
+      <OnskelisteTabs
+        familyMembers={familyMembers}
+        wishListItems={wishListItems}
+        showSizes
+      />
     </main>
   );
 }
