@@ -115,6 +115,13 @@ export default async function Home() {
                 openLabel="Se filmer"
                 addLabel="Legg til film"
               />
+              <HubCard
+                href="/vegetable-tracker"
+                icon="🥕"
+                title="Grønnsaker"
+                accentClass="accentFuture"
+                openLabel="Åpne sporing"
+              />
             {/*   <HubCard
                 href="/kalender"
                 formHref="/#add-event"
