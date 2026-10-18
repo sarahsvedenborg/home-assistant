@@ -44,7 +44,7 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
         <article className="listPanel">
           <div className="recipeContentStack">
             {recipe.ingredients.length > 0 ? (
-              <div>
+              <div className="recipeIngredients">
                 <strong>Ingredienser</strong>
                 {recipe.ingredients.map((paragraph, index) => (
                   <p key={`${recipe.id}-ingredient-${index}`}>{paragraph}</p>
@@ -53,7 +53,7 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
             ) : null}
 
             {recipe.steps.length > 0 ? (
-              <div>
+              <div className="recipeSteps">
                 <strong>Steg</strong>
                 {recipe.steps.map((paragraph, index) => (
                   <p key={`${recipe.id}-step-${index}`}>{paragraph}</p>
@@ -62,8 +62,7 @@ export default async function RecipeDetailPage({ params }: RecipeDetailPageProps
             ) : null}
 
             {recipe.comments.length > 0 ? (
-              <div>
-                <strong>Kommentarer</strong>
+              <div className="recipeComments">
                 {recipe.comments.map((paragraph, index) => (
                   <p key={`${recipe.id}-comment-${index}`}>{paragraph}</p>
                 ))}
