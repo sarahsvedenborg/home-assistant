@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { FavouriteQuoteButton } from "@/components/favourite-quote-button";
 import { MessageWidget } from "@/components/message-widget";
 import { ShoppingWidget } from "@/components/shopping-widget";
 import { formatBirthdayNames } from "@/lib/birthdays";
@@ -15,6 +16,7 @@ import type {
 type FamilyDashboardProps = {
   dateLabel: string;
   dailyQuote: DailyQuote;
+  quoteIsFavourite: boolean;
   todaysBirthdays: Array<{ name: string }>;
   todayEvents: DashboardEvent[];
   tomorrowEvents: DashboardEvent[];
@@ -227,6 +229,7 @@ function WeatherWidget({ weather }: { weather: Weather }) {
 export function FamilyDashboard({
   dateLabel,
   dailyQuote,
+  quoteIsFavourite,
   todaysBirthdays,
   todayEvents,
   tomorrowEvents,
@@ -248,7 +251,14 @@ export function FamilyDashboard({
         </div>
 
         <figure className="dailyQuote dailyQuoteQuote">
-          <blockquote>“{dailyQuote.text}”</blockquote>
+          <div className="dailyQuoteBody">
+            <blockquote>“{dailyQuote.text}”</blockquote>
+            <FavouriteQuoteButton
+              text={dailyQuote.text}
+              author={dailyQuote.author}
+              initiallyFavourite={quoteIsFavourite}
+            />
+          </div>
           <figcaption>— {dailyQuote.author}</figcaption>
         </figure>
         <figure className="dailyQuote dailyQuoteBirthday">

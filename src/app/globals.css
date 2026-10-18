@@ -1273,6 +1273,67 @@ button {
   line-height: 1.35;
 }
 
+.dailyQuoteBody {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.dailyQuoteBody blockquote {
+  flex: 1;
+  min-width: 0;
+}
+
+.quoteHeartWrap {
+  position: relative;
+  flex: none;
+}
+
+.quoteHeart {
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-top: 0.12rem;
+  padding: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.quoteHeart svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.quoteHeart[aria-pressed="true"] {
+  color: var(--danger);
+}
+
+.quoteHeart:hover,
+.quoteHeart:focus-visible {
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  outline: none;
+}
+
+.quoteHeart:disabled {
+  cursor: progress;
+}
+
+.quoteHeartError {
+  position: absolute;
+  top: calc(100% + 0.15rem);
+  right: 0;
+  width: max-content;
+  max-width: 11rem;
+  color: var(--danger);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: right;
+}
+
 .dailyQuote figcaption {
   color: var(--muted);
   font-size: 0.78rem;
@@ -2339,6 +2400,17 @@ html[data-theme="christmas"] .christmasSnow {
 
   .homeDashboardPanel .dailyQuote blockquote {
     font-size: clamp(1.85rem, 2vw, 2.4rem);
+  }
+
+  .homeDashboardPanel .quoteHeart {
+    width: 2.4rem;
+    height: 2.4rem;
+    margin-top: 0.35rem;
+  }
+
+  .homeDashboardPanel .quoteHeart svg {
+    width: 1.45rem;
+    height: 1.45rem;
   }
 
   .homeDashboardPanel .dailyQuoteBirthday p {

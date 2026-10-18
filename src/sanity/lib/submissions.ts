@@ -5,6 +5,12 @@ import {
   EVENT_PARTICIPANT_ALL,
 } from "@/lib/event-participants";
 import type { DayNoteCategory } from "@/lib/day-note-categories";
+import {
+  favouriteQuoteKey,
+  QUOTE_AUTHOR_MAX,
+  QUOTE_TEXT_MAX,
+  quotesMatch,
+} from "@/lib/quotes";
 import type { BoardIssueStatus } from "@/lib/types";
 import { requireApproval } from "@/sanity/env";
 import { getReadClient, getWriteClient } from "@/sanity/lib/client";
@@ -669,4 +675,77 @@ export async function submitRecurringEvent(input: {
   return requireApproval
     ? "Aktiviteten er sendt! En voksen kan godkjenne den i studioet."
     : "Aktiviteten er lagt til!";
+}
+
+const FAVOURITE_QUOTES_DOCUMENT_ID = "favouriteQuotes";
+
+type FavouriteQuoteEntry = {
+  _key?: string;
+  _type?: string;
+  text?: string;
+  author?: string;
+  savedAt?: string;
+};
+
+export async function setFavouriteQuote(input: {
+  text: string;
+  author: string;
+  favourite: boolean;
+}) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const text = input.text.trim().replace(/\s+/g, " ");
+  const author = input.author.trim().replace(/\s+/g, " ");
+
+  if (!text || text.length > QUOTE_TEXT_MAX || !author || author.length > QUOTE_AUTHOR_MAX) {
+    throw new Error("Sitatet er for langt til å lagres.");
+  }
+
+  const existing = await client.fetch<{ quotes?: FavouriteQuoteEntry[] } | null>(
+    `*[_id == $id][0]{ quotes }`,
+    { id: FAVOURITE_QUOTES_DOCUMENT_ID },
+  );
+  const currentQuotes = Array.isArray(existing?.quotes) ? existing.quotes : [];
+  const quote = { text, author };
+  const alreadySaved = currentQuotes.some(
+    (entry) =>
+      typeof entry.text === "string" &&
+      typeof entry.author === "string" &&
+      quotesMatch(quote, { text: entry.text, author: entry.author }),
+  );
+  const nextQuotes = input.favourite
+    ? alreadySaved
+      ? currentQuotes
+      : [
+          ...currentQuotes,
+          {
+            _key: favouriteQuoteKey(text, author),
+            _type: "favouriteQuote",
+            text,
+            author,
+            savedAt: new Date().toISOString(),
+          },
+        ]
+    : currentQuotes.filter(
+        (entry) =>
+          typeof entry.text !== "string" ||
+          typeof entry.author !== "string" ||
+          !quotesMatch(quote, { text: entry.text, author: entry.author }),
+      );
+
+  await client.createIfNotExists({
+    _id: FAVOURITE_QUOTES_DOCUMENT_ID,
+    _type: "favouriteQuotes",
+    quotes: [],
+  });
+  await client
+    .patch(FAVOURITE_QUOTES_DOCUMENT_ID)
+    .set({ quotes: nextQuotes })
+    .commit();
+
+  return input.favourite;
 }

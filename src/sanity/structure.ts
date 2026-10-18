@@ -20,6 +20,15 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("wishListItem").title("Ønskeliste"),
       S.documentTypeListItem("chore").title("Ukelønn-oppgaver"),
       S.documentTypeListItem("shortMessage").title("Melding"),
+      S.listItem()
+        .title("Favorittsitater")
+        .id("favouriteQuotes")
+        .child(
+          S.document()
+            .schemaType("favouriteQuotes")
+            .documentId("favouriteQuotes")
+            .title("Favorittsitater"),
+        ),
       S.divider(),
       S.listItem()
         .title("Læring")

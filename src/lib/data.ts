@@ -46,6 +46,7 @@ import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
 import { eventParticipantLabel } from "@/lib/event-participants";
 import { singleEventCategoryLabel } from "@/lib/single-event-categories";
 import { isFlagCode } from "@/lib/flag-codes";
+import type { SavedQuote } from "@/lib/quotes";
 import { osloDateKey } from "@/lib/family-feed";
 import { birthdaysOnDate } from "@/lib/birthdays";
 import { isSanityConfigured } from "@/sanity/env";
@@ -56,6 +57,7 @@ import {
   BOARD_ISSUES_QUERY,
   DAY_NOTES_QUERY,
   DINNERS_QUERY,
+  FAVOURITE_QUOTES_QUERY,
   FAMILY_MEMBERS_QUERY,
   FEATURE_SUGGESTIONS_QUERY,
   MOVIE_RECOMMENDATIONS_QUERY,
@@ -438,6 +440,27 @@ export async function getDinners(): Promise<Dinner[]> {
         ? dinner.day
         : undefined,
   }));
+}
+
+export async function getFavouriteQuotes(): Promise<SavedQuote[]> {
+  if (!isSanityConfigured) {
+    return [];
+  }
+
+  const document = await fetchFromSanity<{
+    quotes?: Array<{ text?: string; author?: string }>;
+  }>(FAVOURITE_QUOTES_QUERY);
+
+  return (document?.quotes || []).flatMap((quote) => {
+    const text = typeof quote.text === "string" ? quote.text.trim() : "";
+    const author = typeof quote.author === "string" ? quote.author.trim() : "";
+
+    if (!text || !author) {
+      return [];
+    }
+
+    return [{ text, author }];
+  });
 }
 
 export async function getStudiedFlagCodes(): Promise<string[]> {
