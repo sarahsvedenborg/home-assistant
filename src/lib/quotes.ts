@@ -2,15 +2,20 @@ export const QUOTE_TEXT_MAX = 500;
 export const QUOTE_AUTHOR_MAX = 120;
 
 export type SavedQuote = {
+  id: string;
   text: string;
   author: string;
+  savedAt?: string;
 };
 
 export function normalizeQuoteText(value: string) {
   return value.trim().replace(/\s+/g, " ").toLowerCase();
 }
 
-export function quotesMatch(left: SavedQuote, right: SavedQuote) {
+export function quotesMatch(
+  left: Pick<SavedQuote, "text" | "author">,
+  right: Pick<SavedQuote, "text" | "author">,
+) {
   return (
     normalizeQuoteText(left.text) === normalizeQuoteText(right.text) &&
     normalizeQuoteText(left.author) === normalizeQuoteText(right.author)

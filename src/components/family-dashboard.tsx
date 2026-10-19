@@ -259,7 +259,10 @@ export function FamilyDashboard({
               initiallyFavourite={quoteIsFavourite}
             />
           </div>
-          <figcaption>— {dailyQuote.author}</figcaption>
+          <div className="dailyQuoteFoot">
+            <figcaption>— {dailyQuote.author}</figcaption>
+            <Link href="/favoritter">Favoritter</Link>
+          </div>
         </figure>
         <figure className="dailyQuote dailyQuoteBirthday">
           <p>

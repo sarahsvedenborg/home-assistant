@@ -1334,6 +1334,13 @@ button {
   text-align: right;
 }
 
+.dailyQuoteFoot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .dailyQuote figcaption {
   color: var(--muted);
   font-size: 0.78rem;
@@ -1342,8 +1349,10 @@ button {
 
 .dailyQuote a {
   width: fit-content;
+  flex: none;
   color: var(--muted);
-  font-size: 0.62rem;
+  font-size: 0.78rem;
+  font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 0.15em;
 }
@@ -2434,7 +2443,8 @@ html[data-theme="christmas"] .christmasSnow {
     scale: 1.2;
   }
 
-  .homeDashboardPanel .dailyQuote figcaption {
+  .homeDashboardPanel .dailyQuote figcaption,
+  .homeDashboardPanel .dailyQuoteFoot a {
     font-size: 1.35rem;
   }
 
@@ -4971,6 +4981,36 @@ html[data-theme="christmas"] .christmasSnow {
 /* Full-width list layout (replaces the two-column list/form grid) */
 .listStack {
   margin-top: 1.5rem;
+}
+
+.quotesShell .emptyState,
+.quoteList {
+  margin-top: 1.5rem;
+}
+
+.quoteList {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.savedQuote {
+  gap: 0.45rem;
+}
+
+.savedQuote blockquote {
+  max-width: 62ch;
+  font-family: var(--font-display), cursive;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  line-height: 1.35;
+}
+
+.savedQuote figcaption {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 /* Public shared wishlist: smaller title than the internal ønskeliste page. */

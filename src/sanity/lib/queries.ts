@@ -158,7 +158,8 @@ export const FAVOURITE_QUOTES_QUERY = defineQuery(/* groq */ `
     quotes[]{
       _key,
       text,
-      author
+      author,
+      savedAt
     }
   }
 `);

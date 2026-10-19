@@ -46,7 +46,7 @@ import { DEFAULT_EVENT_CATEGORY } from "@/lib/event-categories";
 import { eventParticipantLabel } from "@/lib/event-participants";
 import { singleEventCategoryLabel } from "@/lib/single-event-categories";
 import { isFlagCode } from "@/lib/flag-codes";
-import type { SavedQuote } from "@/lib/quotes";
+import { favouriteQuoteKey, type SavedQuote } from "@/lib/quotes";
 import { osloDateKey } from "@/lib/family-feed";
 import { birthdaysOnDate } from "@/lib/birthdays";
 import { isSanityConfigured } from "@/sanity/env";
@@ -448,19 +448,50 @@ export async function getFavouriteQuotes(): Promise<SavedQuote[]> {
   }
 
   const document = await fetchFromSanity<{
-    quotes?: Array<{ text?: string; author?: string }>;
+    quotes?: Array<{
+      _key?: string;
+      text?: string;
+      author?: string;
+      savedAt?: string;
+    }>;
   }>(FAVOURITE_QUOTES_QUERY);
 
-  return (document?.quotes || []).flatMap((quote) => {
-    const text = typeof quote.text === "string" ? quote.text.trim() : "";
-    const author = typeof quote.author === "string" ? quote.author.trim() : "";
+  return (document?.quotes || [])
+    .flatMap((quote) => {
+      const text = typeof quote.text === "string" ? quote.text.trim() : "";
+      const author = typeof quote.author === "string" ? quote.author.trim() : "";
 
-    if (!text || !author) {
-      return [];
-    }
+      if (!text || !author) {
+        return [];
+      }
 
-    return [{ text, author }];
-  });
+      return [
+        {
+          id:
+            typeof quote._key === "string" && quote._key
+              ? quote._key
+              : favouriteQuoteKey(text, author),
+          text,
+          author,
+          savedAt: typeof quote.savedAt === "string" ? quote.savedAt : undefined,
+        },
+      ];
+    })
+    .sort((left, right) => {
+      if (left.savedAt && right.savedAt) {
+        return right.savedAt.localeCompare(left.savedAt);
+      }
+
+      if (left.savedAt) {
+        return -1;
+      }
+
+      if (right.savedAt) {
+        return 1;
+      }
+
+      return 0;
+    });
 }
 
 export async function getStudiedFlagCodes(): Promise<string[]> {
