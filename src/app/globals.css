@@ -1890,6 +1890,31 @@ html[data-theme="christmas"] .christmasSnow {
   gap: 0.2rem;
 }
 
+.wasteColumnNotes {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wasteColumnNotes li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--warm-soft) 88%, white);
+  color: var(--ink-strong);
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.wasteColumnNotes .calendarWasteEmoji {
+  font-size: 1.35rem;
+}
+
 .eventWidgetGroups {
   display: grid;
   gap: 0.9rem;
@@ -2456,6 +2481,17 @@ html[data-theme="christmas"] .christmasSnow {
   .homeDashboardPanel .wTomorrow .widgetTitle {
     font-size: clamp(2.8rem, 2.8vw, 3.5rem);
     font-family: var(--font-display), cursive;
+  }
+
+  .homeDashboardPanel .wasteColumnNotes li {
+    gap: 0.7rem;
+    padding: 0.8rem 1rem;
+    border-radius: 1rem;
+    font-size: 1.7rem;
+  }
+
+  .homeDashboardPanel .wasteColumnNotes .calendarWasteEmoji {
+    font-size: 1.85rem;
   }
 
   .homeDashboardPanel .widgetBadge {
