@@ -176,6 +176,17 @@ export type Weather = {
   low: number; // today's lowest forecast temperature, °C
 };
 
+export type WastePickup = {
+  date: string; // YYYY-MM-DD
+  type: string;
+};
+
+export type WastePickupNote = {
+  date: string; // YYYY-MM-DD
+  name: string; // e.g. "Tømmedag papir"
+  emoji: string;
+};
+
 export type RecurringEvent = {
   id: string;
   title: string;

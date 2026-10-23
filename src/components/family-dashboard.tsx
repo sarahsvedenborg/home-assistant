@@ -10,6 +10,7 @@ import type {
   DailyQuote,
   ShoppingListEntry,
   ShortMessage,
+  WastePickupNote,
   Weather,
 } from "@/lib/types";
 
@@ -20,6 +21,8 @@ type FamilyDashboardProps = {
   todaysBirthdays: Array<{ name: string }>;
   todayEvents: DashboardEvent[];
   tomorrowEvents: DashboardEvent[];
+  todayWasteNotes: WastePickupNote[];
+  tomorrowWasteNotes: WastePickupNote[];
   activity: RecentActivity[];
   messages: ShortMessage[];
   shoppingItems: ShoppingListEntry[];
@@ -128,6 +131,25 @@ function SingleEventCard({ event }: { event: DashboardEvent }) {
   return <article className={className}>{content}</article>;
 }
 
+function WasteColumnNotes({ notes }: { notes: WastePickupNote[] }) {
+  if (notes.length === 0) {
+    return null;
+  }
+
+  return (
+    <ul className="wasteColumnNotes" aria-label="Tømming">
+      {notes.map((note) => (
+        <li key={`${note.date}-${note.name}`}>
+          <span className="calendarWasteEmoji" aria-hidden="true">
+            {note.emoji}
+          </span>
+          <strong>{note.name}</strong>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function EventList({ events }: { events: DashboardEvent[] }) {
   const groups = EVENT_GROUPS.map((group) => ({
     ...group,
@@ -233,6 +255,8 @@ export function FamilyDashboard({
   todaysBirthdays,
   todayEvents,
   tomorrowEvents,
+  todayWasteNotes,
+  tomorrowWasteNotes,
   activity,
   messages,
   shoppingItems,
@@ -283,6 +307,7 @@ export function FamilyDashboard({
       </article>
 
       <article className="widget wToday accentFuture">
+        <WasteColumnNotes notes={todayWasteNotes} />
         <div className="widgetHead">
           <h2 className="widgetTitle">I dag</h2>
         </div>
@@ -290,6 +315,7 @@ export function FamilyDashboard({
       </article>
 
       <article className="widget wTomorrow accentFuture">
+        <WasteColumnNotes notes={tomorrowWasteNotes} />
         <div className="widgetHead">
           <h2 className="widgetTitle">I morgen</h2>
         </div>

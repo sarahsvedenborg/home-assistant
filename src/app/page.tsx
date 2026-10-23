@@ -6,6 +6,7 @@ import { getDailyQuote } from "@/lib/daily-quote";
 import { getFamilyMembers, getFavouriteQuotes, getMovieRecommendations, getRecipes, getRecurringEvents, getShoppingList, getShortMessages, getSingleEvents, getStudiedFlagCodes, getTodaysBirthdays, getWeather, getWishListItems } from "@/lib/data";
 import { quotesMatch } from "@/lib/quotes";
 import { buildRecentActivity, eventsForDate, osloDateKey } from "@/lib/family-feed";
+import { getWastePickupNotes } from "@/lib/waste-calendar";
 
 // "fredag 21. august" -> "Fredag 21. august" (Oslo local, Norwegian).
 function formatOsloDateLabel(date: Date): string {
@@ -35,6 +36,7 @@ export default async function Home() {
     studiedFlagCodes,
     todaysBirthdays,
     wishListItems,
+    wasteNotes,
     weather,
   ] = await Promise.all([
     getDailyQuote(todayDateKey),
@@ -49,12 +51,16 @@ export default async function Home() {
     getStudiedFlagCodes(),
     getTodaysBirthdays(),
     getWishListItems(),
+    getWastePickupNotes(),
     getWeather(),
   ]);
 
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  const tomorrowDateKey = osloDateKey(tomorrow);
   const todayEvents = eventsForDate(recurringEvents, singleEvents, now);
   const tomorrowEvents = eventsForDate(recurringEvents, singleEvents, tomorrow);
+  const todayWasteNotes = wasteNotes.filter((note) => note.date === todayDateKey);
+  const tomorrowWasteNotes = wasteNotes.filter((note) => note.date === tomorrowDateKey);
   const activity = buildRecentActivity(wishListItems, { now });
   return (
     <main className="shell homeShell">
@@ -69,6 +75,8 @@ export default async function Home() {
               todaysBirthdays={todaysBirthdays}
               todayEvents={todayEvents}
               tomorrowEvents={tomorrowEvents}
+              todayWasteNotes={todayWasteNotes}
+              tomorrowWasteNotes={tomorrowWasteNotes}
               activity={activity}
               messages={messages}
               shoppingItems={shoppingList.items}
