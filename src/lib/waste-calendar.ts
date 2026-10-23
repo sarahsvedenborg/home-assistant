@@ -2,7 +2,7 @@ import "server-only";
 
 import { unstable_cache } from "next/cache";
 
-import type { WastePickup } from "@/lib/types";
+import type { WastePickup, WastePickupNote } from "@/lib/types";
 
 // ØRAS publishes collection days through a WordPress AJAX action on
 // https://www.oeras.no/mitt-abonnement/tommetider/. There is no documented API.
@@ -31,6 +31,27 @@ const WASTE_ADDRESS = {
 } as const;
 
 const UNKNOWN_FRACTION = "Ukjent avfallstype";
+
+const WASTE_NOTE_LABELS: Array<[RegExp, string, string]> = [
+  [/plast/i, "Tømmedag plast", "♻️"],
+  [/papir|papp/i, "Tømmedag papir", "📄"],
+  [/glass|metall/i, "Tømmedag glass og metall", "🫙"],
+  [/mat|rest/i, "Tømmedag mat og rest", "🗑️"],
+  [/tekstil|klær/i, "Tømmedag tekstil", "👕"],
+];
+
+function wastePickupNote(type: string): { name: string; emoji: string } {
+  const match = WASTE_NOTE_LABELS.find(([pattern]) => pattern.test(type));
+  if (match) {
+    return { name: match[1], emoji: match[2] };
+  }
+
+  const fallback = type.replace(/\s+/g, " ").trim().toLowerCase();
+  return {
+    name: fallback ? `Tømmedag ${fallback}` : "Tømmedag",
+    emoji: "🗑️",
+  };
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -217,3 +238,26 @@ async function loadWastePickups(): Promise<WastePickup[]> {
 export const getWastePickups = unstable_cache(loadWastePickups, ["oeras-waste-calendar"], {
   revalidate: CACHE_SECONDS,
 });
+
+export async function getWastePickupNotes(): Promise<WastePickupNote[]> {
+  try {
+    const pickups = await getWastePickups();
+    const seen = new Set<string>();
+    const notes: WastePickupNote[] = [];
+
+    for (const pickup of pickups) {
+      const { name, emoji } = wastePickupNote(pickup.type);
+      const key = `${pickup.date}\0${name}`;
+      if (seen.has(key)) {
+        continue;
+      }
+
+      seen.add(key);
+      notes.push({ date: pickup.date, name, emoji });
+    }
+
+    return notes;
+  } catch {
+    return [];
+  }
+}

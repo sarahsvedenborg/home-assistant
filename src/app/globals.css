@@ -2774,6 +2774,7 @@ html[data-theme="christmas"] .christmasSnow {
   .calendarShell .calendarNoEvents,
   .calendarShell .calendarDayNotes p,
   .calendarShell .calendarPublicHolidays p,
+  .calendarShell .calendarWastePickups p,
   .calendarShell .calendarSpecialEventDescription {
     font-size: 1.35rem;
   }
@@ -6743,17 +6744,31 @@ html[data-theme="christmas"] .christmasSnow {
   border-bottom: 1px dashed var(--line);
 }
 
-.calendarPublicHolidays {
+.calendarPublicHolidays,
+.calendarWastePickups {
   display: grid;
   gap: 0.25rem;
 }
 
-.calendarPublicHolidays p {
+.calendarPublicHolidays p,
+.calendarWastePickups p {
   margin: 0;
   color: var(--muted);
   font-size: 0.74rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
+}
+
+.calendarWastePickups p {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.calendarWasteEmoji {
+  flex: none;
+  font-size: 0.85em;
+  line-height: 1;
 }
 
 .calendarBirthdayNotes,

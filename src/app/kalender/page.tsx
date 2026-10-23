@@ -5,6 +5,7 @@ import { SingleEventForm } from "@/components/single-event-form";
 import { getBirthdays, getDayNotes, getFamilyMembers, getRecurringEvents, getSingleEvents } from "@/lib/data";
 import { osloDateKey } from "@/lib/family-feed";
 import { getNorwegianPublicHolidays } from "@/lib/norwegian-holidays";
+import { getWastePickupNotes } from "@/lib/waste-calendar";
 
 type KalenderPageProps = {
   searchParams: Promise<{
@@ -20,7 +21,7 @@ export default async function KalenderPage({ searchParams }: KalenderPageProps) 
   const query = await searchParams;
   const todayDateKey = osloDateKey(new Date());
   const currentYear = Number(todayDateKey.slice(0, 4));
-  const [birthdays, dayNotes, familyMembers, holidays, recurringEvents, singleEvents] =
+  const [birthdays, dayNotes, familyMembers, holidays, recurringEvents, singleEvents, wasteNotes] =
     await Promise.all([
       getBirthdays(),
       getDayNotes(),
@@ -32,6 +33,7 @@ export default async function KalenderPage({ searchParams }: KalenderPageProps) 
       ]),
       getRecurringEvents(),
       getSingleEvents(),
+      getWastePickupNotes(),
     ]);
 
   return (
@@ -44,6 +46,7 @@ export default async function KalenderPage({ searchParams }: KalenderPageProps) 
         birthdays={birthdays}
         dayNotes={dayNotes}
         holidays={holidays}
+        wasteNotes={wasteNotes}
         todayDateKey={todayDateKey}
         initialEventId={firstSearchParam(query.event)}
       />

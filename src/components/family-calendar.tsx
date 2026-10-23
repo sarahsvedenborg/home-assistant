@@ -16,6 +16,7 @@ import type {
   NorwegianHoliday,
   RecurringEvent,
   SingleEvent,
+  WastePickupNote,
 } from "@/lib/types";
 
 type CalendarView = "week" | "month";
@@ -26,6 +27,7 @@ type FamilyCalendarProps = {
   birthdays?: Birthday[];
   dayNotes?: DayNote[];
   holidays?: NorwegianHoliday[];
+  wasteNotes?: WastePickupNote[];
   todayDateKey: string;
   initialEventId?: string;
 };
@@ -393,17 +395,42 @@ function EventCard({
   );
 }
 
+function wasteNotesOnDate(notes: WastePickupNote[], dateKey: string) {
+  return notes.filter((note) => note.date === dateKey);
+}
+
+function WasteDayNotes({ notes }: { notes: WastePickupNote[] }) {
+  if (notes.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="calendarWastePickups" aria-label="Tømmedager">
+      {notes.map((note) => (
+        <p key={`${note.date}-${note.name}`}>
+          <span className="calendarWasteEmoji" aria-hidden="true">
+            {note.emoji}
+          </span>
+          {note.name}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 function CalendarDayDetail({
   day,
   dayNotes,
   birthdays,
   holidays,
+  wasteNotes,
   onOpenEvent,
 }: {
   day: CalendarDay;
   dayNotes: DayNote[];
   birthdays: Birthday[];
   holidays: NorwegianHoliday[];
+  wasteNotes: WastePickupNote[];
   onOpenEvent: (event: DashboardEvent) => void;
 }) {
   const dayEvents = day.events.filter((event) => !isMultiDayEvent(event));
@@ -422,6 +449,7 @@ function CalendarDayDetail({
   const holydayNotes = notes.filter((note) => note.category === "holyday");
   const proveNotes = notes.filter((note) => note.category === "prove");
   const publicHolidays = holidays.filter((holiday) => holiday.date === day.dateKey);
+  const dayWasteNotes = wasteNotesOnDate(wasteNotes, day.dateKey);
   const regularNotes = notes.filter(
     (note) =>
       note.category !== "birthday" &&
@@ -454,7 +482,8 @@ function CalendarDayDetail({
       {birthdayNotes.length > 0 ||
       holydayNotes.length > 0 ||
       proveNotes.length > 0 ||
-      publicHolidays.length > 0 ? (
+      publicHolidays.length > 0 ||
+      dayWasteNotes.length > 0 ? (
         <div className="calendarTopNotes">
           {publicHolidays.length > 0 ? (
             <div className="calendarPublicHolidays" aria-label="Norske helligdager">
@@ -463,6 +492,8 @@ function CalendarDayDetail({
               ))}
             </div>
           ) : null}
+
+          <WasteDayNotes notes={dayWasteNotes} />
 
           {birthdayNotes.length > 0 ? (
             <div className="calendarBirthdayNotes" aria-label="Bursdager">
@@ -676,6 +707,7 @@ export function FamilyCalendar({
   birthdays = [],
   dayNotes = [],
   holidays = [],
+  wasteNotes = [],
   todayDateKey,
   initialEventId,
 }: FamilyCalendarProps) {
@@ -908,6 +940,7 @@ export function FamilyCalendar({
             const publicHolidays = holidays.filter(
               (holiday) => holiday.date === day.dateKey,
             );
+            const dayWasteNotes = wasteNotesOnDate(wasteNotes, day.dateKey);
             const regularNotes = notes.filter(
               (note) =>
                 note.category !== "birthday" &&
@@ -1017,7 +1050,8 @@ export function FamilyCalendar({
                 {birthdayNotes.length > 0 ||
                 holydayNotes.length > 0 ||
                 proveNotes.length > 0 ||
-                publicHolidays.length > 0 ? (
+                publicHolidays.length > 0 ||
+                dayWasteNotes.length > 0 ? (
                   <div className="calendarTopNotes">
                     {publicHolidays.length > 0 ? (
                       <div
@@ -1031,6 +1065,8 @@ export function FamilyCalendar({
                         ))}
                       </div>
                     ) : null}
+
+                    <WasteDayNotes notes={dayWasteNotes} />
 
                     {birthdayNotes.length > 0 ? (
                       <div className="calendarBirthdayNotes" aria-label="Bursdager">
@@ -1166,6 +1202,7 @@ export function FamilyCalendar({
             dayNotes={dayNotes}
             birthdays={birthdays}
             holidays={holidays}
+            wasteNotes={wasteNotes}
             onOpenEvent={(event) => {
               setSelectedDayKey(null);
               setSelectedEvent({ event, dateKey: selectedDay.dateKey });

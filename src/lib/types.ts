@@ -181,6 +181,12 @@ export type WastePickup = {
   type: string;
 };
 
+export type WastePickupNote = {
+  date: string; // YYYY-MM-DD
+  name: string; // e.g. "Tømmedag papir"
+  emoji: string;
+};
+
 export type RecurringEvent = {
   id: string;
   title: string;
