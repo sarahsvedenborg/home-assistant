@@ -176,6 +176,11 @@ export type Weather = {
   low: number; // today's lowest forecast temperature, °C
 };
 
+export type WastePickup = {
+  date: string; // YYYY-MM-DD
+  type: string;
+};
+
 export type RecurringEvent = {
   id: string;
   title: string;
