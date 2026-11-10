@@ -4,16 +4,16 @@ type HubCardProps = {
   // Link to the section's list page.
   href: string;
   // Link to the section page with the hash that opens its add form.
-  formHref: string;
+  formHref?: string;
   icon: string;
   title: string;
-  stat: string;
+  stat?: string;
   accentClass: string;
   prompt?: string;
   // Label for the button that opens the list page.
   openLabel: string;
   // Label for the button that opens the submission form.
-  addLabel: string;
+  addLabel?: string;
 };
 
 export function HubCard({
@@ -36,16 +36,18 @@ export function HubCard({
           </span>
           <h2>{title}</h2>
         </div>
-        <span className="hubStat">{stat}</span>
+        {stat ? <span className="hubStat">{stat}</span> : null}
       </div>
       {prompt ? <p className="hubCardPrompt">{prompt}</p> : null}
       <div className="hubCardActions">
         <Link href={href} className="buttonSecondary">
           {openLabel}
         </Link>
-        <Link href={formHref} className="buttonPrimary">
-          {addLabel}
-        </Link>
+        {formHref && addLabel ? (
+          <Link href={formHref} className="buttonPrimary">
+            {addLabel}
+          </Link>
+        ) : null}
       </div>
     </article>
   );
