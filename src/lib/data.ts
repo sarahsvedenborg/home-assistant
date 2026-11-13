@@ -356,9 +356,26 @@ export async function getShoppingList(): Promise<ShoppingList> {
     return FALLBACK_SHOPPING_LIST;
   }
 
-  const itemDocs = await fetchFreshFromSanity<SanityShoppingListItem[]>(
-    SHOPPING_LIST_ITEMS_QUERY,
-  );
+  // The live fetch caches this query until a browser event clears it. When that
+  // connection drops, the cached list is what every screen keeps showing.
+  // Handlelisten changes from the form, so read it directly on each render.
+  const client = getFreshReadClient();
+
+  if (!client) {
+    return FALLBACK_SHOPPING_LIST;
+  }
+
+  let itemDocs: SanityShoppingListItem[] | null = null;
+
+  try {
+    itemDocs = await client.fetch<SanityShoppingListItem[]>(
+      SHOPPING_LIST_ITEMS_QUERY,
+      {},
+      { cache: "no-store", useCdn: false },
+    );
+  } catch {
+    itemDocs = null;
+  }
 
   if (!itemDocs) {
     return FALLBACK_SHOPPING_LIST;

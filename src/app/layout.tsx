@@ -10,6 +10,7 @@ import { getTodaysBirthdays } from "@/lib/data";
 import { PERFORMANCE_BOOT_SCRIPT } from "@/lib/performance-mode";
 import { themeForToday } from "@/lib/theme";
 import { SanityLive } from "@/sanity/lib/live";
+import { revalidateLiveTags } from "@/sanity/lib/live-revalidate";
 
 const displayFont = Baloo_2({
   variable: "--font-display",
@@ -101,7 +102,7 @@ export default async function RootLayout({
         {children}
         <InstallPrompt />
         <MobileActionMenu />
-        <SanityLive />
+        <SanityLive revalidateSyncTags={revalidateLiveTags} />
       </body>
     </html>
   );
