@@ -3493,6 +3493,22 @@ html[data-theme="christmas"] .christmasSnow {
     font-size: 2.2rem;
   }
 
+  .wishShell .wishTableHeader:has(.wishEyeSpacer),
+  .wishShell .wishTableRow:has(.wishEyeToggle),
+  .wishShell .wishTableRowCompact:has(.wishEyeToggle) {
+    grid-template-columns: 4rem minmax(0, 1.5fr) minmax(16rem, 0.8fr) minmax(0, 1.2fr);
+  }
+
+  .wishShell .wishEyeToggle {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+
+  .wishShell .wishEyeToggle svg {
+    width: 2.15rem;
+    height: 2.15rem;
+  }
+
   .wishShell .wishComment,
   .wishShell .wishTableEmpty {
     font-size: 1.85rem;
@@ -4094,14 +4110,70 @@ html[data-theme="christmas"] .christmasSnow {
   border-top: 1px solid var(--line);
 }
 
-.wishTableRowCompact {
-  grid-template-columns: minmax(0, 1.5fr) minmax(11rem, 0.9fr) minmax(0, 1.2fr);
+.wishTableHeader:has(.wishEyeSpacer),
+.wishTableRow:has(.wishEyeToggle),
+.wishTableRowCompact:has(.wishEyeToggle) {
+  grid-template-columns: 2.75rem minmax(0, 1.5fr) minmax(11rem, 0.9fr) minmax(0, 1.2fr);
 }
 
 .wishTitleCell,
 .wishComment,
 .wishLinkEmpty {
   min-width: 0;
+}
+
+.wishTitleText {
+  min-width: 0;
+}
+
+.wishEyeSpacer {
+  width: 2.75rem;
+}
+
+.wishEyeToggle {
+  display: inline-grid;
+  place-items: center;
+  justify-self: start;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+}
+
+.wishEyeToggle svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.wishEyeToggle:hover,
+.wishEyeToggle:focus-visible {
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+}
+
+.wishEyeToggle:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.wishTableRowInactive .wishEyeToggle {
+  color: var(--muted);
+}
+
+.wishTableRowInactive .wishTitleText,
+.wishTableRowInactive .wishComment:not(.wishCommentEmpty) {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: color-mix(in srgb, var(--muted) 75%, transparent);
+}
+
+.wishTableRowInactive .wishLinkButton,
+.wishTableRowInactive .wishLinkButton:hover,
+.wishTableRowInactive .wishLinkButton:focus-visible {
+  color: var(--muted);
 }
 
 .wishLinkButton {
@@ -4959,6 +5031,28 @@ html[data-theme="christmas"] .christmasSnow {
 
   .wishTitleCell {
     order: 1;
+  }
+
+  .wishTableRow:has(.wishEyeToggle) {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .wishEyeToggle {
+    grid-column: 1;
+    grid-row: 1;
+    order: 0;
+    align-self: center;
+  }
+
+  .wishTableRow:has(.wishEyeToggle) .wishTitleCell {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .wishTableRow:has(.wishEyeToggle) .wishComment,
+  .wishTableRow:has(.wishEyeToggle) .wishLinkButton {
+    grid-column: 1 / -1;
   }
 
   .wishComment {

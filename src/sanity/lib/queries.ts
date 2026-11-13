@@ -25,6 +25,7 @@ export const WISHLIST_ITEMS_QUERY = `*[_type == "wishListItem" && (!defined(stat
   title,
   description,
   link,
+  notApplicable,
   _createdAt,
   "submittedBy": coalesce(familyMember->name, submittedByName)
 }`;

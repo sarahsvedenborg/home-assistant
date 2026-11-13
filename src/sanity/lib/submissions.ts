@@ -91,6 +91,30 @@ export async function submitWishListItem(input: {
     : "Lagt til i familiens ønskeliste!";
 }
 
+export async function setWishListItemNotApplicable(
+  itemId: string,
+  notApplicable: boolean,
+) {
+  const client = getWriteClient();
+
+  if (!client) {
+    throw new Error("Sanity writes are not configured yet.");
+  }
+
+  const currentItem = await client.fetch<{ _id: string } | null>(
+    `*[_type == "wishListItem" && _id == $id][0]{_id}`,
+    { id: itemId },
+  );
+
+  if (!currentItem?._id) {
+    throw new Error("Fant ikke ønsket du ville oppdatere.");
+  }
+
+  await client.patch(currentItem._id).set({ notApplicable }).commit();
+
+  return notApplicable;
+}
+
 export async function submitMovieRecommendation(input: {
   title: string;
   link?: string;

@@ -41,7 +41,7 @@ export default async function PublicWishlistPage({ params }: PublicWishlistPageP
 
       <OnskelisteTabs
         familyMembers={familyMembers}
-        wishListItems={wishListItems}
+        wishListItems={wishListItems.filter((item) => !item.notApplicable)}
         allowAdd={false}
         showSizes
       />

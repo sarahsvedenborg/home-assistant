@@ -97,6 +97,7 @@ type SanityWishListItem = {
   description?: string;
   link?: string;
   submittedBy?: string;
+  notApplicable?: boolean;
   _createdAt?: string;
 };
 
@@ -220,13 +221,13 @@ function blocksToParagraphs(blocks?: SanityBlock[]) {
 // All reads go through the Live Content API's sanityFetch so every connected
 // client (notably the always-on kiosk) updates in real time when content
 // changes. It manages caching/revalidation and the live event id for us.
-async function fetchFromSanity<T>(query: string): Promise<T | null> {
+async function fetchFromSanity<T>(query: string, tags?: string[]): Promise<T | null> {
   if (!isSanityConfigured) {
     return null;
   }
 
   try {
-    const { data } = await sanityFetch({ query });
+    const { data } = await sanityFetch({ query, tags });
     return (data as T) ?? null;
   } catch {
     return null;
@@ -299,7 +300,9 @@ export async function getWishListItems(): Promise<WishListItem[]> {
     return FALLBACK_WISHLIST_ITEMS;
   }
 
-  const items = await fetchFromSanity<SanityWishListItem[]>(WISHLIST_ITEMS_QUERY);
+  const items = await fetchFromSanity<SanityWishListItem[]>(WISHLIST_ITEMS_QUERY, [
+    "wishlist",
+  ]);
 
   if (!items) {
     return FALLBACK_WISHLIST_ITEMS;
@@ -311,6 +314,7 @@ export async function getWishListItems(): Promise<WishListItem[]> {
     description: item.description,
     link: item.link,
     submittedBy: item.submittedBy || "Someone",
+    notApplicable: Boolean(item.notApplicable),
     createdAt: item._createdAt,
   }));
 }

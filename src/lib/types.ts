@@ -32,6 +32,7 @@ export type WishListItem = {
   description?: string;
   link?: string;
   submittedBy: string;
+  notApplicable: boolean;
   createdAt?: string;
 };
 
