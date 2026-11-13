@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { TbEye, TbEyeClosed } from "react-icons/tb";
 
 import { AddButton } from "@/components/add-button";
 import { WishlistForm } from "@/components/wishlist-form";
@@ -24,12 +25,19 @@ export function OnskelisteTabs({
   allowAdd = true,
   showSizes = false,
 }: OnskelisteTabsProps) {
+  const [items, setItems] = useState(wishListItems);
+  const [pendingIds, setPendingIds] = useState<Set<string>>(() => new Set());
+  const [error, setError] = useState<string | null>(null);
   const groups = useMemo(
-    () => buildWishListGroupsForFamily(familyMembers, wishListItems),
-    [familyMembers, wishListItems],
+    () => buildWishListGroupsForFamily(familyMembers, items),
+    [familyMembers, items],
   );
   const [activeMemberName, setActiveMemberName] = useState(groups[0]?.member.name || "");
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  useEffect(() => {
+    setItems(wishListItems);
+  }, [wishListItems]);
 
   const activeIndex = Math.max(
     0,
@@ -70,6 +78,59 @@ export function OnskelisteTabs({
 
     event.preventDefault();
     moveToTab(nextIndex);
+  }
+
+  async function toggleNotApplicable(item: WishListItem) {
+    const nextValue = !item.notApplicable;
+
+    setPendingIds((current) => new Set(current).add(item.id));
+    setError(null);
+    setItems((current) =>
+      current.map((entry) =>
+        entry.id === item.id ? { ...entry, notApplicable: nextValue } : entry,
+      ),
+    );
+
+    try {
+      const response = await fetch("/api/submissions/onskeliste", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: item.id, notApplicable: nextValue }),
+      });
+
+      if (!response.ok) {
+        const result = (await response.json()) as { error?: string };
+        setItems((current) =>
+          current.map((entry) =>
+            entry.id === item.id ? { ...entry, notApplicable: item.notApplicable } : entry,
+          ),
+        );
+        setError(result.error || "Kunne ikke oppdatere ønsket.");
+        return;
+      }
+
+      const result = (await response.json()) as { notApplicable: boolean };
+      setItems((current) =>
+        current.map((entry) =>
+          entry.id === item.id ? { ...entry, notApplicable: result.notApplicable } : entry,
+        ),
+      );
+    } catch {
+      setItems((current) =>
+        current.map((entry) =>
+          entry.id === item.id ? { ...entry, notApplicable: item.notApplicable } : entry,
+        ),
+      );
+      setError("Noe gikk galt. Prøv igjen.");
+    } finally {
+      setPendingIds((current) => {
+        const next = new Set(current);
+        next.delete(item.id);
+        return next;
+      });
+    }
   }
 
   return (
@@ -147,6 +208,7 @@ export function OnskelisteTabs({
               ) : null}
 
               <div className="wishTableHeader">
+                {allowAdd ? <span className="wishEyeSpacer" aria-hidden="true" /> : null}
                 <span>Ønske</span>
                 <span>Lenke</span>
                 <span>Kommentar</span>
@@ -163,8 +225,31 @@ export function OnskelisteTabs({
                     const host = item.link ? formatWishLinkHost(item.link) : null;
 
                     return (
-                      <li key={item.id} className="wishTableRow wishTableRowCompact">
-                        <strong className="wishTitleCell">{item.title}</strong>
+                      <li
+                        key={item.id}
+                        className={
+                          item.notApplicable
+                            ? "wishTableRow wishTableRowCompact wishTableRowInactive"
+                            : "wishTableRow wishTableRowCompact"
+                        }
+                      >
+                        {allowAdd ? (
+                          <button
+                            type="button"
+                            className="wishEyeToggle"
+                            onClick={() => toggleNotApplicable(item)}
+                            disabled={pendingIds.has(item.id)}
+                            aria-pressed={item.notApplicable}
+                            aria-label={
+                              item.notApplicable
+                                ? `Marker ${item.title} som gjelder igjen`
+                                : `Marker ${item.title} som gjelder ikke`
+                            }
+                          >
+                            {item.notApplicable ? <TbEyeClosed aria-hidden="true" /> : <TbEye aria-hidden="true" />}
+                          </button>
+                        ) : null}
+                        <strong className="wishTitleCell wishTitleText">{item.title}</strong>
                         {item.link ? (
                           <a
                             href={item.link}
@@ -186,6 +271,7 @@ export function OnskelisteTabs({
                   })}
                 </ul>
               )}
+              {error ? <p className="feedback feedbackError">{error}</p> : null}
             </div>
           </div>
         </div>
@@ -208,3 +294,4 @@ export function OnskelisteTabs({
     </section>
   );
 }
+

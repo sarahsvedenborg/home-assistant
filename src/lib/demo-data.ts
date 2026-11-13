@@ -120,6 +120,7 @@ export const FALLBACK_WISHLIST_ITEMS: WishListItem[] = [
     title: "Tegneblokk med sterke tusjer",
     description: "En stor blokk med tykke sider til tegninger og klistremerkeideer.",
     submittedBy: "Amelie",
+    notApplicable: false,
     link: "https://example.com/sketchbook",
     createdAt: "2026-08-20T18:30:00.000Z",
   },
@@ -128,6 +129,7 @@ export const FALLBACK_WISHLIST_ITEMS: WishListItem[] = [
     title: "Byggesett til rakett",
     description: "Noe praktisk som kan males etter at det er bygget.",
     submittedBy: "Colette",
+    notApplicable: false,
     createdAt: "2026-08-19T09:15:00.000Z",
   },
   {
@@ -135,6 +137,7 @@ export const FALLBACK_WISHLIST_ITEMS: WishListItem[] = [
     title: "Selvlysende dinosaurteppe",
     description: "Et mykt teppe til filmkvelder og lesestund.",
     submittedBy: "Linnea",
+    notApplicable: true,
     createdAt: "2026-08-05T12:00:00.000Z",
   },
   {
@@ -142,6 +145,7 @@ export const FALLBACK_WISHLIST_ITEMS: WishListItem[] = [
     title: "Gavekort til familie-vaffelfrokost",
     description: "En hyggelig morgen ute sammen.",
     submittedBy: "Pappa",
+    notApplicable: false,
     createdAt: "2026-08-21T07:45:00.000Z",
   },
 ];

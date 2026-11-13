@@ -35,6 +35,12 @@ export const wishListItemType = defineType({
       description: "Used when no family member document is linked yet.",
     }),
     defineField({
+      name: "notApplicable",
+      title: "Gjelder ikke",
+      type: "boolean",
+      initialValue: false,
+    }),
+    defineField({
       name: "status",
       title: "Approval status",
       type: "string",
@@ -53,11 +59,14 @@ export const wishListItemType = defineType({
       submittedByName: "submittedByName",
       familyMemberName: "familyMember.name",
       status: "status",
+      notApplicable: "notApplicable",
     },
-    prepare({ title, submittedByName, familyMemberName, status }) {
+    prepare({ title, submittedByName, familyMemberName, status, notApplicable }) {
       return {
         title,
-        subtitle: `${familyMemberName || submittedByName || "Unknown"} - ${status || "approved"}`,
+        subtitle: `${familyMemberName || submittedByName || "Unknown"} - ${
+          notApplicable ? "gjelder ikke" : status || "approved"
+        }`,
       };
     },
   },
